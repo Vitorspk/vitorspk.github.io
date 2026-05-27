@@ -52,6 +52,7 @@
 
     /* Alpha variants (used by career timeline and any future components) */
     --primary-alpha-8:    rgba(59, 130, 246, 0.08);
+    --primary-alpha-10:   rgba(59, 130, 246, 0.10);
     --primary-alpha-12:   rgba(59, 130, 246, 0.12);
     --primary-alpha-20:   rgba(59, 130, 246, 0.20);
     --primary-alpha-30:   rgba(59, 130, 246, 0.30);
@@ -2299,7 +2300,7 @@ footer {
 }
 
 .career-phase-banner.phase-platform {
-    background: var(--primary-glow);
+    background: var(--primary-alpha-10);
     color: var(--primary-light);
     border-color: var(--primary-alpha-30);
 }
@@ -2524,6 +2525,10 @@ footer {
 }
 
 /* Phase-specific bar fill colors reuse .bar-fill animation from the barObserver */
+.career-entry.phase-platform .bar-fill {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+
 .career-entry.phase-sre .bar-fill {
     background: linear-gradient(90deg, var(--accent), var(--primary-light));
 }
