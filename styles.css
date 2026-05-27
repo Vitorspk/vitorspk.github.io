@@ -778,9 +778,12 @@ a:hover {
     line-height: 1;
 }
 
-.hero-stat-value.accent-green  { color: var(--success); }
-.hero-stat-value.accent-blue   { color: var(--primary-light); }
-.hero-stat-value.accent-purple { color: var(--secondary-light); }
+.hero-stat-value.accent-green,
+.career-summary-value.accent-green  { color: var(--success); }
+.hero-stat-value.accent-blue,
+.career-summary-value.accent-blue   { color: var(--primary-light); }
+.hero-stat-value.accent-purple,
+.career-summary-value.accent-purple { color: var(--secondary-light); }
 
 .hero-stat-label {
     font-size: 0.75rem;
@@ -2330,6 +2333,10 @@ footer {
     margin-bottom: 0;
 }
 
+.career-entry:last-child .career-rail-line {
+    display: none;
+}
+
 /* Left rail: year label → dot → connecting line */
 .career-rail {
     display: flex;
@@ -2435,7 +2442,9 @@ footer {
 
 @media (hover: hover) {
     .career-card:hover {
-        border-color: var(--border-hover);
+        border-top-color: var(--border-hover);
+        border-right-color: var(--border-hover);
+        border-bottom-color: var(--border-hover);
         box-shadow: var(--shadow-md);
     }
 }
