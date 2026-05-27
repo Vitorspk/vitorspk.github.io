@@ -50,6 +50,25 @@
     --shadow-xl:   0 20px 48px rgba(0,0,0,0.6);
     --glow-primary: 0 0 24px rgba(59,130,246,0.2);
 
+    /* Alpha variants (used by career timeline and any future components) */
+    --primary-alpha-8:    rgba(59, 130, 246, 0.08);
+    --primary-alpha-12:   rgba(59, 130, 246, 0.12);
+    --primary-alpha-20:   rgba(59, 130, 246, 0.20);
+    --primary-alpha-30:   rgba(59, 130, 246, 0.30);
+    --accent-alpha-8:     rgba(6, 182, 212, 0.08);
+    --accent-alpha-10:    rgba(6, 182, 212, 0.10);
+    --accent-alpha-12:    rgba(6, 182, 212, 0.12);
+    --accent-alpha-30:    rgba(6, 182, 212, 0.30);
+    --secondary-alpha-8:  rgba(139, 92, 246, 0.08);
+    --secondary-alpha-10: rgba(139, 92, 246, 0.10);
+    --secondary-alpha-12: rgba(139, 92, 246, 0.12);
+    --secondary-alpha-30: rgba(139, 92, 246, 0.30);
+    --success-alpha-8:    rgba(16, 185, 129, 0.08);
+    --success-alpha-10:   rgba(16, 185, 129, 0.10);
+    --success-alpha-12:   rgba(16, 185, 129, 0.12);
+    --success-alpha-25:   rgba(16, 185, 129, 0.25);
+    --success-alpha-30:   rgba(16, 185, 129, 0.30);
+
     /* Spacing */
     --space-xs:  0.5rem;
     --space-sm:  0.75rem;
@@ -2279,32 +2298,28 @@ footer {
 .career-phase-banner.phase-platform {
     background: var(--primary-glow);
     color: var(--primary-light);
-    border-color: rgba(59, 130, 246, 0.3);
+    border-color: var(--primary-alpha-30);
 }
 
 .career-phase-banner.phase-sre {
-    background: rgba(6, 182, 212, 0.1);
+    background: var(--accent-alpha-10);
     color: var(--accent);
-    border-color: rgba(6, 182, 212, 0.3);
+    border-color: var(--accent-alpha-30);
 }
 
 .career-phase-banner.phase-dev {
-    background: rgba(139, 92, 246, 0.1);
+    background: var(--secondary-alpha-10);
     color: var(--secondary-light);
-    border-color: rgba(139, 92, 246, 0.3);
+    border-color: var(--secondary-alpha-30);
 }
 
 .career-phase-banner.phase-it {
-    background: rgba(16, 185, 129, 0.1);
+    background: var(--success-alpha-10);
     color: var(--success);
-    border-color: rgba(16, 185, 129, 0.3);
+    border-color: var(--success-alpha-30);
 }
 
 /* Flex-based rail — no absolute positioning */
-.career-track {
-    /* natural block, no special positioning */
-}
-
 .career-entry {
     display: flex;
     gap: var(--space-lg);
@@ -2352,27 +2367,27 @@ footer {
 
 .career-entry.phase-platform .career-dot {
     border-color: var(--primary);
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.12);
+    box-shadow: 0 0 0 4px var(--primary-alpha-12);
 }
 
 .career-entry.phase-platform.current .career-dot {
     background: var(--primary);
-    box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.2), var(--glow-primary);
+    box-shadow: 0 0 0 5px var(--primary-alpha-20), var(--glow-primary);
 }
 
 .career-entry.phase-sre .career-dot {
     border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.12);
+    box-shadow: 0 0 0 4px var(--accent-alpha-12);
 }
 
 .career-entry.phase-dev .career-dot {
     border-color: var(--secondary);
-    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12);
+    box-shadow: 0 0 0 4px var(--secondary-alpha-12);
 }
 
 .career-entry.phase-it .career-dot {
     border-color: var(--success);
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.12);
+    box-shadow: 0 0 0 4px var(--success-alpha-12);
 }
 
 /* Connecting line from dot to bottom of entry */
@@ -2386,19 +2401,19 @@ footer {
 }
 
 .career-entry.phase-platform .career-rail-line {
-    background: linear-gradient(180deg, var(--primary), rgba(59, 130, 246, 0.08));
+    background: linear-gradient(180deg, var(--primary), var(--primary-alpha-8));
 }
 
 .career-entry.phase-sre .career-rail-line {
-    background: linear-gradient(180deg, var(--accent), rgba(6, 182, 212, 0.08));
+    background: linear-gradient(180deg, var(--accent), var(--accent-alpha-8));
 }
 
 .career-entry.phase-dev .career-rail-line {
-    background: linear-gradient(180deg, var(--secondary), rgba(139, 92, 246, 0.08));
+    background: linear-gradient(180deg, var(--secondary), var(--secondary-alpha-8));
 }
 
 .career-entry.phase-it .career-rail-line {
-    background: linear-gradient(180deg, var(--success), rgba(16, 185, 129, 0.08));
+    background: linear-gradient(180deg, var(--success), var(--success-alpha-8));
 }
 
 /* Card sits in the flex row beside the rail */
@@ -2418,9 +2433,11 @@ footer {
 .career-entry.phase-dev .career-card      { border-left-color: var(--secondary); }
 .career-entry.phase-it .career-card       { border-left-color: var(--success); }
 
-.career-card:hover {
-    border-color: var(--border-hover);
-    box-shadow: var(--shadow-md);
+@media (hover: hover) {
+    .career-card:hover {
+        border-color: var(--border-hover);
+        box-shadow: var(--shadow-md);
+    }
 }
 
 .career-company {
@@ -2467,8 +2484,8 @@ footer {
     align-items: center;
     gap: 5px;
     padding: 2px 8px;
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid rgba(16, 185, 129, 0.25);
+    background: var(--success-alpha-10);
+    border: 1px solid var(--success-alpha-25);
     border-radius: var(--radius-full);
     font-size: 0.6875rem;
     font-weight: 700;
