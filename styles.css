@@ -50,6 +50,26 @@
     --shadow-xl:   0 20px 48px rgba(0,0,0,0.6);
     --glow-primary: 0 0 24px rgba(59,130,246,0.2);
 
+    /* Alpha variants (used by career timeline and any future components) */
+    --primary-alpha-8:    rgba(59, 130, 246, 0.08);
+    --primary-alpha-10:   rgba(59, 130, 246, 0.10);
+    --primary-alpha-12:   rgba(59, 130, 246, 0.12);
+    --primary-alpha-20:   rgba(59, 130, 246, 0.20);
+    --primary-alpha-30:   rgba(59, 130, 246, 0.30);
+    --accent-alpha-8:     rgba(6, 182, 212, 0.08);
+    --accent-alpha-10:    rgba(6, 182, 212, 0.10);
+    --accent-alpha-12:    rgba(6, 182, 212, 0.12);
+    --accent-alpha-30:    rgba(6, 182, 212, 0.30);
+    --secondary-alpha-8:  rgba(139, 92, 246, 0.08);
+    --secondary-alpha-10: rgba(139, 92, 246, 0.10);
+    --secondary-alpha-12: rgba(139, 92, 246, 0.12);
+    --secondary-alpha-30: rgba(139, 92, 246, 0.30);
+    --success-alpha-8:    rgba(16, 185, 129, 0.08);
+    --success-alpha-10:   rgba(16, 185, 129, 0.10);
+    --success-alpha-12:   rgba(16, 185, 129, 0.12);
+    --success-alpha-25:   rgba(16, 185, 129, 0.25);
+    --success-alpha-30:   rgba(16, 185, 129, 0.30);
+
     /* Spacing */
     --space-xs:  0.5rem;
     --space-sm:  0.75rem;
@@ -759,9 +779,12 @@ a:hover {
     line-height: 1;
 }
 
-.hero-stat-value.accent-green  { color: var(--success); }
-.hero-stat-value.accent-blue   { color: var(--primary-light); }
-.hero-stat-value.accent-purple { color: var(--secondary-light); }
+.hero-stat-value.accent-green,
+.career-summary-value.accent-green  { color: var(--success); }
+.hero-stat-value.accent-blue,
+.career-summary-value.accent-blue   { color: var(--primary-light); }
+.hero-stat-value.accent-purple,
+.career-summary-value.accent-purple { color: var(--secondary-light); }
 
 .hero-stat-label {
     font-size: 0.75rem;
@@ -2214,6 +2237,360 @@ footer {
     [data-theme="light"] {
         --border:       rgba(0,0,0,0.25);
         --text-muted:   #334155;
+    }
+}
+
+/* ============================================================
+   CAREER TIMELINE (enhanced vertical)
+   ============================================================ */
+
+.career-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-md);
+    margin-bottom: var(--space-2xl);
+}
+
+.career-summary-stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    text-align: center;
+    transition: background-color var(--t-fast), border-color var(--t-fast);
+}
+
+@media (hover: hover) {
+    .career-summary-stat:hover {
+        border-color: var(--border-hover);
+        background: var(--bg-hover);
+    }
+}
+
+.career-summary-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.career-summary-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.career-phase-group {
+    margin-bottom: var(--space-2xl);
+}
+
+.career-phase-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 5px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: var(--space-lg);
+    border: 1px solid;
+}
+
+.career-phase-banner.phase-platform {
+    background: var(--primary-alpha-10);
+    color: var(--primary-light);
+    border-color: var(--primary-alpha-30);
+}
+
+.career-phase-banner.phase-sre {
+    background: var(--accent-alpha-10);
+    color: var(--accent);
+    border-color: var(--accent-alpha-30);
+}
+
+.career-phase-banner.phase-dev {
+    background: var(--secondary-alpha-10);
+    color: var(--secondary-light);
+    border-color: var(--secondary-alpha-30);
+}
+
+.career-phase-banner.phase-it {
+    background: var(--success-alpha-10);
+    color: var(--success);
+    border-color: var(--success-alpha-30);
+}
+
+/* Flex-based rail — no absolute positioning */
+.career-entry {
+    display: flex;
+    gap: var(--space-lg);
+    margin-bottom: var(--space-md);
+}
+
+.career-entry:last-child {
+    margin-bottom: 0;
+}
+
+.career-entry:last-child .career-rail-line {
+    display: none;
+}
+
+/* Left rail: year label → dot → connecting line */
+.career-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 52px;
+    flex-shrink: 0;
+    padding-top: 2px;
+}
+
+.career-year {
+    font-size: 0.6875rem;
+    font-weight: 800;
+    text-align: center;
+    line-height: 1;
+    margin-bottom: 6px;
+    letter-spacing: 0.02em;
+    color: var(--text-muted);
+}
+
+.career-entry.phase-platform .career-year { color: var(--primary-light); }
+.career-entry.phase-sre .career-year     { color: var(--accent); }
+.career-entry.phase-dev .career-year     { color: var(--secondary-light); }
+.career-entry.phase-it .career-year      { color: var(--success); }
+
+.career-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--bg-base);
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    transition: border-color var(--t-base), box-shadow var(--t-base), background-color var(--t-base);
+}
+
+.career-entry.phase-platform .career-dot {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-alpha-12);
+}
+
+.career-entry.phase-platform.current .career-dot {
+    background: var(--primary);
+    box-shadow: 0 0 0 5px var(--primary-alpha-20), var(--glow-primary);
+}
+
+.career-entry.phase-sre .career-dot {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-alpha-12);
+}
+
+.career-entry.phase-dev .career-dot {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 4px var(--secondary-alpha-12);
+}
+
+.career-entry.phase-it .career-dot {
+    border-color: var(--success);
+    box-shadow: 0 0 0 4px var(--success-alpha-12);
+}
+
+/* Connecting line from dot to bottom of entry */
+.career-rail-line {
+    flex: 1;
+    width: 2px;
+    min-height: 24px;
+    margin-top: 4px;
+    border-radius: var(--radius-full);
+    background: var(--border);
+}
+
+.career-entry.phase-platform .career-rail-line {
+    background: linear-gradient(180deg, var(--primary), var(--primary-alpha-8));
+}
+
+.career-entry.phase-sre .career-rail-line {
+    background: linear-gradient(180deg, var(--accent), var(--accent-alpha-8));
+}
+
+.career-entry.phase-dev .career-rail-line {
+    background: linear-gradient(180deg, var(--secondary), var(--secondary-alpha-8));
+}
+
+.career-entry.phase-it .career-rail-line {
+    background: linear-gradient(180deg, var(--success), var(--success-alpha-8));
+}
+
+/* Card sits in the flex row beside the rail */
+.career-card {
+    flex: 1;
+    min-width: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    transition: background-color var(--t-base), border-color var(--t-base), box-shadow var(--t-base);
+}
+
+.career-entry.phase-platform .career-card { border-left-color: var(--primary); }
+.career-entry.phase-sre .career-card      { border-left-color: var(--accent); }
+.career-entry.phase-dev .career-card      { border-left-color: var(--secondary); }
+.career-entry.phase-it .career-card       { border-left-color: var(--success); }
+
+@media (hover: hover) {
+    .career-card:hover {
+        border-top-color: var(--border-hover);
+        border-right-color: var(--border-hover);
+        border-bottom-color: var(--border-hover);
+        box-shadow: var(--shadow-md);
+    }
+}
+
+.career-company {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    margin-bottom: 2px;
+}
+
+.career-role {
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: var(--space-xs);
+}
+
+.career-entry.phase-platform .career-role { color: var(--primary-light); }
+.career-entry.phase-sre .career-role { color: var(--accent); }
+.career-entry.phase-dev .career-role { color: var(--secondary-light); }
+.career-entry.phase-it .career-role { color: var(--success); }
+
+.career-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-sm);
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: var(--space-md);
+}
+
+.career-separator {
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.career-current-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    background: var(--success-alpha-10);
+    border: 1px solid var(--success-alpha-25);
+    border-radius: var(--radius-full);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--success);
+    letter-spacing: 0.03em;
+}
+
+.career-tenure-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.career-tenure-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.career-tenure-bar {
+    flex: 1;
+}
+
+/* Phase-specific bar fill colors reuse .bar-fill animation from the barObserver */
+.career-entry.phase-platform .bar-fill {
+    background: linear-gradient(90deg, var(--primary), var(--primary-light));
+}
+
+.career-entry.phase-sre .bar-fill {
+    background: linear-gradient(90deg, var(--accent), var(--primary-light));
+}
+
+.career-entry.phase-dev .bar-fill {
+    background: linear-gradient(90deg, var(--secondary), var(--secondary-light));
+}
+
+.career-entry.phase-it .bar-fill {
+    background: linear-gradient(90deg, var(--success), var(--accent));
+}
+
+.career-achievement {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-md);
+}
+
+.career-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.career-badge {
+    padding: 2px 8px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color var(--t-fast), border-color var(--t-fast);
+}
+
+@media (hover: hover) {
+    .career-badge:hover {
+        color: var(--text-secondary);
+        border-color: var(--border-hover);
+    }
+}
+
+/* Mobile adjustments */
+@media (width <= 768px) {
+    .career-entry {
+        gap: var(--space-md);
+    }
+
+    .career-rail {
+        width: 38px;
+    }
+
+    .career-year {
+        font-size: 0.625rem;
+    }
+
+    .career-summary {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
