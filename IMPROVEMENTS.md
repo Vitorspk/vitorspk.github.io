@@ -38,7 +38,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Status:** Already merged via PR #42 — `sitemap.xml` + `robots.txt` live at the root.
 - **Follow-up:** Submit sitemap in Google Search Console → Sitemaps.
 
-### 1.4 ⏳ Accessibility labels for proficiency dots
+### 1.4 ✅ Accessibility labels for proficiency dots
 - **Why:** `●●●●●` is purely visual. Screen readers announce "black circle, black circle, black circle, black circle, black circle" — useless.
 - **Where:** [index.html](index.html) — all `<span style="color:var(--success)...">●●●●●</span>` patterns in the Skills tab.
 - **How:** Wrap each dot sequence with `aria-label` describing the level:
@@ -48,6 +48,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   - Optionally hide the visual dots from AT with `aria-hidden="true"` on the span and add a visually-hidden text fallback.
 - **Risk:** Low.
 - **Acceptance:** axe-core scan still passes; manual screen reader test announces level correctly.
+- **Result:** Skill row dots use `<span role="img" aria-label="Expert: 5 of 5">` (and equivalents for Advanced/Proficient) — screen readers announce the level instead of "black circle, black circle...". Legend dots use `aria-hidden="true"` since the adjacent `legend-label` already describes the level.
 
 ---
 
