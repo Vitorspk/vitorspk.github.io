@@ -54,7 +54,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 
 ## Phase 2 — SEO & Content Maintainability
 
-### 2.1 ⏳ Remove obsolete `meta keywords`
+### 2.1 ✅ Remove obsolete `meta keywords`
 - **Why:** Google has ignored `<meta name="keywords">` since 2009. It's noise.
 - **Where:** [index.html:10](index.html#L10)
 - **Risk:** Zero.
