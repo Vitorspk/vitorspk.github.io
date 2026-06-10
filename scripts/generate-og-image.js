@@ -181,12 +181,21 @@ const html = `<!DOCTYPE html>
 </html>`;
 
 (async () => {
-    const browser = await chromium.launch();
-    const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
-    await page.setContent(html);
-    await page.waitForLoadState('networkidle');
-    const outputPath = path.join(__dirname, '..', 'og-image.png');
-    await page.screenshot({ path: outputPath, type: 'png' });
-    await browser.close();
-    console.log('Generated:', outputPath);
+    let browser;
+    try {
+        browser = await chromium.launch();
+        const page = await browser.newPage({ viewport: { width: 1200, height: 630 } });
+        await page.setContent(html);
+        await page.waitForLoadState('networkidle');
+        const outputPath = path.join(__dirname, '..', 'og-image.png');
+        await page.screenshot({ path: outputPath, type: 'png' });
+        console.log('Generated:', outputPath);
+    } catch (error) {
+        console.error('Error generating OG image:', error);
+        process.exit(1);
+    } finally {
+        if (browser) {
+            await browser.close();
+        }
+    }
 })();
