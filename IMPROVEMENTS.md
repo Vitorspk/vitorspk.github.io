@@ -59,7 +59,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Where:** [index.html:10](index.html#L10)
 - **Risk:** Zero.
 
-### 2.2 ⏳ Stabilize volatile numbers
+### 2.2 ✅ Stabilize volatile numbers
 - **Why:** Hero shows `207 AI/ML workloads`, `863 infra assets`, `1,241 tasks`. These will drift and look stale.
 - **Where:** [index.html:228-253](index.html#L228) (hero stats), [index.html:381-396](index.html#L381) (task table)
 - **How:** Three options to consider:
@@ -67,6 +67,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   2. Add a footnote: "as of Q1 2026".
   3. Round to ranges: "200+ workloads", "850+ infra assets".
 - **Risk:** Low — content decision.
+- **Result:** Applied Option 3: hero `207 AI/ML workloads` → `200+`, `863 infra assets` → `850+`. Overview highlight card updated for consistency. Task Distribution Analysis got a snapshot description: "Snapshot of Jira activity across 2021–2025". Historical references in case studies/achievements (e.g., "863 assets for ISO 27001 audit") retained as accurate point-in-time facts.
 
 ### 2.3 ⏳ Add CSP via meta tag
 - **Why:** No CSP today. GitHub Pages doesn't allow custom headers, but a `<meta http-equiv="Content-Security-Policy">` works.
