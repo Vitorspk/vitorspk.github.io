@@ -82,7 +82,8 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Result:** Applied to both `index.html` and `404.html`. Policy:
   - `default-src 'self'`
   - `script-src 'self' 'unsafe-inline'` (theme blocking script + ld+json)
-  - `style-src 'self' https://fonts.googleapis.com 'unsafe-inline'` (Google Fonts injects inline styles; 404.html has inline `<style>` block)
+  - `style-src 'self' https://fonts.googleapis.com` on index.html (no inline styles after Phase 1.1); `'unsafe-inline'` retained on 404.html which has an inline `<style>` block
+  - `object-src 'none'` (no plugins). `upgrade-insecure-requests` was considered but omitted: WebKit (mobile Safari) upgrades the test server URL `http://localhost:3000` to HTTPS and the page fails to load, breaking the Playwright test suite. Security gain is marginal since GitHub Pages serves HTTPS and there are no HTTP subresources to upgrade.
   - `font-src 'self' https://fonts.gstatic.com`
   - `img-src 'self' data:` (data URI favicon)
   - `connect-src 'self'`, `base-uri 'self'`, `form-action 'self'` (note: `frame-ancestors` is ignored when set via `<meta>` — only works as HTTP header, which GitHub Pages doesn't allow)
