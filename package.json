@@ -11,7 +11,8 @@
     "validate": "npm run lint",
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "npx playwright test --headed",
-    "test": "npm run validate && npm run test:e2e"
+    "test": "npm run validate && npm run test:e2e",
+    "og:generate": "node scripts/generate-og-image.js"
   },
   "repository": {
     "type": "git",

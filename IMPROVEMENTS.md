@@ -22,7 +22,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Acceptance:** `npm run validate` shows 0 warnings.
 - **Result:** 161 warnings → 3 warnings (the remaining 3 are unrelated `heading-level` issues, pre-existing). Bar-fill widths migrated from inline `style="width:96%"` to `data-width="96%"` (JS already reads `dataset.width`).
 
-### 1.2 ⏳ Add og:image and Twitter card image
+### 1.2 ✅ Add og:image and Twitter card image
 - **Why:** Link sharing on LinkedIn, Slack, WhatsApp shows no preview today.
 - **Where:** [index.html](index.html) `<head>`, new asset file (PNG/JPG 1200x630).
 - **How:**
@@ -31,6 +31,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   - Add `<meta name="twitter:image" content="...">`.
 - **Risk:** Low — additive.
 - **Acceptance:** [opengraph.xyz/url/...](https://www.opengraph.xyz/) shows preview correctly.
+- **Result:** PNG 1200x630 (329 KB) at repo root, generated via `npm run og:generate` (Playwright-rendered HTML → screenshot). Meta tags added for `og:image`, `og:image:width/height/alt`, `twitter:image`, `twitter:image:alt`.
 
 ### 1.3 ✅ Sitemap.xml in portfolio repo
 - **Why:** Google may treat `/portfolio/` as a separate URL from the root.
