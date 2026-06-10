@@ -347,28 +347,28 @@
                                 <span>Productivity Growth (2021 → 2025)</span>
                                 <span class="metric-value">+267%</span>
                             </div>
-                            <div class="bar-container"><div class="bar-fill" style="width:100%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="100%"></div></div>
                         </div>
                         <div class="metric-bar">
                             <div class="metric-label">
                                 <span>Proactive Work Ratio</span>
                                 <span class="metric-value">96%</span>
                             </div>
-                            <div class="bar-container"><div class="bar-fill" style="width:96%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="96%"></div></div>
                         </div>
                         <div class="metric-bar">
                             <div class="metric-label">
                                 <span>Task Completion Rate</span>
                                 <span class="metric-value">100%</span>
                             </div>
-                            <div class="bar-container"><div class="bar-fill" style="width:100%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="100%"></div></div>
                         </div>
                         <div class="metric-bar">
                             <div class="metric-label">
                                 <span>Cloud Cost Optimization</span>
                                 <span class="metric-value">27%</span>
                             </div>
-                            <div class="bar-container"><div class="bar-fill" style="width:85%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="85%"></div></div>
                         </div>
                     </div>
 
@@ -570,8 +570,8 @@
                                 </ul>
                             </div>
                             <div class="diagram-placeholder">
-                                <p style="font-weight:600;margin-bottom:var(--space-sm);">🔐 mTLS Flow</p>
-                                <p style="font-size:0.875rem;line-height:1.7;">
+                                <p class="diagram-flow-text">🔐 mTLS Flow</p>
+                                <p class="diagram-flow-body">
                                     Client (with cert) → Cloudflare (validates client cert) → Origin Server (validates CF cert)<br>
                                     Mutual verification at every layer · End-to-end encrypted + authenticated
                                 </p>
@@ -1551,7 +1551,7 @@
 
                     <div class="card">
                         <h3 class="card-title"><span class="card-icon">🎯</span> Career Progression</h3>
-                        <div class="feature-description" style="line-height:1.9;">
+                        <div class="feature-description feature-description--lh-wide">
                             📊 <strong>2012–2014:</strong> Operations and IT support (Coca-Cola, GZ Sistemas)<br>
                             💻 <strong>2014–2017:</strong> Software development (Microdata, PRÓPONTO, Dasa)<br>
                             ☁️ <strong>2018–2021:</strong> SRE/Cloud Engineering (Dasa, Intelipost)<br>
@@ -1783,7 +1783,7 @@
                                 <p class="feature-description">Refactored from hardcoded T4/RTX 4090 if-else to a <strong>centralized GPU_PROFILES associative array</strong>. Each profile encodes VRAM, max_model_len, dtype, kv-cache-dtype, fp8 support, and tensor-parallel settings. One flag selects the entire tuned config.</p>
                             </div>
                         </div>
-                        <div class="table-container" style="margin-top:var(--space-md);">
+                        <div class="table-container diagram-table">
                             <table>
                                 <thead>
                                     <tr>
@@ -1887,27 +1887,27 @@
                         <h3 class="card-title"><span class="card-icon">📈</span> 3-Year Financial Impact</h3>
                         <div class="metric-bar">
                             <div class="metric-label"><span>Storage Migration</span><span class="metric-value">$148,096/yr</span></div>
-                            <div class="bar-container"><div class="bar-fill" style="width:100%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="100%"></div></div>
                         </div>
                         <div class="metric-bar">
                             <div class="metric-label"><span>GPU Infrastructure</span><span class="metric-value">$77,262/yr</span></div>
-                            <div class="bar-container"><div class="bar-fill" style="width:52%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="52%"></div></div>
                         </div>
                         <div class="metric-bar">
                             <div class="metric-label"><span>Compute Engine</span><span class="metric-value">$26,500/yr</span></div>
-                            <div class="bar-container"><div class="bar-fill" style="width:18%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="18%"></div></div>
                         </div>
                         <div class="metric-bar">
                             <div class="metric-label"><span>Airflow Optimization</span><span class="metric-value">$18,165/yr</span></div>
-                            <div class="bar-container"><div class="bar-fill" style="width:12%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="12%"></div></div>
                         </div>
                         <div class="metric-bar">
                             <div class="metric-label"><span>GCP AI + Others</span><span class="metric-value">$61,073/yr</span></div>
-                            <div class="bar-container"><div class="bar-fill" style="width:41%;"></div></div>
+                            <div class="bar-container"><div class="bar-fill" data-width="41%"></div></div>
                         </div>
-                        <div style="margin-top:var(--space-xl);padding-top:var(--space-lg);border-top:1px solid var(--border);">
-                            <div style="font-size:1.125rem;font-weight:800;color:var(--text-primary);">Total Annual: $331,096</div>
-                            <div style="font-size:0.875rem;color:var(--text-muted);margin-top:4px;">2-Year: $662,192 &nbsp;·&nbsp; 3-Year: $993,288</div>
+                        <div class="finops-total-block">
+                            <div class="finops-total">Total Annual: $331,096</div>
+                            <div class="finops-total-sub">2-Year: $662,192 &nbsp;·&nbsp; 3-Year: $993,288</div>
                         </div>
                     </div>
                 </div>
@@ -2025,10 +2025,10 @@
 
                     <div class="card">
                         <h3 class="card-title"><span class="card-icon">⭐</span> Proficiency Legend</h3>
-                        <div style="display:flex;gap:var(--space-xl);flex-wrap:wrap;font-size:0.875rem;">
-                            <div style="display:flex;align-items:center;gap:var(--space-xs);"><span style="color:var(--success);font-weight:700;">●●●●●</span><span style="color:var(--text-secondary);">Expert (5+ years, production at scale)</span></div>
-                            <div style="display:flex;align-items:center;gap:var(--space-xs);"><span style="color:var(--primary-light);font-weight:700;">●●●●○</span><span style="color:var(--text-secondary);">Advanced (3–5 years, deep knowledge)</span></div>
-                            <div style="display:flex;align-items:center;gap:var(--space-xs);"><span style="color:#a78bfa;font-weight:700;">●●●○○</span><span style="color:var(--text-secondary);">Proficient (1–3 years, working knowledge)</span></div>
+                        <div class="legend-container">
+                            <div class="legend-row"><span class="dot-expert">●●●●●</span><span class="legend-label">Expert (5+ years, production at scale)</span></div>
+                            <div class="legend-row"><span class="dot-advanced">●●●●○</span><span class="legend-label">Advanced (3–5 years, deep knowledge)</span></div>
+                            <div class="legend-row"><span class="dot-proficient">●●●○○</span><span class="legend-label">Proficient (1–3 years, working knowledge)</span></div>
                         </div>
                     </div>
 
@@ -2036,17 +2036,17 @@
                         <div class="card">
                             <h3 class="card-title">☁️ Cloud Platforms</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Google Cloud Platform</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Compute Engine, GKE, Cloud Storage, VPC, VPN, IAM, Secret Manager</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Google Cloud Platform</strong><br><span class="skill-desc">Compute Engine, GKE, Cloud Storage, VPC, VPN, IAM, Secret Manager</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Amazon Web Services</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">EC2, EKS, VPC, S3, CloudFormation, Site-to-Site VPN, IAM, CloudWatch</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Amazon Web Services</strong><br><span class="skill-desc">EC2, EKS, VPC, S3, CloudFormation, Site-to-Site VPN, IAM, CloudWatch</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>Microsoft Azure</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Web Apps, AKS, VNet, ExpressRoute, API Management, Storage</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>Microsoft Azure</strong><br><span class="skill-desc">Web Apps, AKS, VNet, ExpressRoute, API Management, Storage</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
                             </div>
                         </div>
@@ -2054,17 +2054,17 @@
                         <div class="card">
                             <h3 class="card-title">☸️ Containers &amp; Orchestration</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Kubernetes</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">GKE, EKS, multi-cluster, HPA/VPA/MPA, Network Policies</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Kubernetes</strong><br><span class="skill-desc">GKE, EKS, multi-cluster, HPA/VPA/MPA, Network Policies</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Docker</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Multi-stage builds, image optimization, security scanning, registry</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Docker</strong><br><span class="skill-desc">Multi-stage builds, image optimization, security scanning, registry</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>Helm &amp; GitOps</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Chart development, templating, ArgoCD concepts</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>Helm &amp; GitOps</strong><br><span class="skill-desc">Chart development, templating, ArgoCD concepts</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
                             </div>
                         </div>
@@ -2072,17 +2072,17 @@
                         <div class="card">
                             <h3 class="card-title">🚀 CI/CD &amp; Automation</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Jenkins</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">65+ pipelines, shared libraries, multi-branch, Jenkinsfile, slave mgmt</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Jenkins</strong><br><span class="skill-desc">65+ pipelines, shared libraries, multi-branch, Jenkinsfile, slave mgmt</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>GitHub Actions</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Workflow automation, CI/CD pipelines, security scanning</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>GitHub Actions</strong><br><span class="skill-desc">Workflow automation, CI/CD pipelines, security scanning</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>Infrastructure as Code</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Terraform, CloudFormation, configuration management</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>Infrastructure as Code</strong><br><span class="skill-desc">Terraform, CloudFormation, configuration management</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
                             </div>
                         </div>
@@ -2090,21 +2090,21 @@
                         <div class="card">
                             <h3 class="card-title">📊 Observability &amp; Monitoring</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Prometheus</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">PromQL expert, custom metrics, recording rules, alert rules, federation</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Prometheus</strong><br><span class="skill-desc">PromQL expert, custom metrics, recording rules, alert rules, federation</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Grafana</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Dashboard creation, variables, templating, alerting, data sources</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Grafana</strong><br><span class="skill-desc">Dashboard creation, variables, templating, alerting, data sources</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>CloudWatch &amp; GCP Monitoring</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Metrics, logs, dashboards, alarms, log analytics</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>CloudWatch &amp; GCP Monitoring</strong><br><span class="skill-desc">Metrics, logs, dashboards, alarms, log analytics</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>OpsGenie &amp; Alerting</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Alert routing, on-call management, incident response</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>OpsGenie &amp; Alerting</strong><br><span class="skill-desc">Alert routing, on-call management, incident response</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
                             </div>
                         </div>
@@ -2112,21 +2112,21 @@
                         <div class="card">
                             <h3 class="card-title">🌐 Networking &amp; Security</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Advanced Networking</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">VPC, VPN (HA), BGP, private networking, VPC peering, service mesh</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Advanced Networking</strong><br><span class="skill-desc">VPC, VPN (HA), BGP, private networking, VPC peering, service mesh</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>TLS/SSL &amp; Certificates</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">mTLS, certificate management, PKI, Let's Encrypt, cert rotation</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>TLS/SSL &amp; Certificates</strong><br><span class="skill-desc">mTLS, certificate management, PKI, Let's Encrypt, cert rotation</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>API Gateway</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Kong, Nginx Ingress, rate limiting, auth, CORS</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>API Gateway</strong><br><span class="skill-desc">Kong, Nginx Ingress, rate limiting, auth, CORS</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>Security Tools</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">OWASP ZAP, Trivy, SonarQube, penetration testing</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>Security Tools</strong><br><span class="skill-desc">OWASP ZAP, Trivy, SonarQube, penetration testing</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
                             </div>
                         </div>
@@ -2134,21 +2134,21 @@
                         <div class="card">
                             <h3 class="card-title">🗄️ Databases &amp; Data Stores</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>MongoDB &amp; MongoDB Atlas</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">18 clusters managed, replication, sharding, performance tuning, security</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>MongoDB &amp; MongoDB Atlas</strong><br><span class="skill-desc">18 clusters managed, replication, sharding, performance tuning, security</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>PostgreSQL</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">44 instances managed, performance tuning, replication, backup</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>PostgreSQL</strong><br><span class="skill-desc">44 instances managed, performance tuning, replication, backup</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Redis</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">7.2 with SSL, cluster mode, sentinel, GCP Memorystore</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Redis</strong><br><span class="skill-desc">7.2 with SSL, cluster mode, sentinel, GCP Memorystore</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>SQL Server</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Database administration, query optimization</span></div>
-                                    <span style="color:#a78bfa;font-weight:700;">●●●○○</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>SQL Server</strong><br><span class="skill-desc">Database administration, query optimization</span></div>
+                                    <span class="dot-proficient">●●●○○</span>
                                 </div>
                             </div>
                         </div>
@@ -2156,37 +2156,37 @@
                         <div class="card">
                             <h3 class="card-title">💻 Programming &amp; Scripting</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Bash / Shell Scripting</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Automation scripts, system administration, pipeline scripting</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Bash / Shell Scripting</strong><br><span class="skill-desc">Automation scripts, system administration, pipeline scripting</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Python</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Automation, data processing, API development, DevOps tools</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Python</strong><br><span class="skill-desc">Automation, data processing, API development, DevOps tools</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Go (Golang)</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Microservices, CLI tools, Kubernetes operators</span></div>
-                                    <span style="color:#a78bfa;font-weight:700;">●●●○○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Go (Golang)</strong><br><span class="skill-desc">Microservices, CLI tools, Kubernetes operators</span></div>
+                                    <span class="dot-proficient">●●●○○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>YAML / JSON</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Configuration management, K8s manifests, CI/CD configs</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>YAML / JSON</strong><br><span class="skill-desc">Configuration management, K8s manifests, CI/CD configs</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Java</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Spring Boot, Maven, Web Services (previous dev roles)</span></div>
-                                    <span style="color:#a78bfa;font-weight:700;">●●●○○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Java</strong><br><span class="skill-desc">Spring Boot, Maven, Web Services (previous dev roles)</span></div>
+                                    <span class="dot-proficient">●●●○○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>TypeScript / JavaScript</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Next.js, Node.js, side projects in production</span></div>
-                                    <span style="color:#a78bfa;font-weight:700;">●●●○○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>TypeScript / JavaScript</strong><br><span class="skill-desc">Next.js, Node.js, side projects in production</span></div>
+                                    <span class="dot-proficient">●●●○○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Kotlin</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Android development, MVVM, Coroutines, Room ORM</span></div>
-                                    <span style="color:#a78bfa;font-weight:700;">●●●○○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Kotlin</strong><br><span class="skill-desc">Android development, MVVM, Coroutines, Room ORM</span></div>
+                                    <span class="dot-proficient">●●●○○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>Swift / SwiftUI</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">iOS development, SwiftData, native frameworks (zero dependencies)</span></div>
-                                    <span style="color:#a78bfa;font-weight:700;">●●●○○</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>Swift / SwiftUI</strong><br><span class="skill-desc">iOS development, SwiftData, native frameworks (zero dependencies)</span></div>
+                                    <span class="dot-proficient">●●●○○</span>
                                 </div>
                             </div>
                         </div>
@@ -2194,17 +2194,17 @@
                         <div class="card">
                             <h3 class="card-title">💰 FinOps &amp; Cost Management</h3>
                             <div class="skill-list">
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Cloud Cost Optimization</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">$331K savings documented, rightsizing, lifecycle policies, spot instances</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Cloud Cost Optimization</strong><br><span class="skill-desc">$331K savings documented, rightsizing, lifecycle policies, spot instances</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;border-bottom:1px solid var(--border);">
-                                    <div><strong>Kubecost</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Multi-cluster deployment, cost allocation, chargeback, recommendations</span></div>
-                                    <span style="color:var(--primary-light);font-weight:700;">●●●●○</span>
+                                <div class="skill-item skill-row">
+                                    <div><strong>Kubecost</strong><br><span class="skill-desc">Multi-cluster deployment, cost allocation, chargeback, recommendations</span></div>
+                                    <span class="dot-advanced">●●●●○</span>
                                 </div>
-                                <div class="skill-item" style="justify-content:space-between;padding:var(--space-md) 0;">
-                                    <div><strong>FinOps Best Practices</strong><br><span style="font-size:0.8125rem;color:var(--text-muted);">Cost analysis, budgeting, forecasting, showback/chargeback</span></div>
-                                    <span style="color:var(--success);font-weight:700;">●●●●●</span>
+                                <div class="skill-item skill-row--last">
+                                    <div><strong>FinOps Best Practices</strong><br><span class="skill-desc">Cost analysis, budgeting, forecasting, showback/chargeback</span></div>
+                                    <span class="dot-expert">●●●●●</span>
                                 </div>
                             </div>
                         </div>
@@ -2214,57 +2214,57 @@
                         <h3 class="card-title"><span class="card-icon">🎯</span> Additional Technical Proficiencies</h3>
                         <div class="grid-3">
                             <div>
-                                <h4 style="font-size:0.875rem;font-weight:700;margin-bottom:var(--space-md);color:var(--primary-light);">📦 Container Registry</h4>
-                                <ul style="list-style:none;font-size:0.875rem;color:var(--text-secondary);">
-                                    <li style="padding:5px 0;">GCP Artifact Registry</li>
-                                    <li style="padding:5px 0;">Docker Hub</li>
-                                    <li style="padding:5px 0;">Image lifecycle management</li>
-                                    <li style="padding:5px 0;">Registry cleanup automation</li>
+                                <h4 class="subcat-title">📦 Container Registry</h4>
+                                <ul class="list-plain">
+                                    <li>GCP Artifact Registry</li>
+                                    <li>Docker Hub</li>
+                                    <li>Image lifecycle management</li>
+                                    <li>Registry cleanup automation</li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 style="font-size:0.875rem;font-weight:700;margin-bottom:var(--space-md);color:var(--primary-light);">🔄 Workflow Automation</h4>
-                                <ul style="list-style:none;font-size:0.875rem;color:var(--text-secondary);">
-                                    <li style="padding:5px 0;">Apache Airflow</li>
-                                    <li style="padding:5px 0;">Cron jobs</li>
-                                    <li style="padding:5px 0;">Event-driven architectures</li>
-                                    <li style="padding:5px 0;">Pub/Sub messaging</li>
+                                <h4 class="subcat-title">🔄 Workflow Automation</h4>
+                                <ul class="list-plain">
+                                    <li>Apache Airflow</li>
+                                    <li>Cron jobs</li>
+                                    <li>Event-driven architectures</li>
+                                    <li>Pub/Sub messaging</li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 style="font-size:0.875rem;font-weight:700;margin-bottom:var(--space-md);color:var(--primary-light);">📈 BI &amp; Analytics</h4>
-                                <ul style="list-style:none;font-size:0.875rem;color:var(--text-secondary);">
-                                    <li style="padding:5px 0;">Metabase</li>
-                                    <li style="padding:5px 0;">Data visualization</li>
-                                    <li style="padding:5px 0;">Infrastructure metrics</li>
-                                    <li style="padding:5px 0;">Cost dashboards</li>
+                                <h4 class="subcat-title">📈 BI &amp; Analytics</h4>
+                                <ul class="list-plain">
+                                    <li>Metabase</li>
+                                    <li>Data visualization</li>
+                                    <li>Infrastructure metrics</li>
+                                    <li>Cost dashboards</li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 style="font-size:0.875rem;font-weight:700;margin-bottom:var(--space-md);color:var(--primary-light);">🌐 DNS &amp; Domain</h4>
-                                <ul style="list-style:none;font-size:0.875rem;color:var(--text-secondary);">
-                                    <li style="padding:5px 0;">Cloudflare (46 domains)</li>
-                                    <li style="padding:5px 0;">817 DNS records managed</li>
-                                    <li style="padding:5px 0;">SSL certificate automation</li>
-                                    <li style="padding:5px 0;">DMARC, SPF, DKIM</li>
+                                <h4 class="subcat-title">🌐 DNS &amp; Domain</h4>
+                                <ul class="list-plain">
+                                    <li>Cloudflare (46 domains)</li>
+                                    <li>817 DNS records managed</li>
+                                    <li>SSL certificate automation</li>
+                                    <li>DMARC, SPF, DKIM</li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 style="font-size:0.875rem;font-weight:700;margin-bottom:var(--space-md);color:var(--primary-light);">🔐 Security &amp; Compliance</h4>
-                                <ul style="list-style:none;font-size:0.875rem;color:var(--text-secondary);">
-                                    <li style="padding:5px 0;">ISO 27001 compliance</li>
-                                    <li style="padding:5px 0;">Secret management (Vault, GCP)</li>
-                                    <li style="padding:5px 0;">IAM &amp; RBAC</li>
-                                    <li style="padding:5px 0;">Audit logging</li>
+                                <h4 class="subcat-title">🔐 Security &amp; Compliance</h4>
+                                <ul class="list-plain">
+                                    <li>ISO 27001 compliance</li>
+                                    <li>Secret management (Vault, GCP)</li>
+                                    <li>IAM &amp; RBAC</li>
+                                    <li>Audit logging</li>
                                 </ul>
                             </div>
                             <div>
-                                <h4 style="font-size:0.875rem;font-weight:700;margin-bottom:var(--space-md);color:var(--primary-light);">⚙️ Operating Systems</h4>
-                                <ul style="list-style:none;font-size:0.875rem;color:var(--text-secondary);">
-                                    <li style="padding:5px 0;">Linux (Ubuntu, Debian, Fedora)</li>
-                                    <li style="padding:5px 0;">Container OS (optimized)</li>
-                                    <li style="padding:5px 0;">System administration</li>
-                                    <li style="padding:5px 0;">Kernel tuning</li>
+                                <h4 class="subcat-title">⚙️ Operating Systems</h4>
+                                <ul class="list-plain">
+                                    <li>Linux (Ubuntu, Debian, Fedora)</li>
+                                    <li>Container OS (optimized)</li>
+                                    <li>System administration</li>
+                                    <li>Kernel tuning</li>
                                 </ul>
                             </div>
                         </div>

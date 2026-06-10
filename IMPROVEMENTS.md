@@ -10,7 +10,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 
 ## Phase 1 — Quick Wins (visible impact, low risk)
 
-### 1.1 ⏳ Remove inline styles → utility classes
+### 1.1 ✅ Remove inline styles → utility classes
 - **Why:** 161 `no-inline-style` warnings from html-validate. ~60 inline `style=""` attributes in `index.html` (skills cards, hero stats, footer copy block, etc.).
 - **Where:** [index.html](index.html), [styles.css](styles.css)
 - **How:** Create utility classes for the repeated patterns:
@@ -20,6 +20,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   - `.legend-row` — proficiency legend rows
 - **Risk:** Low — purely a refactor; visual output should be identical.
 - **Acceptance:** `npm run validate` shows 0 warnings.
+- **Result:** 161 warnings → 3 warnings (the remaining 3 are unrelated `heading-level` issues, pre-existing). Bar-fill widths migrated from inline `style="width:96%"` to `data-width="96%"` (JS already reads `dataset.width`).
 
 ### 1.2 ⏳ Add og:image and Twitter card image
 - **Why:** Link sharing on LinkedIn, Slack, WhatsApp shows no preview today.
