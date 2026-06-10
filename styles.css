@@ -1915,6 +1915,112 @@ footer {
 }
 
 /* ============================================================
+   UTILITY CLASSES (extracted from inline styles)
+   Placed late in source order so they override component defaults
+   without needing higher selector specificity.
+   ============================================================ */
+
+.skill-item.skill-row {
+    justify-content: space-between;
+    padding: var(--space-md) 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.skill-item.skill-row--last {
+    border-bottom: none;
+}
+
+.skill-desc {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+}
+
+.subcat-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    margin-bottom: var(--space-md);
+    color: var(--primary-light);
+}
+
+.list-plain {
+    list-style: none;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.list-plain > li {
+    padding: 5px 0;
+}
+
+.dot-expert {
+    color: var(--success);
+    font-weight: 700;
+}
+
+.dot-advanced {
+    color: var(--primary-light);
+    font-weight: 700;
+}
+
+.dot-proficient {
+    color: var(--secondary-light);
+    font-weight: 700;
+}
+
+.legend-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.legend-container {
+    display: flex;
+    gap: var(--space-xl);
+    flex-wrap: wrap;
+    font-size: 0.875rem;
+}
+
+.feature-description--lh-wide {
+    line-height: 1.9;
+}
+
+.diagram-flow-text {
+    font-weight: 600;
+    margin-bottom: var(--space-sm);
+}
+
+.diagram-flow-body {
+    font-size: 0.875rem;
+    line-height: 1.7;
+}
+
+.finops-total-block {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--border);
+}
+
+.finops-total {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.finops-total-sub {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
+
+.diagram-table {
+    margin-top: var(--space-md);
+}
+
+.legend-label {
+    color: var(--text-secondary);
+}
+
+/* ============================================================
    RESPONSIVE — TABLET (≤1024px)
    ============================================================ */
 
