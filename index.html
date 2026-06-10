@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
 
+    <!-- Content Security Policy: defense-in-depth against XSS.
+         GitHub Pages can't set headers, so we use the meta-equiv form.
+         'unsafe-inline' on script-src/style-src is required because:
+           - blocking theme script in <head> (FOUC prevention)
+           - inline ld+json structured data
+           - inline <style> block in 404.html
+           - Google Fonts injects inline styles -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+
     <!-- SEO -->
     <title>Vitor Schiavo — SRE &amp; Platform Engineering Expert</title>
     <meta name="description" content="Site Reliability Engineer with 13+ years experience. Expert in GCP, AWS, Azure. $331K annual cloud cost savings. Platform engineering, Kubernetes, FinOps, mTLS, HA VPN, AI/ML Operations.">

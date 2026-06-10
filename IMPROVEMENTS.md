@@ -69,7 +69,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Risk:** Low — content decision.
 - **Result:** Applied Option 3: hero `207 AI/ML workloads` → `200+`, `863 infra assets` → `850+`. Overview highlight card updated for consistency. Task Distribution Analysis got a snapshot description: "Snapshot of Jira activity across 2021–2025". Historical references in case studies/achievements (e.g., "863 assets for ISO 27001 audit") retained as accurate point-in-time facts.
 
-### 2.3 ⏳ Add CSP via meta tag
+### 2.3 ✅ Add CSP via meta tag
 - **Why:** No CSP today. GitHub Pages doesn't allow custom headers, but a `<meta http-equiv="Content-Security-Policy">` works.
 - **Where:** [index.html](index.html) `<head>`
 - **How:**
@@ -79,6 +79,14 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   ```
 - **Risk:** Medium — needs careful testing. The blocking theme script in `<head>` needs `'unsafe-inline'`; inline `style="..."` attributes also need it until Phase 1.1 lands. Order matters: do Phase 1.1 first to tighten this later.
 - **Acceptance:** All tabs/case studies/diagrams still render; no CSP violations in browser console.
+- **Result:** Applied to both `index.html` and `404.html`. Policy:
+  - `default-src 'self'`
+  - `script-src 'self' 'unsafe-inline'` (theme blocking script + ld+json)
+  - `style-src 'self' https://fonts.googleapis.com` on index.html (no inline styles after Phase 1.1); `'unsafe-inline'` retained on 404.html which has an inline `<style>` block
+  - `object-src 'none'` (no plugins). `upgrade-insecure-requests` was considered but omitted: WebKit (mobile Safari) upgrades the test server URL `http://localhost:3000` to HTTPS and the page fails to load, breaking the Playwright test suite. Security gain is marginal since GitHub Pages serves HTTPS and there are no HTTP subresources to upgrade.
+  - `font-src 'self' https://fonts.gstatic.com`
+  - `img-src 'self' data:` (data URI favicon)
+  - `connect-src 'self'`, `base-uri 'self'`, `form-action 'self'` (note: `frame-ancestors` is ignored when set via `<meta>` — only works as HTTP header, which GitHub Pages doesn't allow)
 
 ---
 
