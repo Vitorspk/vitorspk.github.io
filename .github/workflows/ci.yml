@@ -1,0 +1,67 @@
+name: CI
+
+# Runs on every PR (no path filter) so it gates dependency bumps too —
+# validate-pr.yml's path filter skips package.json-only changes, which would
+# otherwise leave Dependabot npm PRs ungated.
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Validate, CSS sync & E2E
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate (CSS build sync + HTML/CSS/JS lint)
+        run: npm run validate
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium webkit
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+
+  # Auto-approves and merges Dependabot patch/minor PRs once `test` passes.
+  # `needs: [test]` is the de-facto gate (branch protection isn't available on
+  # this plan). Major-version bumps are intentionally left for manual review.
+  dependabot-automerge:
+    name: Dependabot auto-merge
+    needs: [test]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.event.pull_request.user.login == 'dependabot[bot]'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Fetch Dependabot metadata
+        id: meta
+        uses: dependabot/fetch-metadata@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Approve the PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Auto-merge patch and minor updates
+        if: steps.meta.outputs.update-type == 'version-update:semver-patch' || steps.meta.outputs.update-type == 'version-update:semver-minor'
+        run: gh pr merge --squash "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
