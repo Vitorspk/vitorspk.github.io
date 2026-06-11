@@ -61,7 +61,7 @@ npm run test:e2e
 npm run test:e2e:headed
 ```
 
-> **Pre-commit:** um hook do husky + lint-staged roda no `git commit` — linta os arquivos staged e, se um módulo `css/` mudou, reconstrói e re-stagea o `styles.css`.
+> **Pre-commit:** um hook do husky + lint-staged roda no `git commit` — faz lint dos arquivos em stage e, se um módulo `css/` mudou, reconstrói o `styles.css` e o adiciona novamente ao stage.
 
 ## 📋 Arquivos de Configuração
 
@@ -92,7 +92,7 @@ git push origin minha-feature
 
 ### 2. Actions Executadas
 
-- **`ci.yml`** roda o gate: build sync + lint + E2E. Se você for o Dependabot e o bump for patch/minor, o PR é aprovado e mergeado automaticamente.
+- **`ci.yml`** roda o gate: build sync + lint + E2E. Em PRs do Dependabot com bump patch/minor, o PR é aprovado e mergeado automaticamente após o gate passar.
 - **`validate-pr.yml`** gera o relatório de lint e comenta no PR.
 - **`claude-code-review.yml`** posta o review da IA.
 
