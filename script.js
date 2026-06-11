@@ -366,4 +366,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // ─── Dynamic copyright year ──────────────────────────────────────────────
     const yearEl = document.getElementById('copyright-year');
     if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    // ─── Dynamic tenure for the current ("Present") role ──────────────────────
+    // Computes "X years Y months" from a data-tenure-since="YYYY-MM" attribute
+    // so the current-role duration never goes stale. Falls back to the static
+    // HTML text if the attribute is missing or malformed.
+    const tenureEl = document.querySelector('[data-tenure-since]');
+    if (tenureEl) {
+        const since = tenureEl.dataset.tenureSince.split('-');
+        const startYear = Number(since[0]);
+        const startMonth = Number(since[1]);
+        if (startYear && startMonth) {
+            const now = new Date();
+            let months = (now.getFullYear() - startYear) * 12 + (now.getMonth() + 1 - startMonth);
+            if (months >= 0) {
+                const years = Math.floor(months / 12);
+                const rem = months % 12;
+                const parts = [];
+                if (years > 0) parts.push(years + (years === 1 ? ' year' : ' years'));
+                if (rem > 0) parts.push(rem + (rem === 1 ? ' month' : ' months'));
+                if (parts.length) tenureEl.textContent = parts.join(' ');
+            }
+        }
+    }
 });
