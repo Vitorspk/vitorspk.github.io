@@ -103,7 +103,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Acceptance:** `git commit` with a lint error blocks the commit until fixed.
 - **Result:** Installed `husky@9` + `lint-staged@17`. `prepare` script auto-installs the hook on `npm install`. `.husky/pre-commit` runs `npx lint-staged` which, per the config in `package.json`, runs `html-validate` on staged `.html`, `stylelint --fix` on staged `.css`, and `eslint --fix` on staged `.js`. Auto-fixed files are re-staged automatically.
 
-### 3.2 ⏳ `.editorconfig`
+### 3.2 ✅ `.editorconfig`
 - **Why:** Indentation drifts between editors (4-space CSS/JS vs 2-space test files).
 - **Where:** new `.editorconfig` at repo root.
 - **How:** Standard config matching existing rules:
@@ -123,6 +123,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   indent_size = 2
   ```
 - **Risk:** Zero.
+- **Result:** Added at repo root. 4-space for site source (`*.html/css/js`), 2-space for tests/Playwright config and YAML/JSON. Markdown keeps trailing whitespace (meaningful line breaks).
 
 ### 3.3 ⏳ Dependabot config
 - **Why:** Currently no automated dep updates. `@playwright/test`, `axe-core`, ESLint, etc. drift behind security patches.
