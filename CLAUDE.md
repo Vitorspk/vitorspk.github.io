@@ -9,10 +9,10 @@ Instructions for AI assistants (Claude Code, @claude in PRs, etc.) working on th
 Static personal portfolio for **Vitor Schiavo** (SRE / Platform Engineer).
 Deployed on **GitHub Pages** at `https://vitorspk.github.io/portfolio/`.
 
-- No framework, no bundler, no build step
-- Three files do all the work: `index.html`, `styles.css`, `script.js`
+- No framework, no bundler — `index.html` and `script.js` ship as-is
+- CSS is authored as modules in `css/` and concatenated into `styles.css` (committed, served directly by GitHub Pages) via `npm run build:css` — **edit the modules, never `styles.css` directly**
 - `404.html` is the custom error page served automatically by GitHub Pages
-- `package.json` exists only to hold dev linting tools (ESLint, Stylelint, html-validate)
+- `package.json` holds dev tooling only (ESLint, Stylelint, html-validate, Playwright, the CSS build script)
 
 ---
 
@@ -32,10 +32,11 @@ Before any change that affects layout, navigation, or accessibility behaviour, d
 
 ### Design system tokens
 
-All colour, spacing, and radius values live in `:root` in `styles.css`.
+All colour, spacing, and radius values live in `:root` in `css/tokens.css` (compiled into `styles.css`).
 - **Do not hardcode** hex values or pixel values that have a corresponding CSS variable
 - `404.html` imports `styles.css` to share these tokens — keep the import, do not inline them
 - `--primary` = `#3b82f6`, `--secondary` = `#8b5cf6` — use the variables, not the literals
+- CSS modules live in `css/`: `tokens.css` → `base.css` → `layout.css` → `components.css` → `responsive.css` (this is the cascade order). Run `npm run build:css` after editing; `npm run validate` fails if `styles.css` is out of sync.
 
 ### Accessibility (non-negotiable)
 
@@ -133,7 +134,8 @@ Or via GitHub UI: revert the merge commit on the master branch.
 ## What to avoid
 
 - Do not add npm runtime dependencies — this project has zero production dependencies by design
-- Do not introduce a bundler or build step — the static file model is intentional
+- Do not introduce a bundler — the only "build" is `scripts/build-css.js`, a dependency-free concat of the `css/` modules into `styles.css`. Keep it that way; no webpack/vite/postcss pipelines.
+- Do not edit `styles.css` by hand — it is generated. Edit the `css/` modules and run `npm run build:css`.
 - Do not add `!important` to CSS — stylelint will flag it
 - Do not use `var()` for one-off values — define a token if a value is reused 3+ times
 - Do not change the `inert`/`aria-hidden` dual-tablist logic without fully understanding `syncTablists()`

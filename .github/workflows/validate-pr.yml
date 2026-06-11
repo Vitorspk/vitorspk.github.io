@@ -31,6 +31,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check CSS build is in sync
+        run: |
+          echo "🧩 Verifying styles.css matches css/ modules..."
+          npm run build:css:check
+
       - name: Validate HTML
         run: |
           echo "🔍 Validating HTML structure..."
@@ -39,8 +44,8 @@ jobs:
 
       - name: Lint CSS
         run: |
-          echo "🎨 Linting CSS..."
-          npx stylelint "*.css" --config-basedir . || echo "⚠️ CSS linting warnings found"
+          echo "🎨 Linting CSS modules..."
+          npx stylelint "css/*.css" --config-basedir . || echo "⚠️ CSS linting warnings found"
         continue-on-error: true
 
       - name: Lint JavaScript

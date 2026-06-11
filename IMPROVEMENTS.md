@@ -147,12 +147,13 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 
 ## Phase 4 — Polish (long-term, optional)
 
-### 4.1 ⏳ Split `styles.css` into modules
-- **Why:** 2241 lines in one file is hard to navigate. Sections logically split by `/* === HEADER === */` comments but it's still one buffer.
-- **Where:** [styles.css](styles.css)
-- **How:** Split into `tokens.css`, `base.css`, `layout.css`, `components.css`, `responsive.css`. Concatenate in CI via `cat *.css > styles.css` build step. Keeps zero-runtime-deps + zero-bundler intent.
+### 4.1 ✅ Split `styles.css` into modules
+- **Why:** 2347 lines in one file is hard to navigate. Sections logically split by `/* === HEADER === */` comments but it's still one buffer.
+- **Where:** [styles.css](styles.css) → `css/` modules
+- **How:** Split into `tokens.css`, `base.css`, `layout.css`, `components.css`, `responsive.css`. Concatenate via a dependency-free `scripts/build-css.js`. Keeps zero-runtime-deps + zero-bundler intent.
 - **Risk:** Medium — touches the entire stylesheet; needs careful diff review.
 - **Trade-off:** Adds a CI build step (concat). May not be worth it.
+- **Result:** Split into 5 contiguous modules in `css/` (cascade order: tokens → base → layout → components → responsive). The split was verified byte-identical to the original by concatenation diff before adding the generated-file header. `scripts/build-css.js` regenerates `styles.css` (committed, served directly by GitHub Pages — no runtime bundler). `npm run build:css` builds; `npm run build:css:check` (run by `npm run validate` and CI) fails if `styles.css` is stale. Pre-commit rebuilds and re-stages `styles.css` automatically when a module changes. stylelint now lints the modules (`css/*.css`); `styles.css` is in `.stylelintignore`. Docs (CLAUDE.md, README) updated with the new contract.
 
 ### 4.2 ✅ Expand test coverage
 - **Why:** 81 tests today, but several JS behaviors are untested:
