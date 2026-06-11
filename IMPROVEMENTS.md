@@ -92,7 +92,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 
 ## Phase 3 — Tooling & Developer Experience
 
-### 3.1 ⏳ Pre-commit hook (husky + lint-staged)
+### 3.1 ✅ Pre-commit hook (husky + lint-staged)
 - **Why:** `npm run validate` can be forgotten. CI catches issues but PR cycle is slower than local feedback.
 - **Where:** `package.json` (devDependencies + scripts), new `.husky/pre-commit`
 - **How:**
@@ -101,6 +101,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   - `lint-staged` config: run `stylelint --fix` on `*.css`, `eslint --fix` on `*.js`, `html-validate` on `*.html`.
 - **Risk:** Low.
 - **Acceptance:** `git commit` with a lint error blocks the commit until fixed.
+- **Result:** Installed `husky@9` + `lint-staged@17`. `prepare` script auto-installs the hook on `npm install`. `.husky/pre-commit` runs `npx lint-staged` which, per the config in `package.json`, runs `html-validate` on staged `.html`, `stylelint --fix` on staged `.css`, and `eslint --fix` on staged `.js`. Auto-fixed files are re-staged automatically.
 
 ### 3.2 ⏳ `.editorconfig`
 - **Why:** Indentation drifts between editors (4-space CSS/JS vs 2-space test files).
