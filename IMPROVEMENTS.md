@@ -6,6 +6,8 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 
 **Legend:** ⏳ pending · 🚧 in progress · ✅ done
 
+**Status: all phases complete ✅** (1.1–1.4, 2.1–2.3, 3.1–3.3, 4.1–4.3). Shipped 2026-06-08 → 2026-06-11.
+
 ---
 
 ## Phase 1 — Quick Wins (visible impact, low risk)
@@ -168,13 +170,17 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Result:** New `tests/interactions.spec.js` with 13 tests (×2 projects = 26 runs) covering all six behaviors. Suite grew 81 → 107 passing. Reduced-motion tests use `page.emulateMedia({ reducedMotion: 'reduce' })` before load because `test.use({ reducedMotion })` did not propagate to `matchMedia` reliably.
 - **Bonus bugfix (found by review):** keyboard Arrow/Home/End navigation followed panel DOM order (Overview → Cases → …) instead of the visual sidebar order (Overview → Experience → Skills → …), violating WCAG 2.4.3 Focus Order — a leftover from the tab reorder (PR #14), which moved buttons but not panels. `script.js` now derives `tabNames` from the sidebar tablist buttons, so keyboard order always matches what users see. CLAUDE.md/README updated to document the new contract (both tablists must share the same order).
 
-### 4.3 ⏳ Audit & refresh content
+### 4.3 ✅ Audit & refresh content
 - **Why:** Several dates and metrics will age:
   - Case study dates ("March 2026", "January 2025") — fine as historical reference, no action needed.
   - Hero "AI/ML workloads: 207" — see 2.2.
   - Career trajectory year ranges — keep current.
 - **Where:** [index.html](index.html)
 - **Risk:** Low.
+- **Result:** Audited all dated/quantified content. Two genuine drift/consistency issues found and fixed:
+  1. **Current-role tenure** ("Jun 2021 – Present · 4 years 10 months") was stale (already 5 years). Made it **dynamic** via `data-tenure-since="2021-06"` + a small computation in `script.js` (same pattern as the dynamic copyright year) so it never goes stale again. Covered by a new E2E test.
+  2. **Skills count mismatch**: sidebar nav badge said `50+` while the Skills section says `55+`. Synced the badge to `55+`.
+  - Case study dates and past-role durations are accurate point-in-time facts — intentionally left as-is. Hero counts were already ranged in Phase 2.2. Footer copyright year was already dynamic.
 
 ---
 

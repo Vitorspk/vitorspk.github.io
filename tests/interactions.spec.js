@@ -103,6 +103,25 @@ test.describe('Keyboard navigation', () => {
   });
 });
 
+test.describe('Dynamic tenure', () => {
+  test('current-role tenure is computed from data-tenure-since', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#tab-experience').click();
+    const el = page.locator('[data-tenure-since]');
+    const since = await el.getAttribute('data-tenure-since');
+    const [sy, sm] = since.split('-').map(Number);
+    const now = new Date();
+    const months = (now.getFullYear() - sy) * 12 + (now.getMonth() + 1 - sm);
+    const years = Math.floor(months / 12);
+    const rem = months % 12;
+    const expected = [
+      years > 0 ? `${years} ${years === 1 ? 'year' : 'years'}` : null,
+      rem > 0 ? `${rem} ${rem === 1 ? 'month' : 'months'}` : null,
+    ].filter(Boolean).join(' ') || 'less than a month';
+    await expect(el).toHaveText(expected);
+  });
+});
+
 test.describe('Case study chevron', () => {
   test('chevron rotates 180deg when expanded', async ({ page }) => {
     await page.goto('/');
