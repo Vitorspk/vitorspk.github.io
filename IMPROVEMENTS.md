@@ -207,7 +207,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   - A `test` job runs on **every** PR (no path filter): `npm run validate` (CSS build-sync check + HTML/CSS/JS lint, hard-fail) and the full Playwright E2E suite (`npm run test:e2e`).
   - A `dependabot-automerge` job (`needs: [test]`) auto-approves and squash-merges **patch/minor** Dependabot PRs once the test job passes. Major bumps are left for manual review.
   - Mirrors the proven pattern from the `pokemon-go-payment` repo.
-- **Risk:** Low — only Dependabot PRs auto-merge, and only after lint + 109 E2E tests pass. Requires the repo setting *Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests"* to be enabled for the approve step.
+- **Risk:** Low — only Dependabot PRs auto-merge, and only after lint + the full Playwright E2E suite passes. Requires the repo setting *Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests"* to be enabled for the approve step.
 
 ---
 
