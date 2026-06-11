@@ -93,12 +93,15 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 ## Local validation
 
 ```bash
-npm install
-npm run validate     # lint HTML + CSS + JS
+npm install          # also installs the husky pre-commit hook
+npm run build:css    # regenerate styles.css from css/ modules
+npm run validate     # CSS build-sync check + lint HTML/CSS/JS
 npm run lint:fix     # auto-fix CSS and JS
+npm run test:e2e     # Playwright E2E (desktop + mobile)
+npm test             # validate + E2E (matches the CI gate)
 ```
 
-Fix all linting errors before pushing. The CI workflow will block the PR check if linting fails.
+A pre-commit hook (husky + lint-staged) lints staged files and rebuilds `styles.css` when a `css/` module changes. Fix all errors before pushing — the `ci.yml` gate (validate + E2E) blocks the PR if anything fails.
 
 ---
 

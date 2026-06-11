@@ -35,22 +35,32 @@ portfolio/
 │   └── responsive.css  #   media queries, reduced motion, print
 ├── script.js           # Tab navigation, accessibility, animations
 ├── 404.html            # Custom error page (auto-served by GitHub Pages)
+├── og-image.png        # Open Graph / Twitter share image (generated)
+├── sitemap.xml         # Search engine sitemap
+├── robots.txt          # Crawler directives
 ├── README.md           # This file
 ├── CLAUDE.md           # AI assistant instructions
+├── IMPROVEMENTS.md     # Improvement roadmap (all phases ✅)
 ├── LICENSE             # MIT license
-├── VALIDATION.md       # Local linting setup guide
-├── package.json        # Dev dependencies (linters, Playwright, build script)
+├── VALIDATION.md       # Local validation & CI guide
+├── package.json        # Dev tooling (linters, Playwright, build scripts)
 ├── package-lock.json
+├── tests/              # Playwright E2E specs (desktop + mobile)
 ├── scripts/
 │   ├── build-css.js    # Concatenates css/ modules → styles.css
-│   └── generate-og-image.js  # Renders the OG share image
-├── eslint.config.js    # ESLint flat config
+│   └── generate-og-image.js  # Renders og-image.png
+├── eslint.config.js    # ESLint flat config (v9+)
+├── playwright.config.js # Playwright config (desktop + mobile projects)
 ├── .stylelintrc.json   # Stylelint config
+├── .stylelintignore    # Excludes generated styles.css from stylelint
 ├── .htmlvalidate.json  # HTML Validate config
 ├── .editorconfig       # Editor indentation rules
+├── .husky/             # Git pre-commit hook (lint-staged)
 └── .github/
+    ├── dependabot.yml          # Weekly dependency update PRs
     └── workflows/
-        ├── validate-pr.yml         # HTML/CSS/JS linting on PRs
+        ├── ci.yml                  # Test gate (validate + E2E) + Dependabot auto-merge
+        ├── validate-pr.yml         # HTML/CSS/JS lint summary on PRs
         ├── claude-code-review.yml  # AI code review on PRs
         └── claude.yml              # @claude mentions in issues/PRs
 ```
@@ -135,10 +145,15 @@ Adding a new tab requires a `[role="tabpanel"]` plus matching buttons in both ta
 ## Local development
 
 ```bash
-npm install        # Install linters
-npm run validate   # Run all linters (HTML + CSS + JS)
+npm install        # Install dev tooling + the husky pre-commit hook
+npm run build:css  # Rebuild styles.css from the css/ modules
+npm run validate   # CSS build-sync check + lint (HTML + CSS + JS)
 npm run lint:fix   # Auto-fix CSS and JS issues
+npm run test:e2e   # Playwright E2E suite (desktop + mobile)
+npm test           # validate + E2E (the full check)
 ```
+
+A **pre-commit hook** (husky + lint-staged) runs automatically on `git commit`: it lints staged files and, when a `css/` module changed, rebuilds and re-stages `styles.css`.
 
 No dev server is needed — open `index.html` directly in a browser, or use any static file server:
 

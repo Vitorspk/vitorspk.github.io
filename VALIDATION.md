@@ -4,42 +4,28 @@ Este projeto usa validação automatizada para garantir qualidade de código em 
 
 ## 🤖 Validação Automática (GitHub Actions)
 
-Toda vez que você abre um Pull Request, a Action `validate-pr.yml` executa automaticamente:
+Dois workflows rodam em todo Pull Request:
 
-### ✅ Checks Executados
+### `ci.yml` — gate de qualidade (bloqueante)
 
-1. **HTML Validation**
-   - Estrutura HTML válida
-   - Meta tags obrigatórias (charset, viewport, description)
-   - Links corretos para CSS/JS externos
-   - Mínimo de estilos/scripts inline
+Roda em **todos** os PRs (sem filtro de path, então também cobre bumps de dependência):
 
-2. **CSS Linting**
-   - Sintaxe CSS válida
-   - Regras de qualidade (stylelint)
-   - Check de uso excessivo de `!important`
-   - Verificação de vendor prefixes
+1. **CSS build sync** — `npm run build:css:check` falha se `styles.css` estiver fora de sincronia com os módulos em `css/`
+2. **Lint (hard-fail)** — `npm run validate` roda html-validate, stylelint e ESLint; erros quebram o build
+3. **E2E** — instala os browsers do Playwright e roda toda a suíte (desktop + mobile)
 
-3. **JavaScript Linting**
-   - Sintaxe JavaScript válida
-   - Regras de qualidade (ESLint)
-   - Detecção de console.log/debugger
-   - Boas práticas de código
+Esse job é o gate real. Além disso, ele **aprova e faz squash-merge automático** de PRs do Dependabot patch/minor quando o gate passa (bumps major ficam para revisão manual).
 
-4. **File Size Checks**
-   - HTML < 500KB
-   - CSS < 100KB
-   - JS < 50KB
+### `validate-pr.yml` — relatório informativo
 
-5. **Security Checks**
-   - Detecção de inline event handlers
-   - Verificação de recursos externos
-   - Boas práticas de segurança
+Roda em mudanças de HTML/CSS/JS e posta um comentário-resumo no PR:
 
-6. **Required Files**
-   - `index.html` presente
-   - `styles.css` presente
-   - `script.js` presente
+1. **HTML Validation** — estrutura, meta tags, links externos, estilos inline
+2. **CSS Linting** — sintaxe, qualidade (stylelint), uso de `!important`, vendor prefixes
+3. **JavaScript Linting** — sintaxe, qualidade (ESLint), console.log/debugger
+4. **File Size Checks** — HTML < 500KB · CSS < 100KB · JS < 50KB
+5. **Security Checks** — inline event handlers, recursos externos
+6. **Required Files** — `index.html`, `styles.css`, `script.js`
 
 ## 💻 Validação Local
 
@@ -52,30 +38,42 @@ npm install
 ### Comandos Disponíveis
 
 ```bash
-# Rodar todas as validações
+# Build do CSS (concatena css/ → styles.css)
+npm run build:css
+npm run build:css:check   # falha se styles.css estiver desatualizado
+
+# Validação completa (build sync + lint HTML/CSS/JS)
 npm run validate
-# ou
+
+# Validação + E2E (o check completo, igual ao CI)
 npm test
 
-# Validar apenas HTML
+# Lint individual
 npm run lint:html
-
-# Validar apenas CSS
-npm run lint:css
-
-# Validar apenas JavaScript
+npm run lint:css          # lint dos módulos em css/
 npm run lint:js
 
 # Auto-fix (CSS e JS)
 npm run lint:fix
+
+# Testes E2E do Playwright (desktop + mobile)
+npm run test:e2e
+npm run test:e2e:headed
 ```
+
+> **Pre-commit:** um hook do husky + lint-staged roda no `git commit` — linta os arquivos staged e, se um módulo `css/` mudou, reconstrói e re-stagea o `styles.css`.
 
 ## 📋 Arquivos de Configuração
 
-- **`eslint.config.js`** - Configuração do ESLint (flat config) para JavaScript
-- **`.stylelintrc.json`** - Configuração do Stylelint para CSS
-- **`.htmlvalidate.json`** - Configuração do HTML Validate
-- **`.github/workflows/validate-pr.yml`** - GitHub Action workflow
+- **`eslint.config.js`** - Configuração do ESLint (flat config, v9+) para JavaScript
+- **`.stylelintrc.json`** + **`.stylelintignore`** - Stylelint (lint dos módulos em `css/`; ignora o `styles.css` gerado)
+- **`.htmlvalidate.json`** - HTML Validate
+- **`.editorconfig`** - Regras de indentação por tipo de arquivo
+- **`playwright.config.js`** - Testes E2E (projetos desktop + mobile)
+- **`scripts/build-css.js`** - Concatena os módulos `css/` em `styles.css`
+- **`.github/dependabot.yml`** - PRs semanais de atualização de dependências
+- **`.github/workflows/ci.yml`** - Gate de teste + auto-merge do Dependabot
+- **`.github/workflows/validate-pr.yml`** - Relatório de lint no PR
 
 ## 🔧 Como Funciona
 
@@ -92,20 +90,18 @@ git push origin minha-feature
 # Abra PR no GitHub
 ```
 
-### 2. Action Executada
+### 2. Actions Executadas
 
-A Action roda automaticamente e:
-- ✅ Valida todo o código
-- 📊 Gera relatório detalhado
-- 💬 Comenta no PR com resumo
-- ⚠️ Mostra warnings e erros
+- **`ci.yml`** roda o gate: build sync + lint + E2E. Se você for o Dependabot e o bump for patch/minor, o PR é aprovado e mergeado automaticamente.
+- **`validate-pr.yml`** gera o relatório de lint e comenta no PR.
+- **`claude-code-review.yml`** posta o review da IA.
 
 ### 3. Review do Resultado
 
 Veja os resultados em:
-- **PR Comments** - Resumo automático
-- **Actions Tab** - Logs detalhados
-- **Checks** - Status de cada validação
+- **PR Comments** - Resumo do lint + review da IA
+- **Actions Tab** - Logs detalhados (incl. a suíte E2E)
+- **Checks** - Status de cada job; o check "Validate, CSS sync & E2E" é o gate bloqueante
 
 ## 🎯 Boas Práticas
 
@@ -217,4 +213,4 @@ Se encontrar problemas com as validações, abra uma issue ou contate o mantened
 
 ---
 
-**Última atualização:** 2025-11-17
+**Última atualização:** 2026-06-11
