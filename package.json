@@ -5,10 +5,12 @@
   "scripts": {
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
     "lint:html": "html-validate index.html",
-    "lint:css": "stylelint '*.css'",
+    "lint:css": "stylelint 'css/*.css'",
     "lint:js": "eslint '*.js'",
     "lint:fix": "npm run lint:css -- --fix && npm run lint:js -- --fix",
-    "validate": "npm run lint",
+    "build:css": "node scripts/build-css.js",
+    "build:css:check": "node scripts/build-css.js --check",
+    "validate": "npm run build:css:check && npm run lint",
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "npx playwright test --headed",
     "test": "npm run validate && npm run test:e2e",
@@ -17,7 +19,11 @@
   },
   "lint-staged": {
     "**/*.html": "html-validate",
-    "**/*.css": "stylelint --fix",
+    "css/*.css": [
+      "stylelint --fix",
+      "node scripts/build-css.js",
+      "git add styles.css"
+    ],
     "**/*.js": "eslint --fix"
   },
   "repository": {

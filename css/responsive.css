@@ -1,0 +1,325 @@
+/* ============================================================
+   RESPONSIVE — TABLET (≤1024px)
+   ============================================================ */
+
+@media (width <= 1024px) {
+    :root {
+        --sidebar-w: 200px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (≤768px)
+   Sidebar becomes hidden; topbar + mobile-tabs appear
+   ============================================================ */
+
+@media (width <= 768px) {
+    .sidebar {
+        display: none;
+    }
+
+    .topbar {
+        display: flex;
+    }
+
+    .mobile-tabs {
+        display: flex;
+    }
+
+    .main-content {
+        margin-left: 0;
+        max-width: 100%;
+
+        /* No extra padding needed — sticky topbar and tabs handle their own offset */
+    }
+
+    .hero {
+        padding: var(--space-2xl) var(--space-lg);
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9375rem;
+    }
+
+    /* Switch to 2-col grid on tablet/mobile — 3 rows of 2 stats */
+    .hero-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Adjust border removal for 2-col layout */
+    .hero-stat:nth-child(3n) {
+        border-right: 1px solid var(--border);
+    }
+
+    .hero-stat:nth-child(2n) {
+        border-right: none;
+    }
+
+    .hero-stat:nth-last-child(-n+3) {
+        border-bottom: 1px solid var(--border);
+    }
+
+    .hero-stat:nth-last-child(-n+2) {
+        border-bottom: none;
+    }
+
+    .page-content {
+        padding: var(--space-lg);
+
+        /* Ensure content doesn't bleed under the iOS home bar */
+        padding-bottom: max(var(--space-lg), env(safe-area-inset-bottom));
+    }
+
+    .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .before-after {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    /* Full-width CTA buttons on mobile for easy tapping */
+    .hero-cta .btn-primary,
+    .hero-cta .btn-ghost {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    footer {
+        padding: var(--space-2xl) var(--space-lg);
+
+        /* Safe area for iPhone home bar */
+        padding-bottom: max(var(--space-2xl), env(safe-area-inset-bottom));
+    }
+
+    .case-header {
+        flex-direction: column;
+    }
+
+    /* Cards: reduce internal padding on mobile to avoid cramping */
+    .card {
+        padding: var(--space-lg);
+    }
+
+    /* Tables on mobile: smaller cell padding */
+    th, td {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    /* Highlight box: tighter padding on mobile */
+    .highlight-box {
+        padding: var(--space-lg);
+    }
+
+    .highlight-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-sm);
+    }
+
+    /* Timeline: tighter left spacing on mobile */
+    .timeline {
+        padding-left: var(--space-xl);
+    }
+
+    .timeline::before {
+        /* 6px = half of 12px dot, centering the line under the dot */
+        left: 6px;
+    }
+
+    .timeline-item::before {
+        /* Adjusted from desktop -25px to match the reduced timeline padding */
+        left: -22px;
+        width: 12px;
+        height: 12px;
+    }
+
+    .timeline-company {
+        font-size: 1.125rem;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — SMALL MOBILE (≤480px)
+   ============================================================ */
+
+@media (width <= 480px) {
+    .hero {
+        padding: var(--space-xl) var(--space-md);
+    }
+
+    .hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .hero-stat {
+        padding: var(--space-md) var(--space-lg);
+    }
+
+    .hero-stat-value {
+        font-size: 1.375rem;
+    }
+
+    .scroll-to-top {
+        bottom: max(20px, env(safe-area-inset-bottom));
+        right: 16px;
+    }
+
+    .theme-toggle {
+        bottom: max(20px, env(safe-area-inset-bottom));
+        right: 68px;
+    }
+
+    .quick-links-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .page-content {
+        padding: var(--space-md);
+        padding-bottom: max(var(--space-md), env(safe-area-inset-bottom));
+    }
+
+    /* Ensure card padding doesn't feel too tight on small screens */
+    .card {
+        padding: var(--space-md);
+    }
+
+    /* Case study headers: less padding on small screens */
+    .case-header {
+        padding: var(--space-lg);
+    }
+
+    .case-title {
+        font-size: 1.125rem;
+    }
+
+    /* Tables: tighter padding for small viewports (scoped to tab content) */
+    .tab-content th,
+    .tab-content td {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 0.875rem;
+    }
+
+    /* Footer links: ensure 44px touch target */
+    .footer-link {
+        padding: var(--space-sm) var(--space-lg);
+        min-height: 44px; /* WCAG 2.5.5 touch target */
+    }
+
+    /* Impact metrics: reduce padding */
+    .impact-metrics {
+        padding: var(--space-sm) var(--space-md);
+    }
+
+    /* Allow horizontal scroll rather than squashing diagram node labels */
+    .architecture-diagram svg {
+        min-width: 500px;
+    }
+}
+
+/* ============================================================
+   RESPONSIVE — ULTRA-SMALL MOBILE (≤320px)
+   ============================================================ */
+
+@media (width <= 320px) {
+    .hero h1 {
+        font-size: 1.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.875rem;
+    }
+
+    .hero-stat-value {
+        font-size: 1.25rem;
+    }
+}
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(16px);
+}
+
+.reveal.revealed {
+    animation: revealUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes revealUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ============================================================
+   HIGH CONTRAST
+   ============================================================ */
+
+@media (prefers-contrast: more) {
+    :root {
+        --border:       rgba(255,255,255,0.2);
+        --text-muted:   #94a3b8;
+        --shadow-sm:    none;
+        --shadow-md:    none;
+        --shadow-lg:    none;
+        --shadow-xl:    none;
+    }
+
+    [data-theme="light"] {
+        --border:       rgba(0,0,0,0.25);
+        --text-muted:   #334155;
+    }
+}
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+
+@media print {
+    .sidebar, .topbar, .mobile-tabs, .scroll-to-top, .theme-toggle, .reading-progress {
+        display: none !important;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .tab-content {
+        display: block !important;
+    }
+
+    body {
+        background: white;
+        color: black;
+    }
+}
