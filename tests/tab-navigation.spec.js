@@ -1,6 +1,9 @@
 const { test, expect } = require('@playwright/test');
 
-const TAB_NAMES = ['overview', 'cases', 'experience', 'aiml', 'finops', 'technical', 'achievements', 'skills', 'projects'];
+// Visual order of the sidebar tablist buttons (same source script.js uses
+// for tabNames). Order only matters for iteration here — each test asserts
+// per-tab state independently.
+const TAB_NAMES = ['overview', 'experience', 'skills', 'cases', 'aiml', 'finops', 'technical', 'achievements', 'projects'];
 
 test.use({ viewport: { width: 1280, height: 800 } });
 

@@ -154,7 +154,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Risk:** Medium — touches the entire stylesheet; needs careful diff review.
 - **Trade-off:** Adds a CI build step (concat). May not be worth it.
 
-### 4.2 ⏳ Expand test coverage
+### 4.2 ✅ Expand test coverage
 - **Why:** 81 tests today, but several JS behaviors are untested:
   - Scroll-to-top button visibility (`window.scrollY > 300`)
   - Reading progress bar updates on scroll
@@ -164,6 +164,8 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   - Case study chevron rotation on expand
 - **Where:** `tests/` — new specs or additions to existing.
 - **Risk:** Low.
+- **Result:** New `tests/interactions.spec.js` with 13 tests (×2 projects = 26 runs) covering all six behaviors. Suite grew 81 → 107 passing. Reduced-motion tests use `page.emulateMedia({ reducedMotion: 'reduce' })` before load because `test.use({ reducedMotion })` did not propagate to `matchMedia` reliably.
+- **Bonus bugfix (found by review):** keyboard Arrow/Home/End navigation followed panel DOM order (Overview → Cases → …) instead of the visual sidebar order (Overview → Experience → Skills → …), violating WCAG 2.4.3 Focus Order — a leftover from the tab reorder (PR #14), which moved buttons but not panels. `script.js` now derives `tabNames` from the sidebar tablist buttons, so keyboard order always matches what users see. CLAUDE.md/README updated to document the new contract (both tablists must share the same order).
 
 ### 4.3 ⏳ Audit & refresh content
 - **Why:** Several dates and metrics will age:

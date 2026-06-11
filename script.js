@@ -20,11 +20,15 @@ let activeTab = TAB_DEFAULT;
 // tabNames is derived here (not at module level) so the code is safe if
 // the script tag is ever moved to <head> with defer.
 document.addEventListener('DOMContentLoaded', () => {
-    // Derive tab order from DOM — HTML is the single source of truth.
-    // Adding a new section to index.html automatically includes it here.
+    // Derive tab order from the sidebar tablist buttons — HTML is the single
+    // source of truth. Buttons (not panels) define the order so keyboard
+    // Arrow/Home/End navigation matches the VISUAL order users see
+    // (WCAG 2.4.3 Focus Order). The sidebar and mobile tablists must list
+    // tabs in the same order. Adding a new tab to both tablists in
+    // index.html automatically includes it here.
     const tabNames = Array.from(
-        document.querySelectorAll('[role="tabpanel"]'),
-        p => p.id
+        document.querySelectorAll('.sidebar-nav [role="tab"]'),
+        b => b.dataset.tab
     );
 
     // Cache NodeLists once
