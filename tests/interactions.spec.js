@@ -117,7 +117,7 @@ test.describe('Dynamic tenure', () => {
     const expected = [
       years > 0 ? `${years} ${years === 1 ? 'year' : 'years'}` : null,
       rem > 0 ? `${rem} ${rem === 1 ? 'month' : 'months'}` : null,
-    ].filter(Boolean).join(' ');
+    ].filter(Boolean).join(' ') || 'less than a month';
     await expect(el).toHaveText(expected);
   });
 });
