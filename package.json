@@ -33,8 +33,8 @@
   "author": "Vitor Schiavo",
   "license": "MIT",
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.1",
-    "@playwright/test": "^1.59.1",
+    "@axe-core/playwright": "^4.11.3",
+    "@playwright/test": "^1.60.0",
     "eslint": "^8.57.0",
     "html-validate": "^8.18.0",
     "husky": "^9.1.7",
