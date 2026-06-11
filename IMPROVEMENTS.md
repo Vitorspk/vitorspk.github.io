@@ -154,7 +154,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Risk:** Medium — touches the entire stylesheet; needs careful diff review.
 - **Trade-off:** Adds a CI build step (concat). May not be worth it.
 
-### 4.2 ⏳ Expand test coverage
+### 4.2 ✅ Expand test coverage
 - **Why:** 81 tests today, but several JS behaviors are untested:
   - Scroll-to-top button visibility (`window.scrollY > 300`)
   - Reading progress bar updates on scroll
@@ -164,6 +164,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
   - Case study chevron rotation on expand
 - **Where:** `tests/` — new specs or additions to existing.
 - **Risk:** Low.
+- **Result:** New `tests/interactions.spec.js` with 13 tests (×2 projects = 26 runs) covering all six behaviors. Suite grew 81 → 107 passing. Notable: keyboard arrow tests assert against panel DOM order (`tabNames`), not sidebar visual order; reduced-motion tests use `page.emulateMedia({ reducedMotion: 'reduce' })` before load because `test.use({ reducedMotion })` did not propagate to `matchMedia` reliably.
 
 ### 4.3 ⏳ Audit & refresh content
 - **Why:** Several dates and metrics will age:
