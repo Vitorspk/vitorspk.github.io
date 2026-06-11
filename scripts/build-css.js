@@ -24,16 +24,25 @@ const HEADER =
     '   Module order (cascade): ' + MODULES.join(' → ') + ' */\n\n';
 
 function build() {
-    const parts = MODULES.map(m => fs.readFileSync(path.join(ROOT, 'css', m), 'utf8'));
+    const parts = MODULES.map(m => {
+        const content = fs.readFileSync(path.join(ROOT, 'css', m), 'utf8');
+        // Guarantee a separating newline so a module without a trailing
+        // newline can't merge its last line into the next module's first.
+        return content.endsWith('\n') ? content : content + '\n';
+    });
     return HEADER + parts.join('');
 }
+
+// Normalize CRLF→LF so the sync check doesn't fail on machines where git's
+// core.autocrlf rewrote line endings on checkout.
+const normalize = str => str.replace(/\r\n/g, '\n');
 
 const check = process.argv.includes('--check');
 const built = build();
 
 if (check) {
     const current = fs.existsSync(OUTPUT) ? fs.readFileSync(OUTPUT, 'utf8') : '';
-    if (current !== built) {
+    if (normalize(current) !== normalize(built)) {
         console.error('styles.css is out of sync with css/ modules. Run: npm run build:css');
         process.exit(1);
     }
