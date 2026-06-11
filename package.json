@@ -36,7 +36,7 @@
     "@axe-core/playwright": "^4.11.3",
     "@playwright/test": "^1.60.0",
     "eslint": "^8.57.0",
-    "html-validate": "^8.18.0",
+    "html-validate": "^11.5.3",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.7",
     "serve": "^14.2.6",
