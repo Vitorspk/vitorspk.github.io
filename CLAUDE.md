@@ -106,7 +106,8 @@ Fix all linting errors before pushing. The CI workflow will block the PR check i
 
 | File | Trigger | Purpose |
 |------|---------|---------|
-| `validate-pr.yml` | PR | HTML/CSS/JS lint, file sizes, security checks |
+| `ci.yml` | PR (all) | Hard gate: `npm run validate` (CSS sync + lint) + full Playwright E2E. Also auto-approves & squash-merges Dependabot patch/minor PRs once the test job passes (majors left for manual review). |
+| `validate-pr.yml` | PR (html/css/js) | Informational: lint, file sizes, security checks, posts a PR comment |
 | `claude-code-review.yml` | PR | AI code review, posts feedback as PR comment |
 | `claude.yml` | `@claude` mention | On-demand Claude Code in issues/PRs |
 

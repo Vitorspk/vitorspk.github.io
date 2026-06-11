@@ -167,7 +167,8 @@ docs/<name>     ← documentation only
 
 | Workflow | Trigger | What it does |
 |----------|---------|--------------|
-| `validate-pr.yml` | PR opened/updated | Lints HTML, CSS, JS; checks file sizes and security; posts a summary comment |
+| `ci.yml` | Every PR | Test gate: `npm run validate` (CSS build sync + lint) + full Playwright E2E suite. Auto-approves and squash-merges Dependabot patch/minor PRs once the gate passes (majors left for manual review). |
+| `validate-pr.yml` | PR (html/css/js) | Lints HTML, CSS, JS; checks file sizes and security; posts a summary comment |
 | `claude-code-review.yml` | PR opened/updated | AI code review via Claude Code Action; posts detailed feedback as a PR comment |
 | `claude.yml` | `@claude` mention in issue/PR comment | Runs Claude Code on demand |
 | GitHub Pages | Push to `master` | Auto-deploys to `vitorspk.github.io/portfolio/` (~1 min propagation) |
