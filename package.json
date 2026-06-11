@@ -16,9 +16,9 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.html": "html-validate",
-    "*.css": "stylelint --fix",
-    "*.js": "eslint --fix"
+    "**/*.html": "html-validate",
+    "**/*.css": "stylelint --fix",
+    "**/*.js": "eslint --fix"
   },
   "repository": {
     "type": "git",
