@@ -1,8 +1,9 @@
 const { test, expect } = require('@playwright/test');
 
-// DOM order of [role="tabpanel"] panels — keyboard navigation follows this
-// order (tabNames in script.js), NOT the visual sidebar button order.
-const TAB_NAMES = ['overview', 'cases', 'experience', 'aiml', 'finops', 'technical', 'achievements', 'skills', 'projects'];
+// Visual order of the sidebar tablist buttons — keyboard navigation follows
+// this order (tabNames in script.js is derived from the tablist buttons so
+// Arrow/Home/End matches what users see — WCAG 2.4.3 Focus Order).
+const TAB_NAMES = ['overview', 'experience', 'skills', 'cases', 'aiml', 'finops', 'technical', 'achievements', 'projects'];
 
 test.use({ viewport: { width: 1280, height: 800 } });
 

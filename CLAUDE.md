@@ -49,7 +49,7 @@ All colour, spacing, and radius values live in `:root` in `styles.css`.
 
 ### JavaScript patterns
 
-- `tabNames` is derived from `[role="tabpanel"]` IDs in the DOM — **HTML is the single source of truth**. Never hardcode tab names in JS.
+- `tabNames` is derived from the sidebar tablist buttons (`.sidebar-nav [role="tab"]` → `data-tab`) — **HTML is the single source of truth**. Never hardcode tab names in JS. Button order defines keyboard Arrow/Home/End navigation order, so it must match the visual order (WCAG 2.4.3); keep the sidebar and mobile tablists in the same order.
 - `activeTab` module-level variable tracks current tab — use it, not `location.hash` (hash is stale on initial load)
 - New click handlers must use `data-tab` delegation, not `onclick` attributes
 - All scroll listeners must use `{ passive: true }`
@@ -83,8 +83,8 @@ All colour, spacing, and radius values live in `:root` in `styles.css`.
 
 1. Add a `<section role="tabpanel" id="<name>" ...>` block to `index.html`
 2. Add a sidebar nav button: `<button role="tab" id="tab-<name>" data-tab="<name>" ...>`
-3. Add a mobile tab button: `<button role="tab" id="mobile-tab-<name>" data-tab="<name>" ...>`
-4. JS picks up the new tab automatically via `document.querySelectorAll('[role="tabpanel"]')`
+3. Add a mobile tab button: `<button role="tab" id="mobile-tab-<name>" data-tab="<name>" ...>` — **at the same position as the sidebar button** (both tablists must share the same order)
+4. JS picks up the new tab automatically via `document.querySelectorAll('.sidebar-nav [role="tab"]')`
 5. No changes to `script.js` are needed
 
 ---

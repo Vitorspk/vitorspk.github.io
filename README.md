@@ -109,7 +109,7 @@ This project targets full **WAI-ARIA tab pattern** compliance:
 
 `script.js` is structured around a single `DOMContentLoaded` listener. Key patterns:
 
-- **`tabNames`** — derived from `[role="tabpanel"]` IDs in the DOM (HTML is the single source of truth)
+- **`tabNames`** — derived from the sidebar tablist buttons (`.sidebar-nav [role="tab"]` → `data-tab`); button order defines keyboard navigation order (HTML is the single source of truth)
 - **`activeTab`** — module-level tracker; avoids reading stale `location.hash` in keyboard nav
 - **Delegated click handler** — listens on `document` for `[data-tab]` attributes
 - **`syncTablists()`** — `matchMedia` listener; keeps `inert`/`aria-hidden` in sync across breakpoints
@@ -118,7 +118,7 @@ This project targets full **WAI-ARIA tab pattern** compliance:
 - **rAF throttle** — reading progress bar (smooth paint-locked updates)
 - All scroll listeners use `{ passive: true }`
 
-Adding a new tab requires only adding a `[role="tabpanel"]` to `index.html` — the script picks it up automatically.
+Adding a new tab requires a `[role="tabpanel"]` plus matching buttons in both tablists (same position in each) — the script picks them up automatically.
 
 ---
 
