@@ -125,7 +125,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Risk:** Zero.
 - **Result:** Added at repo root. 4-space for site source (`*.html/css/js`), 2-space for tests/Playwright config and YAML/JSON. Markdown keeps trailing whitespace (meaningful line breaks).
 
-### 3.3 ⏳ Dependabot config
+### 3.3 ✅ Dependabot config
 - **Why:** Currently no automated dep updates. `@playwright/test`, `axe-core`, ESLint, etc. drift behind security patches.
 - **Where:** new `.github/dependabot.yml`
 - **How:**
@@ -141,6 +141,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
       schedule: { interval: "weekly" }
   ```
 - **Risk:** Low — only opens PRs, doesn't auto-merge.
+- **Result:** `.github/dependabot.yml` added. npm dev-dependency minor/patch updates are grouped into a single weekly PR to reduce noise; GitHub Actions updates checked weekly with a limit of 2 open PRs.
 
 ---
 
