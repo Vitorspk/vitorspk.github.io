@@ -72,7 +72,7 @@ npm run lint:fix
 
 ## 📋 Arquivos de Configuração
 
-- **`.eslintrc.json`** - Configuração do ESLint para JavaScript
+- **`eslint.config.js`** - Configuração do ESLint (flat config) para JavaScript
 - **`.stylelintrc.json`** - Configuração do Stylelint para CSS
 - **`.htmlvalidate.json`** - Configuração do HTML Validate
 - **`.github/workflows/validate-pr.yml`** - GitHub Action workflow

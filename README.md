@@ -44,7 +44,7 @@ portfolio/
 ├── scripts/
 │   ├── build-css.js    # Concatenates css/ modules → styles.css
 │   └── generate-og-image.js  # Renders the OG share image
-├── .eslintrc.json      # ESLint config
+├── eslint.config.js    # ESLint flat config
 ├── .stylelintrc.json   # Stylelint config
 ├── .htmlvalidate.json  # HTML Validate config
 ├── .editorconfig       # Editor indentation rules
