@@ -12,7 +12,13 @@
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "npx playwright test --headed",
     "test": "npm run validate && npm run test:e2e",
-    "og:generate": "node scripts/generate-og-image.js"
+    "og:generate": "node scripts/generate-og-image.js",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "**/*.html": "html-validate",
+    "**/*.css": "stylelint --fix",
+    "**/*.js": "eslint --fix"
   },
   "repository": {
     "type": "git",
@@ -25,6 +31,8 @@
     "@playwright/test": "^1.59.1",
     "eslint": "^8.57.0",
     "html-validate": "^8.18.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.7",
     "serve": "^14.2.6",
     "stylelint": "^16.3.1",
     "stylelint-config-standard": "^36.0.0"
