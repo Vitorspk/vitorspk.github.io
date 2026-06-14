@@ -186,7 +186,7 @@ docs/<name>     ← documentation only
 | `validate-pr.yml` | PR (html/css/js) | Lints HTML, CSS, JS; checks file sizes and security; posts a summary comment |
 | `claude-code-review.yml` | PR opened/updated | AI code review via Claude Code Action; posts detailed feedback as a PR comment |
 | `claude.yml` | `@claude` mention in issue/PR comment | Runs Claude Code on demand |
-| GitHub Pages | Push to `master` | Auto-deploys to `vitorspk.github.io/portfolio/` (~1 min propagation) |
+| GitHub Pages | Push to `master` | Auto-deploys to `vitorspk.github.io` (~1 min propagation) |
 
 ---
 
