@@ -2,7 +2,7 @@
 
 Personal portfolio of **Vitor Schiavo**, Site Reliability Engineer & Platform Engineering Expert with 13+ years of experience across GCP, AWS, and Azure.
 
-**Live:** https://vitorspk.github.io/portfolio/
+**Live:** https://vitorspk.github.io
 
 ---
 
