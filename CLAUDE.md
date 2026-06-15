@@ -7,7 +7,7 @@ Instructions for AI assistants (Claude Code, @claude in PRs, etc.) working on th
 ## Project overview
 
 Static personal portfolio for **Vitor Schiavo** (SRE / Platform Engineer).
-Deployed on **GitHub Pages** at `https://vitorspk.github.io/portfolio/`.
+Deployed on **GitHub Pages** at `https://vitorspk.github.io/` (this repo is the `vitorspk.github.io` user site, served at the domain root).
 
 - No framework, no bundler — `index.html` and `script.js` ship as-is
 - CSS is authored as modules in `css/` and concatenated into `styles.css` (committed, served directly by GitHub Pages) via `npm run build:css` — **edit the modules, never `styles.css` directly**

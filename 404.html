@@ -13,8 +13,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <!-- Design tokens imported from the shared stylesheet — do not duplicate values here.
-         /portfolio/ prefix matches the GitHub Pages deployment path for this repo. -->
-    <link rel="stylesheet" href="/portfolio/styles.css">
+         Root-absolute path matches the GitHub Pages deployment (served at the domain root). -->
+    <link rel="stylesheet" href="/styles.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -116,12 +116,12 @@
 </head>
 <body>
     <main class="container">
-        <div class="code" aria-label="Error 404">404</div>
+        <div class="code" role="img" aria-label="Error 404">404</div>
         <h1 class="title">Page not found</h1>
         <p class="desc">This URL doesn't exist or may have been moved.</p>
-        <div class="path" id="current-path" aria-label="Requested path">(unknown path)</div>
+        <p class="path" id="current-path">(unknown path)</p>
         <div class="actions">
-            <a href="/portfolio/" class="btn btn-primary">Go home</a>
+            <a href="/" class="btn btn-primary">Go home</a>
             <button type="button" id="go-back-btn" class="btn btn-secondary">Go back</button>
         </div>
     </main>
@@ -137,7 +137,7 @@
                 if (history.length > 1) {
                     history.back();
                 } else {
-                    location.href = '/portfolio/';
+                    location.href = '/';
                 }
             });
         }
