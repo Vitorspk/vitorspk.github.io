@@ -90,6 +90,23 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 
 ---
 
+## Recommended models (Claude Code)
+
+Model selection is **manual** — pick it when launching (`claude --model <alias>`) or switch mid-session with `/model <alias>`. Claude Code does not auto-switch per task; this table is the project convention:
+
+| Task | Model | Command |
+|------|-------|---------|
+| Day-to-day coding / refactoring | Sonnet | `claude --model sonnet` — **project default** |
+| Local iteration / fast feedback while coding | Haiku | `claude --model haiku` |
+| PR review, complex debugging | Opus | `claude --model opus` |
+| Architecture design (plan + execute) | opusplan | `claude --model opusplan` — Opus in plan mode, Sonnet on execution |
+
+Three tiers: **local iteration (Haiku)** → **day-to-day (Sonnet)** → **critical decisions (Opus)**.
+
+The day-to-day default (Sonnet) is pinned in `.claude/settings.json` (`"model": "sonnet"`), so it applies automatically when opening Claude Code in this repo — the flags above are only needed to step outside the default. Note: `.claude/` is git-ignored, so this default is local to each contributor's machine.
+
+---
+
 ## Local validation
 
 ```bash
