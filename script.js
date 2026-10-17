@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Evaluate once — used by activateTab (mobile auto-scroll) and barObserver
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    let activeFilter = 'all';
+
     // ─── activateTab ─────────────────────────────────────────────────────────
 
     function activateTab(tabName, pushState = true) {
@@ -134,8 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
     const catalogCases = Array.from(document.querySelectorAll('#cases .case-study'));
     const caseCount = document.getElementById('case-count');
-    let activeFilter = 'all';
-
     function filterCases(value) {
         const known = filterButtons.some(button => button.dataset.filter === value);
         activeFilter = known ? value : 'all';
@@ -159,12 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const aliasFilter = filterButtons.find(button => button.dataset.legacy === section);
         filterCases(category || (aliasFilter && aliasFilter.dataset.filter) || 'all');
         activateTab(name, false);
-        // Canonicalize old links without adding an extra Back step.
-        if (aliasPanel) history.replaceState({ tab: name }, '', '#' + name + (activeFilter !== 'all' ? '/' + activeFilter : ''));
+        // Canonicalize old links and invalid categories without an extra Back step.
+        if (aliasPanel || (name === 'cases' && category && category !== activeFilter)) history.replaceState({ tab: name }, '', '#' + name + (activeFilter !== 'all' ? '/' + activeFilter : ''));
     }
 
     window.addEventListener('popstate', restoreLocation);
-    window.addEventListener('hashchange', restoreLocation);
+    // Modern browsers fire popstate for fragment edits as well as traversal.
+    // Listening to hashchange too would restore every traversal twice.
     restoreLocation();
 
     filterButtons.forEach(button => button.addEventListener('click', () => {
@@ -330,7 +331,6 @@ document.addEventListener('DOMContentLoaded', () => {
             header.setAttribute('aria-expanded', next);
             body.hidden = isExpanded;
             body.inert = isExpanded;
-            body.querySelectorAll('a').forEach(link => link.removeAttribute('tabindex'));
         };
 
         header.addEventListener('click', event => {

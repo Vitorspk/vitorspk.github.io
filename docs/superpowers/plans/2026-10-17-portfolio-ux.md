@@ -48,5 +48,5 @@
 **Files:** docs/ux-redesign-validation.md, PR description.
 **Interfaces:** consumes all completed changes; produces validated branch and PR.
 - [x] Review requirements and full diff, repair material findings, verify links and compare changed content to source.
-- [ ] Commit only task files, push feature branch, open PR and attach it to chat.
-- [ ] Inspect CI and automated review, resolve actionable feedback and record any external limitation.
+- [x] Commit only task files, push feature branch, open PR and attach it to chat.
+- [x] Inspect CI and automated review, resolve actionable feedback and record any external limitation.

@@ -135,3 +135,29 @@ test('theme control stays in the navigation chrome while reading', async ({ page
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator('.topbar #themeToggle')).toBeVisible();
 });
+
+
+test('history restores category once and invalid categories canonicalize without extra entries', async ({ page }) => {
+  await page.goto('/#cases/security');
+  await nav(page, 'about');
+  await page.evaluate(() => {
+    window.tabRestoreScrolls = 0;
+    const original = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (...args) {
+      if (this.id === 'mobile-tab-cases') window.tabRestoreScrolls++;
+      return original.apply(this, args);
+    };
+  });
+  await page.goBack();
+  await expect(page.getByRole('button', { name: 'Security', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  // Let both browser traversal events settle before counting restorations.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  expect(await page.evaluate(() => window.tabRestoreScrolls)).toBe(1);
+  await page.goForward();
+  await expect(page.locator('#about')).toHaveAttribute('aria-hidden', 'false');
+  await page.evaluate(() => { location.hash = 'cases/bogus'; });
+  await expect(page).toHaveURL(/#cases$/);
+  await expect(page.getByRole('button', { name: 'All work', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  await page.goBack();
+  await expect(page.locator('#about')).toHaveAttribute('aria-hidden', 'false');
+});

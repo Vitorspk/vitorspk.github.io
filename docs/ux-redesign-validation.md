@@ -17,7 +17,7 @@
 Baseline: `npm test` — 227 passed, 3 skipped.
 Redesign regression tests were run against the original site and failed on missing navigation/filter/contact/evidence behavior.
 Affected suite after implementation: 101 passed, 1 skipped.
-Full final suite after independent review: `npm test` — 299 passed, 3 skipped; HTML/CSS/JS validation and CSS synchronization passed.
+Full suite after independent review: 299 passed, 3 skipped; HTML/CSS/JS validation and CSS synchronization passed.
 The three skips are the existing WebKit keyboard-focus exclusions.
 `git diff --check` passed.
 
@@ -41,3 +41,13 @@ No merge, no auto-merge, no production publication. New employer-related prose i
 A read-only reviewer checked the implementation against the approved design and evidence inventory. Two findings were addressed: the desktop theme control now lives inside the sidebar (and moves to the mobile topbar), and a retained unmeasured availability achievement was replaced by the documented redundancy capability. Regression coverage reproduced and verified theme-control placement.
 
 An expanded-catalog axe check additionally exposed light-theme contrast and Safari keyboard-scroll access in retained SVG figures. Semantic colors were corrected and scrollable figures made keyboard-focusable. The regression passed on desktop and WebKit mobile. Supplemental settled-state light-theme axe checks passed for the fully expanded catalog, all five new articles, the revised storage and inference articles, and the résumé.
+
+## PR review follow-up
+
+The automated PR review found no blocking issues. Its navigation findings were reproduced: traversing history restored the same route twice because both popstate and hashchange were handled. Navigation now uses popstate alone, with regression coverage for a single restoration, forward navigation, category state and invalid-category canonicalization without extra Back steps. The new test failed with two restorations before the fix and passed afterward in Chromium and mobile WebKit.
+
+Case links now keep natural tab order in source HTML, with hidden/inert containers controlling accessibility; the obsolete per-toggle tabindex mutation and CLAUDE.md guidance were updated. Filter state is declared before navigation. The five identical article stylesheets were consolidated into cases/evidence-case.css. Share-image wrappers already call the single shared generator. The README again documents design tokens, accessibility and maintenance; design/plan documents are retained as the decision record.
+
+Final validation after PR review fixes: `npm run validate` passed and the complete Playwright suite finished with 301 passed, 3 existing skips (59.8 seconds). The previous head also passed GitHub CI and automated review.
+
+The final local browser run uses the same Playwright projects against port 4173 through a temporary configuration override, because port 3000 is occupied by another workspace project. Repository CI continues to use its isolated default server.

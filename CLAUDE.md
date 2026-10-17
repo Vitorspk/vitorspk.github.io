@@ -92,7 +92,7 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 
 ## Standalone case pages
 
-Long-form case studies live as their own indexable pages under `cases/<slug>/index.html`, served by GitHub Pages at `https://vitorspk.github.io/cases/<slug>/` (directory index, trailing slash). They are the SEO and cross-post surface; the SPA cards stay as the short version and link to them with a `.case-readmore` anchor (`tabindex="-1"`, because it sits inside an `aria-hidden` tab panel).
+Long-form case studies live as their own indexable pages under `cases/<slug>/index.html`, served by GitHub Pages at `https://vitorspk.github.io/cases/<slug>/` (directory index, trailing slash). They are the SEO and cross-post surface; the SPA cards stay as the short version and link to them with a `.case-readmore` anchor (normal link tab order; hidden/inert panels and disclosure bodies manage focus access).
 
 Recipe for a new one (first page: `cases/self-hosting-gemma-3-vllm/`):
 1. **Files:** `cases/<slug>/index.html` + a small `cases/<slug>/page.css`. Link `/styles.css` first (tokens, theme, fonts, components) then `page.css` (article layout only). Reference root assets with absolute paths (`/styles.css`, `/og-image.png`).
