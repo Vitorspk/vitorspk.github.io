@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const AxeBuilder = require('@axe-core/playwright').default;
 
 test('recruiter can identify positioning, follow the reading route and download a PDF', async ({ page, request }) => {
@@ -16,7 +17,16 @@ test('recruiter can identify positioning, follow the reading route and download 
   await expect(download).toHaveAttribute('href', '/Vitor-Schiavo-Resume.pdf');
   const pdf = await request.get('/Vitor-Schiavo-Resume.pdf');
   expect(pdf.status()).toBe(200);
-  expect((await pdf.body()).subarray(0, 5).toString()).toBe('%PDF-');
+  const pdfBytes = await pdf.body();
+  expect(pdfBytes.subarray(0, 5).toString()).toBe('%PDF-');
+  expect(pdfBytes.length).toBeGreaterThan(25000);
+  const pdfSource = pdfBytes.toString('latin1');
+  expect((pdfSource.match(/\/Type\s*\/Page\b/g) || []).length).toBe(2);
+  const inputs = ['resume.html', 'styles.css', 'scripts/generate-resume-pdf.js'];
+  const fingerprint = crypto.createHash('sha256').update(inputs.map(file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8')).join('\0')).digest('hex');
+  const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, '../content/resume-artifact.json'), 'utf8'));
+  expect(manifest.sourceSha256, 'regenerate the PDF after changing its HTML, CSS or generator').toBe(fingerprint);
+  expect(crypto.createHash('sha256').update(pdfBytes).digest('hex')).toBe(manifest.pdfSha256);
   await page.goto('/#contact');
   await expect(page.getByRole('heading', { name: 'Working together internationally' })).toBeVisible();
   await expect(page.locator('#contact')).toContainText('English — professional working proficiency');

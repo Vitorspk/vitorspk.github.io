@@ -61,10 +61,10 @@ Unconfirmed residence, work authorization and relocation claims are not inferred
 
 `node scripts/generate-resume-pdf.js` regenerates `Vitor-Schiavo-Resume.pdf` from
 `resume.html` and the compiled print CSS, using installed Playwright/Chromium.
-No network fonts are needed. Inspect both pages and selectable text after edits.
+No network fonts are needed. Regenerate after editing the résumé HTML, CSS or generator; browser tests check the source/PDF fingerprint pair in `content/resume-artifact.json`, the PDF size and its two-page structure. Inspect both pages and selectable text after edits.
 
 `examples/inference-fallback/` is an independent, AI-assisted educational Python
 sample with real local HTTP integration tests and no third-party dependencies.
 Run `python3 -m unittest discover -s examples/inference-fallback -p 'test_*.py'`.
-`python3 scripts/build-code-sample.py` creates the deterministic downloadable ZIP.
+`npm test` includes the Python tests and `npm run check:sample`. The archive check compares filenames and uncompressed contents, so it does not depend on zlib versions. `npm run build:sample` creates the downloadable ZIP; `npm run resume:pdf` regenerates the résumé.
 The sample is not employer source code or a claim of production/model quality.

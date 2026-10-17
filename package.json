@@ -13,13 +13,17 @@
     "validate": "npm run build:css:check && npm run build:visuals:check && npm run lint",
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "npx playwright test --headed",
-    "test": "npm run validate && npm run test:e2e",
+    "test": "npm run validate && npm run test:python && npm run check:sample && npm run test:e2e",
     "og:generate": "node scripts/generate-og-image.js",
     "og:generate:case-vllm": "node scripts/generate-og-case-vllm.js",
     "og:generate:case-gke": "node scripts/generate-og-case-gke.js",
     "prepare": "husky",
     "build:visuals": "node scripts/build-case-visuals.js",
-    "build:visuals:check": "node scripts/build-case-visuals.js --check"
+    "build:visuals:check": "node scripts/build-case-visuals.js --check",
+    "resume:pdf": "node scripts/generate-resume-pdf.js",
+    "test:python": "python3 -m unittest discover -s examples/inference-fallback -p 'test_*.py' -v",
+    "build:sample": "python3 scripts/build-code-sample.py",
+    "check:sample": "python3 scripts/build-code-sample.py --check"
   },
   "lint-staged": {
     "**/*.html": "html-validate",

@@ -3,6 +3,7 @@ const { chromium } = require('playwright');
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const crypto = require('node:crypto');
 const root = path.join(__dirname, '..');
 const resources = new Map([
     ['/resume.html', ['resume.html', 'text/html']],
@@ -28,6 +29,12 @@ async function main() {
         await page.pdf({ path: path.join(root, 'Vitor-Schiavo-Resume.pdf'), format: 'A4',
             margin: { top: '12mm', bottom: '12mm', left: '14mm', right: '14mm' },
             printBackground: false, tagged: true });
+        // Bind both sources and PDF bytes without exposing provenance in the title.
+        // Chromium timestamps vary; a manifest catches stale exports across OSes.
+        const inputs = ['resume.html', 'styles.css', 'scripts/generate-resume-pdf.js'];
+        const sourceSha256 = crypto.createHash('sha256').update(inputs.map(file => fs.readFileSync(path.join(root, file), 'utf8')).join('\0')).digest('hex');
+        const pdfSha256 = crypto.createHash('sha256').update(fs.readFileSync(path.join(root, 'Vitor-Schiavo-Resume.pdf'))).digest('hex');
+        fs.writeFileSync(path.join(root, 'content/resume-artifact.json'), JSON.stringify({ sourceSha256, pdfSha256 }, null, 2) + '\n');
         process.stdout.write('Generated Vitor-Schiavo-Resume.pdf from resume.html.\n');
     } finally {
         if (browser) await browser.close();
