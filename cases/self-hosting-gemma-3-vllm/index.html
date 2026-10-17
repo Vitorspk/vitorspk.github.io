@@ -7,36 +7,36 @@
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
-    <title>Self-hosting Gemma 3 12B with vLLM on serverless GPUs — Vitor Schiavo</title>
-    <meta name="description" content="An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
+    <title>Operating multimodal LLMs across engines and clouds — Vitor Schiavo</title>
+    <meta name="description" content="Model-aware runtime selection, GPU deployment, authenticated fallback and the checks that distinguish a healthy deployment from a green pipeline.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs">
-    <meta property="og:description" content="A three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
+    <meta property="og:title" content="Operating multimodal LLMs across engines and clouds">
+    <meta property="og:description" content="Model-aware runtime selection, GPU deployment, authenticated fallback and the checks that distinguish a healthy deployment from a green pipeline.">
     <meta property="og:url" content="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs — a case study by Vitor Schiavo.">
+    <meta property="og:image:alt" content="Operating multimodal LLMs across engines and clouds — a case study by Vitor Schiavo.">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs">
-    <meta name="twitter:description" content="A three-provider fallback router with measured SLAs and cold starts cut from ten minutes to three.">
+    <meta name="twitter:title" content="Operating multimodal LLMs across engines and clouds">
+    <meta name="twitter:description" content="Model-aware runtime selection, GPU deployment, authenticated fallback and the checks that distinguish a healthy deployment from a green pipeline.">
     <meta name="twitter:image" content="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/og.png">
-    <meta name="twitter:image:alt" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs — a case study by Vitor Schiavo.">
+    <meta name="twitter:image:alt" content="Operating multimodal LLMs across engines and clouds — a case study by Vitor Schiavo.">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
-      "headline": "Self-hosting Gemma 3 12B with vLLM on serverless GPUs",
-      "description": "An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.",
+      "headline": "Operating multimodal LLMs across engines and clouds",
+      "description": "Model-aware runtime selection, GPU deployment, authenticated fallback and the checks that distinguish a healthy deployment from a green pipeline.",
       "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
@@ -83,71 +83,52 @@
 
         <header class="doc-header">
             <span class="doc-eyebrow">Case study · AI infrastructure</span>
-            <h1 class="doc-title">Self-hosting Gemma 3 12B with vLLM on serverless GPUs</h1>
-            <p class="doc-dek">What it took to run a 12B open-weight model in production on rented GPUs: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the driver, scheduler and shell bugs that ate my afternoons.</p>
+            <h1 class="doc-title">Operating multimodal LLMs across engines and clouds</h1>
+            <p class="doc-dek">Model-aware runtime selection, GPU deployment, authenticated fallback and the checks that distinguish a healthy deployment from a green pipeline.</p>
             <div class="doc-meta">
                 <span>By Vitor Schiavo</span>
                 <span>Updated October 2026</span>
-                <span>~10 min read</span>
+                <span>~9 min read</span>
             </div>
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="self-hosting-gemma-3-vllm" data-visual-area="ai">
+<figcaption><span>Solution at a glance</span><strong>Match the model to its runtime, then validate the served path.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><strong>Model compatibility</strong><span>Choose vLLM or llama.cpp</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>GPU serving</strong><span>Isolate images and deployments</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Operated fallback</strong><span>Validate identity and response</span></div>
+</div>
+<p class="case-map-note">The router POC and the later production fallback integration have separate measurements and rollout scopes.</p>
+</figure>
 
-            <p>This is a write-up of building production-grade LLM inference on serverless GPUs: serving an open-weight model in-house instead of through a hosted API, for cost control and to own the behaviour of the stack end to end. The model is Gemma 3 12B, quantized to GGUF Q4 (about 6.9 GB on disk), served with vLLM 0.15.1.</p>
-
-            <p>What follows is the engineering log: the bugs that cost me the most time, how I cut cold starts, the router that removed the single point of failure, and the numbers I measured. Everything here is the technique, with no internal names or specifics.</p>
-
-            <h2>Three bugs that cost me the most time</h2>
-
-            <p>None of these printed a useful error at the surface. That is the real lesson: on rented GPUs, your startup path has to fail loudly and early, because the layers underneath will not do it for you.</p>
-
-            <div class="callout callout--fail">
-                <p class="callout-title">Zero workers provisioned, for hours, with no error</p>
-                <p>Serverless GPU endpoints select hardware by VRAM tier, not by the GPU's marketing name. I asked for <code>NVIDIA GeForce RTX 4090</code> and the scheduler matched nothing, so it quietly provisioned zero workers and never told me why. The fix was to pass the tier id alongside the name (for the 24 GB Ada class, <code>ADA_24</code>). The moment the tier was correct, workers appeared.</p>
-            </div>
-
-            <div class="callout callout--fail">
-                <p class="callout-title">CUDA Error 804: forward compatibility on non-supported hardware</p>
-                <p>Workers crash-looped with a CUDA init failure. The cause was a version mismatch I had assumed away: the vLLM base image ships CUDA 12.8, which needs an NVIDIA driver of at least 570. The serverless hosts I landed on ran driver 550.x, which caps at CUDA 12.4. The container could not initialize the GPU at all. The takeaway is simple and easy to forget: match your CUDA toolkit to the host driver, do not assume the newest image runs everywhere.</p>
-            </div>
-
-            <div class="callout callout--fail">
-                <p class="callout-title">A silent crash with no logs at all</p>
-                <p>Workers died on startup with an empty console. The cause was an <code>exit 1</code> inside a config script that the startup script pulled in with <code>source</code>. Because the file was sourced, that <code>exit</code> killed the whole shell before a single diagnostic line could run. I moved the validation out of the sourced file into a guarded startup step, and the logs came back immediately.</p>
-            </div>
-
-            <h2>Cold starts: ten minutes to three</h2>
-
-            <p>The first version installed vLLM with <code>pip</code> on every worker start and pulled the model weights at boot. Cold starts ran seven to twelve minutes. That is fine for a demo and useless in production, because every scale-up under load makes a user wait.</p>
-
-            <p>What moved the number:</p>
-            <ul>
-                <li><strong>Pre-bake the environment into the image.</strong> vLLM and its patches go in at build time, not on every cold start. This alone removed the five to ten minute <code>pip install</code> from the critical path.</li>
-                <li><strong>Cache weights on a network volume.</strong> A cold worker attaches an already-populated volume instead of downloading 6.9 GB again.</li>
-                <li><strong>Load GGUF directly.</strong> Using the GGUF load-format skips a safetensors conversion step at startup.</li>
-                <li><strong>Pre-compile and trim the boot.</strong> Pre-compiling Python bytecode and masking boot services that add nothing (snap, unattended upgrades, the apt timers) shaved the rest.</li>
-            </ul>
-
-            <div class="stat-strip">
-                <div class="stat"><span class="stat-value">10 min → 3 min</span><span class="stat-label">cold start</span></div>
-                <div class="stat"><span class="stat-value">5m16s → 3m32s</span><span class="stat-label">image boot (33% faster)</span></div>
-                <div class="stat"><span class="stat-value">568 ms</span><span class="stat-label">primary latency</span></div>
-                <div class="stat"><span class="stat-value">6</span><span class="stat-label">deployable GPU types</span></div>
-            </div>
-
-            <div class="callout callout--win">
-                <p class="callout-title">What did not work: Hyperdisk</p>
-                <p>I checked whether a faster disk would speed up model loading. Hyperdisk Extreme cannot be a boot disk, only a data disk, which would mean a separate disk plus a mount script and would defeat the pre-baked image. Hyperdisk Balanced can boot, but the image-build pipeline cannot create images from it. The expected gain was single-digit seconds. Not worth the complexity, so I wrote it down and moved on.</p>
-            </div>
-
-            <h2>The fallback router</h2>
-
-            <p>Serving from a single GPU provider is a single point of failure. A provider outage or a GPU supply constraint takes the whole capability down, and each provider has a different latency profile that a single endpoint cannot exploit. So I put a small router in front.</p>
-
-            <p>It is a roughly 150-line FastAPI reverse proxy that speaks the OpenAI API (<code>/v1/chat/completions</code>, <code>/v1/models</code>). It routes through a provider chain: serverless GPUs first, a managed serverless GPU second, a dedicated cluster third. Each hop has a mock-failure flag, so I can test failover without waiting for a real outage. When every provider fails, it returns HTTP 503 with per-provider diagnostics instead of a blank error, which is the difference between a two-minute triage and a one-hour one.</p>
-
-            <figure class="architecture-diagram" aria-label="Multi-provider inference architecture: a client request reaches a FastAPI fallback router, which routes through three GPU providers in a failover chain, with EU multi-datacenter failover on the primary provider.">
+<h2>My contribution</h2>
+<p>I built GPU-serving and deployment workflows, selected runtimes around model compatibility, repaired silent build and traffic-routing failures, and provisioned the identity needed for authenticated inference. I worked with the application team to promote and validate the fallback integration across environments.</p>
+<p>The work evolved in stages: a three-provider router proof of concept, model-specific serving paths using vLLM and llama.cpp, and a later production print-detection fallback integration. These are related pieces of engineering with separate validation records.</p>
+<div class="stat-strip"><div class="stat"><strong class="stat-value">2 engines</strong><span class="stat-label">vLLM and llama.cpp serving paths</span></div><div class="stat"><strong class="stat-value">164 tests</strong><span class="stat-label">Recorded for the model-aware deployment delivery</span></div><div class="stat"><strong class="stat-value">4 environments</strong><span class="stat-label">Identity and integration checked in the later rollout</span></div></div>
+<h2>Choose the runtime from the model</h2>
+<p>A model identifier is not enough to guarantee that a serving engine can load its architecture, quantization and vision projector. I added a resolver that reads model metadata and selects vLLM or llama.cpp, with separate images, deployment workflows and concurrency groups.</p>
+<p>The vLLM path continued serving its existing model while the alternative runtime was developed in isolation. Cross-guards rejected a model in the wrong workflow before building an image or provisioning a pod. Tests also checked that a nominally successful request actually contained a usable answer: a reasoning model could exhaust its token budget before producing response content.</p>
+<h2>Debug the layer that actually failed</h2>
+<p>On real GPU pods, an apparently healthy container lifecycle hid a shared-library loading failure. The upstream llama.cpp image expected its libraries under its own working directory; changing that directory broke startup. Making the library path explicit solved the crash. Earlier hypotheses about entrypoint handling and driver compatibility did not explain that particular failure.</p>
+<p>GPU profiles, model context and key/value cache settings remained explicit per runtime. A larger configured concurrency value was not treated as a measured throughput improvement. The delivery recorded 164 passing tests and validation on real GPU pods; experimental pods were cleaned up afterward.</p>
+<h2>A green deploy can still serve the old revision</h2>
+<p>A Cloud Run deployment pipeline had three faults masking one another: incompatible dependency pins, traffic remaining on an older revision and smoke tests exercising that older image. I repaired the dependency chain, moved traffic updates to the correct command and verified that the served digest matched the image built by CI.</p>
+<p>Pre-merge validation builds the dependency stage without downloading multi-gigabyte model weights. Runtime smoke tests run from the network path real callers use, and deployment guards reject inconsistent arguments or unsafe ingress changes. A successful command exit is one signal; serving the intended revision is the outcome.</p>
+<h2>Production fallback and identity</h2>
+<p>The later application integration used a hosted provider, a self-hosted multimodal model and a final CNN path. I provisioned a dedicated Kubernetes and Google service-account identity in development, staging and sandbox, granting invocation on the target service rather than broad project roles. The legacy production cluster continued using its existing node identity; it was not converted to Workload Identity by this change.</p>
+<figure class="case-detail-flow"><figcaption class="case-detail-flow-caption">Later production print-detection chain</figcaption><ol><li><strong>Primary provider</strong><span class="case-detail-flow-description">Use the application's first inference path</span></li><li><strong>Self-hosted model</strong><span class="case-detail-flow-description">Invoke the private GPU service with OIDC</span></li><li><strong>Final CNN path</strong><span class="case-detail-flow-description">Continue when the model is unavailable or cold</span></li></ol></figure>
+<p>All four environments passed their identity and provider checks at closeout. In the recorded production post-deploy sample, 395 HTTP requests returned 200. Three primary-provider timeouts reached a cold self-hosted model and then completed through the final fallback. This describes the observed rollout, not an availability SLA.</p>
+<p>Scale-to-zero is an operational trade-off: a cold GPU service can take about five minutes to start while the application's budget is about 30 seconds. Prewarming and the next fallback therefore matter. Auth checks and high-traffic monitoring were added with thresholds calibrated against actual use, rather than alerting on every expected fallback request.</p>
+<h2>Results and measurement</h2>
+<p>The model-aware serving delivery recorded two isolated runtime paths and 164 passing tests. The later fallback rollout checked identity and application behavior in four environments. Those results are separate from the earlier router POC described below.</p>
+<p>Boot optimization measurements also need their own scope: one image test improved from 5m16s to 3m32s; a later clean-boot test recorded about 4m05s. Different configurations and test paths should not be collapsed into a universal cold-start claim.</p>
+<h2>The earlier three-provider router POC</h2>
+<p>I built a FastAPI router to exercise normal flow, cold and warm fallback, the final provider path, health checks and all-provider failure. Six scenarios passed. The test infrastructure was removed afterward pending a production adoption decision for that router; the later application fallback integration is a distinct delivery.</p>
+<figure class="architecture-diagram" tabindex="0" aria-label="Earlier POC: a client request reaches a FastAPI router and three tested provider paths. The lower panel describes a separate deployment supply-failover capability.">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" aria-hidden="true" focusable="false">
                     <rect width="820" height="520" rx="12" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
                     <text x="410" y="35" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-primary)">Multi-Provider Inference Architecture</text>
@@ -170,8 +151,8 @@
                     <text x="590" y="200" text-anchor="middle" font-size="9" font-weight="600" fill="var(--danger)">Fallback 2</text>
                     <rect x="40" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--success)" stroke-width="1.5"/>
                     <text x="155" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--success)">Serverless GPUs</text>
-                    <text x="155" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">RTX 5090 · A6000 · 6000 Ada · L40S</text>
-                    <text x="155" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">568 ms avg latency</text>
+                    <text x="155" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">RTX 4090 · POC test path</text>
+                    <text x="155" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">568 ms observed request</text>
                     <text x="155" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">6 GPU profiles · Cost-optimized burst</text>
                     <text x="155" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Ada Lovelace / Ampere</text>
                     <rect x="295" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--warning)" stroke-width="1.5"/>
@@ -181,14 +162,14 @@
                     <text x="410" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">Managed serverless · Ada Lovelace</text>
                     <text x="410" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Auto-scales to zero</text>
                     <rect x="550" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--danger)" stroke-width="1.5"/>
-                    <text x="665" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--danger)">Dedicated Cluster</text>
-                    <text x="665" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">L40S · A100 SXM 80 GB</text>
-                    <text x="665" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">7.7 s avg latency</text>
-                    <text x="665" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">Dedicated · High-throughput</text>
-                    <text x="665" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Ada / Ampere</text>
+                    <text x="665" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--danger)">GCE Managed Instance Group</text>
+                    <text x="665" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">NVIDIA L4</text>
+                    <text x="665" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">7.7 s observed request</text>
+                    <text x="665" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">Dedicated · Final tested fallback</text>
+                    <text x="665" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">GCE VM group</text>
                     <rect x="40" y="355" width="230" height="65" rx="8" fill="var(--bg-card)" stroke="var(--secondary)" stroke-width="1" stroke-dasharray="5,3"/>
-                    <text x="155" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--secondary)">EU Multi-DC Failover</text>
-                    <text x="155" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">Ordered, three EU datacenters</text>
+                    <text x="155" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--secondary)">Deployment supply failover</text>
+                    <text x="155" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">Separate deployment capability</text>
                     <text x="155" y="408" text-anchor="middle" font-size="9" fill="var(--text-muted)">Per-DC weight volumes · Exponential backoff</text>
                     <line x1="155" y1="330" x2="155" y2="355" stroke="var(--secondary)" stroke-width="1" stroke-dasharray="4,3"/>
                     <polygon points="150,352 155,360 160,352" fill="var(--secondary)"/>
@@ -209,49 +190,16 @@
                     <text x="352" y="471" font-size="9" fill="var(--text-secondary)">Fallback 2 (7.7 s)</text>
                     <circle cx="480" cy="467" r="5" fill="var(--secondary)"/>
                     <text x="492" y="471" font-size="9" fill="var(--text-secondary)">EU DC Failover</text>
-                    <text x="410" y="490" text-anchor="middle" font-size="9" fill="var(--text-muted)">3x redundancy · Measured SLAs per provider · All failure scenarios validated</text>
+                    <text x="410" y="490" text-anchor="middle" font-size="9" fill="var(--text-muted)">Three-provider POC · Six test scenarios passed</text>
                 </svg>
             </figure>
-
-            <p>The latencies are measured, not estimated, and they are what the router uses to reason about which hop a request took:</p>
-
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th scope="col">Hop</th>
-                            <th scope="col">Hardware</th>
-                            <th scope="col">Latency</th>
-                            <th scope="col">Role</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Serverless GPUs</td><td>Ada / Ampere, 6 types</td><td>568 ms</td><td>Primary, cost-optimized burst</td></tr>
-                        <tr><td>Managed serverless GPU</td><td>NVIDIA L4</td><td>1.9 s warm, 41 s cold</td><td>Fallback 1, scales to zero</td></tr>
-                        <tr><td>Dedicated cluster</td><td>L40S / A100 SXM 80 GB</td><td>7.7 s</td><td>Fallback 2, high-throughput</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <h2>Multi-GPU and multi-datacenter</h2>
-
-            <p>GPU supply on rented serverless is not guaranteed. On a bad day the GPU type you want is simply not available in the region you asked for. Two things made this survivable.</p>
-
-            <p><strong>Profile-driven GPU selection.</strong> I replaced a hardcoded if-else over GPU names with one table that maps each GPU type to its tuned config: VRAM, max model length, dtype, kv-cache dtype, fp8 support and tensor-parallel settings. One flag selects the whole profile. Six GPU types are deployable (RTX 4090, RTX 5090, A6000, RTX 6000 Ada, L40S and A100 SXM), and switching between them is a single parameter rather than a code change.</p>
-
-            <p><strong>Datacenter failover.</strong> The deploy tries datacenters in an ordered list and moves to the next one when it hits a supply constraint, with exponential backoff. Each datacenter has its own cached weights volume, so a failover does not re-download the model.</p>
-
-            <h2>What I would tell someone starting this</h2>
-            <ul>
-                <li>Pin your CUDA toolkit to the host driver, not to the newest base image. The newest image is the one that crash-loops on older hosts.</li>
-                <li>Make startup fail loudly. A sourced <code>exit</code> or a silently-unmatched GPU tier will cost you an afternoon of staring at an empty log.</li>
-                <li>Treat cold start as a first-class SLO. Pre-bake everything deterministic and cache the weights; do not assemble the environment on every scale-up.</li>
-                <li>Put a router in front before you think you need it. Single-provider GPU serving is a single point of failure, and GPU supply is the part you do not control.</li>
-            </ul>
-
-        </div>
-
-        <footer class="doc-footer">
+<p>The recorded POC request observations were 568 ms on RunPod, 1,917 ms on Cloud Run GPU and 7,681 ms on the GCE Managed Instance Group path, with a cold fallback observation of about 41 seconds. These were particular test requests, not production latency percentiles. GCE Managed Instance Group does not mean GPU Multi-Instance GPU partitioning.</p>
+<h2>Operate the fleet, not individual pods</h2>
+<p>I also connected router inventory to dynamic Prometheus discovery, so monitoring followed ephemeral GPU workers instead of relying on a manually updated address list. <a href="/cases/ai-fleet-observability/">Read the fleet observability case</a> for its rollout and monitoring boundaries.</p>
+<h2>The lesson</h2>
+<p>Model serving is a system of compatibility, identity, deployment and failure decisions. Validate the loaded model, the served revision and the fallback behavior independently; a green build or an HTTP health response cannot prove all three.</p>
+</div>
+<footer class="doc-footer">
             <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>
             <div class="cta-row">
                 <a class="cta cta--primary" href="/#cases">See more case studies</a>

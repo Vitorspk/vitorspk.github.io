@@ -85,6 +85,18 @@
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="kubernetes-supply-chain-defense" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Detect, contain and prevent a compromised build.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Dependency &amp; build</strong><span>Audit the supply chain</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Runtime signals</strong><span>Detect suspicious CPU activity</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Containment</strong><span>Isolate nodes and remediate</span></div>
+</div>
+<p class="case-map-note">Layer pipeline checks with node-level anomaly detection and an explicit containment procedure.</p>
+</figure>
+
 
             <p>The scariest class of compromise is the quiet one. No outage, no error spike, no alert from the application. Just a node running hotter than it should, with a process like <code>xmrig</code> (a Monero cryptominer) burning CPU inside an otherwise normal container. This is a write-up of how that happens through the software supply chain, and the layered defenses that make it both hard to pull off and fast to catch.</p>
 

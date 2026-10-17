@@ -44,7 +44,7 @@ test.describe('Accessibility', () => {
   test('all tabpanels have aria-labelledby', async ({ page }) => {
     const panels = page.locator('[role="tabpanel"]');
     const count = await panels.count();
-    expect(count).toBe(9);
+    expect(count).toBe(5);
     for (let i = 0; i < count; i++) {
       const labelledBy = await panels.nth(i).getAttribute('aria-labelledby');
       expect(labelledBy).toBeTruthy();
@@ -56,7 +56,7 @@ test.describe('Accessibility', () => {
   test('all tab buttons have aria-controls', async ({ page }) => {
     const tabs = page.locator('.sidebar-nav [role="tab"]');
     const count = await tabs.count();
-    expect(count).toBe(9);
+    expect(count).toBe(5);
     for (let i = 0; i < count; i++) {
       const controls = await tabs.nth(i).getAttribute('aria-controls');
       expect(controls).toBeTruthy();

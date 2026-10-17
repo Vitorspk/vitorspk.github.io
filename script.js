@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Evaluate once — used by activateTab (mobile auto-scroll) and barObserver
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    let activeFilter = 'all';
+
     // ─── activateTab ─────────────────────────────────────────────────────────
 
     function activateTab(tabName, pushState = true) {
@@ -71,10 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const isActive = panel.id === name;
             panel.classList.toggle('active', isActive);
             panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+            panel.inert = !isActive;
         });
 
         if (pushState) {
-            history.pushState({ tab: name }, '', `#${name}`);
+            const suffix = name === 'cases' && activeFilter !== 'all' ? '/' + activeFilter : '';
+            history.pushState({ tab: name }, '', `#${name}${suffix}`);
         }
 
         // Scroll to the active panel (not the page top) so users land at the
@@ -120,19 +124,122 @@ document.addEventListener('DOMContentLoaded', () => {
         activateTab(tab);
     });
 
-    // ─── Browser back/forward ─────────────────────────────────────────────────
-    window.addEventListener('popstate', (e) => {
-        const raw = (e.state && e.state.tab) || location.hash.replace('#', '') || TAB_DEFAULT;
-        const tab = tabNames.includes(raw) ? raw : TAB_DEFAULT;
-        activateTab(tab, false);
+    const skipLink = document.querySelector('.skip-link');
+    const mainContent = document.getElementById('main-content');
+    if (skipLink && mainContent) skipLink.addEventListener('click', event => {
+        event.preventDefault();
+        mainContent.focus({ preventScroll: true });
+        mainContent.scrollIntoView({ behavior: 'auto', block: 'start' });
     });
 
-    // ─── Init from URL hash ───────────────────────────────────────────────────
-    (function initFromHash() {
-        const hash = location.hash.replace('#', '').trim();
-        const validTab = tabNames.includes(hash) ? hash : TAB_DEFAULT;
-        activateTab(validTab, false);
-    })();
+    // Resolve current and retired links from HTML, not a second navigation list.
+    const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
+    const catalogCases = Array.from(document.querySelectorAll('#cases .case-study'));
+    const caseCount = document.getElementById('case-count');
+    function filterCases(value) {
+        const known = filterButtons.some(button => button.dataset.filter === value);
+        activeFilter = known ? value : 'all';
+        filterButtons.forEach(button => {
+            button.setAttribute('aria-pressed', String(button.dataset.filter === activeFilter));
+        });
+        let shown = 0;
+        catalogCases.forEach(study => {
+            const matches = activeFilter === 'all' || study.dataset.category === activeFilter;
+            study.hidden = !matches;
+            if (matches) shown++;
+        });
+        if (caseCount) caseCount.textContent = shown + ' of ' + catalogCases.length + ' case studies and projects';
+    }
+
+    function restoreLocation() {
+        const raw = location.hash.slice(1).trim();
+        const [section, category] = raw.split('/');
+        const aliasPanel = section && tabPanels.find(panel => (panel.dataset.legacy || '').split(' ').includes(section));
+        const name = tabNames.includes(section) ? section : aliasPanel ? aliasPanel.id : TAB_DEFAULT;
+        const aliasFilter = filterButtons.find(button => button.dataset.legacy === section);
+        filterCases(name === 'cases' ? category || (aliasFilter && aliasFilter.dataset.filter) || 'all' : 'all');
+        activateTab(name, false);
+        // Canonicalize old links and invalid categories without an extra Back step.
+        const canonical = '#' + name + (name === 'cases' && activeFilter !== 'all' ? '/' + activeFilter : '');
+        if (raw && location.hash !== canonical) history.replaceState({ tab: name }, '', canonical);
+    }
+
+    window.addEventListener('popstate', restoreLocation);
+    // Modern browsers fire popstate for fragment edits as well as traversal.
+    // Listening to hashchange too would restore every traversal twice.
+    restoreLocation();
+
+    filterButtons.forEach(button => button.addEventListener('click', () => {
+        if (button.dataset.filter === activeFilter) return;
+        filterCases(button.dataset.filter);
+        history.pushState({ tab: activeTab }, '', '#cases' + (activeFilter === 'all' ? '' : '/' + activeFilter));
+    }));
+
+    document.querySelectorAll('[data-jump]').forEach(button => button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.jump);
+        if (!target) return;
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+    }));
+
+    const copyEmail = document.getElementById('copy-email');
+    const copyStatus = document.getElementById('copy-status');
+    const emailLink = document.querySelector('#contact a[href^="mailto:"]');
+    const emailAddress = emailLink ? emailLink.getAttribute('href').slice(7) : '';
+    if (copyEmail && copyStatus && emailAddress) copyEmail.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(emailAddress);
+            copyStatus.textContent = 'Email address copied.';
+        } catch {
+            copyStatus.textContent = 'Copy unavailable. Please select ' + emailAddress + ' above, or use Email Vitor.';
+        }
+    });
+
+    // The home explorer shows documented decisions, never simulated live status.
+    const platformViews = {
+        delivery: {
+            title: 'Build once. Promote with confidence.',
+            summary: 'An isolated preview, the same tested image and an explicit cleanup path.',
+            result: 'Two-repository pilot · 34 automated checks',
+            href: '/cases/ephemeral-preview-environments/',
+            foundation: ['GitHub Actions', 'ArgoCD', 'Helm'],
+            nodes: ['Commit', 'Platform', 'Runtime'],
+            details: ['Build & test', 'Preview & validate', 'Promote & clean up'],
+        },
+        reliability: {
+            title: 'Make the signal trustworthy.',
+            summary: 'Validate alert filters against real log messages, not an empty green dashboard.',
+            result: '22 alert policies and 2 log-based metrics repaired',
+            href: '/cases/gen2-observability-repair/',
+            foundation: ['Cloud Functions', 'Logs', 'Monitoring'],
+            nodes: ['Runtime', 'Log pipeline', 'Alerting'],
+            details: ['Known message', 'Match the format', 'Verify the signal'],
+        },
+        efficiency: {
+            title: 'Find the waste. Verify the savings.',
+            summary: 'Right-size Kubernetes, replace costly ingestion and safely retire legacy infrastructure.',
+            result: '~US$30.1K/year annualized · one legacy retirement',
+            href: '/cases/cloud-cost-engineering/',
+            foundation: ['Kubernetes', 'MongoDB Atlas', 'Cloud billing'],
+            nodes: ['Baseline', 'Resources', 'Validation'],
+            details: ['Map the spend', 'Right-size or retire', 'Check the bill'],
+        },
+    };
+    const platformButtons = Array.from(document.querySelectorAll('[data-platform-view]'));
+    platformButtons.forEach(button => button.addEventListener('click', () => {
+        const view = platformViews[button.dataset.platformView];
+        if (!view) return;
+        platformButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+        document.getElementById('platform-story-title').textContent = view.title;
+        document.getElementById('platform-story-summary').textContent = view.summary;
+        document.getElementById('platform-story-result').textContent = view.result;
+        document.getElementById('platform-story-link').setAttribute('href', view.href);
+        view.nodes.forEach((label, index) => {
+            document.querySelector('[data-platform-node="' + index + '"]').textContent = label;
+            document.querySelector('[data-platform-foundation="' + index + '"]').textContent = view.foundation[index];
+            document.querySelector('[data-platform-detail="' + index + '"]').textContent = view.details[index];
+        });
+    }));
 
     // ─── Scroll to Top Button ─────────────────────────────────────────────────
     const scrollToTopBtn = document.getElementById('scrollToTop');
@@ -142,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 80);
         window.addEventListener('scroll', onScroll, { passive: true });
         scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         });
     }
 
@@ -165,53 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }, { passive: true });
     }
 
-    // ─── Metric Bar Animations (IntersectionObserver) ─────────────────────────
-
-    const barObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            const bar = entry.target;
-            const target = bar.dataset.width || '0%';
-            if (prefersReducedMotion) {
-                // Respect user motion preference — set final width immediately
-                bar.style.width = target;
-            } else {
-                bar.style.width = '0%';
-                // Double rAF ensures 0% paints before the CSS transition fires
-                requestAnimationFrame(() => requestAnimationFrame(() => {
-                    bar.style.width = target;
-                }));
-            }
-            obs.unobserve(bar);
-        });
-    }, { threshold: 0.2 });
-
-    document.querySelectorAll('.bar-fill').forEach(bar => {
-        if (!bar.dataset.width) bar.dataset.width = bar.style.width || '0%';
-        bar.style.width = '0%';
-        barObserver.observe(bar);
-    });
-
-    // ─── Scroll Reveal (staggered card entrance) ──────────────────────────────
-    if (!prefersReducedMotion) {
-        const revealObserver = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('revealed');
-                obs.unobserve(entry.target);
-            });
-        }, { threshold: 0.1 });
-
-        // Group by tab panel so stagger index resets per section
-        document.querySelectorAll('.tab-content').forEach(container => {
-            container.querySelectorAll('.card, .case-study, .feature-card, .timeline-item, .highlight-card').forEach((el, i) => {
-                el.classList.add('reveal');
-                el.style.setProperty('--reveal-delay', (i % 6) * 80 + 'ms');
-                revealObserver.observe(el);
-            });
-        });
-    }
-
     // ─── Dual tablist inert/aria sync ─────────────────────────────────────────
     // sidebar-nav is visually hidden on mobile; mobile-tabs is hidden on desktop.
     // IMPORTANT CONTRACT: whichever nav is off-screen MUST stay inert + aria-hidden.
@@ -222,9 +282,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (sidebarNav && mobileNav) {
         const mq = window.matchMedia('(max-width: 768px)');
+        // A breakpoint can hide the focused parent before matchMedia runs.
+        // Remember focus intent, but clear it when the user targets another control.
+        let themeHadFocus = false;
+        const rememberThemeFocus = event => {
+            themeHadFocus = Boolean(event.target.closest('#themeToggle'));
+        };
+        document.addEventListener('focusin', rememberThemeFocus);
+        document.addEventListener('pointerdown', rememberThemeFocus);
 
         const syncTablists = function syncTablists() {
             const isMobile = mq.matches;
+            const themeControl = document.getElementById('themeToggle');
+            const themeContainer = document.querySelector(isMobile ? '.topbar' : '.brand-controls');
+            if (themeControl && themeContainer && themeControl.parentElement !== themeContainer) {
+                const hadFocus = document.activeElement === themeControl || themeHadFocus;
+                themeContainer.appendChild(themeControl);
+                if (hadFocus) themeControl.focus({ preventScroll: true });
+            }
+
             sidebarNav.inert = isMobile;
             mobileNav.inert  = !isMobile;
             sidebarNav.setAttribute('aria-hidden', isMobile ? 'true' : 'false');
@@ -244,19 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         mq.addEventListener('change', syncTablists);
         syncTablists(); // set initial state
-    }
-
-    // ─── Mobile tab strip overflow indicator ──────────────────────────────────
-    // Toggles .has-overflow-right so the mask-image fade only shows when there
-    // are off-screen tabs to the right — avoids a false affordance at the end.
-    if (mobileNav) {
-        const updateTabOverflow = () => {
-            const hasOverflow = mobileNav.scrollLeft + mobileNav.clientWidth < mobileNav.scrollWidth - 1;
-            mobileNav.classList.toggle('has-overflow-right', hasOverflow);
-        };
-        mobileNav.addEventListener('scroll', updateTabOverflow, { passive: true });
-        window.addEventListener('resize', updateTabOverflow, { passive: true });
-        updateTabOverflow(); // set initial state
     }
 
     // ─── Keyboard Navigation (Arrow / Home / End) ─────────────────────────────
@@ -313,16 +376,26 @@ document.addEventListener('DOMContentLoaded', () => {
         header.setAttribute('role', 'button');
         header.setAttribute('tabindex', '0');
         header.setAttribute('aria-expanded', 'false');
+        const bodyId = 'case-body-' + caseStudies.indexOf(study);
+        body.id = bodyId;
+        header.setAttribute('aria-controls', bodyId);
+        body.hidden = true;
+        body.inert = true;
 
         const toggleCase = () => {
-            const isExpanded = study.getAttribute('aria-expanded') === 'true';
+            const isExpanded = study.getAttribute('data-expanded') === 'true';
             const next = isExpanded ? 'false' : 'true';
-            study.setAttribute('aria-expanded', next);
+            study.setAttribute('data-expanded', next);
             header.setAttribute('aria-expanded', next);
+            body.hidden = isExpanded;
+            body.inert = isExpanded;
         };
 
-        header.addEventListener('click', toggleCase);
+        header.addEventListener('click', event => {
+            if (!event.target.closest('a')) toggleCase();
+        });
         header.addEventListener('keydown', (e) => {
+            if (e.target !== header) return;
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 toggleCase();
@@ -336,20 +409,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (themeToggle) {
         // Restore saved theme (default: dark)
-        const saved = localStorage.getItem('theme') || 'dark';
+        let saved = 'dark';
+        try { saved = localStorage.getItem('theme') || 'dark'; } catch { /* Storage may be blocked. */ }
         applyTheme(saved);
 
         themeToggle.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme') || 'dark';
             const next = current === 'dark' ? 'light' : 'dark';
             applyTheme(next);
-            localStorage.setItem('theme', next);
+            try { localStorage.setItem('theme', next); } catch { /* Theme still works without persistence. */ }
         });
     }
 
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        if (themeIcon) themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        if (themeIcon) themeIcon.textContent = theme === 'dark' ? '◐' : '◑';
         if (themeToggle) {
             themeToggle.setAttribute('aria-label',
                 theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'

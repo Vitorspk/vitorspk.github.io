@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 // Visual order of the sidebar tablist buttons — keyboard navigation follows
 // this order (tabNames in script.js is derived from the tablist buttons so
 // Arrow/Home/End matches what users see — WCAG 2.4.3 Focus Order).
-const TAB_NAMES = ['overview', 'experience', 'skills', 'cases', 'aiml', 'finops', 'technical', 'achievements', 'projects'];
+const TAB_NAMES = ['overview', 'cases', 'experience', 'about', 'contact'];
 
 test.use({ viewport: { width: 1280, height: 800 } });
 
@@ -40,21 +40,6 @@ test.describe('Reading progress bar', () => {
     expect(await width()).toBe(0);
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
     await expect.poll(width, { timeout: 5000 }).toBeGreaterThan(50);
-  });
-});
-
-test.describe('Metric bar animations', () => {
-  test('bar-fill animates to its data-width when scrolled into view', async ({ page }) => {
-    await page.goto('/');
-    const bar = page.locator('#overview .bar-fill').first();
-    const target = await bar.getAttribute('data-width');
-    expect(target).toBeTruthy();
-    await bar.scrollIntoViewIfNeeded();
-    // IntersectionObserver fires, then double-rAF, then 1.5s CSS transition
-    await expect.poll(
-      () => bar.evaluate(el => el.style.width),
-      { timeout: 10000 }
-    ).toBe(target);
   });
 });
 
@@ -149,15 +134,12 @@ test.describe('Reduced motion', () => {
     expect(revealCount).toBe(0);
   });
 
-  test('metric bars get final width without animation', async ({ page }) => {
+  test('scroll to top respects reduced motion', async ({ page }) => {
     await page.goto('/');
-    const bar = page.locator('#overview .bar-fill').first();
-    const target = await bar.getAttribute('data-width');
-    await bar.scrollIntoViewIfNeeded();
-    // With reduced motion, JS sets the final width immediately (no transition)
-    await expect.poll(
-      () => bar.evaluate(el => el.style.width),
-      { timeout: 3000 }
-    ).toBe(target);
+    await page.evaluate(() => window.scrollTo(0, 800));
+    const button = page.locator('#scrollToTop');
+    await expect(button).toHaveClass(/visible/);
+    await button.click();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
   });
 });

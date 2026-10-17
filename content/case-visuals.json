@@ -1,0 +1,927 @@
+[
+  {
+    "id": "jenkins-qa-signal-recovery",
+    "cardTitle": "Restoring trust in the QA pipeline",
+    "category": "reliability",
+    "title": "Separate test failures from platform noise.",
+    "note": "The shared reporting defect was repaired; application failures remained a separate investigation.",
+    "article": "jenkins-qa-signal-recovery",
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Test jobs",
+        "detail": "Run the regression suite"
+      },
+      {
+        "icon": "layers",
+        "label": "Agent platform",
+        "detail": "Repair shared reporting"
+      },
+      {
+        "icon": "check",
+        "label": "QA signal",
+        "detail": "Identify real failures"
+      }
+    ]
+  },
+  {
+    "id": "ephemeral-preview-environments",
+    "cardTitle": "A safe place to test every feature",
+    "category": "platform",
+    "title": "A preview is a complete lifecycle.",
+    "note": "Two-repository pilot: promote the tested image, then remove preview resources when the PR closes.",
+    "article": "ephemeral-preview-environments",
+    "nodes": [
+      {
+        "icon": "branch",
+        "label": "Pull request",
+        "detail": "Build and test the image"
+      },
+      {
+        "icon": "cube",
+        "label": "Isolated preview",
+        "detail": "Validate related changes"
+      },
+      {
+        "icon": "check",
+        "label": "Promote & clean up",
+        "detail": "Reuse the image digest"
+      }
+    ]
+  },
+  {
+    "id": "gen2-observability-repair",
+    "cardTitle": "Finding the failure behind a green dashboard",
+    "category": "reliability",
+    "title": "Follow a real message all the way to an alert.",
+    "note": "Changing the resource type alone was insufficient; filters also had to match runtime-specific log formats.",
+    "article": "gen2-observability-repair",
+    "nodes": [
+      {
+        "icon": "cloud",
+        "label": "Runtime log",
+        "detail": "Start with a known message"
+      },
+      {
+        "icon": "code",
+        "label": "Log filter",
+        "detail": "Match resource and format"
+      },
+      {
+        "icon": "activity",
+        "label": "Alert policy",
+        "detail": "Verify a positive match"
+      }
+    ]
+  },
+  {
+    "id": "cloud-functions-gen1-gen2",
+    "cardTitle": "Cloud Functions: staged Gen2 migration",
+    "category": "platform",
+    "title": "Migrate the runtime and verify its identity.",
+    "note": "A staged migration; production follow-up also checked the runtime service account.",
+    "article": "cloud-functions-gen1-gen2",
+    "nodes": [
+      {
+        "icon": "cloud",
+        "label": "Gen1 function",
+        "detail": "Inventory runtime and triggers"
+      },
+      {
+        "icon": "branch",
+        "label": "Gen2 deployment",
+        "detail": "Adapt pipeline and runtime"
+      },
+      {
+        "icon": "shield",
+        "label": "Validation",
+        "detail": "Check behavior and IAM"
+      }
+    ]
+  },
+  {
+    "id": "grafana-prometheus-modernization",
+    "cardTitle": "Modernizing Grafana and Prometheus",
+    "category": "reliability",
+    "title": "Keep monitoring useful through major upgrades.",
+    "note": "The work combined version upgrades, recording rules and operational validation.",
+    "article": "grafana-prometheus-modernization",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Metrics sources",
+        "detail": "Preserve scrape coverage"
+      },
+      {
+        "icon": "layers",
+        "label": "Prometheus",
+        "detail": "Upgrade and tune rules"
+      },
+      {
+        "icon": "activity",
+        "label": "Grafana",
+        "detail": "Validate queries and views"
+      }
+    ]
+  },
+  {
+    "id": "gke-dataplane-v2-cilium",
+    "cardTitle": "GKE networking: Dataplane V2 and a repeatable bootstrap",
+    "category": "platform",
+    "title": "Change the network in a controlled environment.",
+    "note": "Non-production delivery with explicit checks and rollback; production was outside this scope.",
+    "article": "gke-dataplane-v2-cilium",
+    "nodes": [
+      {
+        "icon": "cloud",
+        "label": "Existing cluster",
+        "detail": "Capture a working baseline"
+      },
+      {
+        "icon": "layers",
+        "label": "Dataplane V2",
+        "detail": "Apply network changes"
+      },
+      {
+        "icon": "check",
+        "label": "Validation",
+        "detail": "Test paths and rollback"
+      }
+    ]
+  },
+  {
+    "id": "kubernetes-finops-kubecost",
+    "cardTitle": "Making Kubernetes cost visible",
+    "category": "finops",
+    "title": "Make cost visible before changing capacity.",
+    "note": "Cost allocation informs resource requests and consolidation; savings need a billing baseline.",
+    "article": "kubernetes-finops-kubecost",
+    "nodes": [
+      {
+        "icon": "cube",
+        "label": "Workloads",
+        "detail": "Inspect requests and usage"
+      },
+      {
+        "icon": "cost",
+        "label": "Cost allocation",
+        "detail": "Attribute spend by namespace"
+      },
+      {
+        "icon": "layers",
+        "label": "Capacity decisions",
+        "detail": "Rightsize and consolidate"
+      }
+    ]
+  },
+  {
+    "id": "zero-downtime-cluster-migration",
+    "cardTitle": "Moving workloads between Kubernetes clusters",
+    "category": "platform",
+    "title": "Move workloads with a route back.",
+    "note": "Prepare application and data migration before DNS cutover, then validate the destination.",
+    "article": "zero-downtime-cluster-migration",
+    "nodes": [
+      {
+        "icon": "cloud",
+        "label": "Source cluster",
+        "detail": "Inventory apps and data"
+      },
+      {
+        "icon": "layers",
+        "label": "Target cluster",
+        "detail": "Restore and validate"
+      },
+      {
+        "icon": "branch",
+        "label": "Traffic cutover",
+        "detail": "Switch DNS with rollback"
+      }
+    ]
+  },
+  {
+    "id": "strapi-v4-to-v5-upgrade",
+    "cardTitle": "A phased Strapi major-version upgrade",
+    "category": "platform",
+    "title": "Test compatibility before moving traffic.",
+    "note": "Major-version changes included lifecycle hooks and behavior checks before production cutover.",
+    "article": "strapi-v4-to-v5-upgrade",
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Strapi v4",
+        "detail": "Map existing behavior"
+      },
+      {
+        "icon": "branch",
+        "label": "Strapi v5",
+        "detail": "Adapt hooks and integration"
+      },
+      {
+        "icon": "check",
+        "label": "Release checks",
+        "detail": "Validate before cutover"
+      }
+    ]
+  },
+  {
+    "id": "metabase-production-ops",
+    "cardTitle": "Keeping Metabase useful in production",
+    "category": "reliability",
+    "title": "Find the metadata bottleneck before scaling the database.",
+    "note": "A controlled production load improved from ~49.7 s to ~3.1 s; a separate MongoDB filter bottleneck remained.",
+    "article": "metabase-production-ops",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Trace the delay",
+        "detail": "Separate metadata from data queries"
+      },
+      {
+        "icon": "database",
+        "label": "Test the index",
+        "detail": "Rehearse on a disposable clone"
+      },
+      {
+        "icon": "check",
+        "label": "Production check",
+        "detail": "Repeat the load with rollback ready"
+      }
+    ]
+  },
+  {
+    "id": "security-posture-observability",
+    "cardTitle": "Security posture as an observable system",
+    "category": "security",
+    "title": "Turn batch scan results into a useful signal.",
+    "note": "Batch visibility includes risk dimensions and scan freshness; it is not real-time threat detection.",
+    "article": "security-posture-observability",
+    "nodes": [
+      {
+        "icon": "shield",
+        "label": "Security scans",
+        "detail": "Collect results by project"
+      },
+      {
+        "icon": "layers",
+        "label": "Metric ingestion",
+        "detail": "Push and preserve dimensions"
+      },
+      {
+        "icon": "activity",
+        "label": "Dashboards",
+        "detail": "Show risk and freshness"
+      }
+    ]
+  },
+  {
+    "id": "monitoring-ingestion-cost",
+    "cardTitle": "Reducing monitoring ingestion spend",
+    "category": "finops",
+    "title": "Keep the visibility. Change the billable path.",
+    "note": "The managed ingestion line was removed; self-managed compute, storage and maintenance still have costs.",
+    "article": "monitoring-ingestion-cost",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Scrape targets",
+        "detail": "Preserve existing metrics"
+      },
+      {
+        "icon": "layers",
+        "label": "Prometheus",
+        "detail": "Replace managed ingestion"
+      },
+      {
+        "icon": "activity",
+        "label": "Grafana & alerts",
+        "detail": "Validate retained visibility"
+      }
+    ]
+  },
+  {
+    "id": "gcp-storage-cost-reduction",
+    "cardTitle": "GCP storage lifecycle and retention",
+    "category": "finops",
+    "title": "Match the storage tier to the retention policy.",
+    "note": "A simplified lifecycle: the effective policy version and deletion requirements must be validated.",
+    "article": "gcp-storage-cost-reduction",
+    "nodes": [
+      {
+        "icon": "database",
+        "label": "Active data",
+        "detail": "Keep recently used objects"
+      },
+      {
+        "icon": "layers",
+        "label": "Lifecycle rules",
+        "detail": "Move data to colder tiers"
+      },
+      {
+        "icon": "shield",
+        "label": "Retention boundary",
+        "detail": "Apply authorized expiry"
+      }
+    ]
+  },
+  {
+    "id": "airflow-consolidation",
+    "cardTitle": "Airflow consolidation — 86% fewer allocated resources",
+    "category": "finops",
+    "title": "Allocate capacity for the work that actually runs.",
+    "note": "The recorded resource allocation fell; this does not mean the platform has zero operating cost.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "cube",
+        "label": "Airflow workload",
+        "detail": "Inspect utilization and queues"
+      },
+      {
+        "icon": "activity",
+        "label": "Resource sizing",
+        "detail": "Tune replicas and requests"
+      },
+      {
+        "icon": "layers",
+        "label": "Node capacity",
+        "detail": "Consolidate the allocation"
+      }
+    ]
+  },
+  {
+    "id": "cloudflare-mtls",
+    "cardTitle": "mTLS with Cloudflare — Zero-Trust Architecture",
+    "category": "security",
+    "title": "Verify identity at both sides of the connection.",
+    "note": "Certificates, rotation and revocation complement network controls.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "person",
+        "label": "Client identity",
+        "detail": "Present a client certificate"
+      },
+      {
+        "icon": "shield",
+        "label": "Cloudflare",
+        "detail": "Validate the certificate"
+      },
+      {
+        "icon": "cloud",
+        "label": "Origin",
+        "detail": "Verify the protected connection"
+      }
+    ]
+  },
+  {
+    "id": "aws-gcp-ha-vpn",
+    "cardTitle": "AWS-GCP HA VPN — Multi-Cloud Connectivity",
+    "category": "platform",
+    "title": "Connect private networks through redundant tunnels.",
+    "note": "BGP provides routing and failover; IPSec encrypts traffic carried over the VPN.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "cloud",
+        "label": "AWS network",
+        "detail": "Route private traffic"
+      },
+      {
+        "icon": "shield",
+        "label": "HA VPN",
+        "detail": "Use encrypted redundant tunnels"
+      },
+      {
+        "icon": "cloud",
+        "label": "GCP network",
+        "detail": "Exchange routes with BGP"
+      }
+    ]
+  },
+  {
+    "id": "custom-canary-deployment",
+    "cardTitle": "Custom Canary Deployment System",
+    "category": "platform",
+    "title": "Increase traffic only after a healthy check.",
+    "note": "Each release gate can stop progression and send traffic back to the stable version.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "cube",
+        "label": "New release",
+        "detail": "Start with limited traffic"
+      },
+      {
+        "icon": "activity",
+        "label": "Health gate",
+        "detail": "Evaluate errors and latency"
+      },
+      {
+        "icon": "branch",
+        "label": "Traffic decision",
+        "detail": "Advance or roll back"
+      }
+    ]
+  },
+  {
+    "id": "database-security-hardening",
+    "cardTitle": "Database security hardening — 60+ databases",
+    "category": "security",
+    "title": "Reduce exposure and protect the connection.",
+    "note": "Private networking, encrypted transport and access controls form separate layers of defense.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "cloud",
+        "label": "Private network",
+        "detail": "Restrict reachable paths"
+      },
+      {
+        "icon": "shield",
+        "label": "TLS & identity",
+        "detail": "Authenticate and encrypt"
+      },
+      {
+        "icon": "database",
+        "label": "Database",
+        "detail": "Limit authorized access"
+      }
+    ]
+  },
+  {
+    "id": "kong-api-gateway",
+    "cardTitle": "Kong Gateway — API Management at Scale",
+    "category": "platform",
+    "title": "Enforce shared API policy in one place.",
+    "note": "The gateway centralizes authentication, rate limits and routing for application traffic.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "person",
+        "label": "API client",
+        "detail": "Send an authenticated request"
+      },
+      {
+        "icon": "shield",
+        "label": "Kong Gateway",
+        "detail": "Apply shared policy"
+      },
+      {
+        "icon": "cube",
+        "label": "Services",
+        "detail": "Route to the application"
+      }
+    ]
+  },
+  {
+    "id": "argocd-multi-cluster",
+    "cardTitle": "ArgoCD GitOps — Multi-Cluster Continuous Delivery",
+    "category": "platform",
+    "title": "Reconcile each environment from versioned intent.",
+    "note": "GitOps separates the desired state in Git from its controlled application to clusters.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Git configuration",
+        "detail": "Review the desired state"
+      },
+      {
+        "icon": "branch",
+        "label": "ArgoCD",
+        "detail": "Reconcile scoped applications"
+      },
+      {
+        "icon": "layers",
+        "label": "GKE environments",
+        "detail": "Apply and observe changes"
+      }
+    ]
+  },
+  {
+    "id": "gke-terraform-shared-vpc",
+    "cardTitle": "GKE Infrastructure — Production-Grade Terraform + Shared VPC",
+    "category": "platform",
+    "title": "Separate shared networking from environment workloads.",
+    "note": "Reusable Terraform modules provision network boundaries and GKE resources consistently.",
+    "article": "gke-terraform-shared-vpc",
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Terraform modules",
+        "detail": "Version reusable infrastructure"
+      },
+      {
+        "icon": "cloud",
+        "label": "Shared VPC",
+        "detail": "Define subnets and boundaries"
+      },
+      {
+        "icon": "layers",
+        "label": "GKE environments",
+        "detail": "Provision isolated workloads"
+      }
+    ]
+  },
+  {
+    "id": "self-hosting-gemma-3-vllm",
+    "cardTitle": "Multimodal LLM serving across engines and clouds",
+    "category": "ai",
+    "title": "Match the model to its runtime, then validate the served path.",
+    "note": "The router POC and the later production fallback integration have separate measurements and rollout scopes.",
+    "article": "self-hosting-gemma-3-vllm",
+    "nodes": [
+      {
+        "icon": "chip",
+        "label": "Model compatibility",
+        "detail": "Choose vLLM or llama.cpp"
+      },
+      {
+        "icon": "cloud",
+        "label": "GPU serving",
+        "detail": "Isolate images and deployments"
+      },
+      {
+        "icon": "shield",
+        "label": "Operated fallback",
+        "detail": "Validate identity and response"
+      }
+    ]
+  },
+  {
+    "id": "kubernetes-supply-chain-defense",
+    "cardTitle": "Defending Kubernetes Against Supply-Chain Attacks",
+    "category": "security",
+    "title": "Detect, contain and prevent a compromised build.",
+    "note": "Layer pipeline checks with node-level anomaly detection and an explicit containment procedure.",
+    "article": "kubernetes-supply-chain-defense",
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Dependency & build",
+        "detail": "Audit the supply chain"
+      },
+      {
+        "icon": "activity",
+        "label": "Runtime signals",
+        "detail": "Detect suspicious CPU activity"
+      },
+      {
+        "icon": "shield",
+        "label": "Containment",
+        "detail": "Isolate nodes and remediate"
+      }
+    ]
+  },
+  {
+    "id": "production-incident-response",
+    "cardTitle": "Production Incident Response — P1 Outage & Partner Auth Failure",
+    "category": "reliability",
+    "title": "Restore service, then address the failure path.",
+    "note": "A simplified response model across dependency and authentication incidents; recovery work is shared.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Detection & triage",
+        "detail": "Find the dependency failure"
+      },
+      {
+        "icon": "shield",
+        "label": "Contain impact",
+        "detail": "Restore a working service path"
+      },
+      {
+        "icon": "code",
+        "label": "Follow-up",
+        "detail": "Review safeguards and monitoring"
+      }
+    ]
+  },
+  {
+    "id": "elastic-stack-migration",
+    "cardTitle": "Elastic Stack Migration — EC2 to Kubernetes at Scale",
+    "category": "reliability",
+    "title": "Separate cluster roles and add a recovery path.",
+    "note": "The Kubernetes design separates master, data and ingest roles with snapshot-based backups.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "cloud",
+        "label": "Legacy clusters",
+        "detail": "Inventory data and pipelines"
+      },
+      {
+        "icon": "layers",
+        "label": "EKS & Helm",
+        "detail": "Separate Elastic node roles"
+      },
+      {
+        "icon": "database",
+        "label": "Snapshots",
+        "detail": "Automate backup and retention"
+      }
+    ]
+  },
+  {
+    "id": "kafka-event-streaming",
+    "cardTitle": "Kafka Event Streaming — Real-Time Pipeline to BI",
+    "category": "platform",
+    "title": "Route one event stream to search and analytics.",
+    "note": "Logstash filters feed Elasticsearch and Kafka topics for downstream BI consumers.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Event sources",
+        "detail": "Receive service and queue events"
+      },
+      {
+        "icon": "branch",
+        "label": "Logstash routing",
+        "detail": "Filter and duplicate outputs"
+      },
+      {
+        "icon": "database",
+        "label": "Search & Kafka",
+        "detail": "Index events and feed BI"
+      }
+    ]
+  },
+  {
+    "id": "ai-tools-enablement",
+    "cardTitle": "AI Tools Integration — Team Productivity",
+    "category": "platform",
+    "title": "Introduce tools with guidance and human review.",
+    "note": "Tool adoption and review-workflow evaluation; productivity improvements were not measured here.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "person",
+        "label": "Engineering teams",
+        "detail": "Introduce assisted workflows"
+      },
+      {
+        "icon": "chip",
+        "label": "AI tools",
+        "detail": "Support coding and review"
+      },
+      {
+        "icon": "check",
+        "label": "Human judgment",
+        "detail": "Document and evaluate usage"
+      }
+    ]
+  },
+  {
+    "id": "pokemon-go-subscriptions",
+    "cardTitle": "Pokémon GO Friend Code — Subscription SaaS",
+    "category": "personal",
+    "title": "Connect a subscription to its daily service.",
+    "note": "Personal product: payment state controls which trainer codes remain active for submission.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "person",
+        "label": "Subscriber",
+        "detail": "Choose a localized plan"
+      },
+      {
+        "icon": "cost",
+        "label": "Payment webhooks",
+        "detail": "Update subscription state"
+      },
+      {
+        "icon": "cube",
+        "label": "Active code",
+        "detail": "Enable daily submissions"
+      }
+    ]
+  },
+  {
+    "id": "pokemon-go-submission-engine",
+    "cardTitle": "Pokémon GO GCP — Automated Code Submission Engine",
+    "category": "personal",
+    "title": "Schedule, submit and verify each code.",
+    "note": "A scheduled backend checks active subscriptions, submits codes and verifies their appearance.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "database",
+        "label": "Active codes",
+        "detail": "Read eligible subscriptions"
+      },
+      {
+        "icon": "code",
+        "label": "Cloud Run Job",
+        "detail": "Submit through browser automation"
+      },
+      {
+        "icon": "check",
+        "label": "Verification",
+        "detail": "Confirm the listing appears"
+      }
+    ]
+  },
+  {
+    "id": "amigosecreto-android",
+    "cardTitle": "AmigoSecreto — Android App (Google Play)",
+    "category": "personal",
+    "title": "Make the draw obey the group rules.",
+    "note": "Native Android app with exclusion rules, local persistence and secure result reveal.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "person",
+        "label": "Group & exclusions",
+        "detail": "Configure participants and rules"
+      },
+      {
+        "icon": "code",
+        "label": "Draw engine",
+        "detail": "Find a valid assignment"
+      },
+      {
+        "icon": "shield",
+        "label": "Private reveal",
+        "detail": "Store and share the result"
+      }
+    ]
+  },
+  {
+    "id": "secret-santa-ios",
+    "cardTitle": "Secret Santa — iOS App (SwiftUI)",
+    "category": "personal",
+    "title": "A native flow from group setup to reveal.",
+    "note": "SwiftUI and SwiftData keep the interface, persistence and draw workflow inside native frameworks.",
+    "article": null,
+    "nodes": [
+      {
+        "icon": "person",
+        "label": "SwiftUI interface",
+        "detail": "Create groups and exclusions"
+      },
+      {
+        "icon": "database",
+        "label": "SwiftData",
+        "detail": "Persist the local group state"
+      },
+      {
+        "icon": "shield",
+        "label": "Draw & reveal",
+        "detail": "Generate and share assignments"
+      }
+    ]
+  },
+  {
+    "id": "cloud-cost-engineering",
+    "cardTitle": "Cloud cost engineering across the stack",
+    "category": "finops",
+    "title": "Find the waste. Change the system. Verify the bill.",
+    "note": "Preserve required data and service behavior; measure each initiative against its own billing baseline.",
+    "article": "cloud-cost-engineering",
+    "nodes": [
+      {
+        "icon": "cost",
+        "label": "Cost baseline",
+        "detail": "Map spend to resources"
+      },
+      {
+        "icon": "layers",
+        "label": "Engineering change",
+        "detail": "Right-size, migrate or retire"
+      },
+      {
+        "icon": "check",
+        "label": "Billing validation",
+        "detail": "Compare scoped results"
+      }
+    ]
+  },
+  {
+    "id": "gke-cluster-rebuild-recovery",
+    "cardTitle": "Rebuilding GKE without reissuing certificates",
+    "category": "platform",
+    "title": "Restore the identity before recreating the controller intent.",
+    "note": "The rehearsal adopted 49 of 49 certificates without reissuing. It is a recovery test, not a production recovery-time SLA.",
+    "article": "gke-cluster-rebuild-recovery",
+    "nodes": [
+      {
+        "icon": "database",
+        "label": "Preserve state",
+        "detail": "Inventory TLS and reserved IPs"
+      },
+      {
+        "icon": "layers",
+        "label": "Rebuild & restore",
+        "detail": "Restore TLS before Certificates"
+      },
+      {
+        "icon": "check",
+        "label": "Prove recovery",
+        "detail": "Check certificates and GitOps"
+      }
+    ]
+  },
+  {
+    "id": "kubernetes-dns-latency",
+    "cardTitle": "Finding the latency hidden in Kubernetes DNS",
+    "category": "reliability",
+    "title": "Measure each layer before changing capacity.",
+    "note": "The roughly 9× improvement describes the measured DNS lookup, not every API request or a sustained service-level guarantee.",
+    "article": "kubernetes-dns-latency",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Trace the latency",
+        "detail": "Separate lookup and TCP time"
+      },
+      {
+        "icon": "layers",
+        "label": "Adjust resolution",
+        "detail": "Tune ndots in the shared chart"
+      },
+      {
+        "icon": "check",
+        "label": "Validate in production",
+        "detail": "Repeat the original measurement"
+      }
+    ]
+  },
+  {
+    "id": "ai-fleet-observability",
+    "cardTitle": "Observing an ephemeral AI inference fleet",
+    "category": "ai",
+    "title": "Discover the fleet from the component that already knows it.",
+    "note": "Five targets were UP in the rollout snapshot. This delivery added visibility; paging rules were a separate follow-up.",
+    "article": "ai-fleet-observability",
+    "nodes": [
+      {
+        "icon": "branch",
+        "label": "Router inventory",
+        "detail": "Track worker heartbeats"
+      },
+      {
+        "icon": "activity",
+        "label": "HTTP discovery",
+        "detail": "Refresh ephemeral targets"
+      },
+      {
+        "icon": "layers",
+        "label": "Fleet dashboard",
+        "detail": "Inspect GPU and inference signals"
+      }
+    ]
+  },
+  {
+    "id": "scheduled-jobs-observability",
+    "cardTitle": "Making scheduled jobs observable",
+    "category": "reliability",
+    "title": "A job that disappears still needs a lasting health signal.",
+    "note": "24 of 26 active entries were instrumented. Freshness thresholds reflect each schedule; telemetry failures do not replace the job result.",
+    "article": "scheduled-jobs-observability",
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Scheduled job",
+        "detail": "Wrap execution and preserve exit code"
+      },
+      {
+        "icon": "activity",
+        "label": "Persistent signals",
+        "detail": "Push completion and timestamps"
+      },
+      {
+        "icon": "check",
+        "label": "Freshness rules",
+        "detail": "Alert according to the schedule"
+      }
+    ]
+  },
+  {
+    "id": "queue-driven-autoscaling",
+    "cardTitle": "Fix the worker before scaling the fleet",
+    "category": "platform",
+    "title": "Release the stuck work before adding more workers.",
+    "note": "KEDA was active in four environments. The 50-replica production ceiling is configuration, not demonstrated throughput capacity.",
+    "article": "queue-driven-autoscaling",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Queue backlog",
+        "detail": "Measure actual waiting work"
+      },
+      {
+        "icon": "code",
+        "label": "Worker lifecycle",
+        "detail": "Bound and release child processes"
+      },
+      {
+        "icon": "layers",
+        "label": "KEDA scaling",
+        "detail": "Scale the corrected workload"
+      }
+    ]
+  }
+]

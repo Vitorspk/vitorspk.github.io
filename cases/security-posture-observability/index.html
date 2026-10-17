@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Security posture as an observable system — Vitor Schiavo</title>
+    <meta name="description" content="Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/security-posture-observability/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Security posture as an observable system">
+    <meta property="og:description" content="Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/security-posture-observability/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/security-posture-observability/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Security posture as an observable system — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Security posture as an observable system">
+    <meta name="twitter:description" content="Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/security-posture-observability/og.png">
+    <meta name="twitter:image:alt" content="Security posture as an observable system — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Security posture as an observable system", "description": "Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorspk.github.io/cases/security-posture-observability/", "mainEntityOfPage": "https://vitorspk.github.io/cases/security-posture-observability/", "image": "https://vitorspk.github.io/cases/security-posture-observability/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<header class="doc-header"><span class="doc-eyebrow">Case study · Security operations · May 2026</span>
+<h1 class="doc-title">Security posture as an observable system</h1>
+<p class="doc-dek">Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~7 min read</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="security-posture-observability" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Turn batch scan results into a useful signal.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Security scans</strong><span>Collect results by project</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Metric ingestion</strong><span>Push and preserve dimensions</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Dashboards</strong><span>Show risk and freshness</span></div>
+</div>
+<p class="case-map-note">Batch visibility includes risk dimensions and scan freshness; it is not real-time threat detection.</p>
+</figure>
+
+<h2>The problem</h2>
+<p>Periodic cloud security reports required manual triage. A point-in-time report made it difficult to compare findings across projects and services or see whether the underlying scan had become stale.</p>
+<h2>My contribution</h2>
+<p>I connected monthly scan results from 14 cloud projects to a metrics pipeline and a Grafana dashboard. The work included CSV enrichment, a small exporter, a Pushgateway deployment, Prometheus configuration and dashboard views by project, service and risk.</p>
+<h2>The decisions</h2>
+<p>The scanner is a batch process, not a long-running service. Pushing results to a gateway lets Prometheus scrape them after the job exits. The exported metrics distinguish finding types, affected resources and the time of the last scan; those represent different questions and should not be collapsed into one count.</p>
+<p>I kept the exporter dependency-free so it could run in the existing scanner image, and preserved labels needed for project/service/risk drill-down. Scan timestamp is essential: a dashboard that still displays the previous month's results must not imply a fresh scan.</p>
+<h2>Results and measurement</h2>
+<p>The delivery record includes a dry run covering all 14 projects, a successful end-to-end push, confirmation that Prometheus stored the metric and a dashboard populated with live results.</p>
+<p>The scan cadence is monthly. Dashboard visibility between runs does not turn this into real-time vulnerability detection. No claim is made here about an independently verified reduction in security incidents or findings.</p>
+<h2>Make the scan repeatable and useful</h2>
+<p>In an earlier pipeline modernization, I moved scanner dependencies into a versioned image, parallelized scans and uploads, corrected exit handling and reduced permission-related noise. The recorded end-to-end run fell from about 50 minutes to 15 minutes for that project set. The later dashboard rollout covered 14 projects; the two validation scopes should not be merged into one benchmark.</p>
+<p>A separate bucket-policy checker was refactored with bounded workers, typed results and actionable report messages. It recorded 80 unit tests and 93.62% coverage. Correct output still showed genuine policy failures; repairing the checker did not mean every bucket became compliant.</p>
+<h2>Prove the scanner reached its targets</h2>
+<p>I repaired a configuration-exposure scanner so an unreachable host could not be mistaken for a clean response. The final recorded run received HTTP responses for 5,681 probes across 299 hosts and 19 path variants, with zero connection failures. Its runtime was about 0.9 minute, compared with about nine minutes previously.</p>
+<p>No exposed configuration file was identified in that run. That is a result for the tested paths and responses, not a claim that all services were free of vulnerabilities.</p>
+<h2>Bring the same discipline to secrets</h2>
+<p>I piloted External Secrets Operator with Secret Manager across three repositories, including 16 ExternalSecrets and updates to 12 ArgoCD applications. Development, staging and sandbox used workload identity; the legacy production path retained a service-account key exception.</p>
+<p>I also changed a destructive secret-update workflow to preserve existing fields. A development validation added one field while retaining the original 183, then removed the test field and restored the original count. A later normalization reversibly disabled 133 older versions across 97 secrets in four projects, retaining the latest enabled version rather than destroying recovery options.</p>
+<p>These are scoped controls and validation records. They do not establish that every credential was rotated, every application used a dedicated identity, or that Vitor independently certified the organization.</p>
+<h2>What I learned</h2>
+<p>Security reporting becomes an operating capability when its dimensions, freshness and ownership are clear. A total count alone cannot tell a team where to act or whether the source is still current.</p></div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

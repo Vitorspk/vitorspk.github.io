@@ -85,6 +85,18 @@
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="gke-dataplane-v2-cilium" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Change the network in a controlled environment.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Existing cluster</strong><span>Capture a working baseline</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Dataplane V2</strong><span>Apply network changes</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Validation</strong><span>Test paths and rollback</span></div>
+</div>
+<p class="case-map-note">Non-production delivery with explicit checks and rollback; production was outside this scope.</p>
+</figure>
+
 
             <p>GKE announced that from March 30, 2027, new clusters default to <strong>Dataplane V2</strong> (DPv2), which replaces the old kube-proxy and iptables data plane (Dataplane V1) with <strong>Cilium and eBPF</strong>. The catch: the <code>datapath_provider</code> field is <strong>immutable</strong>. You cannot flip a running cluster from V1 to V2. The only way across is to destroy and recreate the cluster.</p>
 

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Finding the latency hidden in Kubernetes DNS — Vitor Schiavo</title>
+    <meta name="description" content="Separating DNS lookup time from TCP connection time revealed why a healthy API kept triggering latency alerts.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/kubernetes-dns-latency/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Finding the latency hidden in Kubernetes DNS">
+    <meta property="og:description" content="Separating DNS lookup time from TCP connection time revealed why a healthy API kept triggering latency alerts.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/kubernetes-dns-latency/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/kubernetes-dns-latency/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Finding the latency hidden in Kubernetes DNS — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Finding the latency hidden in Kubernetes DNS">
+    <meta name="twitter:description" content="Separating DNS lookup time from TCP connection time revealed why a healthy API kept triggering latency alerts.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/kubernetes-dns-latency/og.png">
+    <meta name="twitter:image:alt" content="Finding the latency hidden in Kubernetes DNS — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Finding the latency hidden in Kubernetes DNS", "description": "Separating DNS lookup time from TCP connection time revealed why a healthy API kept triggering latency alerts.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorspk.github.io/cases/kubernetes-dns-latency/", "mainEntityOfPage": "https://vitorspk.github.io/cases/kubernetes-dns-latency/", "image": "https://vitorspk.github.io/cases/kubernetes-dns-latency/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<header class="doc-header"><span class="doc-eyebrow">Case study · Reliability · July 2026</span>
+<h1 class="doc-title">Finding the latency hidden in Kubernetes DNS</h1>
+<p class="doc-dek">Separating DNS lookup time from TCP connection time revealed why a healthy API kept triggering latency alerts.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~4 min read</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="kubernetes-dns-latency" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Measure each layer before changing capacity.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Trace the latency</strong><span>Separate lookup and TCP time</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Adjust resolution</strong><span>Tune ndots in the shared chart</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Validate in production</strong><span>Repeat the original measurement</span></div>
+</div>
+<p class="case-map-note">The roughly 9× improvement describes the measured DNS lookup, not every API request or a sustained service-level guarantee.</p>
+</figure>
+
+
+<h2>A healthy service with an unstable latency signal</h2>
+<p>The API had healthy pods, normal resource usage and no observed 5xx errors, yet its P95 latency alert repeatedly opened and closed. Adding capacity would have treated the symptom before identifying where request time was spent.</p>
+<h2>My contribution</h2>
+<p>I compared DNS resolution, fully qualified lookup and direct TCP connection from inside a production pod. The database connection itself was fast. The Kubernetes resolver was trying local search domains before resolving an external database hostname.</p>
+<h2>The decision</h2>
+<p>The default <code>ndots:5</code> treated the external hostname as relative and expanded it through the pod's search domains. I added a configurable <code>ndots:2</code> setting to the shared Helm template, checked rendering across eight application/environment combinations, and promoted the change through development and staging to production.</p>
+<div class="table-container"><table class="evidence-table"><caption>DNS lookup measured from the production workload</caption><thead><tr><th scope="col">Signal</th><th scope="col">Before</th><th scope="col">After</th></tr></thead><tbody><tr><th scope="row">DNS lookup p50</th><td>~18.7 ms</td><td>2.06 ms</td></tr></tbody></table></div>
+<h2>Results and measurement</h2>
+<p>Both production deployments received the new DNS option. Repeating the lookup that opened the investigation showed a reduction from approximately 18.7 ms p50 to 2.06 ms, about nine times faster. Pods remained healthy with no restarts reported in the validation snapshot.</p>
+<p>The closeout recorded API P95 around 0.12 seconds over the 20-minute post-rollout observation, and the alert stopped flapping. The DNS comparison and the API observation are different measurements; the lookup improvement should not be presented as a ninefold improvement in total API response time.</p>
+<h2>Trade-offs and follow-up</h2>
+<p>Changing resolver search behavior must preserve the short names used inside the cluster. The shared setting remained configurable. Cluster-wide DNS cache and resolver capacity were separate follow-ups, rather than results claimed for this per-application fix.</p>
+<h2>The lesson</h2>
+<p>A database-related latency symptom can originate before the database receives a query. Decompose the request path and repeat the same measurement after the change.</p>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>A safe place to test every feature — Vitor Schiavo</title>
+    <meta name="description" content="A two-repository pilot for isolated preview environments, tested image promotion and automated cleanup.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/ephemeral-preview-environments/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="A safe place to test every feature">
+    <meta property="og:description" content="A two-repository pilot for isolated preview environments, tested image promotion and automated cleanup.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/ephemeral-preview-environments/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/ephemeral-preview-environments/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="A safe place to test every feature — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="A safe place to test every feature">
+    <meta name="twitter:description" content="A two-repository pilot for isolated preview environments, tested image promotion and automated cleanup.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/ephemeral-preview-environments/og.png">
+    <meta name="twitter:image:alt" content="A safe place to test every feature — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "A safe place to test every feature", "description": "A two-repository pilot for isolated preview environments, tested image promotion and automated cleanup.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorspk.github.io/cases/ephemeral-preview-environments/", "mainEntityOfPage": "https://vitorspk.github.io/cases/ephemeral-preview-environments/", "image": "https://vitorspk.github.io/cases/ephemeral-preview-environments/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<header class="doc-header"><span class="doc-eyebrow">Case study · Platform engineering · April 2026</span>
+<h1 class="doc-title">A safe place to test every feature</h1>
+<p class="doc-dek">A two-repository pilot for isolated preview environments, tested image promotion and automated cleanup.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="ephemeral-preview-environments" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>A preview is a complete lifecycle.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Pull request</strong><span>Build and test the image</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Isolated preview</strong><span>Validate related changes</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Promote &amp; clean up</strong><span>Reuse the image digest</span></div>
+</div>
+<p class="case-map-note">Two-repository pilot: promote the tested image, then remove preview resources when the PR closes.</p>
+</figure>
+
+<h2>The problem</h2>
+<p>QA depended on shared development and staging environments. Features often met each other only after merging, making it difficult to test a backend/frontend change in isolation and coordinate work across teams.</p>
+<h2>My contribution</h2>
+<p>I built a preview-environment pilot across a Go backend and a Node frontend. The work covered CI workflows, ArgoCD ApplicationSets, Helm configuration, namespace lifecycle, TLS, integration between the two applications and the cleanup path when a pull request closed.</p>
+<h2>The decisions</h2>
+<p>A shared branch-name convention lets related repositories land in the same preview namespace. That allows a frontend to reach its matching backend through an internal service without treating every repository as an isolated demonstration.</p>
+<p>I separated build/test workflows from deployment workflows. Production and sandbox promotion reused the tested staging image rather than rebuilding it. The image digest was checked across environments, so promotion meant moving the tested binary rather than reproducing a build and assuming equivalence.</p>
+<p>Previews used a deliberately smaller runtime configuration than persistent environments. Creation was only half the feature: closing or merging the pull request also had to remove the application, namespace and preview images.</p>
+<figure class="work-visual">
+<figcaption>A preview is a lifecycle, not just a temporary URL</figcaption>
+<div class="flow-path"><span>Feature PR and automated checks</span><span aria-hidden="true">↓</span><span>Isolated backend + frontend preview</span><span aria-hidden="true">↓</span><span>QA validation and merge</span><span aria-hidden="true">↓</span><span>Promote the tested image; clean up preview resources</span></div></figure>
+<h2>Validation</h2>
+<p>The pilot ran 34 automated checks before builds: 16 for Go and 18 for Node. Cleanup was exercised end to end, and application health and synchronization were checked in ArgoCD. Separate tests verified image promotion without rebuilding.</p>
+<h2>Results and measurement</h2>
+<p>The completion record documents both pilot repositories working through the preview flow, eight ArgoCD applications synchronized and healthy, and identical image digests during promotion. One observed push-to-deploy path took approximately 2 minutes 14 seconds; it is a pilot observation, not a fleet-wide deployment-time guarantee.</p>
+<p>The scope was two pilot repositories. Wider adoption, aggregate developer time saved and changes in defect escape rate were not measured in this record. A completed pilot does not establish company-wide adoption or a production-hardening outcome.</p>
+<h2>What I learned</h2>
+<p>A platform feature becomes useful when it connects to the team's workflow. Shared preview namespaces, reliable promotion and explicit cleanup mattered as much as creating the initial deployment.</p></div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

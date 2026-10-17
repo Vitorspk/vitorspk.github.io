@@ -85,10 +85,22 @@
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="cloud-functions-gen1-gen2" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Migrate the runtime and verify its identity.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Gen1 function</strong><span>Inventory runtime and triggers</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Gen2 deployment</strong><span>Adapt pipeline and runtime</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Validation</strong><span>Check behavior and IAM</span></div>
+</div>
+<p class="case-map-note">A staged migration; production follow-up also checked the runtime service account.</p>
+</figure>
+
 
             <p>A fleet of Cloud Functions tends to grow one function at a time, and the pipelines grow the same way: copied, tweaked, and never unified. The result was dozens of functions across several repositories, each deploying through a slightly different Jenkins pipeline, most of them slow, and none of them ready for Gen2. I standardized the whole set and modernized the runtimes, sanitized here to the technique.</p>
 
-            <h2>Where the time was going</h2>
+            <h2>Delivery scope</h2><p>This was a phased migration and pipeline-standardization effort. DEV/STG work and later production operation were distinct stages. A production follow-up found an implicit runtime service-account change and pinned the deployment identity to prevent recurrence. The planning epic alone does not establish the state of every production function.</p><h2>Where the time was going</h2>
             <p>Two things dominated every build. First, the checkout: each build did a full clone of the deploy repository, 30 to 60 seconds of pure waiting before any real work. Second, dependencies: nothing was cached, so every build reinstalled everything from scratch. Multiply that across dozens of functions deploying many times a day and it adds up to real engineer-hours and real cloud build minutes.</p>
 
             <h2>What I changed</h2>

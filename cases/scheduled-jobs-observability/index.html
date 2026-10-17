@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Making scheduled jobs observable — Vitor Schiavo</title>
+    <meta name="description" content="A reusable execution wrapper made short-lived jobs visible without changing their business logic or letting telemetry failures break them.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/scheduled-jobs-observability/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Making scheduled jobs observable">
+    <meta property="og:description" content="A reusable execution wrapper made short-lived jobs visible without changing their business logic or letting telemetry failures break them.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/scheduled-jobs-observability/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/scheduled-jobs-observability/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Making scheduled jobs observable — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Making scheduled jobs observable">
+    <meta name="twitter:description" content="A reusable execution wrapper made short-lived jobs visible without changing their business logic or letting telemetry failures break them.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/scheduled-jobs-observability/og.png">
+    <meta name="twitter:image:alt" content="Making scheduled jobs observable — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Making scheduled jobs observable", "description": "A reusable execution wrapper made short-lived jobs visible without changing their business logic or letting telemetry failures break them.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorspk.github.io/cases/scheduled-jobs-observability/", "mainEntityOfPage": "https://vitorspk.github.io/cases/scheduled-jobs-observability/", "image": "https://vitorspk.github.io/cases/scheduled-jobs-observability/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<header class="doc-header"><span class="doc-eyebrow">Case study · Reliability · August 2026</span>
+<h1 class="doc-title">Making scheduled jobs observable</h1>
+<p class="doc-dek">A reusable execution wrapper made short-lived jobs visible without changing their business logic or letting telemetry failures break them.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~4 min read</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="scheduled-jobs-observability" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>A job that disappears still needs a lasting health signal.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Scheduled job</strong><span>Wrap execution and preserve exit code</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Persistent signals</strong><span>Push completion and timestamps</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Freshness rules</strong><span>Alert according to the schedule</span></div>
+</div>
+<p class="case-map-note">24 of 26 active entries were instrumented. Freshness thresholds reflect each schedule; telemetry failures do not replace the job result.</p>
+</figure>
+
+
+<h2>The problem</h2>
+<p>A legacy cron fleet processed business jobs but exposed no reliable liveness or queue-depth signal. Investigating delivery questions meant searching large log files and writing database queries. A dead job could remain invisible because short-lived processes disappear before a scraper sees them.</p>
+<h2>My contribution</h2>
+<p>I built a reusable wrapper, a read-only business-metric exporter and an idempotent crontab instrumenter. The rollout covered 24 of 26 active cron entries and added 16 Prometheus rules and a 12-panel Grafana dashboard.</p>
+<h2>Make silence measurable</h2>
+<p>The primary health signal was the timestamp of the last successful execution. A failed or missing run must not advance it. Thresholds were grouped by schedule because a monthly task and a minutely processor cannot share the same lateness budget.</p>
+<p>The existing Pushgateway transport was reused. A replacement manifest would have added no useful capability and risked changing an unrelated ingress limit, so I left that infrastructure in place.</p>
+<div class="stat-strip"><div class="stat"><strong class="stat-value">24 / 26</strong><span class="stat-label">Active cron entries instrumented</span></div><div class="stat"><strong class="stat-value">16</strong><span class="stat-label">Schedule-aware rules validated</span></div><div class="stat"><strong class="stat-value">12</strong><span class="stat-label">Dashboard panels</span></div></div>
+<h2>Protect the business job from its monitoring</h2>
+<p>The wrapper propagated the real process exit code. A failed job did not update its success timestamp. When the gateway was unreachable, a successful business job still succeeded. A superseded process receiving SIGTERM was handled separately from an application failure, matching how the existing minutely processors worked.</p>
+<h2>Results and measurement</h2>
+<p>The deployment preserved the active crontab entry count, verified the VM-to-gateway path, validated all 16 rules with promtool and checked business processing after the change. Tests covered success, a failing exit code, SIGTERM and an unavailable gateway.</p>
+<p>Coverage was intentionally partial: two active entries were outside the wrapper's script model. External provider acknowledgement and actual customer-visible delivery were also kept distinct; this dashboard does not prove an external system displayed every result.</p>
+<h2>The lesson</h2>
+<p>Instrumenting legacy jobs is useful when it preserves their behavior. Design the failure path of the telemetry as deliberately as its successful path.</p>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
