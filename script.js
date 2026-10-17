@@ -216,13 +216,13 @@ document.addEventListener('DOMContentLoaded', () => {
             details: ['Known message', 'Match the format', 'Verify the signal'],
         },
         efficiency: {
-            title: 'Change the path. Remove the cost.',
-            summary: 'Replace a paid monitoring-ingestion path while keeping the visibility teams need.',
-            result: '£1,165.80/month ingestion line removed · GBP',
-            href: '/cases/monitoring-ingestion-cost/',
-            foundation: ['Prometheus', 'Scrape targets', 'Grafana'],
-            nodes: ['Metrics', 'Collector', 'Dashboards'],
-            details: ['Keep the signal', 'Change the route', 'Retain visibility'],
+            title: 'Find the waste. Verify the savings.',
+            summary: 'Right-size Kubernetes, replace costly ingestion and safely retire legacy infrastructure.',
+            result: '~US$30.1K/year annualized · one legacy retirement',
+            href: '/cases/cloud-cost-engineering/',
+            foundation: ['Kubernetes', 'MongoDB Atlas', 'Cloud billing'],
+            nodes: ['Baseline', 'Resources', 'Validation'],
+            details: ['Map the spend', 'Right-size or retire', 'Check the bill'],
         },
     };
     const platformButtons = Array.from(document.querySelectorAll('[data-platform-view]'));

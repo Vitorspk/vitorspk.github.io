@@ -11,8 +11,8 @@ test('platform explorer connects a technical decision to a real case', async ({ 
   await expect(page.locator('#platform-story-link')).toHaveAttribute('href', '/cases/gen2-observability-repair/');
   await expect(explorer.getByRole('button', { name: 'Reliability', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await explorer.getByRole('button', { name: 'Cost efficiency', exact: true }).click();
-  await expect(page.locator('#platform-story-link')).toHaveAttribute('href', '/cases/monitoring-ingestion-cost/');
-  await expect(page.locator('#platform-story-result')).toContainText('£1,165.80');
+  await expect(page.locator('#platform-story-link')).toHaveAttribute('href', '/cases/cloud-cost-engineering/');
+  await expect(page.locator('#platform-story-result')).toContainText('~US$30.1K/year annualized');
   await explorer.getByRole('button', { name: 'Delivery', exact: true }).click();
   await expect(page.locator('#platform-story-result')).toContainText('Two-repository pilot');
 });

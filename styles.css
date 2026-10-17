@@ -1693,6 +1693,10 @@ body:has(.doc) .theme-toggle { position: absolute; top: var(--space-md); right: 
 .featured-case .flow-path span:not([aria-hidden]) { background: var(--card-highlight); }
 .portfolio-site .case-study[data-expanded="true"] .case-body { max-height: none; }
 #copy-status { color: var(--text-secondary); min-height: 1.6em; font-size: 0.875rem; }
+
+.featured-ai { --case-color: var(--violet-readable); }
+
+.featured-finops { --case-color: var(--success); }
 @media (width <= 1024px) {
     :root { --sidebar-w: 200px; }
     .featured-case { gap: var(--space-lg); }

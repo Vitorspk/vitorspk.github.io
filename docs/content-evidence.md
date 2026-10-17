@@ -1,11 +1,11 @@
 # Public content evidence inventory — 2026-10-17
 
-Source: pre-redesign index.html and existing standalone case articles. This is a consistency audit, not independent verification of employer records.
+Sources: pre-redesign index.html, existing standalone case articles and the Jira reconciliation below. Financial examples distinguish recorded reductions, infrastructure estimates and unresolved historical claims.
 
 | Claim | Treatment |
 | --- | --- |
-| $331K annual cloud savings | Existing total: storage ~$148K + compute ~$183K. Currency/realization basis requested from owner. Never sum subprojects again or add historical Intelipost savings to this employer total. |
-| Storage 95.9%, ~$148K/year | Preserve as reported result; annualization and currency need confirmation. Remove three-year realized-total wording. Deletion is intentional retention, so qualify zero loss as no unintended loss of retained data. |
+| $331K annual cloud savings | Existing total: storage ~$148K + compute ~$183K. Owner confirmed USD and annualized basis; the component totals still need reconciliation. Never sum subprojects again or add historical Intelipost savings to this employer total. |
+| Storage 95.9%, ~$148K/year | Preserve as reported result; owner confirmed USD and annualization, but the before/after billing basis remains unlocated. Remove three-year realized-total wording. Deletion is intentional retention, so qualify zero loss as no unintended loss of retained data. |
 | Airflow 93%, ~$0/month, ~$18K/year | These are inconsistent with 100→14 pods and a retained node. Publish measured allocation reduction of 86%; remove unsupported cost/percentage figures until billing attribution is reconciled. |
 | 99.9% uptime SLO | A target, not measured achieved availability. Remove from hero; label explicitly wherever retained. |
 | 568ms / 1.9s / 7.7s inference | Existing reported latency measurements, not SLAs. No supplied percentile/sample/prompt methodology. State scope limitation. |
@@ -30,3 +30,22 @@ Source: pre-redesign index.html and existing standalone case articles. This is a
 - NCLS-5011 attributes the code fix to another engineer. Do not claim Vitor authored it.
 
 Public summaries generalize internal system names and omit Jira URLs, internal domains, project IDs, addresses and private repository links. New employer-related case prose is delivered for owner review in a PR, not merged automatically.
+
+
+## Expanded FinOps reconciliation — 2026-10-17
+
+Research covered both pages of the assignee/history cost search (218 items), a broader cost/optimization summary search (118 items), all 45 children of the FinOps epic, and targeted descriptions, completion comments and storage configuration attachments. These are overlapping research sets, not counts of independent savings initiatives.
+
+| Evidence | Public treatment |
+| --- | --- |
+| NCLS-4290 / NCLS-4294, final May 2026 validation | One legacy retirement: Atlas USD 2,424.31 to 131.30 in March/April billing, USD 2,293.01/month reduction (94.6%). Closeout adds ~USD 218/month estimated GKE removal: ~USD 2,511/month, ~USD 30,132/year annualized. Initial estimates and child tasks describe the same initiative, never add them again. |
+| NCLS-3158 completion | Later sandbox step: 12 to 8 nodes; USD 1,009.74/month recorded, USD 12,116.88/year annualized. Separate baseline from NCLS-3001; keep separate rather than forming a fleet total. |
+| NCLS-3001 completion | GBP 2,208.33/month; exact annualized equivalent GBP 26,499.96. |
+| NCLS-3729 | GBP 1,165.80/month; GBP 13,989.60/year annualized for removed ingestion line only. |
+| NCLS-3159 | EUR 25 reduction recorded. Not a headline without a clearer recurring billing period. |
+| NCLS-3829 / NCLS-3820 | Pricing models / discount analyses, not independently validated incremental reductions; excluded from added savings. |
+| NCLS-1887 / 1998 / 2001 / 3033 / 3098 / 3106 | Storage work confirmed; January configuration screenshots show 30-day Nearline and 365-day Archive. Attachments inspected; no before/after invoice for historical USD 148K located. |
+| NCLS-4502 / 3957 / 3958 | Small resource cleanups, including explicit estimates; not substituted for a large verified overall result. |
+| Historic USD 331K headline | Owner confirmed USD and annualized basis, but source reconciliation remains incomplete: original compute breakdown mislabeled a GBP result as USD; Airflow allocation and financial percentages differ. Do not restore or increase a total from mixed bases. |
+
+Home order: AI/LLM first, cost engineering second, observability third. The new umbrella cost case explains the wider program and scoped financial examples. Existing preview environment work remains accessible in the catalog and platform explorer. No raw exports, screenshots, private links or system identifiers are shipped.

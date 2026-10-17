@@ -773,5 +773,30 @@
         "detail": "Generate and share assignments"
       }
     ]
+  },
+  {
+    "id": "cloud-cost-engineering",
+    "cardTitle": "Cloud cost engineering across the stack",
+    "category": "finops",
+    "title": "Find the waste. Change the system. Verify the bill.",
+    "note": "Preserve required data and service behavior; measure each initiative against its own billing baseline.",
+    "article": "cloud-cost-engineering",
+    "nodes": [
+      {
+        "icon": "cost",
+        "label": "Cost baseline",
+        "detail": "Map spend to resources"
+      },
+      {
+        "icon": "layers",
+        "label": "Engineering change",
+        "detail": "Right-size, migrate or retire"
+      },
+      {
+        "icon": "check",
+        "label": "Billing validation",
+        "detail": "Compare scoped results"
+      }
+    ]
   }
 ]

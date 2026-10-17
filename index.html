@@ -170,51 +170,43 @@
 <h2 class="section-title">Selected work</h2>
 <p class="section-subtitle">Real problems. Clear decisions. Measured outcomes.</p>
 </div>
-<article class="featured-case featured-reliability">
+<article class="featured-case featured-ai">
 <div class="featured-copy">
-<p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg>Reliability &amp; developer experience</p>
+<p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>AI infrastructure &amp; LLM serving</p>
 <h3>
-<a href="/cases/jenkins-qa-signal-recovery/">Restoring trust in the QA pipeline</a>
+<a href="/cases/self-hosting-gemma-3-vllm/">Gemma 3 &amp; vLLM: multi-provider LLM inference</a>
 </h3>
-<p>A shared reporting defect had made passing tests appear broken. I traced the common failure, repaired the agent platform and separated real test failures from infrastructure noise.</p>
-<a class="text-link" href="/cases/jenkins-qa-signal-recovery/">Read the decisions and results <span aria-hidden="true">↗</span>
+<p>I built GPU-serving workflows for Gemma 3 12B with vLLM and tested a FastAPI router across three providers, covering warm and cold fallback paths. The router was validated as a proof of concept.</p>
+<a class="text-link" href="/cases/self-hosting-gemma-3-vllm/">Read the decisions and results <span aria-hidden="true">↗</span>
 </a>
 </div>
 <figure class="work-visual">
-<figcaption>Repair the platform. Recover the signal.</figcaption>
-<div class="signal-pair">
-<div>
-<span class="signal-count">40</span>
-<span>Shared platform errors</span>
+<figcaption>FastAPI router · tested fallback paths</figcaption>
+<div class="flow-path">
+<span>RunPod · vLLM</span>
+<span aria-hidden="true">↓</span>
+<span>Cloud Run GPU</span>
+<span aria-hidden="true">↓</span>
+<span>GCE Managed Instance Group</span>
 </div>
-<span aria-hidden="true">→</span>
-<div>
-<span class="signal-count signal-good">0</span>
-<span>After the platform fix</span>
-</div>
-</div>
-<p>Passing tests should produce a trustworthy signal.</p>
+<p>Router POC · six test scenarios passed.</p>
 </figure>
 </article>
-<article class="featured-case featured-delivery">
+<article class="featured-case featured-finops">
 <div class="featured-copy">
-<p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg>Platform engineering</p>
-<h3>
-<a href="/cases/ephemeral-preview-environments/">A safe place to test every feature</a>
-</h3>
-<p>I built a two-repository pilot that creates isolated environments from pull requests, promotes the same tested image and removes preview resources when the PR closes.</p>
-<a class="text-link" href="/cases/ephemeral-preview-environments/">Read the decisions and results <span aria-hidden="true">↗</span>
-</a>
+<p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg>FinOps &amp; cost engineering</p>
+<h3><a href="/cases/cloud-cost-engineering/">Less cloud waste. More engineering value.</a></h3>
+<p>I reduced infrastructure spend through Kubernetes rightsizing, a monitoring migration and safe retirement of legacy services. Each result is tied to its own baseline and currency.</p>
+<a class="text-link" href="/cases/cloud-cost-engineering/">Explore the savings and decisions <span aria-hidden="true">↗</span></a>
 </div>
 <figure class="work-visual">
-<figcaption>Preview environments with a complete lifecycle</figcaption>
-<div class="flow-path">
-<span>Pull request</span>
-<span aria-hidden="true">↓</span>
-<span>Isolated preview</span>
-<span aria-hidden="true">↓</span>
-<span>Test · promote · clean up</span>
+<figcaption>Three cost reductions · annualized equivalents</figcaption>
+<div class="filter-proof">
+<span>Legacy service retirement · USD</span><strong>~US$30.1K/yr</strong>
+<span>Kubernetes rightsizing · GBP</span><strong>£26.5K/yr</strong>
+<span>Monitoring ingestion · GBP</span><strong>£14K/yr</strong>
 </div>
+<p>Separate initiatives from 2025–2026. Monthly reductions × 12.</p>
 </figure>
 </article>
 <article class="featured-case featured-observability">
@@ -449,6 +441,30 @@
 </a>
 </div>
 </article>
+<article class="case-study" data-category="finops" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="finops" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg></span>
+<div>
+<h3 class="case-title">Cloud cost engineering across the stack</h3>
+<p class="case-date">Kubernetes, observability and legacy retirement · 2025–2026</p>
+</div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="cloud-cost-engineering" data-visual-area="finops">
+<figcaption><span>Solution at a glance</span><strong>Find the waste. Change the system. Verify the bill.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg><strong>Cost baseline</strong><span>Map spend to resources</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Engineering change</strong><span>Right-size, migrate or retire</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Billing validation</strong><span>Compare scoped results</span></div>
+</div>
+<p class="case-map-note">Preserve required data and service behavior; measure each initiative against its own billing baseline.</p>
+</figure>
+
+<div class="impact-metrics"><h4>Cost reduction as an engineering discipline</h4>
+<p>Documented annualized equivalents: approximately US$30.1K for one legacy retirement, £26.5K for a Kubernetes rightsizing snapshot and £14K for a monitoring ingestion line. Different currencies and baselines are kept separate.</p></div>
+<a class="case-readmore" href="/cases/cloud-cost-engineering/">Read the case study <span aria-hidden="true">→</span></a>
+</div></article>
 <article class="case-study" data-category="finops" data-expanded="false">
 <div class="case-header">
 <span class="case-header-mark" data-visual-area="finops" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>

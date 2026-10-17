@@ -4,6 +4,7 @@ const AxeBuilder = require('@axe-core/playwright').default;
 test.use({ viewport: { width: 1280, height: 800 } });
 
 const PAGES = [
+  { path: '/cases/cloud-cost-engineering/', title: /Cloud cost engineering/i, h1: /Cloud cost engineering/i },
   { path: '/cases/jenkins-qa-signal-recovery/', title: /Restoring trust/i, h1: /Restoring trust/i },
   { path: '/cases/ephemeral-preview-environments/', title: /safe place to test/i, h1: /safe place to test/i },
   { path: '/cases/gen2-observability-repair/', title: /green dashboard/i, h1: /green dashboard/i },
