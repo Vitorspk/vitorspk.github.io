@@ -30,6 +30,28 @@ const CASES = {
       ['purple', '60+', 'Functions standardized'],
     ],
   },
+  'grafana-prometheus-modernization': {
+    eyebrow: 'Case study · Observability',
+    title: 'Modernizing a Grafana +',
+    gradient: 'Prometheus stack',
+    subtitle: 'Two major Grafana upgrades to 11.6 LTS, Prometheus to 2.53 LTS, and recording rules that made heavy dashboards about 30 times faster.',
+    stats: [
+      ['green', '~30×', 'Faster dashboards'],
+      ['blue', '11.6 LTS', 'Grafana (from EOL)'],
+      ['purple', '2.53 LTS', 'Prometheus (from 2.45)'],
+    ],
+  },
+  'gke-dataplane-v2-cilium': {
+    eyebrow: 'Case study · Platform networking',
+    title: 'Migrating GKE to',
+    gradient: 'Dataplane V2 (Cilium / eBPF)',
+    subtitle: 'An immutable field forced a destroy-and-recreate, so I turned it into a versioned GitOps bootstrap and an 18-point validation plan.',
+    stats: [
+      ['green', 'eBPF', 'Cilium data plane'],
+      ['blue', 'GitOps', 'Repeatable bootstrap'],
+      ['purple', '18-point', 'Validation plan'],
+    ],
+  },
   'kubernetes-supply-chain-defense': {
     eyebrow: 'Guide · Kubernetes security',
     title: 'Defending Kubernetes',
