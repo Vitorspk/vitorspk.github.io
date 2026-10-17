@@ -94,9 +94,9 @@
 
         <div class="doc-body">
 
-            <p>I run platform and reliability engineering for a regulated online-safety product. One of our workloads needed a large language model served in-house instead of through a hosted API, for cost control and to keep inference on infrastructure we own the behaviour of. I chose Gemma 3 12B, quantized to GGUF Q4 (about 6.9 GB on disk), served with vLLM 0.15.1.</p>
+            <p>This is a write-up of building production-grade LLM inference on serverless GPUs: serving an open-weight model in-house instead of through a hosted API, for cost control and to own the behaviour of the stack end to end. The model is Gemma 3 12B, quantized to GGUF Q4 (about 6.9 GB on disk), served with vLLM 0.15.1.</p>
 
-            <p>What follows is the engineering log: the bugs that cost me the most time, how I cut cold starts, the router that removed the single point of failure, and the numbers I measured. I have left out anything tied to the employer's internal naming. Everything here is the technique.</p>
+            <p>What follows is the engineering log: the bugs that cost me the most time, how I cut cold starts, the router that removed the single point of failure, and the numbers I measured. Everything here is the technique, with no internal names or specifics.</p>
 
             <h2>Three bugs that cost me the most time</h2>
 

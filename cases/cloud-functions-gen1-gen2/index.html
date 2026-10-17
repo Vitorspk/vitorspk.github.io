@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>GCP Cloud Functions: Gen1 to Gen2, builds halved — Vitor Schiavo</title>
+    <meta name="description" content="Standardizing and speeding up every GCP Cloud Functions pipeline: checkout 80% faster, builds cut in half, and a safe Gen1 to Gen2 migration path across dev, staging and production.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Modernizing 60+ GCP Cloud Functions: Gen1 to Gen2, builds halved">
+    <meta property="og:description" content="Checkout 80% faster, builds cut in half, and a safe Gen1 to Gen2 migration path.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cloud Functions Gen1 to Gen2, builds halved — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Modernizing 60+ GCP Cloud Functions: Gen1 to Gen2">
+    <meta name="twitter:description" content="Checkout 80% faster, builds cut in half, and a safe Gen1 to Gen2 migration.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/og.png">
+    <meta name="twitter:image:alt" content="Cloud Functions Gen1 to Gen2, builds halved — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Modernizing 60+ GCP Cloud Functions: Gen1 to Gen2, builds halved",
+      "description": "Standardizing and speeding up every GCP Cloud Functions pipeline: checkout 80% faster, builds cut in half, and a safe Gen1 to Gen2 migration path across dev, staging and production.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/",
+      "mainEntityOfPage": "https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/",
+      "image": "https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "GCP, Cloud Functions, Gen2, CI/CD, build optimization, Jenkins, pipeline, Eventarc, Cloud Run"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Case study · Platform engineering</span>
+            <h1 class="doc-title">Modernizing 60+ GCP Cloud Functions: Gen1 to Gen2, builds halved</h1>
+            <p class="doc-dek">Every Cloud Functions pipeline was a little different and most were slow. I standardized all of them, cut checkout time by about 80% and build time in half, and laid down a safe path from Gen1 to Gen2.</p>
+            <div class="doc-meta">
+                <span>By Vitor Schiavo</span>
+                <span>Updated October 2026</span>
+                <span>~6 min read</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+
+            <p>A fleet of Cloud Functions tends to grow one function at a time, and the pipelines grow the same way: copied, tweaked, and never unified. The result was dozens of functions across several repositories, each deploying through a slightly different Jenkins pipeline, most of them slow, and none of them ready for Gen2. I standardized the whole set and modernized the runtimes, sanitized here to the technique.</p>
+
+            <h2>Where the time was going</h2>
+            <p>Two things dominated every build. First, the checkout: each build did a full clone of the deploy repository, 30 to 60 seconds of pure waiting before any real work. Second, dependencies: nothing was cached, so every build reinstalled everything from scratch. Multiply that across dozens of functions deploying many times a day and it adds up to real engineer-hours and real cloud build minutes.</p>
+
+            <h2>What I changed</h2>
+            <ul>
+                <li><strong>Clone-or-update checkout.</strong> Instead of a full clone every build, the pipeline fetches and resets when the repository is already present. Checkout dropped from 30 to 60 seconds down to 5 to 10.</li>
+                <li><strong>Dependency caching.</strong> Builds now reuse cached dependencies instead of reinstalling, taking cache reuse from zero to 80 to 90%.</li>
+                <li><strong>Smaller deploy packages.</strong> Trimmed what gets shipped, roughly halving the deployment package size.</li>
+                <li><strong>Runtime updates.</strong> Brought Go, Node.js and Python to current, supported runtimes on Gen1, and added the Gen2 equivalents.</li>
+                <li><strong>Gen2 pipelines and examples.</strong> New Gen2 deploy pipelines plus working examples in all three languages, so adding a Gen2 function is copy-and-go, not research.</li>
+            </ul>
+            <p>Along the way I fixed a batch of long-standing papercuts: an incorrect workspace path, a vendoring inconsistency from blank imports, an entry-point mismatch between Gen1 and Gen2, and oversized deployment packages.</p>
+
+            <h2>Before and after</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr><th scope="col">Metric</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Change</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Checkout time</td><td>30 to 60 s</td><td>5 to 10 s</td><td>~80% faster</td></tr>
+                        <tr><td>Total build time</td><td>3 to 5 min</td><td>1.5 to 2.5 min</td><td>~50% faster</td></tr>
+                        <tr><td>Deployment size</td><td>100%</td><td>40 to 50%</td><td>~50% smaller</td></tr>
+                        <tr><td>Cache reuse</td><td>0%</td><td>80 to 90%</td><td>new</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">80%</span><span class="stat-label">faster checkout</span></div>
+                <div class="stat"><span class="stat-value">50%</span><span class="stat-label">faster builds</span></div>
+                <div class="stat"><span class="stat-value">60+</span><span class="stat-label">functions standardized</span></div>
+                <div class="stat"><span class="stat-value">3</span><span class="stat-label">languages, Gen1 + Gen2</span></div>
+            </div>
+
+            <h2>Why Gen2, and how to get there safely</h2>
+            <p>Gen2 is not just a version bump. It runs on Cloud Run under the hood, which brings concurrency (up to 1000 simultaneous requests per instance instead of one), native Eventarc integration, faster cold starts, and more granular pay-per-use. The migration is where people get nervous, so I kept it boring:</p>
+            <ul>
+                <li>Start in <strong>dev</strong> with HTTP functions on the updated runtimes, and validate each one on its own.</li>
+                <li>Move to <strong>Pub/Sub-triggered</strong> functions only after the HTTP ones are proven.</li>
+                <li>Use <strong>blue-green</strong> cutovers so traffic shifts only once the new version is healthy.</li>
+                <li>Replicate through <strong>staging</strong>, then production, starting with non-critical functions before the critical ones.</li>
+            </ul>
+
+            <h2>What I would tell someone starting this</h2>
+            <ul>
+                <li>Standardize the pipeline before you optimize it. You cannot speed up twenty different pipelines; you can speed up one and apply it twenty times.</li>
+                <li>The cheapest build win is usually the checkout. Stop full-cloning on every run.</li>
+                <li>Cache dependencies deliberately. Zero to 80% cache reuse is often the single biggest drop in build time.</li>
+                <li>Migrate runtimes in a fixed order (dev, staging, production; HTTP before Pub/Sub; non-critical before critical) and the scary migration becomes routine.</li>
+            </ul>
+
+        </div>
+
+        <footer class="doc-footer">
+            <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/#cases">See more case studies</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
