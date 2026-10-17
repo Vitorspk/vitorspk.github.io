@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Zero-downtime migration to new Kubernetes clusters — Vitor Schiavo</title>
+    <meta name="description" content="Moving a whole platform — apps, cloud functions, schedulers, tasks and data — onto new Kubernetes clusters with a blue-green cutover, an internal DNS switch, and scale-to-zero as an instant rollback.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/zero-downtime-cluster-migration/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Zero-downtime migration to new Kubernetes clusters">
+    <meta property="og:description" content="A whole-platform move with a blue-green cutover, an internal DNS switch, and scale-to-zero as an instant rollback.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/zero-downtime-cluster-migration/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/zero-downtime-cluster-migration/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Zero-downtime migration to new Kubernetes clusters — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Zero-downtime migration to new Kubernetes clusters">
+    <meta name="twitter:description" content="A whole-platform move with a blue-green cutover, DNS switch, and scale-to-zero rollback.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/zero-downtime-cluster-migration/og.png">
+    <meta name="twitter:image:alt" content="Zero-downtime migration to new Kubernetes clusters — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Zero-downtime migration to new Kubernetes clusters",
+      "description": "Moving a whole platform — apps, cloud functions, schedulers, tasks and data — onto new Kubernetes clusters with a blue-green cutover, an internal DNS switch, and scale-to-zero as an instant rollback.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorspk.github.io/cases/zero-downtime-cluster-migration/",
+      "mainEntityOfPage": "https://vitorspk.github.io/cases/zero-downtime-cluster-migration/",
+      "image": "https://vitorspk.github.io/cases/zero-downtime-cluster-migration/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "Kubernetes, cluster migration, blue-green, zero downtime, DNS cutover, GKE, Cloud Functions, Firestore, platform engineering"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Case study · Platform migration</span>
+            <h1 class="doc-title">Zero-downtime migration to new Kubernetes clusters</h1>
+            <p class="doc-dek">Moving a whole platform onto new clusters is the kind of change that goes wrong at 2 a.m. Here is how I did it with no downtime: a blue-green cutover at the cluster level, an internal DNS switch, and scale-to-zero as a one-command rollback.</p>
+            <div class="doc-meta">
+                <span>By Vitor Schiavo</span>
+                <span>Updated October 2026</span>
+                <span>~6 min read</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+
+            <p>Rebuilding clusters is only half the job. Once the new clusters exist, every workload still has to move onto them, and "move production to a different cluster" is exactly the sentence that makes people schedule a midnight maintenance window. I wanted no window and no downtime, so I treated the whole thing as a blue-green deployment, just at the level of the cluster instead of a single service.</p>
+
+            <h2>The strategy: blue-green at the cluster level</h2>
+            <p>The new clusters ran in parallel with the legacy ones. Nothing was deleted until the new side was proven. The sequence:</p>
+            <ul>
+                <li><strong>Stand up the workloads on the new clusters</strong> while the legacy clusters keep serving all live traffic.</li>
+                <li><strong>Cut over by pointing internal DNS</strong> for each migrated app at the new clusters. Traffic shifts at the DNS layer, not by redeploying callers.</li>
+                <li><strong>Scale the legacy workloads to zero</strong> rather than deleting them. They stay as a warm rollback: if anything looks wrong, scaling the old side back up and flipping DNS back is a one-command revert.</li>
+                <li><strong>Decommission only after soak</strong>, once the new side has run clean long enough to trust.</li>
+            </ul>
+
+            <h2>What actually had to move</h2>
+            <p>A platform is more than its stateless pods. The migration covered the whole surface:</p>
+            <ul>
+                <li><strong>Applications</strong> — the stateless services, redeployed onto the new clusters.</li>
+                <li><strong>Cloud Functions, schedulers and task queues</strong> — the event-driven and cron-driven glue that is easy to forget until something stops firing.</li>
+                <li><strong>Firestore data</strong> — the stateful part, migrated to the new project so the apps on the new clusters read from the right place.</li>
+                <li><strong>Scale schedules</strong> — the up/down scaling windows for non-production, recreated so the new clusters cost the same to idle as the old ones.</li>
+            </ul>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">0</span><span class="stat-label">downtime</span></div>
+                <div class="stat"><span class="stat-value">DNS</span><span class="stat-label">layer cutover</span></div>
+                <div class="stat"><span class="stat-value">scale-to-0</span><span class="stat-label">warm rollback</span></div>
+                <div class="stat"><span class="stat-value">full stack</span><span class="stat-label">apps · functions · data</span></div>
+            </div>
+
+            <div class="callout callout--win">
+                <p class="callout-title">Scale to zero, do not delete</p>
+                <p>The single most valuable move in a cluster migration is keeping the old workloads at zero replicas instead of deleting them. It costs almost nothing to park an idle deployment, and it turns rollback from a rebuild into a one-line scale command plus a DNS flip. Delete only after the new side has earned your trust.</p>
+            </div>
+
+            <h2>The parts people forget</h2>
+            <p>The migration is not done when traffic flows. Two cleanups mattered:</p>
+            <ul>
+                <li><strong>Monitoring that still probes the old hosts.</strong> After the cutover, blackbox probes were checking the legacy internal hostnames and showing a wall of false "down" alerts. Repointing them at the migrated hosts was what actually made the migration "finished".</li>
+                <li><strong>Tooling left behind on the legacy clusters.</strong> Cost agents and other cluster-scoped add-ons had to be uninstalled cleanly (Helm releases plus leftover CRDs and namespaces), so the empty clusters really were empty before teardown.</li>
+            </ul>
+
+            <h2>What I would tell someone starting this</h2>
+            <ul>
+                <li>Treat a cluster move as blue-green. Run both in parallel, cut over at the DNS layer, and never delete the old side until the new one is proven.</li>
+                <li>Scale the old workloads to zero, do not delete them. That is your rollback, and it is nearly free to keep.</li>
+                <li>Inventory the whole surface first: functions, schedulers, task queues and stateful data, not just the obvious pods.</li>
+                <li>Finish the job. Repoint monitoring at the new hosts and clean up the old clusters, or you will chase phantom alerts for weeks.</li>
+            </ul>
+
+        </div>
+
+        <footer class="doc-footer">
+            <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/#cases">See more case studies</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

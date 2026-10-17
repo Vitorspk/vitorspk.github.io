@@ -9,6 +9,8 @@ const PAGES = [
   { path: '/cases/kubernetes-supply-chain-defense/', title: /supply-chain attacks/i, h1: /Defending Kubernetes/i },
   { path: '/cases/grafana-prometheus-modernization/', title: /Grafana \+ Prometheus/i, h1: /Grafana and Prometheus/i },
   { path: '/cases/gke-dataplane-v2-cilium/', title: /Dataplane V2/i, h1: /Dataplane V2/i },
+  { path: '/cases/kubernetes-finops-kubecost/', title: /Kubecost/i, h1: /cost visibility/i },
+  { path: '/cases/zero-downtime-cluster-migration/', title: /Zero-downtime migration/i, h1: /Zero-downtime migration/i },
 ];
 
 for (const p of PAGES) {
