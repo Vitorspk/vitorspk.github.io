@@ -15,6 +15,7 @@
     "test:e2e:headed": "npx playwright test --headed",
     "test": "npm run validate && npm run test:e2e",
     "og:generate": "node scripts/generate-og-image.js",
+    "og:generate:case-vllm": "node scripts/generate-og-case-vllm.js",
     "prepare": "husky"
   },
   "lint-staged": {
