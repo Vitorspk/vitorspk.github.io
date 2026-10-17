@@ -66,7 +66,7 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 
 ### Performance
 
-- No external JS dependencies — keep the bundle zero
+- No external JS dependencies — keep the bundle zero. The **one** allowed exception is the Cloudflare Web Analytics beacon (privacy-first, cookieless); do not add any other third-party script. See § Analytics & SEO.
 - No Google Fonts changes without checking render impact (`display=swap` is required)
 - Images: use `loading="lazy"` and always include `width`/`height` attributes
 - Do not add `transition: all` — it causes the browser to evaluate every animatable property on each frame
@@ -77,6 +77,16 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 - All external links must have `rel="noopener noreferrer"`
 - No inline `onclick` handlers — use `addEventListener` or `data-tab` delegation
 - No hardcoded secrets or tokens
+
+---
+
+## Analytics & SEO
+
+- **Visitor analytics:** Cloudflare Web Analytics, loaded via the beacon `<script>` before `</body>` in `index.html`. It is privacy-first and cookieless, so no consent banner is required. The beacon is **inert until its site token is set** — replace `REPLACE_WITH_CLOUDFLARE_TOKEN` with the token from Cloudflare dashboard → Web Analytics → (site) → *Manage site*. The token is public by design (it ships in client JS), so it is fine to commit.
+- **No Subresource Integrity on the beacon:** `beacon.min.js` is a rolling, auto-updated asset — a pinned `integrity` hash would break on every Cloudflare update. The CSP `script-src https://static.cloudflareinsights.com` is the mitigation. Do not add `integrity` to it.
+- **CSP:** the beacon requires `script-src https://static.cloudflareinsights.com` and `connect-src https://cloudflareinsights.com`. Keep both when editing the CSP. The beacon is only on `index.html`, not `404.html`.
+- **Search Console:** verified via the `googlef65df98b38f7f095.html` file at the repo root — do not delete it. After a sitemap change, resubmit `sitemap.xml` in Search Console → Sitemaps.
+- **Sitemap:** `#fragment` URLs are ignored by Google for indexing (they all resolve to `/`). Real SEO gains need standalone pages with their own paths, not more fragment entries.
 
 ---
 
