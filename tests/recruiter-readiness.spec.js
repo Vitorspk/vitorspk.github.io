@@ -17,6 +17,7 @@ test('recruiter can identify positioning, follow the reading route and download 
   await expect(download).toHaveAttribute('href', '/Vitor-Schiavo-Resume.pdf');
   const pdf = await request.get('/Vitor-Schiavo-Resume.pdf');
   expect(pdf.status()).toBe(200);
+  expect(pdf.headers()['content-type']).toContain('application/pdf');
   const pdfBytes = await pdf.body();
   expect(pdfBytes.subarray(0, 5).toString()).toBe('%PDF-');
   expect(pdfBytes.length).toBeGreaterThan(25000);
@@ -26,6 +27,8 @@ test('recruiter can identify positioning, follow the reading route and download 
   const fingerprint = crypto.createHash('sha256').update(inputs.map(file => fs.readFileSync(path.join(__dirname, '..', file), 'utf8')).join('\0')).digest('hex');
   const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, '../content/resume-artifact.json'), 'utf8'));
   expect(manifest.sourceSha256, 'regenerate the PDF after changing its HTML, CSS or generator').toBe(fingerprint);
+  // Compare the committed download to its manifest; CI never regenerates the PDF.
+  // A browser upgrade cannot alter either committed artifact during this check.
   expect(crypto.createHash('sha256').update(pdfBytes).digest('hex')).toBe(manifest.pdfSha256);
   await page.goto('/#contact');
   await expect(page.getByRole('heading', { name: 'Working together internationally' })).toBeVisible();

@@ -1,13 +1,20 @@
-"""Build a deterministic download with only the documented sample sources."""
+"""Build/check the documented sample without depending on zlib byte output."""
 from pathlib import Path
-import zipfile
 import sys
+import zipfile
 
 root = Path(__file__).resolve().parent.parent
-sources = {name: root / 'examples/inference-fallback' / name for name in ('README.md', 'client.py', 'test_client.py')}
+# Stable archive metadata; this is the sample's creation date, not build time.
+ARCHIVE_TIMESTAMP = (2026, 10, 17, 0, 0, 0)
+sources = {
+    name: root / 'examples/inference-fallback' / name
+    for name in ('README.md', 'client.py', 'test_client.py')
+}
 sources['LICENSE'] = root / 'LICENSE'
+archive_path = root / 'examples/inference-fallback.zip'
+
 if '--check' in sys.argv:
-    with zipfile.ZipFile(root / 'examples/inference-fallback.zip') as archive:
+    with zipfile.ZipFile(archive_path) as archive:
         expected = {'inference-fallback/' + name for name in sources}
         if set(archive.namelist()) != expected or len(archive.namelist()) != len(expected):
             raise SystemExit('Download archive has missing, duplicate or unexpected files')
@@ -16,13 +23,11 @@ if '--check' in sys.argv:
                 raise SystemExit('Download archive is stale: ' + name)
     print('Download archive content matches its sources')
     raise SystemExit(0)
-with zipfile.ZipFile(root / 'examples/inference-fallback.zip', 'w', compression=zipfile.ZIP_DEFLATED) as archive:
-    for name in ('README.md', 'client.py', 'test_client.py'):
-        info = zipfile.ZipInfo('inference-fallback/' + name, date_time=(2026, 10, 17, 0, 0, 0))
+
+with zipfile.ZipFile(archive_path, 'w', compression=zipfile.ZIP_DEFLATED) as archive:
+    for name, source in sources.items():
+        info = zipfile.ZipInfo('inference-fallback/' + name, date_time=ARCHIVE_TIMESTAMP)
         info.compress_type = zipfile.ZIP_DEFLATED
         info.external_attr = 0o100644 << 16
-        archive.writestr(info, (root / 'examples/inference-fallback' / name).read_bytes())
-    info = zipfile.ZipInfo('inference-fallback/LICENSE', date_time=(2026, 10, 17, 0, 0, 0))
-    info.compress_type = zipfile.ZIP_DEFLATED
-    archive.writestr(info, (root / 'LICENSE').read_bytes())
+        archive.writestr(info, source.read_bytes())
 print('Built examples/inference-fallback.zip')
