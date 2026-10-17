@@ -157,10 +157,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const aliasPanel = section && tabPanels.find(panel => (panel.dataset.legacy || '').split(' ').includes(section));
         const name = tabNames.includes(section) ? section : aliasPanel ? aliasPanel.id : TAB_DEFAULT;
         const aliasFilter = filterButtons.find(button => button.dataset.legacy === section);
-        filterCases(category || (aliasFilter && aliasFilter.dataset.filter) || 'all');
+        filterCases(name === 'cases' ? category || (aliasFilter && aliasFilter.dataset.filter) || 'all' : 'all');
         activateTab(name, false);
         // Canonicalize old links and invalid categories without an extra Back step.
-        if (aliasPanel || (name === 'cases' && category && category !== activeFilter)) history.replaceState({ tab: name }, '', '#' + name + (activeFilter !== 'all' ? '/' + activeFilter : ''));
+        const canonical = '#' + name + (name === 'cases' && activeFilter !== 'all' ? '/' + activeFilter : '');
+        if (raw && location.hash !== canonical) history.replaceState({ tab: name }, '', canonical);
     }
 
     window.addEventListener('popstate', restoreLocation);
@@ -169,6 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
     restoreLocation();
 
     filterButtons.forEach(button => button.addEventListener('click', () => {
+        if (button.dataset.filter === activeFilter) return;
         filterCases(button.dataset.filter);
         history.pushState({ tab: activeTab }, '', '#cases' + (activeFilter === 'all' ? '' : '/' + activeFilter));
     }));
@@ -182,12 +184,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const copyEmail = document.getElementById('copy-email');
     const copyStatus = document.getElementById('copy-status');
-    if (copyEmail && copyStatus) copyEmail.addEventListener('click', async () => {
+    const emailLink = document.querySelector('#contact a[href^="mailto:"]');
+    const emailAddress = emailLink ? emailLink.getAttribute('href').slice(7) : '';
+    if (copyEmail && copyStatus && emailAddress) copyEmail.addEventListener('click', async () => {
         try {
-            await navigator.clipboard.writeText('vitorspk@gmail.com');
+            await navigator.clipboard.writeText(emailAddress);
             copyStatus.textContent = 'Email address copied.';
         } catch {
-            copyStatus.textContent = 'Copy unavailable. Please select vitorspk@gmail.com above, or use Email Vitor.';
+            copyStatus.textContent = 'Copy unavailable. Please select ' + emailAddress + ' above, or use Email Vitor.';
         }
     });
 

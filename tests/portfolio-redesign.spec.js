@@ -139,6 +139,9 @@ test('theme control stays in the navigation chrome while reading', async ({ page
 
 test('history restores category once and invalid categories canonicalize without extra entries', async ({ page }) => {
   await page.goto('/#cases/security');
+  const historyLength = await page.evaluate(() => history.length);
+  await page.getByRole('button', { name: 'Security', exact: true }).click();
+  expect(await page.evaluate(() => history.length)).toBe(historyLength);
   await nav(page, 'about');
   await page.evaluate(() => {
     window.tabRestoreScrolls = 0;
@@ -160,6 +163,8 @@ test('history restores category once and invalid categories canonicalize without
   await expect(page.getByRole('button', { name: 'All work', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await page.goBack();
   await expect(page.locator('#about')).toHaveAttribute('aria-hidden', 'false');
+  await page.evaluate(() => { location.hash = 'overview/foo'; });
+  await expect(page).toHaveURL(/#overview$/);
 });
 
 test('links inside case headers retain their native keyboard activation', async ({ page }) => {
