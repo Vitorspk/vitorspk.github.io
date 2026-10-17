@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Self-hosting Gemma 3 12B with vLLM on serverless GPUs — Vitor Schiavo</title>
+    <meta name="description" content="An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs">
+    <meta property="og:description" content="A three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs — a case study by Vitor Schiavo.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs">
+    <meta name="twitter:description" content="A three-provider fallback router with measured SLAs and cold starts cut from ten minutes to three.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/og-image.png">
+    <meta name="twitter:image:alt" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs — a case study by Vitor Schiavo.">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Self-hosting Gemma 3 12B with vLLM on serverless GPUs",
+      "description": "An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/",
+      "mainEntityOfPage": "https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/",
+      "image": "https://vitorspk.github.io/og-image.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "vLLM, Gemma 3 12B, self-hosted LLM, serverless GPU, RunPod, cold start optimization, GPU inference, fallback router, CUDA"
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Favicon — inline SVG matching the VS avatar brand. -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="page.css">
+
+    <!-- Blocking theme init — prevents FOUC when user has saved light mode. -->
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Skip navigation — first focusable element in <body> -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Theme Toggle -->
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Case study · AI infrastructure</span>
+            <h1 class="doc-title">Self-hosting Gemma 3 12B with vLLM on serverless GPUs</h1>
+            <p class="doc-dek">What it took to run a 12B open-weight model in production on rented GPUs: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the driver, scheduler and shell bugs that ate my afternoons.</p>
+            <div class="doc-meta">
+                <span>By Vitor Schiavo</span>
+                <span>Updated October 2026</span>
+                <span>~10 min read</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+
+            <p>I run platform and reliability engineering for a regulated online-safety product. One of our workloads needed a large language model served in-house instead of through a hosted API, for cost control and to keep inference on infrastructure we own the behaviour of. I chose Gemma 3 12B, quantized to GGUF Q4 (about 6.9 GB on disk), served with vLLM 0.15.1.</p>
+
+            <p>What follows is the engineering log: the bugs that cost me the most time, how I cut cold starts, the router that removed the single point of failure, and the numbers I measured. I have left out anything tied to the employer's internal naming. Everything here is the technique.</p>
+
+            <h2>Three bugs that cost me the most time</h2>
+
+            <p>None of these printed a useful error at the surface. That is the real lesson: on rented GPUs, your startup path has to fail loudly and early, because the layers underneath will not do it for you.</p>
+
+            <div class="callout callout--fail">
+                <p class="callout-title">Zero workers provisioned, for hours, with no error</p>
+                <p>Serverless GPU endpoints select hardware by VRAM tier, not by the GPU's marketing name. I asked for <code>NVIDIA GeForce RTX 4090</code> and the scheduler matched nothing, so it quietly provisioned zero workers and never told me why. The fix was to pass the tier id alongside the name (for the 24 GB Ada class, <code>ADA_24</code>). The moment the tier was correct, workers appeared.</p>
+            </div>
+
+            <div class="callout callout--fail">
+                <p class="callout-title">CUDA Error 804: forward compatibility on non-supported hardware</p>
+                <p>Workers crash-looped with a CUDA init failure. The cause was a version mismatch I had assumed away: the vLLM base image ships CUDA 12.8, which needs an NVIDIA driver of at least 570. The serverless hosts I landed on ran driver 550.x, which caps at CUDA 12.4. The container could not initialize the GPU at all. The takeaway is simple and easy to forget: match your CUDA toolkit to the host driver, do not assume the newest image runs everywhere.</p>
+            </div>
+
+            <div class="callout callout--fail">
+                <p class="callout-title">A silent crash with no logs at all</p>
+                <p>Workers died on startup with an empty console. The cause was an <code>exit 1</code> inside a config script that the startup script pulled in with <code>source</code>. Because the file was sourced, that <code>exit</code> killed the whole shell before a single diagnostic line could run. I moved the validation out of the sourced file into a guarded startup step, and the logs came back immediately.</p>
+            </div>
+
+            <h2>Cold starts: ten minutes to three</h2>
+
+            <p>The first version installed vLLM with <code>pip</code> on every worker start and pulled the model weights at boot. Cold starts ran seven to twelve minutes. That is fine for a demo and useless in production, because every scale-up under load makes a user wait.</p>
+
+            <p>What moved the number:</p>
+            <ul>
+                <li><strong>Pre-bake the environment into the image.</strong> vLLM and its patches go in at build time, not on every cold start. This alone removed the five to ten minute <code>pip install</code> from the critical path.</li>
+                <li><strong>Cache weights on a network volume.</strong> A cold worker attaches an already-populated volume instead of downloading 6.9 GB again.</li>
+                <li><strong>Load GGUF directly.</strong> Using the GGUF load-format skips a safetensors conversion step at startup.</li>
+                <li><strong>Pre-compile and trim the boot.</strong> Pre-compiling Python bytecode and masking boot services that add nothing (snap, unattended upgrades, the apt timers) shaved the rest.</li>
+            </ul>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">10 min → 3 min</span><span class="stat-label">cold start</span></div>
+                <div class="stat"><span class="stat-value">5m16s → 3m32s</span><span class="stat-label">image boot (33% faster)</span></div>
+                <div class="stat"><span class="stat-value">568 ms</span><span class="stat-label">primary latency</span></div>
+                <div class="stat"><span class="stat-value">6</span><span class="stat-label">deployable GPU types</span></div>
+            </div>
+
+            <div class="callout callout--win">
+                <p class="callout-title">What did not work: Hyperdisk</p>
+                <p>I checked whether a faster disk would speed up model loading. Hyperdisk Extreme cannot be a boot disk, only a data disk, which would mean a separate disk plus a mount script and would defeat the pre-baked image. Hyperdisk Balanced can boot, but the image-build pipeline cannot create images from it. The expected gain was single-digit seconds. Not worth the complexity, so I wrote it down and moved on.</p>
+            </div>
+
+            <h2>The fallback router</h2>
+
+            <p>Serving from a single GPU provider is a single point of failure. A provider outage or a GPU supply constraint takes the whole capability down, and each provider has a different latency profile that a single endpoint cannot exploit. So I put a small router in front.</p>
+
+            <p>It is a roughly 150-line FastAPI reverse proxy that speaks the OpenAI API (<code>/v1/chat/completions</code>, <code>/v1/models</code>). It routes through a provider chain: serverless GPUs first, a managed serverless GPU second, a dedicated cluster third. Each hop has a mock-failure flag, so I can test failover without waiting for a real outage. When every provider fails, it returns HTTP 503 with per-provider diagnostics instead of a blank error, which is the difference between a two-minute triage and a one-hour one.</p>
+
+            <figure class="architecture-diagram" aria-label="Multi-provider inference architecture: a client request reaches a FastAPI fallback router, which routes through three GPU providers in a failover chain, with EU multi-datacenter failover on the primary provider.">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" aria-hidden="true" focusable="false">
+                    <rect width="820" height="520" rx="12" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="35" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-primary)">Multi-Provider Inference Architecture</text>
+                    <rect x="335" y="55" width="150" height="44" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="76" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Client Request</text>
+                    <text x="410" y="91" text-anchor="middle" font-family="monospace" font-size="9" fill="var(--text-muted)">/v1/chat/completions</text>
+                    <line x1="410" y1="99" x2="410" y2="125" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <polygon points="405,122 410,132 415,122" fill="var(--text-muted)"/>
+                    <rect x="295" y="132" width="230" height="50" rx="10" fill="var(--primary)" fill-opacity="0.12" stroke="var(--primary)" stroke-width="1.5"/>
+                    <text x="410" y="154" text-anchor="middle" font-size="12" font-weight="700" fill="var(--primary)">FastAPI Fallback Router</text>
+                    <text x="410" y="172" text-anchor="middle" font-size="9" fill="var(--text-muted)">~150 lines · OpenAI-compatible · 503 diagnostics</text>
+                    <line x1="340" y1="182" x2="155" y2="228" stroke="var(--success)" stroke-width="1.5"/>
+                    <polygon points="150,224 158,233 162,223" fill="var(--success)"/>
+                    <text x="230" y="200" text-anchor="middle" font-size="9" font-weight="600" fill="var(--success)">Primary</text>
+                    <line x1="410" y1="182" x2="410" y2="228" stroke="var(--warning)" stroke-width="1.5"/>
+                    <polygon points="405,225 410,235 415,225" fill="var(--warning)"/>
+                    <text x="440" y="212" text-anchor="start" font-size="9" font-weight="600" fill="var(--warning)">Fallback 1</text>
+                    <line x1="480" y1="182" x2="665" y2="228" stroke="var(--danger)" stroke-width="1.5"/>
+                    <polygon points="660,224 668,233 672,223" fill="var(--danger)"/>
+                    <text x="590" y="200" text-anchor="middle" font-size="9" font-weight="600" fill="var(--danger)">Fallback 2</text>
+                    <rect x="40" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--success)" stroke-width="1.5"/>
+                    <text x="155" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--success)">Serverless GPUs</text>
+                    <text x="155" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">RTX 5090 · A6000 · 6000 Ada · L40S</text>
+                    <text x="155" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">568 ms avg latency</text>
+                    <text x="155" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">6 GPU profiles · Cost-optimized burst</text>
+                    <text x="155" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Ada Lovelace / Ampere</text>
+                    <rect x="295" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--warning)" stroke-width="1.5"/>
+                    <text x="410" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--warning)">Managed Serverless GPU</text>
+                    <text x="410" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">NVIDIA L4</text>
+                    <text x="410" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">1.9 s warm · 41 s cold</text>
+                    <text x="410" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">Managed serverless · Ada Lovelace</text>
+                    <text x="410" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Auto-scales to zero</text>
+                    <rect x="550" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--danger)" stroke-width="1.5"/>
+                    <text x="665" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--danger)">Dedicated Cluster</text>
+                    <text x="665" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">L40S · A100 SXM 80 GB</text>
+                    <text x="665" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">7.7 s avg latency</text>
+                    <text x="665" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">Dedicated · High-throughput</text>
+                    <text x="665" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Ada / Ampere</text>
+                    <rect x="40" y="355" width="230" height="65" rx="8" fill="var(--bg-card)" stroke="var(--secondary)" stroke-width="1" stroke-dasharray="5,3"/>
+                    <text x="155" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--secondary)">EU Multi-DC Failover</text>
+                    <text x="155" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">Ordered, three EU datacenters</text>
+                    <text x="155" y="408" text-anchor="middle" font-size="9" fill="var(--text-muted)">Per-DC weight volumes · Exponential backoff</text>
+                    <line x1="155" y1="330" x2="155" y2="355" stroke="var(--secondary)" stroke-width="1" stroke-dasharray="4,3"/>
+                    <polygon points="150,352 155,360 160,352" fill="var(--secondary)"/>
+                    <rect x="295" y="355" width="230" height="65" rx="8" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">Gemma 3 12B (GGUF Q4)</text>
+                    <text x="410" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">vLLM 0.15.1 · OpenAI API</text>
+                    <text x="410" y="408" text-anchor="middle" font-size="9" fill="var(--text-muted)">Profile-driven GPU selection</text>
+                    <rect x="550" y="355" width="230" height="65" rx="8" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="665" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">All Providers Down</text>
+                    <text x="665" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">HTTP 503 + per-provider errors</text>
+                    <text x="665" y="408" text-anchor="middle" font-size="9" fill="var(--text-muted)">Failure scenarios validated end-to-end</text>
+                    <rect x="40" y="445" width="740" height="55" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <circle cx="70" cy="467" r="5" fill="var(--success)"/>
+                    <text x="82" y="471" font-size="9" fill="var(--text-secondary)">Primary (568 ms)</text>
+                    <circle cx="200" cy="467" r="5" fill="var(--warning)"/>
+                    <text x="212" y="471" font-size="9" fill="var(--text-secondary)">Fallback 1 (1.9 s)</text>
+                    <circle cx="340" cy="467" r="5" fill="var(--danger)"/>
+                    <text x="352" y="471" font-size="9" fill="var(--text-secondary)">Fallback 2 (7.7 s)</text>
+                    <circle cx="480" cy="467" r="5" fill="var(--secondary)"/>
+                    <text x="492" y="471" font-size="9" fill="var(--text-secondary)">EU DC Failover</text>
+                    <text x="410" y="490" text-anchor="middle" font-size="9" fill="var(--text-muted)">3x redundancy · Measured SLAs per provider · All failure scenarios validated</text>
+                </svg>
+            </figure>
+
+            <p>The latencies are measured, not estimated, and they are what the router uses to reason about which hop a request took:</p>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Hop</th>
+                            <th scope="col">Hardware</th>
+                            <th scope="col">Latency</th>
+                            <th scope="col">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Serverless GPUs</td><td>Ada / Ampere, 6 types</td><td>568 ms</td><td>Primary, cost-optimized burst</td></tr>
+                        <tr><td>Managed serverless GPU</td><td>NVIDIA L4</td><td>1.9 s warm, 41 s cold</td><td>Fallback 1, scales to zero</td></tr>
+                        <tr><td>Dedicated cluster</td><td>L40S / A100 SXM 80 GB</td><td>7.7 s</td><td>Fallback 2, high-throughput</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Multi-GPU and multi-datacenter</h2>
+
+            <p>GPU supply on rented serverless is not guaranteed. On a bad day the GPU type you want is simply not available in the region you asked for. Two things made this survivable.</p>
+
+            <p><strong>Profile-driven GPU selection.</strong> I replaced a hardcoded if-else over GPU names with one table that maps each GPU type to its tuned config: VRAM, max model length, dtype, kv-cache dtype, fp8 support and tensor-parallel settings. One flag selects the whole profile. Six GPU types are deployable (RTX 4090, RTX 5090, A6000, RTX 6000 Ada, L40S and A100 SXM), and switching between them is a single parameter rather than a code change.</p>
+
+            <p><strong>Datacenter failover.</strong> The deploy tries datacenters in an ordered list and moves to the next one when it hits a supply constraint, with exponential backoff. Each datacenter has its own cached weights volume, so a failover does not re-download the model.</p>
+
+            <h2>What I would tell someone starting this</h2>
+            <ul>
+                <li>Pin your CUDA toolkit to the host driver, not to the newest base image. The newest image is the one that crash-loops on older hosts.</li>
+                <li>Make startup fail loudly. A sourced <code>exit</code> or a silently-unmatched GPU tier will cost you an afternoon of staring at an empty log.</li>
+                <li>Treat cold start as a first-class SLO. Pre-bake everything deterministic and cache the weights; do not assemble the environment on every scale-up.</li>
+                <li>Put a router in front before you think you need it. Single-provider GPU serving is a single point of failure, and GPU supply is the part you do not control.</li>
+            </ul>
+
+        </div>
+
+        <footer class="doc-footer">
+            <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/#cases">See more case studies</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Theme toggle wiring (no tablist logic; this page is standalone). -->
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <!-- Cloudflare Web Analytics: privacy-first, cookieless (see CLAUDE.md § Analytics). Token is public by design. -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

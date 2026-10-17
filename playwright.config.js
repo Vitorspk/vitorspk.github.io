@@ -21,7 +21,7 @@ module.exports = defineConfig({
     },
   ],
   webServer: {
-    command: 'npx serve . -p 3000 -s',
+    command: 'npx serve . -p 3000',
     port: 3000,
     reuseExistingServer: !process.env.CI,
   },

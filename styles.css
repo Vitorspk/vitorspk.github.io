@@ -2024,6 +2024,30 @@ footer {
     color: var(--text-secondary);
 }
 
+/* Read-the-full-write-up link — funnels from a SPA card to a standalone case page */
+.case-readmore {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-top: var(--space-md);
+    padding: 9px var(--space-md);
+    background: var(--primary-dark);
+    border: 1px solid var(--primary-dark);
+    border-radius: var(--radius-md);
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: background-color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+}
+
+.case-readmore:hover {
+    background: color-mix(in srgb, var(--primary-dark) 85%, #000000);
+    border-color: color-mix(in srgb, var(--primary-dark) 85%, #000000);
+    color: #ffffff;
+    transform: translateX(2px);
+}
+
 /* ============================================================
    RESPONSIVE — TABLET (≤1024px)
    ============================================================ */
