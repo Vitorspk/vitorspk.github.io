@@ -8,14 +8,14 @@
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <title>Self-hosting Gemma 3 12B with vLLM on serverless GPUs — Vitor Schiavo</title>
-    <meta name="description" content="An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
+    <meta name="description" content="An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback POC with measured latencies, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/">
 
     <!-- Open Graph -->
     <meta property="og:type" content="article">
     <meta property="og:title" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs">
-    <meta property="og:description" content="A three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
+    <meta property="og:description" content="A three-provider fallback router with measured POC latencies, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.">
     <meta property="og:url" content="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/og.png">
@@ -26,7 +26,7 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs">
-    <meta name="twitter:description" content="A three-provider fallback router with measured SLAs and cold starts cut from ten minutes to three.">
+    <meta name="twitter:description" content="A three-provider fallback router with measured POC latencies and cold starts cut from ten minutes to three.">
     <meta name="twitter:image" content="https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/og.png">
     <meta name="twitter:image:alt" content="Self-hosting Gemma 3 12B with vLLM on serverless GPUs — a case study by Vitor Schiavo.">
 
@@ -36,7 +36,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "Self-hosting Gemma 3 12B with vLLM on serverless GPUs",
-      "description": "An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.",
+      "description": "An engineering log of running Gemma 3 12B in production on serverless GPUs with vLLM: a three-provider fallback POC with measured latencies, cold starts cut from ten minutes to three, and the CUDA, scheduler and shell bugs along the way.",
       "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
@@ -84,7 +84,7 @@
         <header class="doc-header">
             <span class="doc-eyebrow">Case study · AI infrastructure</span>
             <h1 class="doc-title">Self-hosting Gemma 3 12B with vLLM on serverless GPUs</h1>
-            <p class="doc-dek">What it took to run a 12B open-weight model in production on rented GPUs: a three-provider fallback router with measured SLAs, cold starts cut from ten minutes to three, and the driver, scheduler and shell bugs that ate my afternoons.</p>
+            <p class="doc-dek">What it took to run a 12B open-weight model in production on rented GPUs: a three-provider fallback POC with measured latencies, cold starts cut from ten minutes to three, and the driver, scheduler and shell bugs that ate my afternoons.</p>
             <div class="doc-meta">
                 <span>By Vitor Schiavo</span>
                 <span>Updated October 2026</span>
@@ -96,9 +96,9 @@
 
             <p>This is a write-up of building production-grade LLM inference on serverless GPUs: serving an open-weight model in-house instead of through a hosted API, for cost control and to own the behaviour of the stack end to end. The model is Gemma 3 12B, quantized to GGUF Q4 (about 6.9 GB on disk), served with vLLM 0.15.1.</p>
 
-            <p>What follows is the engineering log: the bugs that cost me the most time, how I cut cold starts, the router that removed the single point of failure, and the numbers I measured. Everything here is the technique, with no internal names or specifics.</p>
+            <p>What follows is the engineering log: the bugs that cost me the most time, how I cut cold starts, the router POC that tested alternatives to a single provider, and the numbers I measured. Everything here is the technique, with no internal names or specifics.</p>
 
-            <h2>Three bugs that cost me the most time</h2>
+            <h2>My contribution</h2><p>I built and tested GPU serving workflows, investigated cold-start and compatibility problems, and implemented the fallback POC. The router evaluation is distinct from ongoing provider-specific serving work.</p><h2>Results and measurement</h2><p>The router POC recorded warm request latencies of 568 ms, 1,917 ms and 7,681 ms across its three provider paths, plus a cold fallback observation of about 41 seconds. These are test observations, not production percentiles or SLAs. Six scenarios covered normal flow, cold and warm fallback, the final fallback, health checks and all-provider failure.</p><p>For the tested third path, MIG means a GCE Managed Instance Group. It does not refer to GPU Multi-Instance GPU partitioning. Hardware profiles described elsewhere in this article belong to the broader serving investigation, not necessarily this router test.</p><h2>Three bugs that cost me the most time</h2>
 
             <p>None of these printed a useful error at the surface. That is the real lesson: on rented GPUs, your startup path has to fail loudly and early, because the layers underneath will not do it for you.</p>
 
@@ -141,7 +141,7 @@
                 <p>I checked whether a faster disk would speed up model loading. Hyperdisk Extreme cannot be a boot disk, only a data disk, which would mean a separate disk plus a mount script and would defeat the pre-baked image. Hyperdisk Balanced can boot, but the image-build pipeline cannot create images from it. The expected gain was single-digit seconds. Not worth the complexity, so I wrote it down and moved on.</p>
             </div>
 
-            <h2>The fallback router</h2>
+            <h2>The fallback router proof of concept</h2><p>This part of the work was a controlled proof of concept. Six scenarios passed; the test infrastructure was removed afterward, pending a production adoption decision. Deploying the test on a production cluster did not make it an always-on production service.</p>
 
             <p>Serving from a single GPU provider is a single point of failure. A provider outage or a GPU supply constraint takes the whole capability down, and each provider has a different latency profile that a single endpoint cannot exploit. So I put a small router in front.</p>
 
@@ -209,11 +209,11 @@
                     <text x="352" y="471" font-size="9" fill="var(--text-secondary)">Fallback 2 (7.7 s)</text>
                     <circle cx="480" cy="467" r="5" fill="var(--secondary)"/>
                     <text x="492" y="471" font-size="9" fill="var(--text-secondary)">EU DC Failover</text>
-                    <text x="410" y="490" text-anchor="middle" font-size="9" fill="var(--text-muted)">3x redundancy · Measured SLAs per provider · All failure scenarios validated</text>
+                    <text x="410" y="490" text-anchor="middle" font-size="9" fill="var(--text-muted)">Three-provider POC · Six test scenarios passed</text>
                 </svg>
             </figure>
 
-            <p>The latencies are measured, not estimated, and they are what the router uses to reason about which hop a request took:</p>
+            <p>The latencies are measured, not estimated, and describe the specific POC test requests rather than a contractual service level:</p>
 
             <div class="table-container">
                 <table>

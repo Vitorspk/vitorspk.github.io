@@ -88,7 +88,7 @@
 
             <p>A fleet of Cloud Functions tends to grow one function at a time, and the pipelines grow the same way: copied, tweaked, and never unified. The result was dozens of functions across several repositories, each deploying through a slightly different Jenkins pipeline, most of them slow, and none of them ready for Gen2. I standardized the whole set and modernized the runtimes, sanitized here to the technique.</p>
 
-            <h2>Where the time was going</h2>
+            <h2>Delivery scope</h2><p>This was a phased migration and pipeline-standardization effort. DEV/STG work and later production operation were distinct stages. A production follow-up found an implicit runtime service-account change and pinned the deployment identity to prevent recurrence. The planning epic alone does not establish the state of every production function.</p><h2>Where the time was going</h2>
             <p>Two things dominated every build. First, the checkout: each build did a full clone of the deploy repository, 30 to 60 seconds of pure waiting before any real work. Second, dependencies: nothing was cached, so every build reinstalled everything from scratch. Multiply that across dozens of functions deploying many times a day and it adds up to real engineer-hours and real cloud build minutes.</p>
 
             <h2>What I changed</h2>

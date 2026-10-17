@@ -4,7 +4,7 @@
   "description": "Professional portfolio with automated validation",
   "scripts": {
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
-    "lint:html": "html-validate index.html 'cases/**/*.html'",
+    "lint:html": "html-validate index.html resume.html 'cases/**/*.html'",
     "lint:css": "stylelint 'css/*.css' 'cases/**/*.css'",
     "lint:js": "eslint '*.js'",
     "lint:fix": "npm run lint:css -- --fix && npm run lint:js -- --fix",

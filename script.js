@@ -71,10 +71,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const isActive = panel.id === name;
             panel.classList.toggle('active', isActive);
             panel.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+            panel.inert = !isActive;
         });
 
         if (pushState) {
-            history.pushState({ tab: name }, '', `#${name}`);
+            const suffix = name === 'cases' && activeFilter !== 'all' ? '/' + activeFilter : '';
+            history.pushState({ tab: name }, '', `#${name}${suffix}`);
         }
 
         // Scroll to the active panel (not the page top) so users land at the
@@ -120,19 +122,73 @@ document.addEventListener('DOMContentLoaded', () => {
         activateTab(tab);
     });
 
-    // ─── Browser back/forward ─────────────────────────────────────────────────
-    window.addEventListener('popstate', (e) => {
-        const raw = (e.state && e.state.tab) || location.hash.replace('#', '') || TAB_DEFAULT;
-        const tab = tabNames.includes(raw) ? raw : TAB_DEFAULT;
-        activateTab(tab, false);
+    const skipLink = document.querySelector('.skip-link');
+    const mainContent = document.getElementById('main-content');
+    if (skipLink && mainContent) skipLink.addEventListener('click', event => {
+        event.preventDefault();
+        mainContent.focus({ preventScroll: true });
+        mainContent.scrollIntoView({ behavior: 'auto', block: 'start' });
     });
 
-    // ─── Init from URL hash ───────────────────────────────────────────────────
-    (function initFromHash() {
-        const hash = location.hash.replace('#', '').trim();
-        const validTab = tabNames.includes(hash) ? hash : TAB_DEFAULT;
-        activateTab(validTab, false);
-    })();
+    // Resolve current and retired links from HTML, not a second navigation list.
+    const filterButtons = Array.from(document.querySelectorAll('[data-filter]'));
+    const catalogCases = Array.from(document.querySelectorAll('#cases .case-study'));
+    const caseCount = document.getElementById('case-count');
+    let activeFilter = 'all';
+
+    function filterCases(value) {
+        const known = filterButtons.some(button => button.dataset.filter === value);
+        activeFilter = known ? value : 'all';
+        filterButtons.forEach(button => {
+            button.setAttribute('aria-pressed', String(button.dataset.filter === activeFilter));
+        });
+        let shown = 0;
+        catalogCases.forEach(study => {
+            const matches = activeFilter === 'all' || study.dataset.category === activeFilter;
+            study.hidden = !matches;
+            if (matches) shown++;
+        });
+        if (caseCount) caseCount.textContent = shown + ' of ' + catalogCases.length + ' case studies and projects';
+    }
+
+    function restoreLocation() {
+        const raw = location.hash.slice(1).trim();
+        const [section, category] = raw.split('/');
+        const aliasPanel = section && tabPanels.find(panel => (panel.dataset.legacy || '').split(' ').includes(section));
+        const name = tabNames.includes(section) ? section : aliasPanel ? aliasPanel.id : TAB_DEFAULT;
+        const aliasFilter = filterButtons.find(button => button.dataset.legacy === section);
+        filterCases(category || (aliasFilter && aliasFilter.dataset.filter) || 'all');
+        activateTab(name, false);
+        // Canonicalize old links without adding an extra Back step.
+        if (aliasPanel) history.replaceState({ tab: name }, '', '#' + name + (activeFilter !== 'all' ? '/' + activeFilter : ''));
+    }
+
+    window.addEventListener('popstate', restoreLocation);
+    window.addEventListener('hashchange', restoreLocation);
+    restoreLocation();
+
+    filterButtons.forEach(button => button.addEventListener('click', () => {
+        filterCases(button.dataset.filter);
+        history.pushState({ tab: activeTab }, '', '#cases' + (activeFilter === 'all' ? '' : '/' + activeFilter));
+    }));
+
+    document.querySelectorAll('[data-jump]').forEach(button => button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.jump);
+        if (!target) return;
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth', block: 'start' });
+    }));
+
+    const copyEmail = document.getElementById('copy-email');
+    const copyStatus = document.getElementById('copy-status');
+    if (copyEmail && copyStatus) copyEmail.addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText('vitorspk@gmail.com');
+            copyStatus.textContent = 'Email address copied.';
+        } catch {
+            copyStatus.textContent = 'Copy unavailable. Please select vitorspk@gmail.com above, or use Email Vitor.';
+        }
+    });
 
     // ─── Scroll to Top Button ─────────────────────────────────────────────────
     const scrollToTopBtn = document.getElementById('scrollToTop');
@@ -142,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 80);
         window.addEventListener('scroll', onScroll, { passive: true });
         scrollToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
         });
     }
 
@@ -163,53 +219,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 rafId = null;
             });
         }, { passive: true });
-    }
-
-    // ─── Metric Bar Animations (IntersectionObserver) ─────────────────────────
-
-    const barObserver = new IntersectionObserver((entries, obs) => {
-        entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            const bar = entry.target;
-            const target = bar.dataset.width || '0%';
-            if (prefersReducedMotion) {
-                // Respect user motion preference — set final width immediately
-                bar.style.width = target;
-            } else {
-                bar.style.width = '0%';
-                // Double rAF ensures 0% paints before the CSS transition fires
-                requestAnimationFrame(() => requestAnimationFrame(() => {
-                    bar.style.width = target;
-                }));
-            }
-            obs.unobserve(bar);
-        });
-    }, { threshold: 0.2 });
-
-    document.querySelectorAll('.bar-fill').forEach(bar => {
-        if (!bar.dataset.width) bar.dataset.width = bar.style.width || '0%';
-        bar.style.width = '0%';
-        barObserver.observe(bar);
-    });
-
-    // ─── Scroll Reveal (staggered card entrance) ──────────────────────────────
-    if (!prefersReducedMotion) {
-        const revealObserver = new IntersectionObserver((entries, obs) => {
-            entries.forEach(entry => {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('revealed');
-                obs.unobserve(entry.target);
-            });
-        }, { threshold: 0.1 });
-
-        // Group by tab panel so stagger index resets per section
-        document.querySelectorAll('.tab-content').forEach(container => {
-            container.querySelectorAll('.card, .case-study, .feature-card, .timeline-item, .highlight-card').forEach((el, i) => {
-                el.classList.add('reveal');
-                el.style.setProperty('--reveal-delay', (i % 6) * 80 + 'ms');
-                revealObserver.observe(el);
-            });
-        });
     }
 
     // ─── Dual tablist inert/aria sync ─────────────────────────────────────────
@@ -244,19 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         mq.addEventListener('change', syncTablists);
         syncTablists(); // set initial state
-    }
-
-    // ─── Mobile tab strip overflow indicator ──────────────────────────────────
-    // Toggles .has-overflow-right so the mask-image fade only shows when there
-    // are off-screen tabs to the right — avoids a false affordance at the end.
-    if (mobileNav) {
-        const updateTabOverflow = () => {
-            const hasOverflow = mobileNav.scrollLeft + mobileNav.clientWidth < mobileNav.scrollWidth - 1;
-            mobileNav.classList.toggle('has-overflow-right', hasOverflow);
-        };
-        mobileNav.addEventListener('scroll', updateTabOverflow, { passive: true });
-        window.addEventListener('resize', updateTabOverflow, { passive: true });
-        updateTabOverflow(); // set initial state
     }
 
     // ─── Keyboard Navigation (Arrow / Home / End) ─────────────────────────────
@@ -313,15 +309,25 @@ document.addEventListener('DOMContentLoaded', () => {
         header.setAttribute('role', 'button');
         header.setAttribute('tabindex', '0');
         header.setAttribute('aria-expanded', 'false');
+        const bodyId = 'case-body-' + caseStudies.indexOf(study);
+        body.id = bodyId;
+        header.setAttribute('aria-controls', bodyId);
+        body.hidden = true;
+        body.inert = true;
 
         const toggleCase = () => {
-            const isExpanded = study.getAttribute('aria-expanded') === 'true';
+            const isExpanded = study.getAttribute('data-expanded') === 'true';
             const next = isExpanded ? 'false' : 'true';
-            study.setAttribute('aria-expanded', next);
+            study.setAttribute('data-expanded', next);
             header.setAttribute('aria-expanded', next);
+            body.hidden = isExpanded;
+            body.inert = isExpanded;
+            body.querySelectorAll('a').forEach(link => link.removeAttribute('tabindex'));
         };
 
-        header.addEventListener('click', toggleCase);
+        header.addEventListener('click', event => {
+            if (!event.target.closest('a')) toggleCase();
+        });
         header.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -336,20 +342,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (themeToggle) {
         // Restore saved theme (default: dark)
-        const saved = localStorage.getItem('theme') || 'dark';
+        let saved = 'dark';
+        try { saved = localStorage.getItem('theme') || 'dark'; } catch { /* Storage may be blocked. */ }
         applyTheme(saved);
 
         themeToggle.addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme') || 'dark';
             const next = current === 'dark' ? 'light' : 'dark';
             applyTheme(next);
-            localStorage.setItem('theme', next);
+            try { localStorage.setItem('theme', next); } catch { /* Theme still works without persistence. */ }
         });
     }
 
     function applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        if (themeIcon) themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+        if (themeIcon) themeIcon.textContent = theme === 'dark' ? '◐' : '◑';
         if (themeToggle) {
             themeToggle.setAttribute('aria-label',
                 theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'

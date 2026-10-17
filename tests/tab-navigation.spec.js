@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 // Visual order of the sidebar tablist buttons (same source script.js uses
 // for tabNames). Order only matters for iteration here — each test asserts
 // per-tab state independently.
-const TAB_NAMES = ['overview', 'experience', 'skills', 'cases', 'aiml', 'finops', 'technical', 'achievements', 'projects'];
+const TAB_NAMES = ['overview', 'cases', 'experience', 'about', 'contact'];
 
 test.use({ viewport: { width: 1280, height: 800 } });
 
@@ -49,18 +49,18 @@ test.describe('Tab Navigation', () => {
   });
 
   test('browser back/forward navigates tabs', async ({ page }) => {
-    await page.locator('#tab-skills').click();
-    await expect(page.locator('#skills')).toHaveAttribute('aria-hidden', 'false');
+    await page.locator('#tab-about').click();
+    await expect(page.locator('#about')).toHaveAttribute('aria-hidden', 'false');
 
     await page.locator('#tab-cases').click();
     await expect(page.locator('#cases')).toHaveAttribute('aria-hidden', 'false');
 
     await page.goBack();
     await page.waitForFunction(() => {
-      const panel = document.querySelector('#skills');
+      const panel = document.querySelector('#about');
       return panel && panel.getAttribute('aria-hidden') === 'false';
     });
-    await expect(page.locator('#skills')).toHaveAttribute('aria-hidden', 'false');
+    await expect(page.locator('#about')).toHaveAttribute('aria-hidden', 'false');
 
     await page.goForward();
     await page.waitForFunction(() => {

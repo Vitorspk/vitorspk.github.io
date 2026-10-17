@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Finding the failure behind a green dashboard — Vitor Schiavo</title>
+    <meta name="description" content="A runtime migration left alerts silently matching nothing. Positive controls exposed the incomplete fix.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/gen2-observability-repair/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Finding the failure behind a green dashboard">
+    <meta property="og:description" content="A runtime migration left alerts silently matching nothing. Positive controls exposed the incomplete fix.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/gen2-observability-repair/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/gen2-observability-repair/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Finding the failure behind a green dashboard — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Finding the failure behind a green dashboard">
+    <meta name="twitter:description" content="A runtime migration left alerts silently matching nothing. Positive controls exposed the incomplete fix.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/gen2-observability-repair/og.png">
+    <meta name="twitter:image:alt" content="Finding the failure behind a green dashboard — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Finding the failure behind a green dashboard", "description": "A runtime migration left alerts silently matching nothing. Positive controls exposed the incomplete fix.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorspk.github.io/cases/gen2-observability-repair/", "mainEntityOfPage": "https://vitorspk.github.io/cases/gen2-observability-repair/", "image": "https://vitorspk.github.io/cases/gen2-observability-repair/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body><a href="#main-content" class="skip-link">Skip to main content</a><button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button><main class="doc" id="main-content"><a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a><header class="doc-header"><span class="doc-eyebrow">Case study · Observability · July 2026</span><h1 class="doc-title">Finding the failure behind a green dashboard</h1><p class="doc-dek">A runtime migration left alerts silently matching nothing. Positive controls exposed the incomplete fix.</p><div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header><div class="doc-body">
+<h2>The problem</h2><p>After functions moved to a new runtime generation, the application dashboards still appeared healthy. But the log resource type and labels had changed, while alert policies and log-based metrics still filtered the previous format.</p><p>An audit identified 22 policies and two metrics in scope. Twenty-one policies were enabled, but the old filters could no longer match their intended events. An absence of alerts had become indistinguishable from an absence of incidents.</p>
+<h2>My contribution</h2><p>I traced the migration's effect on resource labels and payload formats, audited related policies and metrics, applied the runtime-specific changes and validated the new filters against log messages known to exist. I also checked the application logging path where changing the filter alone would not restore visibility.</p>
+<h2>Why the obvious fix was incomplete</h2><p>Replacing the resource type looked sufficient. It was not: some Go functions emitted structured JSON, while Python functions emitted plain text. A policy using a plain-text field could remain blind even after its resource filter was corrected.</p><p>Other policies used a search expression that already matched either payload format. Treating every filter as the same would have introduced unnecessary changes. I verified each shape instead of applying a universal replacement.</p>
+<figure class="work-visual"><figcaption>Three-way validation using a message known to exist</figcaption><div class="filter-proof"><span>Original filter</span><strong>0 matches</strong><span>Resource-type change only</span><strong>0 matches</strong><span>Resource + correct payload field</span><strong class="signal-good">5 matches</strong></div></figure>
+<h2>Results and measurement</h2><p>The completion record confirms 22 policies and two metrics corrected and verified. A project-wide sweep found no remaining policy or metric using the obsolete resource filter.</p><p>The five-match comparison is a positive-control test for a specific known message. It demonstrates why the resource-only fix was insufficient; it is not a claim that every possible future failure was covered. Some signals were deliberately left disabled where they were redundant, rather than enabling everything indiscriminately.</p>
+<h2>What I learned</h2><p>A filter returning zero rows is not a validation result until there is a known event it should match. Migration acceptance needs an observability check that exercises real payloads, not only a successful health endpoint.</p></div><footer class="doc-footer"><p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p><div class="cta-row"><a class="cta cta--primary" href="/#cases">See more case studies</a><a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

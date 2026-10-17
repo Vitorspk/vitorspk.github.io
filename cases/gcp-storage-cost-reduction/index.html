@@ -8,13 +8,13 @@
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <title>Cutting a GCP storage bill by 95.9% — Vitor Schiavo</title>
-    <meta name="description" content="How automated Cloud Storage lifecycle tiering and deletion policies cut a bill by 95.9%, about $148K a year, with zero data loss.">
+    <meta name="description" content="How automated Cloud Storage lifecycle tiering and deletion policies cut a bill by 95.9%, a historical reported reduction, with retention-aware lifecycle policies.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://vitorspk.github.io/cases/gcp-storage-cost-reduction/">
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="Cutting a GCP storage bill by 95.9% with lifecycle policies">
-    <meta property="og:description" content="A 95.9% lower storage bill, about $148K a year saved, with zero data loss.">
+    <meta property="og:description" content="A 95.9% lower storage bill, a historical reported reduction saved, with retention-aware lifecycle policies.">
     <meta property="og:url" content="https://vitorspk.github.io/cases/gcp-storage-cost-reduction/">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorspk.github.io/cases/gcp-storage-cost-reduction/og.png">
@@ -24,7 +24,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Cutting a GCP storage bill by 95.9% with lifecycle policies">
-    <meta name="twitter:description" content="A 95.9% lower storage bill, about $148K a year saved, with zero data loss.">
+    <meta name="twitter:description" content="A 95.9% lower storage bill, a historical reported reduction saved, with retention-aware lifecycle policies.">
     <meta name="twitter:image" content="https://vitorspk.github.io/cases/gcp-storage-cost-reduction/og.png">
     <meta name="twitter:image:alt" content="GCP storage, 95.9% cost reduction — a case study by Vitor Schiavo.">
 
@@ -33,7 +33,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "Cutting a GCP storage bill by 95.9% with lifecycle policies",
-      "description": "How automated Cloud Storage lifecycle tiering and deletion policies cut a bill by 95.9%, about $148K a year, with zero data loss.",
+      "description": "How automated Cloud Storage lifecycle tiering and deletion policies cut a bill by 95.9%, a historical reported reduction, with retention-aware lifecycle policies.",
       "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
@@ -76,7 +76,7 @@
         <header class="doc-header">
             <span class="doc-eyebrow">Case study · FinOps</span>
             <h1 class="doc-title">Cutting a GCP storage bill by 95.9% with lifecycle policies</h1>
-            <p class="doc-dek">Cloud storage is the cost that creeps: nobody deletes anything and every byte lands in the most expensive tier. Here is how a handful of lifecycle policies cut a bill by 95.9%, about $148K a year, with zero data loss.</p>
+            <p class="doc-dek">Cloud storage is the cost that creeps: nobody deletes anything and every byte lands in the most expensive tier. Here is how a handful of lifecycle policies cut a bill by 95.9%, a historical reported reduction, with retention-aware lifecycle policies.</p>
             <div class="doc-meta">
                 <span>By Vitor Schiavo</span>
                 <span>Updated October 2026</span>
@@ -86,37 +86,37 @@
 
         <div class="doc-body">
 
-            <p>Storage is the cost that creeps. Nobody deletes anything, every byte lands in the default (and most expensive) class, and the bill grows quietly until someone looks. This is a write-up of the technique I used to cut one of these bills by <strong>95.9%</strong>, with no new infrastructure and no data migration tooling.</p>
+            <p>Storage is the cost that creeps. Nobody deletes anything, every byte lands in the default (and most expensive) class, and the bill grows quietly until someone looks. This is a write-up of the technique I used to cut one of these bills by <strong>95.9%</strong>, with access-aware tiering and retention changes.</p>
 
-            <h2>The problem</h2>
+            <h2>My contribution</h2><p>I reviewed access and retention patterns with the product team, configured lifecycle changes and worked on regional placement and storage footprint reduction.</p><h2>Results and measurement</h2><p>The historical portfolio reported 95.9% lower storage cost and a 94.2% smaller footprint. The work records confirm lifecycle and retention changes, but do not establish one consistent currency, billing baseline and policy version for the full estimate. Absolute and cumulative savings are therefore omitted here pending reconciliation.</p><h2>The problem</h2>
             <p>The data was not all hot. Most of it was written once and never read again, but it sat in Standard storage priced for frequent access. There was no tiering to cheaper classes and nothing ever aged out, so the footprint and the bill only went one direction.</p>
 
             <h2>What I changed</h2>
             <p>No new infrastructure, no data migration tooling, just lifecycle policies applied to the buckets:</p>
             <ul>
-                <li><strong>Keep only hot data in Standard.</strong> The last 5 days of data stays in Standard, which is what actually gets read.</li>
-                <li><strong>Archive the rest automatically.</strong> Files older than 5 days move to the Archive class, a fraction of the Standard price.</li>
-                <li><strong>Delete what nobody needs.</strong> Files older than 365 days are removed on a schedule, so the footprint stops growing forever.</li>
+                <li><strong>Keep hot data in Standard.</strong> Base the hot window on observed access patterns and the applicable retention requirements.</li>
+                <li><strong>Tier older data automatically.</strong> A recorded iteration moved objects to Nearline after 30 days and Archive after 365 days. Earlier policies differed, so these are versioned decisions rather than a universal rule.</li>
+                <li><strong>Review deletion separately.</strong> Agree which records may expire with the product team; archival and deletion have different effects and requirements.</li>
                 <li><strong>Applied everywhere.</strong> The same policies went on both multi-region and single-region buckets.</li>
             </ul>
-            <p>The important part: this is self-driving. Once the policies are in place, archival and deletion run on their own. There is nothing to remember and nothing to maintain.</p>
+            <p>The important part: this is self-driving. Once the policies are in place, archival and deletion run on their own. Access patterns, retention requirements and billing effects still need periodic review.</p>
 
             <div class="stat-strip">
                 <div class="stat"><span class="stat-value">95.9%</span><span class="stat-label">monthly cost cut</span></div>
-                <div class="stat"><span class="stat-value">$148K</span><span class="stat-label">saved per year</span></div>
+                <div class="stat"><span class="stat-value">Lifecycle</span><span class="stat-label">automated tiering</span></div>
                 <div class="stat"><span class="stat-value">94.2%</span><span class="stat-label">smaller footprint</span></div>
-                <div class="stat"><span class="stat-value">0</span><span class="stat-label">data lost</span></div>
+                <div class="stat"><span class="stat-value">Retention</span><span class="stat-label">reviewed separately</span></div>
             </div>
 
             <div class="callout callout--win">
                 <p class="callout-title">The result in one line</p>
-                <p>About $148K saved per year, well over a third of a million across three years, with hot data still in Standard so nothing got slower, and zero data loss. The cheapest wins in cloud are often the ones already sitting in your bill.</p>
+                <p>The historical portfolio reported a 95.9% reduction. Currency, billing period and the exact contribution of tiering versus deletion must be reconciled before publishing an absolute or cumulative savings total. The transferable result is a repeatable lifecycle process tied to actual access and retention requirements.</p>
             </div>
 
             <h2>What I would tell someone starting this</h2>
             <ul>
                 <li>Look at the storage bill before the compute bill. It is usually simpler to fix and the savings compound monthly.</li>
-                <li>Tier by access pattern, not by guesswork. The last few days are hot; almost everything older is not.</li>
+                <li>Tier by access pattern, not by guesswork. Validate which data is still read before choosing the transition window.</li>
                 <li>Add a deletion policy, not just archival. Archival slows the growth; deletion stops it.</li>
                 <li>Let the platform do the work. Lifecycle policies are set-and-forget, which means the savings do not depend on anyone remembering.</li>
             </ul>

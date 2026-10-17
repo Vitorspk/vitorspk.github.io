@@ -4,6 +4,10 @@
    ============================================================ */
 
 :root {
+    --on-brand: #ffffff;
+    --brand-hover: #1d4ed8;
+    --evidence-positive: #6ee7b7;
+
     /* Brand */
     --primary:        #3b82f6;
     --primary-dark:   #2563eb;
@@ -74,14 +78,17 @@
 
     /* Layout */
     --sidebar-w:   240px;
-    --content-max: 900px;
-    --header-h:    64px;
-    --mobile-tabs-h: 45px;
+    --content-max: 1000px;
+    --header-h:    56px;
+    --mobile-tabs-h: 46px;
 }
 
 /* ── Light theme overrides ─────────────────────────────────── */
 
 [data-theme="light"] {
+    --primary-light: #1d4ed8;
+    --evidence-positive: #047857;
+
     /* Surface Palette */
     --bg-base:        #f8fafc;
     --bg-surface:     #f1f5f9;

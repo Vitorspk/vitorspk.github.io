@@ -4,6 +4,11 @@ const AxeBuilder = require('@axe-core/playwright').default;
 test.use({ viewport: { width: 1280, height: 800 } });
 
 const PAGES = [
+  { path: '/cases/jenkins-qa-signal-recovery/', title: /Restoring trust/i, h1: /Restoring trust/i },
+  { path: '/cases/ephemeral-preview-environments/', title: /safe place to test/i, h1: /safe place to test/i },
+  { path: '/cases/gen2-observability-repair/', title: /green dashboard/i, h1: /green dashboard/i },
+  { path: '/cases/security-posture-observability/', title: /Security posture/i, h1: /Security posture/i },
+  { path: '/cases/monitoring-ingestion-cost/', title: /ingestion cost/i, h1: /ingestion cost/i },
   { path: '/cases/gcp-storage-cost-reduction/', title: /Cutting a GCP storage bill by 95\.9%/i, h1: /storage/i },
   { path: '/cases/cloud-functions-gen1-gen2/', title: /Gen1 to Gen2/i, h1: /Cloud Functions/i },
   { path: '/cases/kubernetes-supply-chain-defense/', title: /supply-chain attacks/i, h1: /Defending Kubernetes/i },
