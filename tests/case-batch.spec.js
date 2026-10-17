@@ -11,6 +11,8 @@ const PAGES = [
   { path: '/cases/gke-dataplane-v2-cilium/', title: /Dataplane V2/i, h1: /Dataplane V2/i },
   { path: '/cases/kubernetes-finops-kubecost/', title: /Kubecost/i, h1: /cost visibility/i },
   { path: '/cases/zero-downtime-cluster-migration/', title: /Zero-downtime migration/i, h1: /Zero-downtime migration/i },
+  { path: '/cases/strapi-v4-to-v5-upgrade/', title: /Strapi from v4 to v5/i, h1: /Upgrading Strapi/i },
+  { path: '/cases/metabase-production-ops/', title: /Running Metabase/i, h1: /Running Metabase/i },
 ];
 
 for (const p of PAGES) {

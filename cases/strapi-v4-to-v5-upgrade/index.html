@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Upgrading Strapi from v4 to v5 in production — Vitor Schiavo</title>
+    <meta name="description" content="A breaking Strapi major-version upgrade done safely: a stepwise codebase path, 19 lifecycle hooks moved to the new Document Service, testing on a cloned database, and a phased cutover with a legacy fallback.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Upgrading Strapi from v4 to v5 in production">
+    <meta property="og:description" content="A breaking major-version upgrade: stepwise codebase path, 19 lifecycle hooks moved to the Document Service, and a phased cutover with a legacy fallback.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Upgrading Strapi from v4 to v5 in production — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Upgrading Strapi from v4 to v5 in production">
+    <meta name="twitter:description" content="A breaking major-version upgrade done safely, with a phased cutover and legacy fallback.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/og.png">
+    <meta name="twitter:image:alt" content="Upgrading Strapi from v4 to v5 in production — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Upgrading Strapi from v4 to v5 in production",
+      "description": "A breaking Strapi major-version upgrade done safely: a stepwise codebase path, 19 lifecycle hooks moved to the new Document Service, testing on a cloned database, and a phased cutover with a legacy fallback.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/",
+      "mainEntityOfPage": "https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/",
+      "image": "https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "Strapi, Strapi v5, upgrade, migration, Document Service, lifecycle hooks, headless CMS, Node 20, zero downtime"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Case study · Upgrades</span>
+            <h1 class="doc-title">Upgrading Strapi from v4 to v5 in production</h1>
+            <p class="doc-dek">Strapi v5 is a breaking major version, with a new data-access API at the core of it. Here is how I upgraded a production CMS from v4 to v5 without losing content or downtime: a stepwise path, 19 lifecycle hooks rewritten, a cloned database to rehearse on, and a cutover that kept production for last.</p>
+            <div class="doc-meta">
+                <span>By Vitor Schiavo</span>
+                <span>Updated October 2026</span>
+                <span>~6 min read</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+
+            <p>Major-version upgrades of a stateful, content-bearing app are where "it is just a version bump" goes to die. Strapi v5 changes the data-access model, so the upgrade is not only new dependencies, it is rewriting how the application reads and writes its own content. The content in the database had to survive, and the site could not go down. This is how I did it.</p>
+
+            <h2>Step up through the latest v4 first</h2>
+            <p>The first mistake would have been jumping straight from an old v4 to v5. I upgraded the codebase in steps: old v4, then the <strong>latest v4</strong>, then v5. Landing on the latest v4 first clears the deprecations and surfaces the breaking changes while you are still on a familiar major version, so the final jump to v5 is the only thing left to debug. The same pass moved the runtime to Node 20 and switched the database driver to the maintained one.</p>
+
+            <h2>The real breaking change: the Document Service</h2>
+            <p>Strapi v5 replaces the old entity-level data API with a new <strong>Document Service</strong>, and that touches every piece of custom logic. The heaviest part of the migration was rewriting <strong>all 19 lifecycle hooks</strong> to the new API. Lifecycle hooks are the custom behaviour that runs when content is created, updated or deleted, so getting them wrong is how you silently corrupt data. Each one was migrated and checked individually.</p>
+
+            <h2>Rehearse on a clone, not on production</h2>
+            <p>Before touching anything live, I cloned the development database into an <strong>isolated v5 schema</strong> and ran the whole migration against that. The data migration either works on a copy of real content or it does not; finding that out on a throwaway clone is free, finding it out in production is not.</p>
+
+            <h2>Cut over in phases, production last</h2>
+            <p>The v5 build ran as a new flow alongside the existing v4 one. I cut over environment by environment, starting with the lowest-stakes (sandbox / legacy), validating each before moving on. Production was <strong>prepared and then held</strong>, cut over only after explicit sign-off. At no point was there a single big-bang switch with no way back.</p>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">v4 → v5</span><span class="stat-label">major upgrade</span></div>
+                <div class="stat"><span class="stat-value">19</span><span class="stat-label">lifecycle hooks migrated</span></div>
+                <div class="stat"><span class="stat-value">0</span><span class="stat-label">content lost</span></div>
+                <div class="stat"><span class="stat-value">prod last</span><span class="stat-label">phased cutover</span></div>
+            </div>
+
+            <div class="callout callout--win">
+                <p class="callout-title">The upgrade also made it more resilient</p>
+                <p>Working this closely with the app surfaced latent fragility: the pods would crash-loop when the CMS upstream had a brief blip, and a burst of traffic to one endpoint could saturate it. I added a shared error handler across every request handler and hardened the database connection pool against transient network blips, plus uptime alerting. The upgrade left the service not just newer, but harder to knock over.</p>
+            </div>
+
+            <h2>What I would tell someone starting this</h2>
+            <ul>
+                <li>Step up through the latest minor of your current major before the big jump. Clear the deprecations where the ground is familiar.</li>
+                <li>Treat the data-access API change as the real work. For Strapi v5 that is the Document Service and every lifecycle hook, not the dependency bump.</li>
+                <li>Rehearse the data migration on a clone of real content. A copy tells you the truth for free.</li>
+                <li>Cut over in phases and keep production for last, behind an explicit go. Run the new flow beside the old one so there is always a way back.</li>
+            </ul>
+
+        </div>
+
+        <footer class="doc-footer">
+            <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/#cases">See more case studies</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
