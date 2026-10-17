@@ -84,9 +84,26 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 
 - **Visitor analytics:** Cloudflare Web Analytics, loaded via the beacon `<script>` before `</body>` in `index.html`. It is privacy-first and cookieless, so no consent banner is required. The site token is set in the `data-cf-beacon` attribute; it is public by design (it ships in client JS), so it is fine to commit. To rotate it or point at a different site, copy the token from Cloudflare dashboard → Web Analytics → (site) → *Manage site*.
 - **No Subresource Integrity on the beacon:** `beacon.min.js` is a rolling, auto-updated asset — a pinned `integrity` hash would break on every Cloudflare update. The CSP `script-src https://static.cloudflareinsights.com` is the mitigation. Do not add `integrity` to it.
-- **CSP:** the beacon requires `script-src https://static.cloudflareinsights.com` and `connect-src https://cloudflareinsights.com`. Keep both when editing the CSP. The beacon is only on `index.html`, not `404.html`.
+- **CSP:** the beacon requires `script-src https://static.cloudflareinsights.com` and `connect-src https://cloudflareinsights.com`. Keep both when editing the CSP. The beacon is on `index.html` and each standalone case page (see § Standalone case pages), not `404.html`.
 - **Search Console:** verified via the `googlef65df98b38f7f095.html` file at the repo root — do not delete it. After a sitemap change, resubmit `sitemap.xml` in Search Console → Sitemaps.
 - **Sitemap:** `#fragment` URLs are ignored by Google for indexing (they all resolve to `/`). Real SEO gains need standalone pages with their own paths, not more fragment entries.
+
+---
+
+## Standalone case pages
+
+Long-form case studies live as their own indexable pages under `cases/<slug>/index.html`, served by GitHub Pages at `https://vitorspk.github.io/cases/<slug>/` (directory index, trailing slash). They are the SEO and cross-post surface; the SPA cards stay as the short version and link to them with a `.case-readmore` anchor (`tabindex="-1"`, because it sits inside an `aria-hidden` tab panel).
+
+Recipe for a new one (first page: `cases/self-hosting-gemma-3-vllm/`):
+1. **Files:** `cases/<slug>/index.html` + a small `cases/<slug>/page.css`. Link `/styles.css` first (tokens, theme, fonts, components) then `page.css` (article layout only). Reference root assets with absolute paths (`/styles.css`, `/og-image.png`).
+2. **No `script.js`.** It is built for the dual tablist and will no-op or throw here. Copy only the blocking theme-init into `<head>`, plus a tiny inline theme-toggle handler before `</body>`.
+3. **Beacon:** add the Cloudflare Web Analytics `<script>` and the two CF domains to the page's own CSP (`script-src`/`connect-src`).
+4. **SEO:** unique `<title>`, meta description, `<link rel="canonical">`, Open Graph + Twitter, and JSON-LD `TechArticle`. Canonical, `og:url`, the sitemap `<loc>` and the JSON-LD `url` must be the identical trailing-slash URL.
+5. **Sitemap:** add the page URL to `sitemap.xml` (a real path, unlike the ignored `#fragment` entries).
+6. **Lint/CI must see it:** `lint:html` globs `cases/**/*.html` and `lint:css` globs `cases/**/*.css` (already set). Add a Playwright spec (loads, single `<h1>`, axe clean, back-link, stored theme). The E2E server runs `serve .` without `-s` so directory indexes resolve like GitHub Pages.
+7. **a11y:** skip link first, `:focus-visible`, decorative elements `aria-hidden`, `prefers-reduced-motion` honored. White text needs `--primary-dark` (not `--primary`) behind it to clear WCAG AA contrast.
+8. **Confidentiality:** publish the technique, not the employer's internals. No project/registry IDs, repo names, volume IDs or internal service names; generalize fleet/DC specifics; frame the product as regulated online safety.
+9. **Publishing is the gated step.** New long-form public writing about the current employer is the irreversible/legal carve-out: open the PR, do **not** enable auto-merge, and let the owner review and merge.
 
 ---
 
