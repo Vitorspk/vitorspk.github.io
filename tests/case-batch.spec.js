@@ -1,0 +1,46 @@
+const { test, expect } = require('@playwright/test');
+const AxeBuilder = require('@axe-core/playwright').default;
+
+test.use({ viewport: { width: 1280, height: 800 } });
+
+const PAGES = [
+  { path: '/cases/gcp-storage-cost-reduction/', title: /Cutting a GCP storage bill by 95\.9%/i, h1: /storage/i },
+  { path: '/cases/cloud-functions-gen1-gen2/', title: /Gen1 to Gen2/i, h1: /Cloud Functions/i },
+  { path: '/cases/kubernetes-supply-chain-defense/', title: /supply-chain attacks/i, h1: /Defending Kubernetes/i },
+];
+
+for (const p of PAGES) {
+  test.describe(`Case page — ${p.path}`, () => {
+    test('loads the standalone page (not the SPA fallback)', async ({ page }) => {
+      await page.goto(p.path);
+      await expect(page).toHaveTitle(p.title);
+    });
+
+    test('has exactly one h1', async ({ page }) => {
+      await page.goto(p.path);
+      const h1 = page.locator('h1');
+      await expect(h1).toHaveCount(1);
+      await expect(h1).toHaveText(p.h1);
+    });
+
+    test('axe-core: no violations', async ({ page }) => {
+      await page.goto(p.path);
+      const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+      expect(results.violations).toEqual([]);
+    });
+
+    test('back link points to the portfolio cases section', async ({ page }) => {
+      await page.goto(p.path);
+      await expect(page.locator('a.backlink')).toHaveAttribute('href', '/#cases');
+    });
+
+    test('stored light theme is applied, and toggle works', async ({ page }) => {
+      await page.goto(p.path);
+      await page.evaluate(() => localStorage.setItem('theme', 'light'));
+      await page.reload();
+      await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+      await page.locator('#themeToggle').click();
+      await expect(page.locator('html')).not.toHaveAttribute('data-theme', 'light');
+    });
+  });
+}

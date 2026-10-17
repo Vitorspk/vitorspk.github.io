@@ -329,7 +329,7 @@
                                 </div>
                                 <div class="highlight-card">
                                     <h4 class="highlight-card-title"><span aria-hidden="true">🔐</span> Security</h4>
-                                    <p class="highlight-card-text">mTLS with Cloudflare, AWS-GCP HA VPN, 61 databases hardened, xmrig supply-chain incident response</p>
+                                    <p class="highlight-card-text">mTLS with Cloudflare, AWS-GCP HA VPN, 61 databases hardened, supply-chain attack defenses</p>
                                 </div>
                                 <div class="highlight-card">
                                     <h4 class="highlight-card-title"><span aria-hidden="true">📊</span> Scale</h4>
@@ -484,6 +484,7 @@
                                 <span class="tech-badge">Archive Storage Class</span>
                                 <span class="tech-badge">Cost Analysis</span>
                             </div>
+                            <a class="case-readmore" href="/cases/gcp-storage-cost-reduction/" tabindex="-1">Read the full write-up <span aria-hidden="true">→</span></a>
                         </div>
                     </div>
 
@@ -994,62 +995,44 @@
                     <div class="case-study" aria-expanded="false">
                         <div class="case-header">
                             <div>
-                                <h3 class="case-title">🛡️ Cryptomining Incident Response — xmrig on GKE PRD</h3>
-                                <p class="case-date">2026 · Security Incident · GKE Production</p>
+                                <h3 class="case-title">🛡️ Defending Kubernetes Against Supply-Chain Attacks</h3>
+                                <p class="case-date">Security · Kubernetes · Supply-Chain Defense</p>
                                 <div class="case-tags">
-                                    <span class="case-tag">Incident Response</span>
                                     <span class="case-tag">Supply Chain</span>
-                                    <span class="case-tag">GKE Security</span>
+                                    <span class="case-tag">Kubernetes Security</span>
                                     <span class="case-tag">Threat Detection</span>
+                                    <span class="case-tag">Defense in Depth</span>
                                 </div>
                             </div>
                         </div>
                         <div class="case-body">
                             <div class="case-section">
-                                <h4 class="case-section-title">❓ Problem</h4>
+                                <h4 class="case-section-title">❓ The threat</h4>
                                 <p class="case-description">
-                                    xmrig (Monero cryptominer) detected running on a GKE production node. The miner was injected via a compromised frontend npm dependency, a supply-chain attack that bypassed standard code review. The workload was silently consuming node CPU, masking legitimate service degradation with no immediate visible symptoms.
+                                    A compromised dependency can smuggle a cryptominer (such as xmrig) into a build and past code review, then quietly burn CPU on a production node with no application symptoms. The malicious code never appears in a diff, because it rides in on a transitive package and is assembled into the bundle at build time.
                                 </p>
                             </div>
                             <div class="case-section">
-                                <h4 class="case-section-title">💡 Detection &amp; Response</h4>
+                                <h4 class="case-section-title">💡 Detection &amp; defense in depth</h4>
                                 <ul class="impact-list">
-                                    <li class="impact-item"><strong>Detection:</strong> Anomalous CPU spike on GKE production node triggered infrastructure alert</li>
-                                    <li class="impact-item"><strong>Triage:</strong> Identified xmrig process running inside a frontend container via node-level process inspection</li>
-                                    <li class="impact-item"><strong>Root cause:</strong> Compromised npm package in frontend dependency tree injected miner code into the built bundle</li>
-                                    <li class="impact-item"><strong>Containment:</strong> Cordoned the affected node; drained and restarted all workloads on clean nodes within minutes</li>
-                                    <li class="impact-item"><strong>Remediation:</strong> Updated all vulnerable frontend libraries; pinned transitive dependency versions</li>
-                                    <li class="impact-item"><strong>Hardening:</strong> Added <code>npm audit --audit-level=high</code> as a CI gate; implemented Trivy image scanning on every pre-deploy build</li>
-                                </ul>
-                            </div>
-                            <div class="impact-metrics">
-                                <h4 class="impact-title">Business Impact</h4>
-                                <ul class="impact-list">
-                                    <li class="impact-item"><strong>Zero data exfiltration</strong>: miner targeted CPU only, no credentials or data accessed</li>
-                                    <li class="impact-item"><strong>Full remediation</strong> in under 4 hours from first alert to clean production deployment</li>
-                                    <li class="impact-item"><strong>Supply-chain hardening</strong>: npm audit + Trivy scanning now gates every production build</li>
-                                    <li class="impact-item"><strong>Post-mortem and team training</strong>: dependency pinning, supply-chain threat model published internally</li>
-                                </ul>
-                            </div>
-                            <div class="case-section">
-                                <h4 class="case-section-title"><span aria-hidden="true">📝</span> Lessons &amp; Permanent Changes</h4>
-                                <ul class="impact-list">
-                                    <li class="impact-item"><strong>Lock files enforced:</strong> all repos now require committed <code>package-lock.json</code>; CI fails if lockfile is missing or modified without review</li>
-                                    <li class="impact-item"><strong>Runtime isolation:</strong> implemented Pod Security Standards (restricted) across all GKE namespaces to prevent privilege escalation</li>
-                                    <li class="impact-item"><strong>Network policies:</strong> egress rules block outbound connections to mining pools and unknown endpoints by default</li>
-                                    <li class="impact-item"><strong>Alerting gap closed:</strong> added GKE node-level CPU anomaly detection via Cloud Monitoring with 5-minute threshold alerts</li>
+                                    <li class="impact-item"><strong>Detect at the node:</strong> node-level CPU anomaly alerts (short threshold window) are the tripwire when the application itself looks healthy</li>
+                                    <li class="impact-item"><strong>Contain fast:</strong> cordon the affected node, drain and reschedule onto clean nodes, then remediate the source and pin transitive versions</li>
+                                    <li class="impact-item"><strong>Gate the pipeline:</strong> <code>npm audit --audit-level=high</code> plus Trivy image scanning on every pre-deploy build</li>
+                                    <li class="impact-item"><strong>Enforce lockfiles:</strong> committed lockfiles required; CI fails if missing or changed without review</li>
+                                    <li class="impact-item"><strong>Restrict the runtime:</strong> Pod Security Standards (restricted) across namespaces to block privilege escalation</li>
+                                    <li class="impact-item"><strong>Default-deny egress:</strong> network policies block outbound to mining pools and unknown endpoints, so an intrusion is a dead end</li>
                                 </ul>
                             </div>
                             <div class="tech-stack-list">
-                                <span class="tech-badge">GKE</span>
+                                <span class="tech-badge">Kubernetes</span>
                                 <span class="tech-badge">Trivy</span>
                                 <span class="tech-badge">npm audit</span>
                                 <span class="tech-badge">Pod Security Standards</span>
                                 <span class="tech-badge">Network Policies</span>
                                 <span class="tech-badge">Cloud Monitoring</span>
-                                <span class="tech-badge">Incident Response</span>
                                 <span class="tech-badge">Supply Chain Security</span>
                             </div>
+                            <a class="case-readmore" href="/cases/kubernetes-supply-chain-defense/" tabindex="-1">Read the full write-up <span aria-hidden="true">→</span></a>
                         </div>
                     </div>
 

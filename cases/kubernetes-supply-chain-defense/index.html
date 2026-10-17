@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Defending Kubernetes against supply-chain attacks — Vitor Schiavo</title>
+    <meta name="description" content="How a compromised npm dependency can smuggle a cryptominer into a build and past code review, how to detect it on a node, and the pipeline and runtime defenses that stop it.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Defending Kubernetes against supply-chain attacks">
+    <meta property="og:description" content="How a compromised npm dependency smuggles a cryptominer past code review, and the pipeline and runtime defenses that stop it.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Defending Kubernetes against supply-chain attacks — a guide by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Defending Kubernetes against supply-chain attacks">
+    <meta name="twitter:description" content="How a compromised npm dependency smuggles a cryptominer past code review, and how to stop it.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/og.png">
+    <meta name="twitter:image:alt" content="Defending Kubernetes against supply-chain attacks — a guide by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Defending Kubernetes against supply-chain attacks",
+      "description": "How a compromised npm dependency can smuggle a cryptominer into a build and past code review, how to detect it on a node, and the pipeline and runtime defenses that stop it.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/",
+      "mainEntityOfPage": "https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/",
+      "image": "https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "supply chain security, Kubernetes, npm audit, Trivy, Pod Security Standards, network policy, cryptomining, xmrig, dependency pinning"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Guide · Kubernetes security</span>
+            <h1 class="doc-title">Defending Kubernetes against supply-chain attacks</h1>
+            <p class="doc-dek">A compromised dependency can smuggle a cryptominer into your build, past code review, and quietly burn CPU on a production node with no application symptoms at all. Here is how that attack works and the pipeline and runtime defenses that stop it.</p>
+            <div class="doc-meta">
+                <span>By Vitor Schiavo</span>
+                <span>Updated October 2026</span>
+                <span>~6 min read</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+
+            <p>The scariest class of compromise is the quiet one. No outage, no error spike, no alert from the application. Just a node running hotter than it should, with a process like <code>xmrig</code> (a Monero cryptominer) burning CPU inside an otherwise normal container. This is a write-up of how that happens through the software supply chain, and the layered defenses that make it both hard to pull off and fast to catch.</p>
+
+            <h2>How a miner gets in without touching a pull request</h2>
+            <p>The dangerous part of a supply-chain attack is that the malicious code is never in a diff anyone reads. A package deep in the dependency tree (a transitive dependency of a dependency) is compromised upstream. When the frontend builds, the bad code is pulled in and assembled into the bundle. Code review structurally cannot catch this, because reviewers look at the change set, not at every line of every transitive package. The result ships to production looking completely normal.</p>
+
+            <div class="callout callout--fail">
+                <p class="callout-title">Why code review is the wrong layer for this</p>
+                <p>Human review inspects what changed in the pull request. A poisoned transitive dependency changes nothing in the diff; it changes what gets downloaded and built. That is why supply-chain defense has to live in the pipeline and the runtime, not in the review.</p>
+            </div>
+
+            <h2>Detection: watch the node, not just the app</h2>
+            <p>Because the application behaves normally, the only early signal is at the infrastructure layer. A cryptominer's whole purpose is to consume CPU, so node-level CPU anomaly detection is the tripwire. Concretely:</p>
+            <ul>
+                <li>Alert on anomalous CPU on any node, with a short threshold window (for example five minutes), routed to the on-call channel.</li>
+                <li>When it fires and the application metrics look fine, suspect the node, not the service. Inspect the processes running inside the containers on that node.</li>
+                <li>A process that does not belong to any of your images (a miner, a shell, an unexpected binary) is the smoking gun.</li>
+            </ul>
+
+            <h2>Containment, if one gets in</h2>
+            <p>The response is standard Kubernetes hygiene, done quickly:</p>
+            <ul>
+                <li><strong>Cordon</strong> the affected node so no new workloads land on it.</li>
+                <li><strong>Drain</strong> it and let the workloads reschedule onto clean nodes.</li>
+                <li><strong>Remediate the source</strong>: update every vulnerable library and pin the transitive versions so the poisoned package cannot return on the next build.</li>
+            </ul>
+
+            <h2>The defenses that actually stop it</h2>
+            <p>Detection and cleanup are the last resort. These are the layers that prevent it, or neuter it if it still gets through.</p>
+            <ul>
+                <li><strong>Audit in CI.</strong> Gate every build on <code>npm audit --audit-level=high</code> so known-vulnerable dependencies fail the build.</li>
+                <li><strong>Scan the image.</strong> Run an image scanner such as Trivy on every pre-deploy build, so a malicious payload baked into the image is caught before it ships.</li>
+                <li><strong>Enforce lockfiles.</strong> Require a committed lockfile in every repo and fail CI if it is missing or changed without review, so dependency versions are deterministic and auditable.</li>
+                <li><strong>Pin transitive versions.</strong> Floating versions are how a poisoned package gets a second chance; pinning closes that door.</li>
+                <li><strong>Restrict the runtime.</strong> Apply Pod Security Standards (restricted) across namespaces so a compromised container cannot escalate privileges.</li>
+                <li><strong>Default-deny egress.</strong> Network policies that block outbound connections to mining pools and unknown endpoints turn a successful intrusion into a dead end: the miner cannot reach its pool and cannot phone home.</li>
+            </ul>
+
+            <div class="callout callout--win">
+                <p class="callout-title">Defense in depth, in one sentence</p>
+                <p>CI audit and image scanning make it hard to get in, lockfiles and pinning make it hard to come back, Pod Security Standards make it hard to escalate, default-deny egress makes it useless if it does get in, and node CPU anomaly alerts make it fast to catch. No single layer has to be perfect.</p>
+            </div>
+
+            <h2>What I would tell someone hardening a cluster</h2>
+            <ul>
+                <li>Assume a dependency will be compromised eventually, and design so that it does not matter much when it is.</li>
+                <li>Put the supply-chain checks in the pipeline. They catch what code review structurally cannot.</li>
+                <li>Default-deny egress is the highest-leverage control: it turns most intrusions into dead ends with almost no downside.</li>
+                <li>Watch infrastructure signals, not just application ones. The quiet compromises only show up at the node.</li>
+            </ul>
+
+        </div>
+
+        <footer class="doc-footer">
+            <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one of the write-ups in my portfolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/#cases">See more case studies</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
