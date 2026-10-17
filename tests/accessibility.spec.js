@@ -5,7 +5,17 @@ test.use({ viewport: { width: 1280, height: 800 } });
 
 test.describe('Accessibility', () => {
   test.beforeEach(async ({ page }) => {
+    // Entrance reveals (.reveal -> .revealed) fade opacity in. axe can sample
+    // mid-fade and read a blended (darker) colour, which fails contrast
+    // intermittently across environments. Reduced motion makes the transition
+    // instant and forcing .revealed settles every reveal element at full
+    // opacity, so axe evaluates the final state. Both are CSP-safe (no inline
+    // style injection, which this page's CSP would block).
+    await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
+    await page.evaluate(() => {
+      document.querySelectorAll('.reveal').forEach((el) => el.classList.add('revealed'));
+    });
   });
 
   test('axe-core: no violations on overview tab', async ({ page }) => {
