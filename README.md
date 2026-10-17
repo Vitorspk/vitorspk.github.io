@@ -50,3 +50,21 @@ Design rationale and implementation sequencing are retained under `docs/superpow
 Every catalog case has a header icon and an introductory diagram; standalone articles repeat the matching diagram before the detailed reading. Edit `content/case-visuals.json`, then run `npm run build:visuals`. This pre-renders HTML and inline SVG into the existing pages, so visitors need no rendering library or extra network requests. `npm run validate` checks that all catalog and article diagrams remain synchronized.
 
 The home explorer connects delivery, reliability and cost decisions to specific case studies. Its three modes describe documented work; it does not display simulated live telemetry. Diagrams simplify the architecture and keep pilot, POC and cost-scope qualifications visible.
+
+## Recruiter reading path and downloadable artifacts
+
+The home recommends AI infrastructure, cloud cost engineering and reliability.
+Each standalone case includes a contribution/scope summary and a retrospective
+decision review. Proposed next improvements are explicitly distinct from results.
+Employment history keeps formal job titles; the headline describes target positioning.
+Unconfirmed residence, work authorization and relocation claims are not inferred.
+
+`node scripts/generate-resume-pdf.js` regenerates `Vitor-Schiavo-Resume.pdf` from
+`resume.html` and the compiled print CSS, using installed Playwright/Chromium.
+No network fonts are needed. Regenerate after editing the résumé HTML, CSS or generator; browser tests check the source/PDF fingerprint pair in `content/resume-artifact.json`, the PDF size and its two-page structure. Inspect both pages and selectable text after edits.
+
+`examples/inference-fallback/` is an independent, AI-assisted educational Python
+sample with real local HTTP integration tests and no third-party dependencies.
+Run `python3 -m unittest discover -s examples/inference-fallback -p 'test_*.py'`.
+`npm test` includes the Python tests and `npm run check:sample`. The archive check compares filenames and uncompressed contents, so it does not depend on zlib versions. `npm run build:sample` creates the downloadable ZIP; `npm run resume:pdf` regenerates the résumé.
+The sample is not employer source code or a claim of production/model quality.

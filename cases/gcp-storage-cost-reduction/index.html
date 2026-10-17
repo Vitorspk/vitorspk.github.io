@@ -97,6 +97,13 @@
 <p class="case-map-note">A simplified lifecycle: the effective policy version and deletion requirements must be validated.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Access/retention review, lifecycle policy configuration and storage-footprint work.</dd></div>
+<div><dt>Scope</dt><dd>Historical storage optimization; full financial reconciliation remains incomplete.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I worked with the product team on access and retention requirements before changing storage behavior.</dd></div>
+<div><dt>Outcome</dt><dd>The historical portfolio reported 95.9% lower storage cost. Absolute savings are withheld until currency, baseline and policy version are reconciled.</dd></div>
+</dl></section>
+
 
             <p>Storage is the cost that creeps. Nobody deletes anything, every byte lands in the default (and most expensive) class, and the bill grows quietly until someone looks. This is a write-up of the technique I used to cut one of these bills by <strong>95.9%</strong>, with access-aware tiering and retention changes.</p>
 
@@ -133,7 +140,8 @@
                 <li>Let the platform do the work. Lifecycle policies are set-and-forget, which means the savings do not depend on anyone remembering.</li>
             </ul>
 
-        </div>
+        <section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Keeping everything in Standard is simple; colder tiers and authorized expiry must match real access and retention requirements.</p><h3>Trade-off</h3><p>Retrieval charges, minimum retention periods and deletion requirements affect whether a lower storage bill is a better total outcome.</p><h3>What I would improve next</h3><p>Next improvement: reconcile the policy version and billing period, then calculate net savings including retrieval and retention charges.</p></section>
+</div>
 
         <footer class="doc-footer">
             <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>

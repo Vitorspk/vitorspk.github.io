@@ -70,6 +70,13 @@
 <p class="case-map-note">The roughly 9× improvement describes the measured DNS lookup, not every API request or a sustained service-level guarantee.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Layer-by-layer diagnosis, a shared Helm DNS setting and staged rollout validation.</dd></div>
+<div><dt>Scope</dt><dd>Production DNS measurement and eight application/environment render checks.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I changed the shared deployment configuration after separating DNS overhead from database connection time.</dd></div>
+<div><dt>Outcome</dt><dd>DNS lookup p50 changed from ~18.7 ms to 2.06 ms in the recorded measurement; this is not a 9× API speedup.</dd></div>
+</dl></section>
+
 
 <h2>A healthy service with an unstable latency signal</h2>
 <p>The API had healthy pods, normal resource usage and no observed 5xx errors, yet its P95 latency alert repeatedly opened and closed. Adding capacity would have treated the symptom before identifying where request time was spent.</p>
@@ -85,6 +92,7 @@
 <p>Changing resolver search behavior must preserve the short names used inside the cluster. The shared setting remained configurable. Cluster-wide DNS cache and resolver capacity were separate follow-ups, rather than results claimed for this per-application fix.</p>
 <h2>The lesson</h2>
 <p>A database-related latency symptom can originate before the database receives a query. Decompose the request path and repeat the same measurement after the change.</p>
+<section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Adding replicas or database capacity would not remove resolver search expansion. Tune resolution after isolating lookup time from TCP time.</p><h3>Trade-off</h3><p>A lower ndots value changes lookup behavior; validate internal names and external dependencies before generalizing the setting.</p><h3>What I would improve next</h3><p>Next improvement: extend the observation window and add resolver-regression checks for representative internal and external names.</p></section>
 </div>
 <footer class="doc-footer">
 <p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>

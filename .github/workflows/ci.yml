@@ -29,6 +29,12 @@ jobs:
       - name: Validate (CSS build sync + HTML/CSS/JS lint)
         run: npm run validate
 
+      - name: Test independent Python inference example
+        run: npm run test:python
+
+      - name: Verify downloadable sample matches its sources
+        run: npm run check:sample
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium webkit
 

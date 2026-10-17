@@ -70,6 +70,13 @@
 <p class="case-map-note">Five targets were UP in the rollout snapshot. This delivery added visibility; paging rules were a separate follow-up.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Dynamic target inventory, Prometheus discovery integration and fleet dashboards.</dd></div>
+<div><dt>Scope</dt><dd>Ephemeral inference workers; discovery refreshed every 30 seconds.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I connected the inventory and monitoring layers. Paging rules were separate follow-up work.</dd></div>
+<div><dt>Outcome</dt><dd>Five targets were UP in the rollout snapshot; worker redeployments no longer required a manually maintained static list.</dd></div>
+</dl></section>
+
 
 <h2>The problem</h2>
 <p>Rented GPU pods receive new provider addresses after redeployment. A static Prometheus target list breaks as those addresses change, and an operator-only web view does not provide the history or shared visibility needed for diagnosis.</p>
@@ -86,6 +93,7 @@
 <h2>Why it mattered</h2>
 <p>The useful abstraction was the fleet, not an individual rented pod. Reusing the router's inventory made that abstraction available to the monitoring system without adding a second manually maintained source of truth.</p>
 <p>Related work: <a href="/cases/self-hosting-gemma-3-vllm/">serving multimodal models across engines and clouds</a>.</p>
+<section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Static targets are simple but decay after redeployments. Router-owned inventory follows the component that already knows active workers.</p><h3>Trade-off</h3><p>Discovery depends on the inventory endpoint; high-cardinality stream labels can make fleet-level metrics expensive.</p><h3>What I would improve next</h3><p>Next improvement: add discovery freshness checks and test alert behavior when inventory or a worker disappears.</p></section>
 </div>
 <footer class="doc-footer">
 <p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
