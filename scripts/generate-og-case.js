@@ -52,6 +52,28 @@ const CASES = {
       ['purple', '18-point', 'Validation plan'],
     ],
   },
+  'kubernetes-finops-kubecost': {
+    eyebrow: 'Case study · FinOps',
+    title: 'Kubernetes cost visibility',
+    gradient: 'with Kubecost + VPA',
+    subtitle: 'Per-namespace cost allocation with Kubecost, automated rightsizing with VPA, and node-pool consolidation that cut node counts about 20%.',
+    stats: [
+      ['green', '~20%', 'Fewer nodes'],
+      ['blue', 'Per-ns', 'Cost allocation'],
+      ['purple', 'VPA', 'Automated rightsizing'],
+    ],
+  },
+  'zero-downtime-cluster-migration': {
+    eyebrow: 'Case study · Platform migration',
+    title: 'Zero-downtime migration to',
+    gradient: 'new Kubernetes clusters',
+    subtitle: 'Moving a whole platform — apps, functions, schedulers and data — onto new clusters, with a DNS cutover and scale-to-zero rollback.',
+    stats: [
+      ['green', '0', 'Downtime'],
+      ['blue', 'Blue-green', 'At cluster level'],
+      ['purple', 'Instant', 'Rollback (scale-to-zero)'],
+    ],
+  },
   'kubernetes-supply-chain-defense': {
     eyebrow: 'Guide · Kubernetes security',
     title: 'Defending Kubernetes',
