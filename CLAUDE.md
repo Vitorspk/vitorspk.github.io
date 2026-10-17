@@ -82,7 +82,7 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 
 ## Analytics & SEO
 
-- **Visitor analytics:** Cloudflare Web Analytics, loaded via the beacon `<script>` before `</body>` in `index.html`. It is privacy-first and cookieless, so no consent banner is required. The beacon is **inert until its site token is set** — replace `REPLACE_WITH_CLOUDFLARE_TOKEN` with the token from Cloudflare dashboard → Web Analytics → (site) → *Manage site*. The token is public by design (it ships in client JS), so it is fine to commit.
+- **Visitor analytics:** Cloudflare Web Analytics, loaded via the beacon `<script>` before `</body>` in `index.html`. It is privacy-first and cookieless, so no consent banner is required. The site token is set in the `data-cf-beacon` attribute; it is public by design (it ships in client JS), so it is fine to commit. To rotate it or point at a different site, copy the token from Cloudflare dashboard → Web Analytics → (site) → *Manage site*.
 - **No Subresource Integrity on the beacon:** `beacon.min.js` is a rolling, auto-updated asset — a pinned `integrity` hash would break on every Cloudflare update. The CSP `script-src https://static.cloudflareinsights.com` is the mitigation. Do not add `integrity` to it.
 - **CSP:** the beacon requires `script-src https://static.cloudflareinsights.com` and `connect-src https://cloudflareinsights.com`. Keep both when editing the CSP. The beacon is only on `index.html`, not `404.html`.
 - **Search Console:** verified via the `googlef65df98b38f7f095.html` file at the repo root — do not delete it. After a sitemap change, resubmit `sitemap.xml` in Search Console → Sitemaps.
