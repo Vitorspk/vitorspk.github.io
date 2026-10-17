@@ -439,7 +439,7 @@
                             <div class="case-section">
                                 <h4 class="case-section-title">❓ Problem</h4>
                                 <p class="case-description">
-                                    Cloud storage costs growing exponentially. Spending <strong>$12,874/month</strong> on 360 TiB, all in expensive Standard storage. No lifecycle management, no archival strategy, no deletion policies.
+                                    Cloud storage costs growing exponentially: a six-figure annual bill on hundreds of TiB, all in expensive Standard storage. No lifecycle management, no archival strategy, no deletion policies.
                                 </p>
                             </div>
                             <div class="case-section">
@@ -455,25 +455,23 @@
                             <div class="before-after">
                                 <div class="before-card">
                                     <span class="before-label">❌ Before</span>
-                                    <div class="metric-row"><span class="metric-name">Storage</span><span class="metric-value">360 TiB</span></div>
+                                    <div class="metric-row"><span class="metric-name">Footprint</span><span class="metric-value">baseline</span></div>
                                     <div class="metric-row"><span class="metric-name">Class</span><span class="metric-value">100% Standard</span></div>
-                                    <div class="metric-row"><span class="metric-name">Monthly</span><span class="metric-value">$12,874</span></div>
-                                    <div class="metric-row"><span class="metric-name">Annual</span><span class="metric-value">$154,488</span></div>
+                                    <div class="metric-row"><span class="metric-name">Annual</span><span class="metric-value">six figures</span></div>
                                 </div>
                                 <div class="after-card">
                                     <span class="after-label">✅ After</span>
-                                    <div class="metric-row"><span class="metric-name">Storage</span><span class="metric-value">21 TiB</span></div>
-                                    <div class="metric-row"><span class="metric-name">Class</span><span class="metric-value">10.5 TiB Std + Archive</span></div>
-                                    <div class="metric-row"><span class="metric-name">Monthly</span><span class="metric-value">$533</span></div>
-                                    <div class="metric-row"><span class="metric-name">Annual</span><span class="metric-value">$6,396</span></div>
+                                    <div class="metric-row"><span class="metric-name">Footprint</span><span class="metric-value">−94.2%</span></div>
+                                    <div class="metric-row"><span class="metric-name">Class</span><span class="metric-value">hot tier + Archive</span></div>
+                                    <div class="metric-row"><span class="metric-name">Annual</span><span class="metric-value">−95.9%</span></div>
                                 </div>
                             </div>
-                            <div class="savings-badge">💰 $148,092/year saved (95.9% reduction)</div>
+                            <div class="savings-badge">💰 ~$148K/year saved (95.9% reduction)</div>
                             <div class="impact-metrics">
                                 <h4 class="impact-title">Business Impact</h4>
                                 <ul class="impact-list">
-                                    <li class="impact-item"><strong>94.2% storage reduction</strong> (360 TiB → 21 TiB)</li>
-                                    <li class="impact-item"><strong>$444K saved over 3 years</strong> with zero data loss</li>
+                                    <li class="impact-item"><strong>94.2% storage reduction</strong> with the footprint almost entirely archived or deleted</li>
+                                    <li class="impact-item"><strong>Well over a third of a million saved across three years</strong> with zero data loss</li>
                                     <li class="impact-item"><strong>Fully automated lifecycle</strong>: archival and deletion run on their own once the policies are in place</li>
                                     <li class="impact-item"><strong>Maintained performance</strong>: hot data still in Standard class</li>
                                 </ul>
@@ -506,7 +504,7 @@
                             <div class="case-section">
                                 <h4 class="case-section-title">❓ Problem</h4>
                                 <p class="case-description">
-                                    Airflow deployment massively over-provisioned: 100 pods (50 dev + 50 prod), 20 CPUs, 200 GB RAM across 7 nodes costing $1,513/month. Most pods idle 90% of the time.
+                                    Airflow deployment massively over-provisioned: around 100 pods, 20 vCPUs and 200 GB of RAM across several nodes, costing about $1.5K/month. Most pods idle 90% of the time.
                                 </p>
                             </div>
                             <div class="case-section">
@@ -525,7 +523,7 @@
                                     <div class="metric-row"><span class="metric-name">CPU</span><span class="metric-value">20 vCPUs</span></div>
                                     <div class="metric-row"><span class="metric-name">Memory</span><span class="metric-value">200 GB</span></div>
                                     <div class="metric-row"><span class="metric-name">Nodes</span><span class="metric-value">7</span></div>
-                                    <div class="metric-row"><span class="metric-name">Cost</span><span class="metric-value">$1,513/mo</span></div>
+                                    <div class="metric-row"><span class="metric-name">Cost</span><span class="metric-value">~$1.5K/mo</span></div>
                                 </div>
                                 <div class="after-card">
                                     <span class="after-label">✅ After</span>
@@ -536,7 +534,7 @@
                                     <div class="metric-row"><span class="metric-name">Cost</span><span class="metric-value">~$0/mo</span></div>
                                 </div>
                             </div>
-                            <div class="savings-badge">💰 $18,165/year saved (93% reduction)</div>
+                            <div class="savings-badge">💰 ~$18K/year saved (93% reduction)</div>
                             <div class="impact-metrics">
                                 <h4 class="impact-title">Business Impact</h4>
                                 <ul class="impact-list">
@@ -750,7 +748,7 @@
                             <div class="impact-metrics">
                                 <h4 class="impact-title">Business Impact</h4>
                                 <ul class="impact-list">
-                                    <li class="impact-item"><strong>61 databases secured</strong> (18 MongoDB Atlas + 44 PostgreSQL)</li>
+                                    <li class="impact-item"><strong>60+ databases secured</strong> (MongoDB Atlas + PostgreSQL)</li>
                                     <li class="impact-item"><strong>Zero security incidents</strong> post-implementation</li>
                                     <li class="impact-item"><strong>ISO 27001 certification</strong> achieved</li>
                                 </ul>
@@ -1243,12 +1241,12 @@
                             <div class="impact-metrics">
                                 <h4 class="impact-title">Business Impact</h4>
                                 <ul class="impact-list">
-                                    <li class="impact-item"><strong>54.5% cost reduction</strong>: old cluster (65 EC2 + 183 disks + ~91 TB) cost $17,038/month; new EKS cluster (7 m5.2xlarge + 7x 7.1 TB SSD) cost $7,750/month, saving ~$111K/year</li>
-                                    <li class="impact-item"><strong>Consolidated 2 → 1 cluster</strong>: eliminated 65 EC2 instances and 183 EBS volumes, replacing with 7 EKS nodes</li>
+                                    <li class="impact-item"><strong>54.5% cost reduction</strong>: consolidated a legacy two-cluster fleet of dozens of instances and disks into a small EKS node pool, saving ~$111K/year</li>
+                                    <li class="impact-item"><strong>Consolidated 2 → 1 cluster</strong>: eliminated the entire legacy fleet of instances and volumes, replacing it with a handful of EKS nodes</li>
                                     <li class="impact-item"><strong>Version upgrade v5/v6 → v7.8</strong>: major version leap, unlocking ILM, security features, and index lifecycle management</li>
-                                    <li class="impact-item"><strong>EBS GP2 → Standard migration</strong>: migrated 124 volumes across 2 AWS regions (São Paulo + Virginia), reducing storage costs</li>
-                                    <li class="impact-item"><strong>Multi-region cost analysis</strong>: data-driven decision to consolidate in Virginia saved $10.7K/month vs São Paulo region pricing</li>
-                                    <li class="impact-item"><strong>S3 cleanup</strong>: deleted 141 TB unused S3 bucket, automated snapshot retention via custom ECR image with repository-s3 plugin</li>
+                                    <li class="impact-item"><strong>EBS GP2 → Standard migration</strong>: migrated the full volume fleet across two AWS regions, reducing storage costs</li>
+                                    <li class="impact-item"><strong>Multi-region cost analysis</strong>: a data-driven decision to consolidate in the cheaper region saved roughly $10K/month</li>
+                                    <li class="impact-item"><strong>S3 cleanup</strong>: deleted a large unused S3 bucket (tens of TB), automated snapshot retention via custom ECR image with repository-s3 plugin</li>
                                     <li class="impact-item"><strong>9 dedicated Logstash pipelines</strong>: each pipeline tuned for its specific source, enabling independent scaling and troubleshooting</li>
                                     <li class="impact-item"><strong>Self-healing infrastructure</strong>: Kubernetes StatefulSets with PDB, rolling updates, and automated recovery replaced manual EC2 management</li>
                                 </ul>
@@ -1461,7 +1459,7 @@
                             </div>
                             <p class="timeline-description">
                                 <strong>London, UK (Remote)</strong>. Platform engineering and FinOps at a child safety tech company (safeguarding children and society online).<br><br>
-                                Led $331K annual cloud cost optimization ($148K storage + $183K compute) · Manage 160+ applications across 4 Kubernetes environments (versions 1.22 → 1.33) · mTLS with Cloudflare and AWS-GCP HA VPN · Secured 61 databases (SSL/TLS, private IPs, cert auth) · Secret rotation policies and audit logging across all environments · Built 65+ Jenkins CI/CD pipelines with 98%+ first-deploy success · Custom canary deployment automation with metric-based rollback · Led ISO 27001 compliance (certification achieved) · OWASP ZAP + SonarQube automated security scanning pipeline · Kong Gateway for 160+ APIs · End-to-end observability framework using OpsGenie, Statuspage, Cloud Monitoring, and Slack · Production LLM serving with vLLM on RunPod Serverless and GCP (Cloud Run GPU + GKE MIG) with multi-provider failover<br><br>
+                                Led $331K annual cloud cost optimization ($148K storage + $183K compute) · Manage 160+ applications across 4 Kubernetes environments (versions 1.22 → 1.33) · mTLS with Cloudflare and AWS-GCP HA VPN · Secured 60+ databases (SSL/TLS, private IPs, cert auth) · Secret rotation policies and audit logging across all environments · Built 65+ Jenkins CI/CD pipelines with 98%+ first-deploy success · Custom canary deployment automation with metric-based rollback · Led ISO 27001 compliance (certification achieved) · OWASP ZAP + SonarQube automated security scanning pipeline · Kong Gateway for 160+ APIs · End-to-end observability framework using OpsGenie, Statuspage, Cloud Monitoring, and Slack · Production LLM serving with vLLM on RunPod Serverless and GCP (Cloud Run GPU + GKE MIG) with multi-provider failover<br><br>
                                 <strong>Stack:</strong> GCP (expert), AWS, Kubernetes, Jenkins, Kong, Prometheus, Grafana, vLLM, RunPod, OpsGenie, Statuspage, MongoDB Atlas, PostgreSQL, Redis, Terraform, GitHub Actions
                             </p>
                         </div>
@@ -1472,7 +1470,7 @@
                             <div class="timeline-period">Feb 2020 – Jun 2021 · 1 year 5 months</div>
                             <p class="timeline-description">
                                 <strong>São Paulo, Brazil</strong>. SRE at a logistics technology company focused on reliability, observability, and infrastructure modernization at scale.<br><br>
-                                Migrated Elasticsearch 5 (EC2) and Elasticsearch 6 (ECS) clusters to a unified EKS cluster on v7.8 with dedicated node roles (3 master, 3 data, 3 ingest) and custom ECR images with S3 snapshot plugin. Reduced Elasticsearch infrastructure cost by 54.5% ($17K/month → $7.75K/month, ~$111K/year saved) by consolidating 65 EC2 instances and 183 EBS volumes into 7 EKS nodes. Migrated 124 EBS volumes from GP2 to Standard across 2 AWS regions. Deleted 141 TB of unused S3 storage. Implemented instance scheduling for non-production environments. Designed and deployed 9 specialized Logstash pipelines handling logs from GELF, Kubernetes, NiFi, RabbitMQ, and application-specific sources. Integrated Kafka (AWS MSK) for real-time event streaming to BI systems. Built log collection layer with Filebeat DaemonSets and Fluent Bit for container log forwarding. Deployed Kibana (3 replicas) with CSV reporting, APM Server for tracing, and Metricbeat for cluster health. Led multi-region cost analysis (Virginia vs São Paulo) driving data-informed infrastructure placement decisions. Planned and provisioned dedicated Black Friday infrastructure. Expanded observability scope and promoted monitoring awareness among developers.<br><br>
+                                Migrated Elasticsearch 5 (EC2) and Elasticsearch 6 (ECS) clusters to a unified EKS cluster on v7.8 with dedicated node roles (3 master, 3 data, 3 ingest) and custom ECR images with S3 snapshot plugin. Reduced Elasticsearch infrastructure cost by 54.5% (~$111K/year saved) by consolidating a legacy two-cluster fleet of dozens of instances and volumes into a small EKS node pool. Migrated the full volume fleet from GP2 to Standard across two AWS regions. Deleted a large unused S3 bucket (tens of TB). Implemented instance scheduling for non-production environments. Designed and deployed 9 specialized Logstash pipelines handling logs from GELF, Kubernetes, NiFi, RabbitMQ, and application-specific sources. Integrated Kafka (AWS MSK) for real-time event streaming to BI systems. Built log collection layer with Filebeat DaemonSets and Fluent Bit for container log forwarding. Deployed Kibana (3 replicas) with CSV reporting, APM Server for tracing, and Metricbeat for cluster health. Led multi-region cost analysis driving data-informed infrastructure placement decisions. Planned and provisioned dedicated Black Friday infrastructure. Expanded observability scope and promoted monitoring awareness among developers.<br><br>
                                 <strong>Stack:</strong> AWS (Expert), GCP, Kubernetes, Elasticsearch 7.8, Logstash, Kibana, Filebeat, Fluent Bit, APM Server, Metricbeat, Kafka (MSK), RabbitMQ, NiFi, Docker, Helm, NGINX Ingress, PostgreSQL, Python, CloudFormation
                             </p>
                         </div>
@@ -1832,7 +1830,7 @@
                         <div class="highlight-content">
                             <h3 class="highlight-title">💰 Total Savings: $331K/year</h3>
                             <div class="highlight-text">
-                                <strong>Storage Migration:</strong> $148K/year (95.9% reduction), 360 TiB → 21 TiB<br>
+                                <strong>Storage Migration:</strong> $148K/year (95.9% reduction)<br>
                                 <strong>Compute Optimization:</strong> $183K/year (27% reduction)<br>
                                 <strong>3-Year Projected Impact: $993,288 (nearly $1M)</strong>
                             </div>
@@ -1844,8 +1842,8 @@
                             <h4 class="feature-title">💾 Storage Policy Migration</h4>
                             <p class="feature-description">
                                 <strong>$148K/year saved (95.9% reduction)</strong><br><br>
-                                Before: 360 TiB Standard storage at $12,874/month<br>
-                                After: 21 TiB total at $533/month<br><br>
+                                Before: hundreds of TiB, all in Standard storage<br>
+                                After: a fraction of that, mostly archived or deleted<br><br>
                                 Strategy: archive &gt;5 days · auto-delete after 365 days · keep only last 5 days in Standard
                             </p>
                         </div>
@@ -1866,7 +1864,7 @@
                         <div class="feature-card">
                             <h4 class="feature-title">✈️ Airflow Optimization</h4>
                             <p class="feature-description">
-                                <strong>$18,165/year saved (93% reduction)</strong><br><br>
+                                <strong>~$18K/year saved (93% reduction)</strong><br><br>
                                 Reduced from 100 pods to 14 pods while maintaining full functionality. CPU: 20→2.8, Memory: 200GB→28GB.
                             </p>
                         </div>
@@ -1900,7 +1898,7 @@
                             <div class="bar-container"><div class="bar-fill" data-width="18%"></div></div>
                         </div>
                         <div class="metric-bar">
-                            <div class="metric-label"><span>Airflow Optimization</span><span class="metric-value">$18,165/yr</span></div>
+                            <div class="metric-label"><span>Airflow Optimization</span><span class="metric-value">~$18K/yr</span></div>
                             <div class="bar-container"><div class="bar-fill" data-width="12%"></div></div>
                         </div>
                         <div class="metric-bar">
@@ -1935,7 +1933,7 @@
                         </div>
                         <div class="feature-card">
                             <h4 class="feature-title">🔒 Database Security (61 DBs)</h4>
-                            <p class="feature-description">Moved all 61 databases (18 MongoDB Atlas + 44 PostgreSQL) off public IPs, enforced SSL/TLS on every connection, and switched from password-only auth to certificate-based. Part of the ISO 27001 push.</p>
+                            <p class="feature-description">Moved 60+ databases (MongoDB Atlas + PostgreSQL) off public IPs, enforced SSL/TLS on every connection, and switched from password-only auth to certificate-based. Part of the ISO 27001 push.</p>
                         </div>
                         <div class="feature-card">
                             <h4 class="feature-title">⚡ Redis 7.2 Security</h4>
@@ -1973,7 +1971,7 @@
                     <div class="grid-2">
                         <div class="feature-card">
                             <h4 class="feature-title">💾 Storage Migration Champion</h4>
-                            <p class="feature-description"><strong>$148K/year saved (95.9% reduction).</strong> Moved 360 TiB from Standard storage to lifecycle-managed tiers. Files older than 5 days archive automatically; anything past 365 days is deleted. Cost dropped from $12,874/mo to $533/mo.</p>
+                            <p class="feature-description"><strong>$148K/year saved (95.9% reduction).</strong> Moved hundreds of TiB from Standard storage to lifecycle-managed tiers. Files older than 5 days archive automatically; anything past 365 days is deleted. The monthly bill dropped by about 96%.</p>
                         </div>
                         <div class="feature-card">
                             <h4 class="feature-title">💰 FinOps Excellence</h4>
