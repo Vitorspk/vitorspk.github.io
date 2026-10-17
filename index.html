@@ -12,7 +12,7 @@
            - inline <style> block in 404.html
            - Google Fonts injects inline styles -->
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <!-- SEO -->
     <title>Vitor Schiavo — SRE &amp; Platform Engineering Expert</title>
@@ -2560,5 +2560,7 @@
     </div><!-- /app-shell -->
 
     <script src="script.js" defer></script>
+    <!-- Cloudflare Web Analytics: privacy-first, cookieless, no consent banner. Inert until the token below is set (see CLAUDE.md § Analytics). -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "REPLACE_WITH_CLOUDFLARE_TOKEN"}'></script>
 </body>
 </html>
