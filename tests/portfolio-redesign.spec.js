@@ -113,3 +113,25 @@ test('returning to filtered work preserves its shareable URL and reload state', 
   await page.reload();
   await expect(page.getByRole('button', { name: 'Security', exact: true })).toHaveAttribute('aria-pressed', 'true');
 });
+
+test('expanded technical evidence remains readable in the light theme', async ({ page }) => {
+  test.setTimeout(90000);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/#cases');
+  await page.locator('#themeToggle').click();
+  for (const header of await page.locator('#cases .case-header').all()) await header.click();
+  const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(result.violations).toEqual([]);
+});
+
+test('theme control stays in the navigation chrome while reading', async ({ page }) => {
+  await page.setViewportSize({ width: 800, height: 768 });
+  await page.goto('/');
+  await page.evaluate(() => scrollTo(0, 2010));
+  await expect(page.locator('.sidebar #themeToggle')).toBeVisible();
+  const control = await page.locator('#themeToggle').boundingBox();
+  const sidebar = await page.locator('.sidebar').boundingBox();
+  expect(control.x + control.width).toBeLessThanOrEqual(sidebar.x + sidebar.width);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('.topbar #themeToggle')).toBeVisible();
+});

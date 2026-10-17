@@ -52,6 +52,8 @@
 .proof-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-lg); border-top: 1px solid var(--border); padding-top: var(--space-lg); margin-top: var(--space-xl); }
 .proof-strip span { display: grid; gap: var(--space-xs); font-size: 0.75rem; color: var(--text-muted); }
 .proof-strip strong { font-size: 0.875rem; font-weight: 600; color: var(--text-primary); }
-.portfolio-site .theme-toggle { position: fixed; top: var(--space-md); right: var(--space-lg); bottom: auto; box-shadow: none; background: var(--bg-surface); border-radius: var(--radius-full); z-index: 600; }
+.portfolio-site .theme-toggle { position: static; margin: 0; box-shadow: none; background: var(--bg-surface); border-radius: var(--radius-full); }
+.brand-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-lg); }
+.brand-controls .sidebar-avatar { margin-bottom: 0; }
 .portfolio-site .theme-toggle:hover { transform: none; background: var(--bg-hover); color: var(--text-primary); }
 .portfolio-footer { display: flex; flex-wrap: wrap; gap: var(--space-md) var(--space-xl); justify-content: space-between; padding: var(--space-xl) var(--space-2xl); color: var(--text-muted); font-size: 0.75rem; border-top: 1px solid var(--border); background: var(--bg-base); }

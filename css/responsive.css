@@ -13,7 +13,7 @@
     .mobile-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); position: sticky; top: var(--header-h); z-index: 400; min-height: var(--mobile-tabs-h); background: var(--bg-surface); border-bottom: 1px solid var(--border); padding: 0 var(--space-xs); }
     .mobile-tab { min-width: 0; min-height: 44px; padding: var(--space-xs) 0; font: inherit; font-size: 0.75rem; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--text-secondary); cursor: pointer; }
     .mobile-tab.active { border-bottom-color: var(--primary); color: var(--primary-light); font-weight: 700; }
-    .portfolio-site .theme-toggle { top: 6px; right: var(--space-md); width: 44px; height: 44px; }
+    .portfolio-site .theme-toggle { width: 44px; height: 44px; margin-left: auto; }
     .page-content { padding: var(--space-lg); }
     .hero { padding: var(--space-md) 0 var(--space-md); }
     .selected-work { padding-top: var(--space-xs); }

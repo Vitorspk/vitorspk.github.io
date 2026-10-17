@@ -234,6 +234,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const syncTablists = function syncTablists() {
             const isMobile = mq.matches;
+            const themeControl = document.getElementById('themeToggle');
+            const themeContainer = document.querySelector(isMobile ? '.topbar' : '.brand-controls');
+            if (themeControl && themeContainer && themeControl.parentElement !== themeContainer) {
+                const hadFocus = document.activeElement === themeControl;
+                themeContainer.appendChild(themeControl);
+                if (hadFocus) themeControl.focus({ preventScroll: true });
+            }
+
             sidebarNav.inert = isMobile;
             mobileNav.inert  = !isMobile;
             sidebarNav.setAttribute('aria-hidden', isMobile ? 'true' : 'false');

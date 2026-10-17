@@ -147,7 +147,7 @@
 
             <p>It is a roughly 150-line FastAPI reverse proxy that speaks the OpenAI API (<code>/v1/chat/completions</code>, <code>/v1/models</code>). It routes through a provider chain: serverless GPUs first, a managed serverless GPU second, a dedicated cluster third. Each hop has a mock-failure flag, so I can test failover without waiting for a real outage. When every provider fails, it returns HTTP 503 with per-provider diagnostics instead of a blank error, which is the difference between a two-minute triage and a one-hour one.</p>
 
-            <figure class="architecture-diagram" aria-label="Multi-provider inference architecture: a client request reaches a FastAPI fallback router, which routes through three GPU providers in a failover chain, with EU multi-datacenter failover on the primary provider.">
+            <figure class="architecture-diagram" tabindex="0" aria-label="Multi-provider inference architecture: a client request reaches a FastAPI fallback router, which routes through three GPU providers in a failover chain, with EU multi-datacenter failover on the primary provider.">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" aria-hidden="true" focusable="false">
                     <rect width="820" height="520" rx="12" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
                     <text x="410" y="35" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-primary)">Multi-Provider Inference Architecture</text>

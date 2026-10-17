@@ -17,7 +17,7 @@
 Baseline: `npm test` — 227 passed, 3 skipped.
 Redesign regression tests were run against the original site and failed on missing navigation/filter/contact/evidence behavior.
 Affected suite after implementation: 101 passed, 1 skipped.
-Full final suite: `npm test` — 295 passed, 3 skipped; HTML/CSS/JS validation and CSS synchronization passed.
+Full final suite after independent review: `npm test` — 299 passed, 3 skipped; HTML/CSS/JS validation and CSS synchronization passed.
 The three skips are the existing WebKit keyboard-focus exclusions.
 `git diff --check` passed.
 
@@ -35,3 +35,9 @@ The three skips are the existing WebKit keyboard-focus exclusions.
 ## Delivery limits
 
 No merge, no auto-merge, no production publication. New employer-related prose is generalized and awaits owner review in the PR. Raw Jira exports, attachments, internal URLs and private code were not added to the repository. The pre-existing untracked AGENTS.md was left untouched and unstaged.
+
+## Independent review and fixes
+
+A read-only reviewer checked the implementation against the approved design and evidence inventory. Two findings were addressed: the desktop theme control now lives inside the sidebar (and moves to the mobile topbar), and a retained unmeasured availability achievement was replaced by the documented redundancy capability. Regression coverage reproduced and verified theme-control placement.
+
+An expanded-catalog axe check additionally exposed light-theme contrast and Safari keyboard-scroll access in retained SVG figures. Semantic colors were corrected and scrollable figures made keyboard-focusable. The regression passed on desktop and WebKit mobile. Supplemental settled-state light-theme axe checks passed for the fully expanded catalog, all five new articles, the revised storage and inference articles, and the résumé.
