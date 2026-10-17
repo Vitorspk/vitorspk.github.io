@@ -35,6 +35,8 @@ function render(visual) {
         '<div class="case-map-flow">\n' + nodes.join('\n' + arrow + '\n') + '\n</div>\n' +
         '<p class="case-map-note">' + escape(visual.note) + '</p>\n</figure>\n';
 }
+// Controlled markup contract: generated figures and header marks must not nest
+// figures/spans; case-title text must match cardTitle with the decoded entities below.
 const strip = source => source.replace(/\n?<span class="case-header-mark"[\s\S]*?<\/span>\n?/g, '').replace(/\n?<figure class="case-map" data-case-visual="[^"]*"[\s\S]*?<\/figure>\n?/g, '');
 const outputs = new Map();
 const indexPath = path.join(root, 'index.html');
