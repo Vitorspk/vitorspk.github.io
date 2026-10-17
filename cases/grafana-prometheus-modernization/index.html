@@ -85,6 +85,18 @@
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="grafana-prometheus-modernization" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Keep monitoring useful through major upgrades.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Metrics sources</strong><span>Preserve scrape coverage</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Prometheus</strong><span>Upgrade and tune rules</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Grafana</strong><span>Validate queries and views</span></div>
+</div>
+<p class="case-map-note">The work combined version upgrades, recording rules and operational validation.</p>
+</figure>
+
 
             <p>Observability stacks rot quietly. The upgrades feel risky, so they get deferred, and one day you are on an end-of-life Grafana with dashboards nobody trusts and queries that take half a minute. This is a write-up of pulling one back to current: two major Grafana versions, a Prometheus LTS bump, and the recording rules that were the real win.</p>
 

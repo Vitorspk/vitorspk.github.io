@@ -58,6 +58,18 @@
 <p class="doc-dek">A measured reduction in one billing line, with monitoring functionality checked separately.</p>
 <div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
 <div class="doc-body">
+<figure class="case-map" data-case-visual="monitoring-ingestion-cost" data-visual-area="finops">
+<figcaption><span>Solution at a glance</span><strong>Keep the visibility. Change the billable path.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Scrape targets</strong><span>Preserve existing metrics</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Prometheus</strong><span>Replace managed ingestion</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Grafana &amp; alerts</strong><span>Validate retained visibility</span></div>
+</div>
+<p class="case-map-note">The managed ingestion line was removed; self-managed compute, storage and maintenance still have costs.</p>
+</figure>
+
 <h2>The problem</h2>
 <p>A Prometheus deployment forwarded metrics into a managed monitoring ingestion path. The operational record attributed £1,165.80 per month to that billing line, while the team also maintained a local monitoring stack.</p>
 <h2>My contribution</h2>

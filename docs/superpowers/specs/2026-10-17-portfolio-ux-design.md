@@ -18,3 +18,11 @@ P2: about with evidence-linked capability table, education/languages and leaders
 
 ## Acceptance
 Five consistent nav destinations; all legacy fragments resolve, including browser history/hash changes. Filters reset or preserve predictably and hidden cases cannot be focused. All current content destinations accessible through catalog. No root/mobile-nav overflow at 320/390/768/1280. Focus, keyboard, reduced motion and dark/light axe checks pass. Shared article styles remain compatible. Résumé readable on mobile and printable. Full npm test passes. PR and local screenshots provided.
+
+## Visual revision following owner feedback
+
+The owner found the first local result too plain relative to the published site and requested a combination of the published visual richness and the revised evidence. The owner then specified icons, explanatory drawings in every case, and a quick, simple visual model.
+
+The revision retains the blue/violet/cyan identity, adds outlined icons, restores scoped highlights, and uses a two-column home with an interactive architecture explorer. Delivery, reliability and cost views link to the actual case and expose no simulated live state. Evidence-led case panels, six specialty links and experience panels provide depth without restoring overlapping top-level tabs or self-rated skill bars. On mobile the explorer is compact, with the first case still beginning in the initial 390×844 viewport.
+
+All 31 catalog cases and 16 standalone articles receive a content-specific three-part explanatory drawing. Their titles, components and scope notes are defined in content/case-visuals.json and pre-rendered as HTML/SVG. Catalog diagrams follow disclosure visibility; article diagrams precede the detailed narrative. Narrow screens stack the stages vertically. Shared CSS and a build-sync validation keep the visual model consistent. No runtime dependency, hosting change or production publication is introduced.

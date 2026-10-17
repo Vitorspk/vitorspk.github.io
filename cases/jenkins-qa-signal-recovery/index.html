@@ -58,6 +58,18 @@
 <p class="doc-dek">A shared platform failure made passing tests look broken. Restoring the signal came before fixing individual test suites.</p>
 <div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
 <div class="doc-body">
+<figure class="case-map" data-case-visual="jenkins-qa-signal-recovery" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Separate test failures from platform noise.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Test jobs</strong><span>Run the regression suite</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Agent platform</strong><span>Repair shared reporting</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>QA signal</strong><span>Identify real failures</span></div>
+</div>
+<p class="case-map-note">The shared reporting defect was repaired; application failures remained a separate investigation.</p>
+</figure>
+
 <h2>The problem</h2>
 <p>A QA view contained 73 jobs, with 45 showing red. The obvious response was to repair the failing tests one by one. But a build result is only useful if its reporting and execution platform can be trusted.</p>
 <p>The investigation found that 40 of those red jobs shared a failure after test execution: an upgraded reporting plugin no longer found its command-line installation. A passing suite could therefore produce a failed build. Some apparently green jobs had not run for a long time, so the status color alone was misleading in both directions.</p>

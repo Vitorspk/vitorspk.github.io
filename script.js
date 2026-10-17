@@ -195,6 +195,52 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // The home explorer shows documented decisions, never simulated live status.
+    const platformViews = {
+        delivery: {
+            title: 'Build once. Promote with confidence.',
+            summary: 'An isolated preview, the same tested image and an explicit cleanup path.',
+            result: 'Two-repository pilot · 34 automated checks',
+            href: '/cases/ephemeral-preview-environments/',
+            foundation: ['GitHub Actions', 'ArgoCD', 'Helm'],
+            nodes: ['Commit', 'Platform', 'Runtime'],
+            details: ['Build & test', 'Preview & validate', 'Promote & clean up'],
+        },
+        reliability: {
+            title: 'Make the signal trustworthy.',
+            summary: 'Validate alert filters against real log messages, not an empty green dashboard.',
+            result: '22 alert policies and 2 log-based metrics repaired',
+            href: '/cases/gen2-observability-repair/',
+            foundation: ['Cloud Functions', 'Logs', 'Monitoring'],
+            nodes: ['Runtime', 'Log pipeline', 'Alerting'],
+            details: ['Known message', 'Match the format', 'Verify the signal'],
+        },
+        efficiency: {
+            title: 'Change the path. Remove the cost.',
+            summary: 'Replace a paid monitoring-ingestion path while keeping the visibility teams need.',
+            result: '£1,165.80/month ingestion line removed · GBP',
+            href: '/cases/monitoring-ingestion-cost/',
+            foundation: ['Prometheus', 'Scrape targets', 'Grafana'],
+            nodes: ['Metrics', 'Collector', 'Dashboards'],
+            details: ['Keep the signal', 'Change the route', 'Retain visibility'],
+        },
+    };
+    const platformButtons = Array.from(document.querySelectorAll('[data-platform-view]'));
+    platformButtons.forEach(button => button.addEventListener('click', () => {
+        const view = platformViews[button.dataset.platformView];
+        if (!view) return;
+        platformButtons.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
+        document.getElementById('platform-story-title').textContent = view.title;
+        document.getElementById('platform-story-summary').textContent = view.summary;
+        document.getElementById('platform-story-result').textContent = view.result;
+        document.getElementById('platform-story-link').setAttribute('href', view.href);
+        view.nodes.forEach((label, index) => {
+            document.querySelector('[data-platform-node="' + index + '"]').textContent = label;
+            document.querySelector('[data-platform-foundation="' + index + '"]').textContent = view.foundation[index];
+            document.querySelector('[data-platform-detail="' + index + '"]').textContent = view.details[index];
+        });
+    }));
+
     // ─── Scroll to Top Button ─────────────────────────────────────────────────
     const scrollToTopBtn = document.getElementById('scrollToTop');
     if (scrollToTopBtn) {

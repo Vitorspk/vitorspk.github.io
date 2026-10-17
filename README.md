@@ -44,3 +44,9 @@ The navigation order comes from the sidebar HTML, and `activeTab` tracks current
 `npm run lint:fix` fixes eligible CSS/JS lint issues. The pre-commit hook validates staged HTML/JS and rebuilds generated CSS for module changes. CI repeats validation and browser tests; the separate validation report and automated code review add PR feedback. Keep runtime dependencies at zero and Google Fonts on display=swap. Preserve the Search Console verification file and the Cloudflare beacon/CSP domains when editing pages.
 
 Design rationale and implementation sequencing are retained under `docs/superpowers/`; the delivered behavior, measurements and verification limits live in `docs/ux-redesign-validation.md` and `docs/content-evidence.md`.
+
+## Explanatory case visuals
+
+Every catalog case has a header icon and an introductory diagram; standalone articles repeat the matching diagram before the detailed reading. Edit `content/case-visuals.json`, then run `npm run build:visuals`. This pre-renders HTML and inline SVG into the existing pages, so visitors need no rendering library or extra network requests. `npm run validate` checks that all 31 catalog and 16 article diagrams remain synchronized.
+
+The home explorer connects delivery, reliability and cost decisions to specific case studies. Its three modes describe documented work; it does not display simulated live telemetry. Diagrams simplify the architecture and keep pilot, POC and cost-scope qualifications visible.

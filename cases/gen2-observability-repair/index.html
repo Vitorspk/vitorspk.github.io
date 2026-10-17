@@ -58,6 +58,18 @@
 <p class="doc-dek">A runtime migration left alerts silently matching nothing. Positive controls exposed the incomplete fix.</p>
 <div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
 <div class="doc-body">
+<figure class="case-map" data-case-visual="gen2-observability-repair" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Follow a real message all the way to an alert.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Runtime log</strong><span>Start with a known message</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Log filter</strong><span>Match resource and format</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Alert policy</strong><span>Verify a positive match</span></div>
+</div>
+<p class="case-map-note">Changing the resource type alone was insufficient; filters also had to match runtime-specific log formats.</p>
+</figure>
+
 <h2>The problem</h2>
 <p>After functions moved to a new runtime generation, the application dashboards still appeared healthy. But the log resource type and labels had changed, while alert policies and log-based metrics still filtered the previous format.</p>
 <p>An audit identified 22 policies and two metrics in scope. Twenty-one policies were enabled, but the old filters could no longer match their intended events. An absence of alerts had become indistinguishable from an absence of incidents.</p>

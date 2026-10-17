@@ -85,6 +85,18 @@
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="zero-downtime-cluster-migration" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Move workloads with a route back.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Source cluster</strong><span>Inventory apps and data</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Target cluster</strong><span>Restore and validate</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Traffic cutover</strong><span>Switch DNS with rollback</span></div>
+</div>
+<p class="case-map-note">Prepare application and data migration before DNS cutover, then validate the destination.</p>
+</figure>
+
 
             <p>Rebuilding clusters is only half the job. Once the new clusters exist, every workload still has to move onto them, and "move production to a different cluster" is exactly the sentence that makes people schedule a midnight maintenance window. I wanted no window and no downtime, so I treated the whole thing as a blue-green deployment, just at the level of the cluster instead of a single service.</p>
 

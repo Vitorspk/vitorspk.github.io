@@ -85,6 +85,18 @@
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="strapi-v4-to-v5-upgrade" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Test compatibility before moving traffic.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Strapi v4</strong><span>Map existing behavior</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Strapi v5</strong><span>Adapt hooks and integration</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Release checks</strong><span>Validate before cutover</span></div>
+</div>
+<p class="case-map-note">Major-version changes included lifecycle hooks and behavior checks before production cutover.</p>
+</figure>
+
 
             <p>Major-version upgrades of a stateful, content-bearing app are where "it is just a version bump" goes to die. Strapi v5 changes the data-access model, so the upgrade is not only new dependencies, it is rewriting how the application reads and writes its own content. The content in the database had to survive, and the site could not go down. This is how I did it.</p>
 

@@ -50,3 +50,10 @@
 - [x] Review requirements and full diff, repair material findings, verify links and compare changed content to source.
 - [x] Commit only task files, push feature branch, open PR and attach it to chat.
 - [x] Inspect CI and automated review, resolve actionable feedback and record any external limitation.
+
+### Owner-requested visual revision
+- [x] Compare the published and local site and preserve the useful visual language.
+- [x] Add a rich but scoped technical explorer, icons, highlights and specialty discovery.
+- [x] Add source definitions and pre-rendered diagrams to all catalog items and articles, with generated-output checks.
+- [x] Reproduce missing visual behavior in tests, implement and verify targeted Chromium/WebKit behavior and both themes.
+- [x] Complete visual checks, full regression, independent review, push and inspect PR checks.

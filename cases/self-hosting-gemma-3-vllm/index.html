@@ -93,6 +93,18 @@
         </header>
 
         <div class="doc-body">
+<figure class="case-map" data-case-visual="self-hosting-gemma-3-vllm" data-visual-area="ai">
+<figcaption><span>Solution at a glance</span><strong>Exercise the fallback path before relying on it.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Inference request</strong><span>Enter the FastAPI router</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Provider routing</strong><span>Try warm and cold fallback</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><strong>GPU serving</strong><span>Validate the returned response</span></div>
+</div>
+<p class="case-map-note">Three-provider proof of concept; test infrastructure was removed pending a production decision.</p>
+</figure>
+
 
             <p>This is a write-up of building production-grade LLM inference on serverless GPUs: serving an open-weight model in-house instead of through a hosted API, for cost control and to own the behaviour of the stack end to end. The model is Gemma 3 12B, quantized to GGUF Q4 (about 6.9 GB on disk), served with vLLM 0.15.1.</p>
 

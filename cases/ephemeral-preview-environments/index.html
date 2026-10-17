@@ -58,6 +58,18 @@
 <p class="doc-dek">A two-repository pilot for isolated preview environments, tested image promotion and automated cleanup.</p>
 <div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
 <div class="doc-body">
+<figure class="case-map" data-case-visual="ephemeral-preview-environments" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>A preview is a complete lifecycle.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Pull request</strong><span>Build and test the image</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Isolated preview</strong><span>Validate related changes</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Promote &amp; clean up</strong><span>Reuse the image digest</span></div>
+</div>
+<p class="case-map-note">Two-repository pilot: promote the tested image, then remove preview resources when the PR closes.</p>
+</figure>
+
 <h2>The problem</h2>
 <p>QA depended on shared development and staging environments. Features often met each other only after merging, making it difficult to test a backend/frontend change in isolation and coordinate work across teams.</p>
 <h2>My contribution</h2>

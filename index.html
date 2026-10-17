@@ -88,14 +88,14 @@
 <div class="brand-controls"><div class="sidebar-avatar" aria-hidden="true">VS</div></div>
 <div class="sidebar-name">Vitor Schiavo</div>
 <div class="sidebar-role">Site Reliability Engineer<br>Platform engineering</div>
-<p class="sidebar-status">Open to Staff / Platform roles</p>
+<p class="sidebar-status"><span class="status-dot" aria-hidden="true"></span>Open to Staff / Platform roles</p>
 </div>
 <nav class="sidebar-nav" role="tablist" aria-label="Portfolio sections" aria-orientation="vertical">
-<button id="tab-overview" type="button" role="tab" class="nav-item active" data-tab="overview" aria-selected="true" aria-controls="overview" tabindex="0">Home</button>
-<button id="tab-cases" type="button" role="tab" class="nav-item" data-tab="cases" aria-selected="false" aria-controls="cases" tabindex="-1">Work</button>
-<button id="tab-experience" type="button" role="tab" class="nav-item" data-tab="experience" aria-selected="false" aria-controls="experience" tabindex="-1">Experience</button>
-<button id="tab-about" type="button" role="tab" class="nav-item" data-tab="about" aria-selected="false" aria-controls="about" tabindex="-1">About</button>
-<button id="tab-contact" type="button" role="tab" class="nav-item" data-tab="contact" aria-selected="false" aria-controls="contact" tabindex="-1">Contact</button>
+<button id="tab-overview" type="button" role="tab" class="nav-item active" data-tab="overview" aria-selected="true" aria-controls="overview" tabindex="0"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 3l9 7M5 9v12h5v-7h4v7h5V9"></path></svg><span>Home</span></button>
+<button id="tab-cases" type="button" role="tab" class="nav-item" data-tab="cases" aria-selected="false" aria-controls="cases" tabindex="-1"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><span>Work</span></button>
+<button id="tab-experience" type="button" role="tab" class="nav-item" data-tab="experience" aria-selected="false" aria-controls="experience" tabindex="-1"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6V3h8v3M3 7h18v14H3V7Zm0 5 9 4 9-4M12 12v5"></path></svg><span>Experience</span></button>
+<button id="tab-about" type="button" role="tab" class="nav-item" data-tab="about" aria-selected="false" aria-controls="about" tabindex="-1"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><span>About</span></button>
+<button id="tab-contact" type="button" role="tab" class="nav-item" data-tab="contact" aria-selected="false" aria-controls="contact" tabindex="-1"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3V5Zm0 1 9 7 9-7"></path></svg><span>Contact</span></button>
 </nav>
 <div class="sidebar-footer">
 <a href="/resume.html" class="sidebar-contact-link">Printable résumé <span aria-hidden="true">↗</span>
@@ -126,27 +126,53 @@
 <main class="page-content" id="main-content" tabindex="-1">
 <section id="overview" data-legacy="achievements" class="tab-content section-anchor active" role="tabpanel" aria-labelledby="tab-overview" tabindex="-1" aria-hidden="false">
 <div class="hero">
-<p class="hero-location">Staff / Platform opportunities · Remote</p>
+<div class="hero-copy">
+<p class="hero-location"><span class="status-dot" aria-hidden="true"></span>London, UK <span aria-hidden="true">/</span> Remote</p>
 <h1>Vitor Schiavo</h1>
 <p class="hero-role">Site Reliability &amp; Platform Engineer</p>
-<h2>I build platforms<br>teams can trust.</h2>
-<p class="hero-subtitle">Reliable delivery, useful observability and cloud infrastructure shaped around the people who operate it.</p>
-
+<h2>Reliable systems.<br> Stronger teams.</h2>
+<p class="hero-subtitle">Cloud infrastructure, reliable delivery and the tools engineering teams need to do their best work.</p>
 <div class="hero-cta">
-<button type="button" class="btn-primary" data-jump="selected-work">Explore selected work <span aria-hidden="true">↓</span>
-</button>
+<button type="button" class="btn-primary" data-jump="selected-work">Explore selected work <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></button>
 <button type="button" class="btn-ghost" data-tab="contact">Get in touch</button>
 </div>
-
+<p class="hero-availability">Looking for my next challenge in Staff / Platform engineering.</p>
+</div>
+<div class="platform-explorer">
+<div class="platform-explorer-heading"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><span>A platform in practice</span><span class="explorer-context">Explore the decisions</span></div>
+<div class="platform-switch" role="group" aria-label="Explore platform engineering">
+<button type="button" data-platform-view="delivery" aria-pressed="true">Delivery</button>
+<button type="button" data-platform-view="reliability" aria-pressed="false">Reliability</button>
+<button type="button" data-platform-view="efficiency" aria-pressed="false">Cost efficiency</button>
+</div>
+<div class="platform-diagram" aria-hidden="true">
+<svg class="platform-connections" viewBox="0 0 440 160" preserveAspectRatio="none"><path class="connection-route" d="M70 68H370M70 68V134H370V68M220 68V134"></path><path class="connection-active" d="M70 68H370"></path><circle cx="70" cy="134" r="4"></circle><circle cx="220" cy="134" r="4"></circle><circle cx="370" cy="134" r="4"></circle></svg>
+<div class="platform-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong data-platform-node="0">Commit</strong><span data-platform-detail="0">Build &amp; test</span></div>
+<div class="platform-node platform-node-core"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong data-platform-node="1">Platform</strong><span data-platform-detail="1">Preview &amp; validate</span></div>
+<div class="platform-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong data-platform-node="2">Runtime</strong><span data-platform-detail="2">Promote &amp; clean up</span></div>
+<div class="platform-foundation"><span data-platform-foundation="0">GitHub Actions</span><span data-platform-foundation="1">ArgoCD</span><span data-platform-foundation="2">Helm</span></div>
+</div>
+<div class="platform-story" aria-live="polite" aria-atomic="true">
+<h3 id="platform-story-title">Build once. Promote with confidence.</h3>
+<p class="platform-story-summary" id="platform-story-summary">An isolated preview, the same tested image and an explicit cleanup path.</p>
+<p class="platform-story-result"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><span id="platform-story-result">Two-repository pilot · 34 automated checks</span></p>
+<a id="platform-story-link" href="/cases/ephemeral-preview-environments/">Explore this case <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></a>
+</div>
+</div>
+</div>
+<div class="impact-rail" role="group" aria-label="Selected experience and measured outcomes">
+<a href="#experience"><strong>13<span>+</span></strong><span>Years in technology<small>Software development to platform engineering</small></span></a>
+<a href="/cases/jenkins-qa-signal-recovery/"><strong>40<span>→</span>0</strong><span>Shared CI platform failures<small>After repairing the reporting failure</small></span></a>
+<a href="/cases/gen2-observability-repair/"><strong>22</strong><span>Alert policies repaired<small>Plus two log-based metrics after migration</small></span></a>
 </div>
 <div id="selected-work" class="selected-work section-anchor" tabindex="-1">
 <div class="section-header">
 <h2 class="section-title">Selected work</h2>
-<p class="section-subtitle">Three problems. The decisions behind them. What changed.</p>
+<p class="section-subtitle">Real problems. Clear decisions. Measured outcomes.</p>
 </div>
-<article class="featured-case">
+<article class="featured-case featured-reliability">
 <div class="featured-copy">
-<p class="work-domain">Reliability &amp; developer experience</p>
+<p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg>Reliability &amp; developer experience</p>
 <h3>
 <a href="/cases/jenkins-qa-signal-recovery/">Restoring trust in the QA pipeline</a>
 </h3>
@@ -155,7 +181,7 @@
 </a>
 </div>
 <figure class="work-visual">
-<figcaption>40 platform failures to zero</figcaption>
+<figcaption>Repair the platform. Recover the signal.</figcaption>
 <div class="signal-pair">
 <div>
 <span class="signal-count">40</span>
@@ -170,9 +196,9 @@
 <p>Passing tests should produce a trustworthy signal.</p>
 </figure>
 </article>
-<article class="featured-case">
+<article class="featured-case featured-delivery">
 <div class="featured-copy">
-<p class="work-domain">Platform engineering</p>
+<p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg>Platform engineering</p>
 <h3>
 <a href="/cases/ephemeral-preview-environments/">A safe place to test every feature</a>
 </h3>
@@ -191,9 +217,9 @@
 </div>
 </figure>
 </article>
-<article class="featured-case">
+<article class="featured-case featured-observability">
 <div class="featured-copy">
-<p class="work-domain">Observability &amp; migration</p>
+<p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg>Observability &amp; migration</p>
 <h3>
 <a href="/cases/gen2-observability-repair/">Finding the failure behind a green dashboard</a>
 </h3>
@@ -217,25 +243,15 @@
 <button type="button" class="btn-ghost" data-tab="cases">Explore all work <span aria-hidden="true">→</span>
 </button>
 </div>
-<div class="proof-strip">
-<span>
-<strong>SRE since 2018</strong>Software development background</span>
-<span>
-<strong>4 environments</strong>Platform automation and guardrails</span>
-<span>
-<strong>Teams first</strong>Tools that make delivery safer</span>
-</div><div class="home-context">
-<h2>Built through years of operating real systems.</h2>
-<p>IT since 2013, software development before SRE, and platform work across online safety, logistics and healthcare. I combine hands-on implementation with reusable patterns, documentation and cross-team delivery.</p>
-<button type="button" class="text-link" data-tab="experience">See my experience <span aria-hidden="true">→</span>
-</button>
-</div>
-<div class="home-context">
-<h2>Make the next engineer's job easier.</h2>
-<p>I look for the shared cause behind repeated failures, validate changes with real signals and turn fixes into tools and runbooks other engineers can use.</p>
-<button type="button" class="text-link" data-tab="about">More about how I work <span aria-hidden="true">→</span>
-</button>
-</div>
+<div class="specialty-section"><div class="section-header"><h2 class="section-title">Depth across the platform.</h2><p class="section-subtitle">The disciplines behind the work. Explore the projects that put them into practice.</p></div><div class="specialty-grid"><a class="specialty-link specialty-platform" href="#cases/platform" aria-label="Platform &amp; delivery: explore work"><span class="specialty-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg></span><h3>Platform &amp; delivery</h3><p>Reusable workflows that connect code to production.</p><span class="specialty-tech">Kubernetes · Terraform · ArgoCD</span><span class="specialty-action">Explore work <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a class="specialty-link specialty-reliability" href="#cases/reliability" aria-label="Reliability &amp; observability: explore work"><span class="specialty-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span><h3>Reliability &amp; observability</h3><p>Signals engineers can use to diagnose and act.</p><span class="specialty-tech">Prometheus · Grafana · Jenkins</span><span class="specialty-action">Explore work <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a class="specialty-link specialty-finops" href="#cases/finops" aria-label="Cost engineering: explore work"><span class="specialty-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg></span><h3>Cost engineering</h3><p>Understand the bill. Change the architecture.</p><span class="specialty-tech">Cloud billing · Rightsizing · Storage</span><span class="specialty-action">Explore work <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a class="specialty-link specialty-security" href="#cases/security" aria-label="Security &amp; trust: explore work"><span class="specialty-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg></span><h3>Security &amp; trust</h3><p>Practical controls built into the platform.</p><span class="specialty-tech">mTLS · IAM · Private networking</span><span class="specialty-action">Explore work <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a class="specialty-link specialty-ai" href="#cases/ai" aria-label="AI infrastructure: explore work"><span class="specialty-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg></span><h3>AI infrastructure</h3><p>Serving, startup and failure paths under scrutiny.</p><span class="specialty-tech">vLLM · GPU serving · Fallback POC</span><span class="specialty-action">Explore work <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+<a class="specialty-link specialty-platform" href="#cases/platform" aria-label="Cloud architecture: explore work"><span class="specialty-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span><h3>Cloud architecture</h3><p>Connected environments with clear boundaries.</p><span class="specialty-tech">GCP · AWS · Azure</span><span class="specialty-action">Explore work <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span></a>
+</div></div>
+<div class="career-band"><div><p>Experience built in demanding environments</p><div class="career-companies"><span>VerifyMy</span><span>Intelipost</span><span>Dasa</span></div></div><a class="text-link" href="#experience">Explore my experience <span aria-hidden="true">↗</span></a></div>
+<div class="home-context"><h2>Make the next engineer's job easier.</h2><p>My background in software development shapes the way I work in infrastructure. I look for shared causes, build reusable capabilities and document decisions so teams can operate independently.</p><a class="text-link" href="#about">How I work <span aria-hidden="true">↗</span></a></div>
 </section>
 <section id="cases" data-legacy="aiml finops technical projects" class="tab-content section-anchor" role="tabpanel" aria-labelledby="tab-cases" tabindex="-1" aria-hidden="true" inert>
 <div class="section-header">
@@ -255,12 +271,26 @@
 </p>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+
 <div>
 <h3 class="case-title">Restoring trust in the QA pipeline</h3>
 <p class="case-date">40 platform failures to zero</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="jenkins-qa-signal-recovery" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Separate test failures from platform noise.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Test jobs</strong><span>Run the regression suite</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Agent platform</strong><span>Repair shared reporting</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>QA signal</strong><span>Identify real failures</span></div>
+</div>
+<p class="case-map-note">The shared reporting defect was repaired; application failures remained a separate investigation.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>A shared reporting defect had made passing tests appear broken. I traced the common failure, repaired the agent platform and separated real test failures from infrastructure noise. 65-job validation run; remaining application test failures identified separately.</p>
@@ -271,12 +301,26 @@
 </article>
 <article class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg></span>
+
 <div>
 <h3 class="case-title">A safe place to test every feature</h3>
 <p class="case-date">Preview environments with a complete lifecycle</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="ephemeral-preview-environments" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>A preview is a complete lifecycle.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Pull request</strong><span>Build and test the image</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Isolated preview</strong><span>Validate related changes</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Promote &amp; clean up</strong><span>Reuse the image digest</span></div>
+</div>
+<p class="case-map-note">Two-repository pilot: promote the tested image, then remove preview resources when the PR closes.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>I built a two-repository pilot that creates isolated environments from pull requests, promotes the same tested image and removes preview resources when the PR closes. 16 Go and 18 Node checks before builds; image digest verified during promotion.</p>
@@ -287,12 +331,26 @@
 </article>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
+
 <div>
 <h3 class="case-title">Finding the failure behind a green dashboard</h3>
 <p class="case-date">22 alert policies and 2 metrics repaired</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="gen2-observability-repair" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Follow a real message all the way to an alert.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Runtime log</strong><span>Start with a known message</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Log filter</strong><span>Match resource and format</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Alert policy</strong><span>Verify a positive match</span></div>
+</div>
+<p class="case-map-note">Changing the resource type alone was insufficient; filters also had to match runtime-specific log formats.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>A runtime migration left alert filters silently matching nothing. I traced the logging changes and verified each fix against messages known to exist. Positive controls proved that replacing the resource type alone would still miss structured Go logs.</p>
@@ -303,12 +361,26 @@
 </article>
 <article class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
+
 <div>
 <h3 class="case-title">Cloud Functions: staged Gen2 migration</h3>
 <p class="case-date">Modernizing runtimes and deployment pipelines; production follow-up exposed and fixed an implicit runtime identity change.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="cloud-functions-gen1-gen2" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Migrate the runtime and verify its identity.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Gen1 function</strong><span>Inventory runtime and triggers</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Gen2 deployment</strong><span>Adapt pipeline and runtime</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Validation</strong><span>Check behavior and IAM</span></div>
+</div>
+<p class="case-map-note">A staged migration; production follow-up also checked the runtime service account.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>Modernizing runtimes and deployment pipelines; production follow-up exposed and fixed an implicit runtime identity change.</p>
@@ -319,12 +391,26 @@
 </article>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+
 <div>
 <h3 class="case-title">Modernizing Grafana and Prometheus</h3>
 <p class="case-date">Major-version upgrades, recording rules and a more maintainable monitoring stack.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="grafana-prometheus-modernization" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Keep monitoring useful through major upgrades.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Metrics sources</strong><span>Preserve scrape coverage</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Prometheus</strong><span>Upgrade and tune rules</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Grafana</strong><span>Validate queries and views</span></div>
+</div>
+<p class="case-map-note">The work combined version upgrades, recording rules and operational validation.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>Major-version upgrades, recording rules and a more maintainable monitoring stack.</p>
@@ -335,12 +421,26 @@
 </article>
 <article class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
+
 <div>
 <h3 class="case-title">GKE networking: Dataplane V2 and a repeatable bootstrap</h3>
 <p class="case-date">A staged non-production migration with explicit rollback and validation; production excluded from that delivery.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="gke-dataplane-v2-cilium" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Change the network in a controlled environment.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Existing cluster</strong><span>Capture a working baseline</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Dataplane V2</strong><span>Apply network changes</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Validation</strong><span>Test paths and rollback</span></div>
+</div>
+<p class="case-map-note">Non-production delivery with explicit checks and rollback; production was outside this scope.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>A staged non-production migration with explicit rollback and validation; production excluded from that delivery.</p>
@@ -351,12 +451,26 @@
 </article>
 <article class="case-study" data-category="finops" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="finops" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>
+
 <div>
 <h3 class="case-title">Making Kubernetes cost visible</h3>
 <p class="case-date">Namespace-level cost allocation, resource requests and node consolidation.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="kubernetes-finops-kubecost" data-visual-area="finops">
+<figcaption><span>Solution at a glance</span><strong>Make cost visible before changing capacity.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Workloads</strong><span>Inspect requests and usage</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg><strong>Cost allocation</strong><span>Attribute spend by namespace</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Capacity decisions</strong><span>Rightsize and consolidate</span></div>
+</div>
+<p class="case-map-note">Cost allocation informs resource requests and consolidation; savings need a billing baseline.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>Namespace-level cost allocation, resource requests and node consolidation.</p>
@@ -367,12 +481,26 @@
 </article>
 <article class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
+
 <div>
 <h3 class="case-title">Moving workloads between Kubernetes clusters</h3>
 <p class="case-date">Phased application and data migration, DNS cutover, validation and rollback.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="zero-downtime-cluster-migration" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Move workloads with a route back.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Source cluster</strong><span>Inventory apps and data</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Target cluster</strong><span>Restore and validate</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Traffic cutover</strong><span>Switch DNS with rollback</span></div>
+</div>
+<p class="case-map-note">Prepare application and data migration before DNS cutover, then validate the destination.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>Phased application and data migration, DNS cutover, validation and rollback.</p>
@@ -383,12 +511,26 @@
 </article>
 <article class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+
 <div>
 <h3 class="case-title">A phased Strapi major-version upgrade</h3>
 <p class="case-date">Adapting lifecycle hooks and validating compatibility before production cutover.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="strapi-v4-to-v5-upgrade" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Test compatibility before moving traffic.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Strapi v4</strong><span>Map existing behavior</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Strapi v5</strong><span>Adapt hooks and integration</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Release checks</strong><span>Validate before cutover</span></div>
+</div>
+<p class="case-map-note">Major-version changes included lifecycle hooks and behavior checks before production cutover.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>Adapting lifecycle hooks and validating compatibility before production cutover.</p>
@@ -399,12 +541,26 @@
 </article>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+
 <div>
 <h3 class="case-title">Keeping Metabase useful in production</h3>
 <p class="case-date">Upgrades, read-only access, indexes and query isolation on a replica.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="metabase-production-ops" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Give analytics a safer query path.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>Analyst</strong><span>Use controlled read access</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Metabase</strong><span>Run dashboards and queries</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Read replica</strong><span>Isolate analytics queries</span></div>
+</div>
+<p class="case-map-note">Read-only access and replica-based queries help isolate analytics from the primary workload.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>Upgrades, read-only access, indexes and query isolation on a replica.</p>
@@ -415,12 +571,26 @@
 </article>
 <article class="case-study" data-category="security" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg></span>
+
 <div>
 <h3 class="case-title">Security posture as an observable system</h3>
 <p class="case-date">Monthly scans across 14 cloud projects, enriched metrics and a dashboard for triage.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="security-posture-observability" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Turn batch scan results into a useful signal.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Security scans</strong><span>Collect results by project</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Metric ingestion</strong><span>Push and preserve dimensions</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Dashboards</strong><span>Show risk and freshness</span></div>
+</div>
+<p class="case-map-note">Batch visibility includes risk dimensions and scan freshness; it is not real-time threat detection.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>I connected batch scan results to Prometheus and Grafana, preserving project/service/risk dimensions and scan freshness. End-to-end metric ingestion and dashboard data were verified.</p>
@@ -431,12 +601,26 @@
 </article>
 <article class="case-study" data-category="finops" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="finops" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+
 <div>
 <h3 class="case-title">Reducing monitoring ingestion spend</h3>
 <p class="case-date">£1,165.80/month removed from one Prometheus ingestion billing line.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="monitoring-ingestion-cost" data-visual-area="finops">
+<figcaption><span>Solution at a glance</span><strong>Keep the visibility. Change the billable path.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Scrape targets</strong><span>Preserve existing metrics</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Prometheus</strong><span>Replace managed ingestion</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Grafana &amp; alerts</strong><span>Validate retained visibility</span></div>
+</div>
+<p class="case-map-note">The managed ingestion line was removed; self-managed compute, storage and maintenance still have costs.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>What changed</h4>
 <p>I replaced the managed ingestion path while preserving monitoring targets and dashboards. The annualized equivalent is £13,989.60; hosting and maintenance costs remain outside that billing line.</p>
@@ -447,12 +631,26 @@
 </article>
 <article class="case-study" data-category="finops" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="finops" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg></span>
+
 <div>
 <h3 class="case-title">GCP storage lifecycle and retention</h3>
 <p class="case-date">Access-aware storage tiering and retention review.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="gcp-storage-cost-reduction" data-visual-area="finops">
+<figcaption><span>Solution at a glance</span><strong>Match the storage tier to the retention policy.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Active data</strong><span>Keep recently used objects</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Lifecycle rules</strong><span>Move data to colder tiers</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Retention boundary</strong><span>Apply authorized expiry</span></div>
+</div>
+<p class="case-map-note">A simplified lifecycle: the effective policy version and deletion requirements must be validated.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>Scope and result</h4>
 <p>The historical portfolio reported a 95.9% reduction. Absolute savings are omitted until currency, billing baseline and policy version are reconciled.</p>
@@ -463,12 +661,26 @@
 </article>
 <article class="case-study" data-category="finops" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="finops" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>
+
 <div>
 <h3 class="case-title">Airflow consolidation — 86% fewer allocated resources</h3>
 <p class="case-date">Consolidating an overprovisioned deployment.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="airflow-consolidation" data-visual-area="finops">
+<figcaption><span>Solution at a glance</span><strong>Allocate capacity for the work that actually runs.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Airflow workload</strong><span>Inspect utilization and queues</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Resource sizing</strong><span>Tune replicas and requests</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Node capacity</strong><span>Consolidate the allocation</span></div>
+</div>
+<p class="case-map-note">The recorded resource allocation fell; this does not mean the platform has zero operating cost.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>Scope and result</h4>
 <p>The recorded allocation changed from 100 to 14 pods, 20 to 2.8 vCPUs and 200 to 28 GB of memory. These are allocation reductions, not a claim of zero operating cost.</p>
@@ -479,6 +691,8 @@
 </article>
 <div class="case-study" data-category="security" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+
 <div>
 <h3 class="case-title"> mTLS with Cloudflare — Zero-Trust Architecture</h3>
 <p class="case-date">2024–2025 · Advanced Security · Network Architecture</p>
@@ -491,6 +705,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="cloudflare-mtls" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Verify identity at both sides of the connection.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>Client identity</strong><span>Present a client certificate</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Cloudflare</strong><span>Validate the certificate</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Origin</strong><span>Verify the protected connection</span></div>
+</div>
+<p class="case-map-note">Certificates, rotation and revocation complement network controls.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
@@ -538,6 +764,8 @@
 </div>
 <div class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
+
 <div>
 <h3 class="case-title"> AWS-GCP HA VPN — Multi-Cloud Connectivity</h3>
 <p class="case-date">2024 · Multi-Cloud Networking · High Availability</p>
@@ -550,6 +778,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="aws-gcp-ha-vpn" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Connect private networks through redundant tunnels.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>AWS network</strong><span>Route private traffic</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>HA VPN</strong><span>Use encrypted redundant tunnels</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>GCP network</strong><span>Exchange routes with BGP</span></div>
+</div>
+<p class="case-map-note">BGP provides routing and failover; IPSec encrypts traffic carried over the VPN.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
@@ -590,6 +830,8 @@
 </div>
 <div class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Custom Canary Deployment System</h3>
 <p class="case-date">2024–2025 · Progressive Delivery · Automation</p>
@@ -601,6 +843,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="custom-canary-deployment" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Increase traffic only after a healthy check.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>New release</strong><span>Start with limited traffic</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Health gate</strong><span>Evaluate errors and latency</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Traffic decision</strong><span>Advance or roll back</span></div>
+</div>
+<p class="case-map-note">Each release gate can stop progression and send traffic back to the stable version.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
@@ -639,6 +893,8 @@
 </div>
 <div class="case-study" data-category="security" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Database security hardening — 60+ databases</h3>
 <p class="case-date">2023–2025 · Security Architecture · Compliance</p>
@@ -651,6 +907,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="database-security-hardening" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Reduce exposure and protect the connection.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Private network</strong><span>Restrict reachable paths</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>TLS &amp; identity</strong><span>Authenticate and encrypt</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Database</strong><span>Limit authorized access</span></div>
+</div>
+<p class="case-map-note">Private networking, encrypted transport and access controls form separate layers of defense.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
@@ -718,6 +986,8 @@
 </div>
 <div class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Kong Gateway — API Management at Scale</h3>
 <p class="case-date">2023–2024 · API Management · Architecture</p>
@@ -730,6 +1000,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="kong-api-gateway" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Enforce shared API policy in one place.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>API client</strong><span>Send an authenticated request</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Kong Gateway</strong><span>Apply shared policy</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Services</strong><span>Route to the application</span></div>
+</div>
+<p class="case-map-note">The gateway centralizes authentication, rate limits and routing for application traffic.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
@@ -759,6 +1041,8 @@
 </div>
 <div class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+
 <div>
 <h3 class="case-title"> ArgoCD GitOps — Multi-Cluster Continuous Delivery</h3>
 <p class="case-date">March 2026 · GitOps · Kubernetes Multi-Cluster</p>
@@ -772,6 +1056,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="argocd-multi-cluster" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Reconcile each environment from versioned intent.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Git configuration</strong><span>Review the desired state</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>ArgoCD</strong><span>Reconcile scoped applications</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>GKE environments</strong><span>Apply and observe changes</span></div>
+</div>
+<p class="case-map-note">GitOps separates the desired state in Git from its controlled application to clusters.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
@@ -832,6 +1128,8 @@
 </div>
 <div class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+
 <div>
 <h3 class="case-title"> GKE Infrastructure — Production-Grade Terraform + Shared VPC</h3>
 <p class="case-date">February 2026 · Infrastructure as Code · GKE · Terraform</p>
@@ -845,6 +1143,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="gke-terraform-shared-vpc" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Separate shared networking from environment workloads.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Terraform modules</strong><span>Version reusable infrastructure</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Shared VPC</strong><span>Define subnets and boundaries</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>GKE environments</strong><span>Provision isolated workloads</span></div>
+</div>
+<p class="case-map-note">Reusable Terraform modules provision network boundaries and GKE resources consistently.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
@@ -902,12 +1212,26 @@
 </div>
 <article class="case-study" data-category="ai" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="ai" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+
 <div>
 <h3 class="case-title">LLM inference fallback — three-provider proof of concept</h3>
 <p class="case-date">Six controlled scenarios tested, including complete provider failure.</p>
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="self-hosting-gemma-3-vllm" data-visual-area="ai">
+<figcaption><span>Solution at a glance</span><strong>Exercise the fallback path before relying on it.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Inference request</strong><span>Enter the FastAPI router</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Provider routing</strong><span>Try warm and cold fallback</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><strong>GPU serving</strong><span>Validate the returned response</span></div>
+</div>
+<p class="case-map-note">Three-provider proof of concept; test infrastructure was removed pending a production decision.</p>
+</figure>
+
 <div class="impact-metrics">
 <h4>Scope and result</h4>
 <p>A FastAPI router demonstrated warm and cold fallback across RunPod, Cloud Run GPU and a GCE Managed Instance Group. The test infrastructure was removed afterward, pending production adoption.</p>
@@ -918,6 +1242,8 @@
 </article>
 <div class="case-study" data-category="security" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Defending Kubernetes Against Supply-Chain Attacks</h3>
 <p class="case-date">Security · Kubernetes · Supply-Chain Defense</p>
@@ -930,6 +1256,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="kubernetes-supply-chain-defense" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Detect, contain and prevent a compromised build.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Dependency &amp; build</strong><span>Audit the supply chain</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Runtime signals</strong><span>Detect suspicious CPU activity</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Containment</strong><span>Isolate nodes and remediate</span></div>
+</div>
+<p class="case-map-note">Layer pipeline checks with node-level anomaly detection and an explicit containment procedure.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> The threat</h4>
 <p class="case-description">
@@ -969,6 +1307,8 @@
 </div>
 <div class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Production Incident Response — P1 Outage &amp; Partner Auth Failure</h3>
 <p class="case-date">March 2026 · Incident Response · Production Reliability</p>
@@ -981,6 +1321,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="production-incident-response" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Restore service, then address the failure path.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Detection &amp; triage</strong><span>Find the dependency failure</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Contain impact</strong><span>Restore a working service path</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Follow-up</strong><span>Review safeguards and monitoring</span></div>
+</div>
+<p class="case-map-note">A simplified response model across dependency and authentication incidents; recovery work is shared.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title">Incident A — Third-Party CMS Loader [P1]: HTTP 500 across two regional markets</h4>
 <ul class="impact-list">
@@ -1029,6 +1381,8 @@
 </div>
 <div class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Elastic Stack Migration — EC2 to Kubernetes at Scale</h3>
 <p class="case-date">2020–2021 · Observability · Infrastructure Modernization</p>
@@ -1043,6 +1397,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="elastic-stack-migration" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Separate cluster roles and add a recovery path.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Legacy clusters</strong><span>Inventory data and pipelines</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>EKS &amp; Helm</strong><span>Separate Elastic node roles</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Snapshots</strong><span>Automate backup and retention</span></div>
+</div>
+<p class="case-map-note">The Kubernetes design separates master, data and ingest roles with snapshot-based backups.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <ul class="impact-list">
@@ -1195,6 +1561,8 @@
 </div>
 <div class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Kafka Event Streaming — Real-Time Pipeline to BI</h3>
 <p class="case-date">2020–2021 · Data Engineering · Event-Driven Architecture</p>
@@ -1207,6 +1575,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="kafka-event-streaming" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Route one event stream to search and analytics.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Event sources</strong><span>Receive service and queue events</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Logstash routing</strong><span>Filter and duplicate outputs</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Search &amp; Kafka</strong><span>Index events and feed BI</span></div>
+</div>
+<p class="case-map-note">Logstash filters feed Elasticsearch and Kafka topics for downstream BI consumers.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <ul class="impact-list">
@@ -1318,6 +1698,8 @@
 </div>
 <div class="case-study" data-category="platform" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+
 <div>
 <h3 class="case-title"> AI Tools Integration — Team Productivity</h3>
 <p class="case-date">2024–2025 · AI Adoption · Developer Experience</p>
@@ -1330,6 +1712,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="ai-tools-enablement" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Introduce tools with guidance and human review.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>Engineering teams</strong><span>Introduce assisted workflows</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><strong>AI tools</strong><span>Support coding and review</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Human judgment</strong><span>Document and evaluate usage</span></div>
+</div>
+<p class="case-map-note">Tool adoption and review-workflow evaluation; productivity improvements were not measured here.</p>
+</figure>
+
 <div class="case-section">
 <h4 class="case-section-title"> Solution</h4>
 <ul class="impact-list">
@@ -1357,6 +1751,8 @@
 </div>
 <div class="case-study" data-category="personal" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="personal" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Pokémon GO Friend Code — Subscription SaaS</h3>
 <p class="case-date">2025–2026 · Full-Stack · Next.js · GCP · Multi-payment · </p>
@@ -1371,6 +1767,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="pokemon-go-subscriptions" data-visual-area="personal">
+<figcaption><span>Solution at a glance</span><strong>Connect a subscription to its daily service.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>Subscriber</strong><span>Choose a localized plan</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg><strong>Payment webhooks</strong><span>Update subscription state</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Active code</strong><span>Enable daily submissions</span></div>
+</div>
+<p class="case-map-note">Personal product: payment state controls which trainer codes remain active for submission.</p>
+</figure>
+
 <a href="https://github.com/Vitorspk/pokemon-go-payment" target="_blank" rel="noopener noreferrer" class="case-repo-link">
 <span aria-hidden="true">
 </span> GitHub</a>
@@ -1422,6 +1830,8 @@
 </div>
 <div class="case-study" data-category="personal" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="personal" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Pokémon GO GCP — Automated Code Submission Engine</h3>
 <p class="case-date">2025–2026 · Backend Automation · Cloud Run Jobs · Web Scraping · </p>
@@ -1436,6 +1846,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="pokemon-go-submission-engine" data-visual-area="personal">
+<figcaption><span>Solution at a glance</span><strong>Schedule, submit and verify each code.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Active codes</strong><span>Read eligible subscriptions</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Cloud Run Job</strong><span>Submit through browser automation</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Verification</strong><span>Confirm the listing appears</span></div>
+</div>
+<p class="case-map-note">A scheduled backend checks active subscriptions, submits codes and verifies their appearance.</p>
+</figure>
+
 <a href="https://github.com/Vitorspk/pokemon-go-gcp" target="_blank" rel="noopener noreferrer" class="case-repo-link">
 <span aria-hidden="true">
 </span> GitHub</a>
@@ -1483,6 +1905,8 @@
 </div>
 <div class="case-study" data-category="personal" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="personal" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+
 <div>
 <h3 class="case-title"> AmigoSecreto — Android App (Google Play)</h3>
 <p class="case-date">2024–2026 · Android · Kotlin · MVVM · Google Play · </p>
@@ -1497,6 +1921,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="amigosecreto-android" data-visual-area="personal">
+<figcaption><span>Solution at a glance</span><strong>Make the draw obey the group rules.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>Group &amp; exclusions</strong><span>Configure participants and rules</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Draw engine</strong><span>Find a valid assignment</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Private reveal</strong><span>Store and share the result</span></div>
+</div>
+<p class="case-map-note">Native Android app with exclusion rules, local persistence and secure result reveal.</p>
+</figure>
+
 <a href="https://github.com/Vitorspk/amigosecreto" target="_blank" rel="noopener noreferrer" class="case-repo-link">
 <span aria-hidden="true">
 </span> GitHub</a>
@@ -1547,6 +1983,8 @@
 </div>
 <div class="case-study" data-category="personal" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="personal" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+
 <div>
 <h3 class="case-title"> Secret Santa — iOS App (SwiftUI)</h3>
 <p class="case-date">2025–2026 · iOS 17+ · Swift · SwiftUI · SwiftData · </p>
@@ -1560,6 +1998,18 @@
 </div>
 </div>
 <div class="case-body">
+<figure class="case-map" data-case-visual="secret-santa-ios" data-visual-area="personal">
+<figcaption><span>Solution at a glance</span><strong>A native flow from group setup to reveal.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>SwiftUI interface</strong><span>Create groups and exclusions</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>SwiftData</strong><span>Persist the local group state</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Draw &amp; reveal</strong><span>Generate and share assignments</span></div>
+</div>
+<p class="case-map-note">SwiftUI and SwiftData keep the interface, persistence and draw workflow inside native frameworks.</p>
+</figure>
+
 <a href="https://github.com/Vitorspk/secretsanta" target="_blank" rel="noopener noreferrer" class="case-repo-link">
 <span aria-hidden="true">
 </span> GitHub</a>
