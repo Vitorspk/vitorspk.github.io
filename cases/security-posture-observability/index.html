@@ -43,17 +43,38 @@
 
     <script>
         (function() {
-            var t = localStorage.getItem('theme');
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
             if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
         })();
     </script>
 </head>
-<body><a href="#main-content" class="skip-link">Skip to main content</a><button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button><main class="doc" id="main-content"><a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a><header class="doc-header"><span class="doc-eyebrow">Case study · Security operations · May 2026</span><h1 class="doc-title">Security posture as an observable system</h1><p class="doc-dek">Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.</p><div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header><div class="doc-body">
-<h2>The problem</h2><p>Periodic cloud security reports required manual triage. A point-in-time report made it difficult to compare findings across projects and services or see whether the underlying scan had become stale.</p>
-<h2>My contribution</h2><p>I connected monthly scan results from 14 cloud projects to a metrics pipeline and a Grafana dashboard. The work included CSV enrichment, a small exporter, a Pushgateway deployment, Prometheus configuration and dashboard views by project, service and risk.</p>
-<h2>The decisions</h2><p>The scanner is a batch process, not a long-running service. Pushing results to a gateway lets Prometheus scrape them after the job exits. The exported metrics distinguish finding types, affected resources and the time of the last scan; those represent different questions and should not be collapsed into one count.</p><p>I kept the exporter dependency-free so it could run in the existing scanner image, and preserved labels needed for project/service/risk drill-down. Scan timestamp is essential: a dashboard that still displays the previous month's results must not imply a fresh scan.</p>
-<h2>Results and measurement</h2><p>The delivery record includes a dry run covering all 14 projects, a successful end-to-end push, confirmation that Prometheus stored the metric and a dashboard populated with live results.</p><p>The scan cadence is monthly. Dashboard visibility between runs does not turn this into real-time vulnerability detection. No claim is made here about an independently verified reduction in security incidents or findings.</p>
-<h2>What I learned</h2><p>Security reporting becomes an operating capability when its dimensions, freshness and ownership are clear. A total count alone cannot tell a team where to act or whether the source is still current.</p></div><footer class="doc-footer"><p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p><div class="cta-row"><a class="cta cta--primary" href="/#cases">See more case studies</a><a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<header class="doc-header"><span class="doc-eyebrow">Case study · Security operations · May 2026</span>
+<h1 class="doc-title">Security posture as an observable system</h1>
+<p class="doc-dek">Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
+<div class="doc-body">
+<h2>The problem</h2>
+<p>Periodic cloud security reports required manual triage. A point-in-time report made it difficult to compare findings across projects and services or see whether the underlying scan had become stale.</p>
+<h2>My contribution</h2>
+<p>I connected monthly scan results from 14 cloud projects to a metrics pipeline and a Grafana dashboard. The work included CSV enrichment, a small exporter, a Pushgateway deployment, Prometheus configuration and dashboard views by project, service and risk.</p>
+<h2>The decisions</h2>
+<p>The scanner is a batch process, not a long-running service. Pushing results to a gateway lets Prometheus scrape them after the job exits. The exported metrics distinguish finding types, affected resources and the time of the last scan; those represent different questions and should not be collapsed into one count.</p>
+<p>I kept the exporter dependency-free so it could run in the existing scanner image, and preserved labels needed for project/service/risk drill-down. Scan timestamp is essential: a dashboard that still displays the previous month's results must not imply a fresh scan.</p>
+<h2>Results and measurement</h2>
+<p>The delivery record includes a dry run covering all 14 projects, a successful end-to-end push, confirmation that Prometheus stored the metric and a dashboard populated with live results.</p>
+<p>The scan cadence is monthly. Dashboard visibility between runs does not turn this into real-time vulnerability detection. No claim is made here about an independently verified reduction in security incidents or findings.</p>
+<h2>What I learned</h2>
+<p>Security reporting becomes an operating capability when its dimensions, freshness and ownership are clear. A total count alone cannot tell a team where to act or whether the source is still current.</p></div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
         (function() {
             var btn = document.getElementById('themeToggle');
             var icon = document.getElementById('themeIcon');

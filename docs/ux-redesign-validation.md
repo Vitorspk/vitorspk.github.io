@@ -51,3 +51,7 @@ Case links now keep natural tab order in source HTML, with hidden/inert containe
 Final validation after PR review fixes: `npm run validate` passed and the complete Playwright suite finished with 301 passed, 3 existing skips (59.8 seconds). The previous head also passed GitHub CI and automated review.
 
 The final local browser run uses the same Playwright projects against port 4173 through a temporary configuration override, because port 3000 is occupied by another workspace project. Repository CI continues to use its isolated default server.
+
+A second automated review confirmed the history fix. Two additional low-risk findings were reproduced and fixed: native keyboard activation of nested case-header links, and blocked localStorage during initial theme loading on the five new articles. Both regression paths failed before the changes and passed in desktop Chromium and mobile WebKit afterward. Third-party analytics is stubbed in the storage regression to isolate the site's behavior from network/CORS failures. Case prose and résumé block markup are now split across readable lines; these pages are hand-authored HTML rather than generated output. The résumé is intentionally indexable and now has a sitemap entry. Existing inline-script CSP policy is retained; a site-wide CSP migration is outside this redesign.
+
+Final verification after the second review: HTML/CSS/JS validation and CSS sync passed; full browser suite: 305 passed, 3 existing skips (1.3 minutes).

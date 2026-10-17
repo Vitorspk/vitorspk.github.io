@@ -337,6 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!event.target.closest('a')) toggleCase();
         });
         header.addEventListener('keydown', (e) => {
+            if (e.target !== header) return;
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
                 toggleCase();

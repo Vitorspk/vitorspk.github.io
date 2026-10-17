@@ -161,3 +161,29 @@ test('history restores category once and invalid categories canonicalize without
   await page.goBack();
   await expect(page.locator('#about')).toHaveAttribute('aria-hidden', 'false');
 });
+
+test('links inside case headers retain their native keyboard activation', async ({ page }) => {
+  await page.goto('/#cases');
+  await page.locator('.case-header').first().evaluate(header => {
+    const link = document.createElement('a');
+    link.href = '#contact';
+    link.textContent = 'Contact about this case';
+    header.appendChild(link);
+  });
+  await page.getByRole('link', { name: 'Contact about this case' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#contact')).toHaveAttribute('aria-hidden', 'false');
+});
+
+test('new reading pages and navigation work when browser storage is blocked', async ({ page }) => {
+  await page.route('https://static.cloudflareinsights.com/**', route => route.fulfill({ contentType: 'application/javascript', body: '' }));
+  await page.addInitScript(() => Object.defineProperty(window, 'localStorage', { get() { throw new Error('Storage blocked'); } }));
+  const errors = [];
+  page.on('pageerror', error => errors.push(error.message));
+  for (const path of ['/', '/cases/jenkins-qa-signal-recovery/', '/cases/ephemeral-preview-environments/', '/cases/gen2-observability-repair/', '/cases/security-posture-observability/', '/cases/monitoring-ingestion-cost/']) {
+    await page.goto(path);
+    await page.locator('#themeToggle').click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  }
+  expect(errors).toEqual([]);
+});

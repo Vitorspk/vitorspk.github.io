@@ -43,17 +43,38 @@
 
     <script>
         (function() {
-            var t = localStorage.getItem('theme');
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
             if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
         })();
     </script>
 </head>
-<body><a href="#main-content" class="skip-link">Skip to main content</a><button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button><main class="doc" id="main-content"><a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a><header class="doc-header"><span class="doc-eyebrow">Case study · FinOps · July 2025</span><h1 class="doc-title">Removing an unnecessary monitoring ingestion cost</h1><p class="doc-dek">A measured reduction in one billing line, with monitoring functionality checked separately.</p><div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header><div class="doc-body">
-<h2>The problem</h2><p>A Prometheus deployment forwarded metrics into a managed monitoring ingestion path. The operational record attributed £1,165.80 per month to that billing line, while the team also maintained a local monitoring stack.</p>
-<h2>My contribution</h2><p>I replaced the managed ingestion path with a standard Prometheus stack and updated its configuration while preserving existing scrape targets, dashboards and alerts. The change was applied with checks for target health, query access and the absence of further managed ingestion.</p>
-<h2>The trade-off</h2><p>Removing managed ingestion transfers responsibility for storage, availability and operations to the self-managed stack. A billing reduction is valuable only if the team understands those responsibilities and validates the monitoring capability it still needs.</p>
-<h2>Results and measurement</h2><p>The recorded ingestion line fell from £1,165.80 per month to zero. The annualized equivalent is <strong>£13,989.60</strong>, calculated as twelve times that monthly reduction. Currency is GBP.</p><p>This is not zero total monitoring cost. Compute, storage, maintenance and future capacity requirements remain separate. The annualized figure is a run-rate estimate, not a claim of twelve months of realized savings, and is not added to other portfolio savings totals.</p><p>Validation covered more than 120 blackbox targets, more than 20 applications with custom metrics, Grafana access and existing scrape configuration. The operational record reported those functions retained after the change.</p>
-<h2>What I learned</h2><p>Cost engineering starts with identifying the exact billable mechanism. Publishing its currency, scope and operational trade-off makes the result more useful than a large aggregate savings claim.</p></div><footer class="doc-footer"><p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p><div class="cta-row"><a class="cta cta--primary" href="/#cases">See more case studies</a><a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<header class="doc-header"><span class="doc-eyebrow">Case study · FinOps · July 2025</span>
+<h1 class="doc-title">Removing an unnecessary monitoring ingestion cost</h1>
+<p class="doc-dek">A measured reduction in one billing line, with monitoring functionality checked separately.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
+<div class="doc-body">
+<h2>The problem</h2>
+<p>A Prometheus deployment forwarded metrics into a managed monitoring ingestion path. The operational record attributed £1,165.80 per month to that billing line, while the team also maintained a local monitoring stack.</p>
+<h2>My contribution</h2>
+<p>I replaced the managed ingestion path with a standard Prometheus stack and updated its configuration while preserving existing scrape targets, dashboards and alerts. The change was applied with checks for target health, query access and the absence of further managed ingestion.</p>
+<h2>The trade-off</h2>
+<p>Removing managed ingestion transfers responsibility for storage, availability and operations to the self-managed stack. A billing reduction is valuable only if the team understands those responsibilities and validates the monitoring capability it still needs.</p>
+<h2>Results and measurement</h2>
+<p>The recorded ingestion line fell from £1,165.80 per month to zero. The annualized equivalent is <strong>£13,989.60</strong>, calculated as twelve times that monthly reduction. Currency is GBP.</p>
+<p>This is not zero total monitoring cost. Compute, storage, maintenance and future capacity requirements remain separate. The annualized figure is a run-rate estimate, not a claim of twelve months of realized savings, and is not added to other portfolio savings totals.</p>
+<p>Validation covered more than 120 blackbox targets, more than 20 applications with custom metrics, Grafana access and existing scrape configuration. The operational record reported those functions retained after the change.</p>
+<h2>What I learned</h2>
+<p>Cost engineering starts with identifying the exact billable mechanism. Publishing its currency, scope and operational trade-off makes the result more useful than a large aggregate savings claim.</p></div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
         (function() {
             var btn = document.getElementById('themeToggle');
             var icon = document.getElementById('themeIcon');
