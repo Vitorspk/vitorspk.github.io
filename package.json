@@ -16,6 +16,7 @@
     "test": "npm run validate && npm run test:e2e",
     "og:generate": "node scripts/generate-og-image.js",
     "og:generate:case-vllm": "node scripts/generate-og-case-vllm.js",
+    "og:generate:case-gke": "node scripts/generate-og-case-gke.js",
     "prepare": "husky"
   },
   "lint-staged": {
