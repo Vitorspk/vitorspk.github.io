@@ -74,6 +74,28 @@ const CASES = {
       ['purple', 'Instant', 'Rollback (scale-to-zero)'],
     ],
   },
+  'strapi-v4-to-v5-upgrade': {
+    eyebrow: 'Case study · Upgrades',
+    title: 'Upgrading Strapi from',
+    gradient: 'v4 to v5 in production',
+    subtitle: 'A breaking major-version upgrade: a stepwise codebase path, 19 lifecycle hooks moved to the new Document Service, and a phased cutover with a legacy fallback.',
+    stats: [
+      ['green', 'v4 → v5', 'Major upgrade'],
+      ['blue', '19', 'Lifecycle hooks migrated'],
+      ['purple', 'Phased', 'Cutover, prod last'],
+    ],
+  },
+  'metabase-production-ops': {
+    eyebrow: 'Case study · BI / Data',
+    title: 'Running Metabase in production:',
+    gradient: 'upgrades, access & performance',
+    subtitle: 'Version upgrades across environments, least-privilege read-only data access, and killing a timeout-prone dashboard with the right index and a read replica.',
+    stats: [
+      ['green', 'Read-only', 'Least-privilege access'],
+      ['blue', '524 → fast', 'Slow dashboard fixed'],
+      ['purple', 'Replica', 'Reads off PRIMARY'],
+    ],
+  },
   'kubernetes-supply-chain-defense': {
     eyebrow: 'Guide · Kubernetes security',
     title: 'Defending Kubernetes',
