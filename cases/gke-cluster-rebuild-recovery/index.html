@@ -70,6 +70,13 @@
 <p class="case-map-note">The rehearsal adopted 49 of 49 certificates without reissuing. It is a recovery test, not a production recovery-time SLA.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Rebuild rehearsal, bootstrap/teardown repairs and certificate and GitOps recovery checks.</dd></div>
+<div><dt>Scope</dt><dd>One full rehearsal followed by reuse for three environment rebuilds during network renumbering.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I owned the infrastructure procedure and validation; application recovery was checked through GitOps state.</dd></div>
+<div><dt>Outcome</dt><dd>The rehearsal adopted 49/49 TLS certificates with zero reissues and restored 35 ArgoCD applications.</dd></div>
+</dl></section>
+
 
 <h2>The problem</h2>
 <p>Overlapping network ranges prevented private connectivity between a newer platform and legacy services. Some GKE address ranges are immutable, so the change required rebuilding clusters. A rebuild that silently reissued every TLS certificate could exhaust a shared weekly issuance quota before the platform was healthy.</p>
@@ -85,6 +92,7 @@
 <h2>What I would repeat</h2>
 <p>A recovery plan becomes credible when its destructive steps have actually run. Preserve the resources that carry identity, exercise restore order, and validate the recovered applications before calling the platform rebuilt.</p>
 <p>Related work: <a href="/cases/gke-terraform-shared-vpc/">the Terraform and Shared VPC foundation</a> and <a href="/cases/zero-downtime-cluster-migration/">staged workload migration</a>.</p>
+<section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Reissuing certificates is simpler than restoring them, but risks issuance quotas. Restoring TLS state first lets the controller adopt existing identity.</p><h3>Trade-off</h3><p>A rehearsal proves the tested recovery path; it does not establish a production recovery-time SLA.</p><h3>What I would improve next</h3><p>Next improvement: schedule repeat rehearsals, record recovery times and test recovery when one preserved dependency is missing.</p></section>
 </div>
 <footer class="doc-footer">
 <p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>

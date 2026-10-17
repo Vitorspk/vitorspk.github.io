@@ -97,6 +97,13 @@
 <p class="case-map-note">Cost allocation informs resource requests and consolidation; savings need a billing baseline.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Kubecost deployment, billing integration and workload allocation visibility.</dd></div>
+<div><dt>Scope</dt><dd>Sandbox and production cost-allocation infrastructure.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I made cost and resource usage visible to support workload decisions; visibility is distinct from verified adoption or savings.</dd></div>
+<div><dt>Outcome</dt><dd>Namespace/module allocation and rightsizing information; resulting savings require their own billing baseline.</dd></div>
+</dl></section>
+
 
             <p>Kubernetes cost is famously opaque. The cloud bill arrives as one number, but it is spread across namespaces, teams and workloads that share the same nodes, and nobody can say what anything actually costs. FinOps starts by fixing that: make the cost visible per workload, then act on what you see.</p>
 
@@ -143,7 +150,8 @@
                 <li>Make cost a daily glance, not a quarterly fire drill. Spikes are cheapest to fix the day they happen.</li>
             </ul>
 
-        </div>
+        <section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>A dedicated metrics stack simplifies initial collection; reusing a shared stack can reduce duplication but introduces coupling.</p><h3>Trade-off</h3><p>Allocation is an attribution model. Shared resources and labels affect how costs are assigned to teams.</p><h3>What I would improve next</h3><p>Next improvement: reconcile allocation coverage and measure which recommendations teams adopt before claiming optimization impact.</p></section>
+</div>
 
         <footer class="doc-footer">
             <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>

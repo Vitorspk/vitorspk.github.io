@@ -105,6 +105,13 @@
 <p class="case-map-note">The router POC and the later production fallback integration have separate measurements and rollout scopes.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>GPU-serving workflows, runtime selection, deployment repairs and invocation identity.</dd></div>
+<div><dt>Scope</dt><dd>A router POC, model-aware serving paths and a separate later production fallback rollout.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>Infrastructure and operational validation were my responsibility; application fallback integration was collaborative.</dd></div>
+<div><dt>Outcome</dt><dd>Two serving engines; 164 recorded deployment tests; later integration checked across four environments. These are separate validation records.</dd></div>
+</dl></section>
+
 <h2>My contribution</h2>
 <p>I built GPU-serving and deployment workflows, selected runtimes around model compatibility, repaired silent build and traffic-routing failures, and provisioned the identity needed for authenticated inference. I worked with the application team to promote and validate the fallback integration across environments.</p>
 <p>The work evolved in stages: a three-provider router proof of concept, model-specific serving paths using vLLM and llama.cpp, and a later production print-detection fallback integration. These are related pieces of engineering with separate validation records.</p>
@@ -198,6 +205,7 @@
 <p>I also connected router inventory to dynamic Prometheus discovery, so monitoring followed ephemeral GPU workers instead of relying on a manually updated address list. <a href="/cases/ai-fleet-observability/">Read the fleet observability case</a> for its rollout and monitoring boundaries.</p>
 <h2>The lesson</h2>
 <p>Model serving is a system of compatibility, identity, deployment and failure decisions. Validate the loaded model, the served revision and the fallback behavior independently; a green build or an HTTP health response cannot prove all three.</p>
+<section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>A single serving engine simplifies operations but cannot load every model architecture; isolated runtimes preserve compatibility at the cost of more deployment paths.</p><h3>Trade-off</h3><p>Cold GPU startup can exceed the request budget. A healthy container does not prove model readiness or correct traffic routing.</p><h3>What I would improve next</h3><p>Next improvement: measure warm/cold fallback rates, end-to-end latency and cost per completed request over a representative production window.</p></section>
 </div>
 <footer class="doc-footer">
             <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>

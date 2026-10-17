@@ -97,6 +97,13 @@
 <p class="case-map-note">A staged migration; production follow-up also checked the runtime service account.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Function-pipeline standardization, runtime migration and identity follow-up.</dd></div>
+<div><dt>Scope</dt><dd>Phased development/staging delivery and distinct later production operation.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I worked on the infrastructure and deploy path; a planning epic is not proof that every production function completed migration.</dd></div>
+<div><dt>Outcome</dt><dd>Standardized deployment work and a production follow-up that pinned runtime identity after an implicit service-account change.</dd></div>
+</dl></section>
+
 
             <p>A fleet of Cloud Functions tends to grow one function at a time, and the pipelines grow the same way: copied, tweaked, and never unified. The result was dozens of functions across several repositories, each deploying through a slightly different Jenkins pipeline, most of them slow, and none of them ready for Gen2. I standardized the whole set and modernized the runtimes, sanitized here to the technique.</p>
 
@@ -152,7 +159,8 @@
                 <li>Migrate runtimes in a fixed order (dev, staging, production; HTTP before Pub/Sub; non-critical before critical) and the scary migration becomes routine.</li>
             </ul>
 
-        </div>
+        <section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Per-function pipelines offer local flexibility; a common deploy path reduces repetition but must preserve runtime and trigger differences.</p><h3>Trade-off</h3><p>New runtime generations can change identity and logging as well as compute. Deployment success alone is insufficient acceptance.</p><h3>What I would improve next</h3><p>Next improvement: maintain a per-function migration inventory with trigger, identity, logging and rollback acceptance checks.</p></section>
+</div>
 
         <footer class="doc-footer">
             <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>

@@ -105,6 +105,13 @@
 <p class="case-map-note">Reusable Terraform modules provision network boundaries and GKE resources consistently.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Modular Terraform, network boundaries and a phased GKE platform rollout.</dd></div>
+<div><dt>Scope</dt><dd>Shared VPC and isolated environment infrastructure; public landing-zone examples are separate reusable code.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I designed and implemented the infrastructure foundation described here; public examples generalize the pattern rather than expose employer configuration.</dd></div>
+<div><dt>Outcome</dt><dd>Reusable environment provisioning and protected shared-network resources, delivered through a phased ownership transition.</dd></div>
+</dl></section>
+
 
             <p>Picture a GKE estate and the network under it, all provisioned by hand. No infrastructure as code, no consistent story across environments, and nothing stopping a stray <code>terraform destroy</code> from taking out the shared network. This is a write-up of rebuilding that into a Shared VPC, private clusters, a modular Terraform codebase, and an eight-phase rollout that never left the system half-managed.</p>
 
@@ -242,7 +249,8 @@
                 <li>Keep state remote and secrets out of the repo. The landing zones above show the defaults I use.</li>
             </ul>
 
-        </div>
+        <section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>A monolithic stack is quick to start; separating shared networking from environment workloads reduces destructive coupling.</p><h3>Trade-off</h3><p>Modules add interfaces and state boundaries that need ownership, versioning and safe migration.</p><h3>What I would improve next</h3><p>Next improvement: automate drift checks and validate recovery from each infrastructure state boundary.</p></section>
+</div>
 
         <footer class="doc-footer">
             <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>

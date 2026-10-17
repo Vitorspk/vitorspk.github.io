@@ -70,6 +70,13 @@
 <p class="case-map-note">Batch visibility includes risk dimensions and scan freshness; it is not real-time threat detection.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Security-result exporter, metric enrichment, dashboarding and scoped secret controls.</dd></div>
+<div><dt>Scope</dt><dd>Batch scan visibility plus separately validated scanner and secret-management changes.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I built infrastructure visibility and reversible controls; this work is not a claim of real-time threat detection or complete vulnerability coverage.</dd></div>
+<div><dt>Outcome</dt><dd>Scan risk and freshness became observable. Related work verified probe reachability and reversible secret-version controls within their recorded scopes.</dd></div>
+</dl></section>
+
 <h2>The problem</h2>
 <p>Periodic cloud security reports required manual triage. A point-in-time report made it difficult to compare findings across projects and services or see whether the underlying scan had become stale.</p>
 <h2>My contribution</h2>
@@ -91,7 +98,8 @@
 <p>I also changed a destructive secret-update workflow to preserve existing fields. A development validation added one field while retaining the original 183, then removed the test field and restored the original count. A later normalization reversibly disabled 133 older versions across 97 secrets in four projects, retaining the latest enabled version rather than destroying recovery options.</p>
 <p>These are scoped controls and validation records. They do not establish that every credential was rotated, every application used a dedicated identity, or that Vitor independently certified the organization.</p>
 <h2>What I learned</h2>
-<p>Security reporting becomes an operating capability when its dimensions, freshness and ownership are clear. A total count alone cannot tell a team where to act or whether the source is still current.</p></div>
+<p>Security reporting becomes an operating capability when its dimensions, freshness and ownership are clear. A total count alone cannot tell a team where to act or whether the source is still current.</p><section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Keeping only static reports is cheap but makes freshness and trends difficult to inspect. Exported metrics add shared visibility and maintenance responsibility.</p><h3>Trade-off</h3><p>Stale data can look reassuring; scan reachability and timestamps must remain separate from the number of findings.</p><h3>What I would improve next</h3><p>Next improvement: test stale-scan alerts and document triage ownership and exception expiry for each control.</p></section>
+</div>
 <footer class="doc-footer">
 <p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
 <div class="cta-row">

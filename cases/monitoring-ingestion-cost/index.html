@@ -70,6 +70,13 @@
 <p class="case-map-note">The managed ingestion line was removed; self-managed compute, storage and maintenance still have costs.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Replaced managed metric ingestion and preserved targets, dashboards and alert configuration.</dd></div>
+<div><dt>Scope</dt><dd>One managed Prometheus ingestion billing line, denominated in GBP.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I changed the monitoring infrastructure and checked target health, query access and the absence of further managed ingestion.</dd></div>
+<div><dt>Outcome</dt><dd>£1,165.80/month removed from that line; £13,989.60 annualized. Hosting and maintenance costs remain.</dd></div>
+</dl></section>
+
 <h2>The problem</h2>
 <p>A Prometheus deployment forwarded metrics into a managed monitoring ingestion path. The operational record attributed £1,165.80 per month to that billing line, while the team also maintained a local monitoring stack.</p>
 <h2>My contribution</h2>
@@ -81,7 +88,8 @@
 <p>This is not zero total monitoring cost. Compute, storage, maintenance and future capacity requirements remain separate. The annualized figure is a run-rate estimate, not a claim of twelve months of realized savings, and is not added to other portfolio savings totals.</p>
 <p>Validation covered more than 120 blackbox targets, more than 20 applications with custom metrics, Grafana access and existing scrape configuration. The operational record reported those functions retained after the change.</p>
 <h2>What I learned</h2>
-<p>Cost engineering starts with identifying the exact billable mechanism. Publishing its currency, scope and operational trade-off makes the result more useful than a large aggregate savings claim.</p></div>
+<p>Cost engineering starts with identifying the exact billable mechanism. Publishing its currency, scope and operational trade-off makes the result more useful than a large aggregate savings claim.</p><section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Managed ingestion transfers operational work to a provider; self-managed Prometheus changes the billing path and keeps that responsibility with the team.</p><h3>Trade-off</h3><p>The gross billing-line reduction is not a net saving after compute, storage and engineering maintenance.</p><h3>What I would improve next</h3><p>Next improvement: track net ownership cost and periodically exercise monitoring-stack recovery.</p></section>
+</div>
 <footer class="doc-footer">
 <p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
 <div class="cta-row">

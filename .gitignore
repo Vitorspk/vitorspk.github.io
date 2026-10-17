@@ -26,3 +26,7 @@ test-results/
 playwright-report/
 blob-report/
 .claude/
+
+# Python demonstration caches
+__pycache__/
+*.pyc

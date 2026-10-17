@@ -70,6 +70,13 @@
 <p class="case-map-note">Changing the resource type alone was insufficient; filters also had to match runtime-specific log formats.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Alert inventory, runtime-aware filter repairs and positive-control validation.</dd></div>
+<div><dt>Scope</dt><dd>22 alert policies and two log-based metrics affected by a runtime migration.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I repaired the monitoring path and checked application logging where a filter change alone was insufficient.</dd></div>
+<div><dt>Outcome</dt><dd>Policies and metrics repaired against known log messages; changing only the resource type still returned zero matches.</dd></div>
+</dl></section>
+
 <h2>The problem</h2>
 <p>After functions moved to a new runtime generation, the application dashboards still appeared healthy. But the log resource type and labels had changed, while alert policies and log-based metrics still filtered the previous format.</p>
 <p>An audit identified 22 policies and two metrics in scope. Twenty-one policies were enabled, but the old filters could no longer match their intended events. An absence of alerts had become indistinguishable from an absence of incidents.</p>
@@ -91,7 +98,8 @@
 <p>A later batch-worker investigation separated valid empty event counters from defective state gauges. A healthy circuit breaker must still publish its current state even if it never transitions. The repair also gave each replica an appropriate OpenTelemetry resource identity instead of merging its data into one ambiguous series.</p>
 <p>The production validation recorded zero ordering errors in a 3h28m window, compared with errors recurring every minute before the change. The same query returned the earlier errors as a positive control. Event panels could still legitimately have no data when no batch had run; the repair did not manufacture events to make a dashboard look populated.</p>
 <h2>What I learned</h2>
-<p>A filter returning zero rows is not a validation result until there is a known event it should match. Migration acceptance needs an observability check that exercises real payloads, not only a successful health endpoint.</p></div>
+<p>A filter returning zero rows is not a validation result until there is a known event it should match. Migration acceptance needs an observability check that exercises real payloads, not only a successful health endpoint.</p><section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Replacing only the resource type is simpler, but structured Go and plain-text Python logs require different payload matching.</p><h3>Trade-off</h3><p>A quiet dashboard cannot distinguish a healthy application from a broken logging or alerting path.</p><h3>What I would improve next</h3><p>Next improvement: automate periodic positive-control checks and include alert compatibility in migration acceptance criteria.</p></section>
+</div>
 <footer class="doc-footer">
 <p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
 <div class="cta-row">

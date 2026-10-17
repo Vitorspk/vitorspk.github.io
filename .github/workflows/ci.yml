@@ -29,6 +29,14 @@ jobs:
       - name: Validate (CSS build sync + HTML/CSS/JS lint)
         run: npm run validate
 
+      - name: Test independent Python inference example
+        run: python3 -m unittest discover -s examples/inference-fallback -p 'test_*.py' -v
+
+      - name: Verify downloadable sample matches its sources
+        run: |
+          python3 scripts/build-code-sample.py
+          git diff --exit-code -- examples/inference-fallback.zip
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium webkit
 

@@ -97,6 +97,13 @@
 <p class="case-map-note">A controlled production load improved from ~49.7 s to ~3.1 s; a separate MongoDB filter bottleneck remained.</p>
 </figure>
 
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>Upgrades, read-only database access and metadata-query performance diagnosis.</dd></div>
+<div><dt>Scope</dt><dd>BI operations and a controlled production dashboard-load measurement.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>I isolated infrastructure and metadata bottlenecks; a separate MongoDB filter bottleneck remained outside the measured fix.</dd></div>
+<div><dt>Outcome</dt><dd>Controlled dashboard load improved from ~49.7 s to ~3.1 s; this is not a universal dashboard-performance guarantee.</dd></div>
+</dl></section>
+
 
             <p>A BI tool quietly accumulates risk. It sits on powerful database credentials, its dashboards get slower as data grows, and its version drifts behind until an upgrade feels scary. I treated keeping Metabase healthy as three ongoing jobs: stay current, hold least privilege, and keep queries fast.</p>
 
@@ -129,7 +136,8 @@
                 <li>Upgrade on a schedule. Staying a few minors behind is cheaper than catching up by years.</li>
             </ul>
 
-        </div>
+        <section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Adding database capacity is one option; profiling first exposed a metadata access pattern that could be addressed with an index.</p><h3>Trade-off</h3><p>Index changes need a backup, a disposable rehearsal and a rollback plan. Metadata and source-query latency are different bottlenecks.</p><h3>What I would improve next</h3><p>Next improvement: repeat representative dashboard tests over time and address the remaining source-query bottleneck separately.</p></section>
+</div>
 
         <footer class="doc-footer">
             <p>I am Vitor Schiavo, a Site Reliability and Platform engineer. This is one case from my portfolio.</p>
