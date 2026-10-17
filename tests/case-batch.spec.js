@@ -7,6 +7,8 @@ const PAGES = [
   { path: '/cases/gcp-storage-cost-reduction/', title: /Cutting a GCP storage bill by 95\.9%/i, h1: /storage/i },
   { path: '/cases/cloud-functions-gen1-gen2/', title: /Gen1 to Gen2/i, h1: /Cloud Functions/i },
   { path: '/cases/kubernetes-supply-chain-defense/', title: /supply-chain attacks/i, h1: /Defending Kubernetes/i },
+  { path: '/cases/grafana-prometheus-modernization/', title: /Grafana \+ Prometheus/i, h1: /Grafana and Prometheus/i },
+  { path: '/cases/gke-dataplane-v2-cilium/', title: /Dataplane V2/i, h1: /Dataplane V2/i },
 ];
 
 for (const p of PAGES) {
