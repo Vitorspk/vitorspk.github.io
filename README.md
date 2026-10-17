@@ -47,6 +47,6 @@ Design rationale and implementation sequencing are retained under `docs/superpow
 
 ## Explanatory case visuals
 
-Every catalog case has a header icon and an introductory diagram; standalone articles repeat the matching diagram before the detailed reading. Edit `content/case-visuals.json`, then run `npm run build:visuals`. This pre-renders HTML and inline SVG into the existing pages, so visitors need no rendering library or extra network requests. `npm run validate` checks that all 31 catalog and 16 article diagrams remain synchronized.
+Every catalog case has a header icon and an introductory diagram; standalone articles repeat the matching diagram before the detailed reading. Edit `content/case-visuals.json`, then run `npm run build:visuals`. This pre-renders HTML and inline SVG into the existing pages, so visitors need no rendering library or extra network requests. `npm run validate` checks that all catalog and article diagrams remain synchronized.
 
 The home explorer connects delivery, reliability and cost decisions to specific case studies. Its three modes describe documented work; it does not display simulated live telemetry. Diagrams simplify the architecture and keep pilot, POC and cost-scope qualifications visible.

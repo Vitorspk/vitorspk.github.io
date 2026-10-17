@@ -49,3 +49,22 @@ Research covered both pages of the assignee/history cost search (218 items), a b
 | Historic USD 331K headline | Owner confirmed USD and annualized basis, but source reconciliation remains incomplete: original compute breakdown mislabeled a GBP result as USD; Airflow allocation and financial percentages differ. Do not restore or increase a total from mixed bases. |
 
 Home order: AI/LLM first, cost engineering second, observability third. The new umbrella cost case explains the wider program and scoped financial examples. Existing preview environment work remains accessible in the catalog and platform explorer. No raw exports, screenshots, private links or system identifiers are shipped.
+
+
+## 2026 case expansion from the weekly research
+
+Owner authorized implementation of the nine recommendations on the private research Page. The weekly inventory covered 1,091 resolved records through 17 October 2026; item counts are not productivity metrics and are not published as achievements.
+
+| Public change | Evidence and limits |
+| --- | --- |
+| Expanded LLM article, same URL | NCLS-4865: two isolated engines, 164 tests. NCLS-4882: dependency/traffic/digest repair. NCLS-5105/5145/5151: later multimodal fallback and four-environment identity validation; 395-request production snapshot. Dedicated workload identity in dev/stg/sdx only; production retained node identity. Application integration code was collaborative; do not claim sole authorship. Earlier NCLS-4237 remains a distinct router POC. |
+| New cluster rebuild case | NCLS-4968: 49/49 adopted, zero reissued, 35 apps healthy; ~20s is certificate readiness, not rebuild RTO. NCLS-4972: three rebuilt environments. Its text says 161 certs, table sums 160, so publish neither disputed aggregate. NCLS-4976: peering checked separately. |
+| New DNS performance case | NCLS-4778 final comment: ~18.7ms p50 to 2.06ms DNS; API P95 ~0.12s over a 20-minute observation. Do not apply the DNS improvement ratio to all API calls. |
+| Expanded Metabase case | NCLS-5193: controlled tab load ~49.7s to ~3.1s; metadata SQL 4,356ms to 8.2ms. Separate Mongo filter bottleneck and unproven original 524 cause remain explicit. Final comments confirm automated backups; no claim that only manual backups remain. |
+| New AI fleet observability case | NCLS-4346: HTTP discovery at 30s, five UP targets in rollout snapshot. No paging rules delivered; metric endpoint exception and manual dashboard import remain explicit. |
+| New scheduled-job observability case | NCLS-4834: 24/26 active cron entries, 16 rules, 12 panels. Wrapper success/failure/SIGTERM/gateway-unreachable checks. Do not equate provider acknowledgement with delivery to the end user. |
+| New queue-driven scaling case | NCLS-5070 final comments supersede original dev/stg-only scope: KEDA active in four envs, parent-side lifecycle fix prevented stuck-child OOMs. Replica maximum is configuration; no sustained throughput claim. Production QA exception and follow-ups remain scoped. |
+| Security and secret-governance enrichment | NCLS-4344 scan ~50 to ~15min for earlier project set; later dashboard covers 14 projects. NCLS-4416 80 tests/93.62% and real remaining policy failures. NCLS-5175 final 5,681 probes, 299 hosts, 19 paths, HTTP responses received, ~0.9min vs ~9min. NCLS-4320 three-repository ESO pilot; NCLS-4711 non-destructive update; NCLS-5032 reversible disabling of 133 versions across 97 secrets. No universal keyless/rotation/compliance claim. |
+| Observability follow-ups | NCLS-4797 newly covered scopes ~128k docs/day is observed volume, not failures. NCLS-4979 state gauges/resource identity; zero ordering errors in a 3h28m window with positive control. No annual availability inference. |
+
+No raw Jira exports, account identifiers, internal service names, private URLs or customer identifiers are added to public articles. Pending MDI adoption, KPI automation, alert-delivery validation and unfinished credential rotations are not promoted into completed outcomes. Five new article slugs, four expanded articles, 37 catalog drawings and 22 article drawings use the existing generated-visual contract. Home ordering remains AI, costs, observability.

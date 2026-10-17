@@ -857,6 +857,12 @@ td {
     font-size: 0.9rem;
 }
 
+/* Measured evidence in long-form case studies. */
+.evidence-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: var(--space-lg) 0; font-size: 0.875rem; }
+.evidence-table caption { text-align: left; color: var(--text-secondary); margin-bottom: var(--space-sm); }
+.evidence-table th, .evidence-table td { padding: var(--space-sm); border-bottom: 1px solid var(--border); text-align: left; overflow-wrap: anywhere; vertical-align: top; }
+.evidence-table th { color: var(--text-primary); font-weight: 600; }
+
 tr:hover td {
     background: var(--bg-hover);
     color: var(--text-primary);
@@ -1697,6 +1703,13 @@ body:has(.doc) .theme-toggle { position: absolute; top: var(--space-md); right: 
 .featured-ai { --case-color: var(--violet-readable); }
 
 .featured-finops { --case-color: var(--success); }
+
+
+.case-detail-flow { margin: var(--space-xl) 0; }
+.case-detail-flow-caption { margin-bottom: var(--space-md); font-weight: 600; }
+.case-detail-flow ol { display: grid; gap: var(--space-md); padding-left: var(--space-lg); }
+.case-detail-flow li { padding-left: var(--space-xs); }
+.case-detail-flow-description { display: block; color: var(--text-secondary); font-size: 0.875rem; }
 @media (width <= 1024px) {
     :root { --sidebar-w: 200px; }
     .featured-case { gap: var(--space-lg); }

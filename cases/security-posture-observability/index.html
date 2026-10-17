@@ -56,7 +56,7 @@
 <header class="doc-header"><span class="doc-eyebrow">Case study · Security operations · May 2026</span>
 <h1 class="doc-title">Security posture as an observable system</h1>
 <p class="doc-dek">Turn monthly cloud security scans into dimensional metrics, freshness signals and a useful triage dashboard.</p>
-<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~5 min read</span></div></header>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~7 min read</span></div></header>
 <div class="doc-body">
 <figure class="case-map" data-case-visual="security-posture-observability" data-visual-area="security">
 <figcaption><span>Solution at a glance</span><strong>Turn batch scan results into a useful signal.</strong></figcaption>
@@ -80,6 +80,16 @@
 <h2>Results and measurement</h2>
 <p>The delivery record includes a dry run covering all 14 projects, a successful end-to-end push, confirmation that Prometheus stored the metric and a dashboard populated with live results.</p>
 <p>The scan cadence is monthly. Dashboard visibility between runs does not turn this into real-time vulnerability detection. No claim is made here about an independently verified reduction in security incidents or findings.</p>
+<h2>Make the scan repeatable and useful</h2>
+<p>In an earlier pipeline modernization, I moved scanner dependencies into a versioned image, parallelized scans and uploads, corrected exit handling and reduced permission-related noise. The recorded end-to-end run fell from about 50 minutes to 15 minutes for that project set. The later dashboard rollout covered 14 projects; the two validation scopes should not be merged into one benchmark.</p>
+<p>A separate bucket-policy checker was refactored with bounded workers, typed results and actionable report messages. It recorded 80 unit tests and 93.62% coverage. Correct output still showed genuine policy failures; repairing the checker did not mean every bucket became compliant.</p>
+<h2>Prove the scanner reached its targets</h2>
+<p>I repaired a configuration-exposure scanner so an unreachable host could not be mistaken for a clean response. The final recorded run received HTTP responses for 5,681 probes across 299 hosts and 19 path variants, with zero connection failures. Its runtime was about 0.9 minute, compared with about nine minutes previously.</p>
+<p>No exposed configuration file was identified in that run. That is a result for the tested paths and responses, not a claim that all services were free of vulnerabilities.</p>
+<h2>Bring the same discipline to secrets</h2>
+<p>I piloted External Secrets Operator with Secret Manager across three repositories, including 16 ExternalSecrets and updates to 12 ArgoCD applications. Development, staging and sandbox used workload identity; the legacy production path retained a service-account key exception.</p>
+<p>I also changed a destructive secret-update workflow to preserve existing fields. A development validation added one field while retaining the original 183, then removed the test field and restored the original count. A later normalization reversibly disabled 133 older versions across 97 secrets in four projects, retaining the latest enabled version rather than destroying recovery options.</p>
+<p>These are scoped controls and validation records. They do not establish that every credential was rotated, every application used a dedicated identity, or that Vitor independently certified the organization.</p>
 <h2>What I learned</h2>
 <p>Security reporting becomes an operating capability when its dimensions, freshness and ownership are clear. A total count alone cannot tell a team where to act or whether the source is still current.</p></div>
 <footer class="doc-footer">

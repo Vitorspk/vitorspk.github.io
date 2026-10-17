@@ -84,6 +84,12 @@
 <h2>Results and measurement</h2>
 <p>The completion record confirms 22 policies and two metrics corrected and verified. A project-wide sweep found no remaining policy or metric using the obsolete resource filter.</p>
 <p>The five-match comparison is a positive-control test for a specific known message. It demonstrates why the resource-only fix was insufficient; it is not a claim that every possible future failure was covered. Some signals were deliberately left disabled where they were redundant, rather than enabling everything indiscriminately.</p>
+<h2>Extend coverage to the business flow</h2>
+<p>In a separate follow-up, I found that two high-volume verification scopes were absent from a monitor that watched a much smaller scope. The recorded production snapshot showed approximately 128,000 documents per day across those previously unwatched scopes. I added the missing checks and separated a dormant scope instead of treating one total as proof of complete coverage.</p>
+<p>That daily volume describes the observation used to find the gap. It is not a count of failed verifications or prevented incidents.</p>
+<h2>Distinguish no events from missing state</h2>
+<p>A later batch-worker investigation separated valid empty event counters from defective state gauges. A healthy circuit breaker must still publish its current state even if it never transitions. The repair also gave each replica an appropriate OpenTelemetry resource identity instead of merging its data into one ambiguous series.</p>
+<p>The production validation recorded zero ordering errors in a 3h28m window, compared with errors recurring every minute before the change. The same query returned the earlier errors as a positive control. Event panels could still legitimately have no data when no batch had run; the repair did not manufacture events to make a dashboard look populated.</p>
 <h2>What I learned</h2>
 <p>A filter returning zero rows is not a validation result until there is a known event it should match. Migration acceptance needs an observability check that exercises real payloads, not only a successful health endpoint.</p></div>
 <footer class="doc-footer">

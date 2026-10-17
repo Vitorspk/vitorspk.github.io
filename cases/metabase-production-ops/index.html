@@ -8,13 +8,13 @@
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <title>Running Metabase in production — Vitor Schiavo</title>
-    <meta name="description" content="Operating Metabase well: staying current on versions across environments, least-privilege read-only data access, routing BI reads to an analytics replica, and fixing a timeout-prone dashboard with the right index.">
+    <meta name="description" content="A controlled dashboard load improved from about 49.7 seconds to 3.1 seconds after a metadata index change, alongside safer data access and operational backups.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://vitorspk.github.io/cases/metabase-production-ops/">
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="Running Metabase in production: upgrades, access and performance">
-    <meta property="og:description" content="Version upgrades across environments, least-privilege read-only access, and killing a timeout-prone dashboard with the right index and a read replica.">
+    <meta property="og:description" content="A controlled dashboard load improved from about 49.7 seconds to 3.1 seconds after a metadata index change, alongside safer data access and operational backups.">
     <meta property="og:url" content="https://vitorspk.github.io/cases/metabase-production-ops/">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorspk.github.io/cases/metabase-production-ops/og.png">
@@ -24,7 +24,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Running Metabase in production">
-    <meta name="twitter:description" content="Upgrades, least-privilege read-only access, and killing a timeout-prone dashboard with the right index and a read replica.">
+    <meta name="twitter:description" content="A controlled dashboard load improved from about 49.7 seconds to 3.1 seconds after a metadata index change, alongside safer data access and operational backups.">
     <meta name="twitter:image" content="https://vitorspk.github.io/cases/metabase-production-ops/og.png">
     <meta name="twitter:image:alt" content="Running Metabase in production — a case study by Vitor Schiavo.">
 
@@ -33,7 +33,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "Running Metabase in production: upgrades, access and performance",
-      "description": "Operating Metabase well: staying current on versions across environments, least-privilege read-only data access, routing BI reads to an analytics replica, and fixing a timeout-prone dashboard with the right index.",
+      "description": "A controlled dashboard load improved from about 49.7 seconds to 3.1 seconds after a metadata index change, alongside safer data access and operational backups.",
       "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/" },
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
@@ -76,7 +76,7 @@
         <header class="doc-header">
             <span class="doc-eyebrow">Case study · BI / Data</span>
             <h1 class="doc-title">Running Metabase in production: upgrades, access and performance</h1>
-            <p class="doc-dek">Metabase is the window the whole business looks at the data through, which makes it easy to neglect and expensive to get wrong. Here is how I kept it current, locked down its access to least privilege, and turned a timeout-prone dashboard into a fast one.</p>
+            <p class="doc-dek">A controlled dashboard load improved from about 49.7 seconds to 3.1 seconds after a metadata index change, alongside safer data access and operational backups.</p>
             <div class="doc-meta">
                 <span>By Vitor Schiavo</span>
                 <span>Updated October 2026</span>
@@ -86,15 +86,15 @@
 
         <div class="doc-body">
 <figure class="case-map" data-case-visual="metabase-production-ops" data-visual-area="reliability">
-<figcaption><span>Solution at a glance</span><strong>Give analytics a safer query path.</strong></figcaption>
+<figcaption><span>Solution at a glance</span><strong>Find the metadata bottleneck before scaling the database.</strong></figcaption>
 <div class="case-map-flow">
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>Analyst</strong><span>Use controlled read access</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Trace the delay</strong><span>Separate metadata from data queries</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Metabase</strong><span>Run dashboards and queries</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Test the index</strong><span>Rehearse on a disposable clone</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Read replica</strong><span>Isolate analytics queries</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Production check</strong><span>Repeat the load with rollback ready</span></div>
 </div>
-<p class="case-map-note">Read-only access and replica-based queries help isolate analytics from the primary workload.</p>
+<p class="case-map-note">A controlled production load improved from ~49.7 s to ~3.1 s; a separate MongoDB filter bottleneck remained.</p>
 </figure>
 
 
@@ -107,19 +107,15 @@
             <p>Metabase connects to the databases it visualizes, and it is tempting to hand it a broad user because that "just works". That broad user is also a standing risk: a reporting tool with write access to source data is an incident waiting to happen. I replaced the broad database users with a dedicated <strong>read-only</strong> user, so the BI layer can query everything it needs and change nothing. A visualization tool has no business being able to write.</p>
 
             <h2>Keep production out of the blast radius</h2>
-            <p>Heavy analytical queries and live production traffic do not belong on the same database node. I mapped every data source Metabase was reading from and found queries landing on the <strong>primary</strong>, competing with the application. I routed those reads to a dedicated <strong>analytics replica</strong> instead, so a slow dashboard can never slow down the product.</p>
+            <p>Heavy analytical queries and live production traffic do not belong on the same database node. I mapped every data source Metabase was reading from and found queries landing on the <strong>primary</strong>, competing with the application. I routed those reads to a dedicated <strong>analytics replica</strong> instead, to reduce contention with the product workload.</p>
 
-            <h2>Kill the slow dashboard with the right index</h2>
-            <p>One dashboard was timing out with 524s under load. The cause was the classic one: a query doing a lot of work with no supporting index. Adding the right <strong>composite index</strong> turned a timeout into a fast response. Databases reward the index that matches the query, and punish its absence exactly when traffic is highest.</p>
-
-            <div class="stat-strip">
-                <div class="stat"><span class="stat-value">read-only</span><span class="stat-label">least-privilege access</span></div>
-                <div class="stat"><span class="stat-value">524 → fast</span><span class="stat-label">slow dashboard fixed</span></div>
-                <div class="stat"><span class="stat-value">replica</span><span class="stat-label">reads off the primary</span></div>
-                <div class="stat"><span class="stat-value">current</span><span class="stat-label">supported versions</span></div>
-            </div>
-
-            <div class="callout callout--win">
+            <h2>Find the metadata bottleneck</h2>
+<p>A slow dashboard investigation showed that each card spent much of its time fetching metadata from Metabase's own application database, before querying the source data. Dynamic source fields had accumulated a large metadata table; the existing index did not match the filter on table and active status.</p>
+<p>I reproduced the exact SQL on a disposable clone, compared sequential and concurrent loads, and rehearsed index creation and rollback. In production, I took a fresh backup, waited for active queries to clear and added a composite index with an explicit lock timeout and online DDL.</p>
+<div class="table-container"><table class="evidence-table"><caption>Controlled production measurements, one load before and after</caption><thead><tr><th scope="col">Signal</th><th scope="col">Before</th><th scope="col">After</th></tr></thead><tbody><tr><th scope="row">Metadata SQL, EXPLAIN ANALYZE</th><td>4,356 ms</td><td>8.2 ms</td></tr><tr><th scope="row">Eight cards, each</th><td>35.7–37.1 s</td><td>1.15–1.62 s</td></tr><tr><th scope="row">Whole dashboard tab</th><td>~49.7 s</td><td>~3.1 s</td></tr></tbody></table></div>
+<p>Index creation took about 29 seconds with zero metadata-lock waits in that execution. These are controlled before/after measurements, not a latency distribution for all dashboard users. A separate MongoDB filter scan remained a different bottleneck, and the originally reported 524 did not have a proven cause.</p>
+<p>The follow-up confirmed a successful automated daily backup with seven retained recovery points. Temporary clone resources and approved on-demand backups were cleaned up. The index was added to the upgrade checklist because it sits outside Metabase's own migrations and must be checked after an upgrade or restore.</p>
+<div class="callout callout--win">
                 <p class="callout-title">Also: trust the data, not just the tool</p>
                 <p>A separate but related job is data freshness. When a dashboard quietly stopped updating for one downstream integration, the tool looked fine; the data had gone stale upstream. Operating a BI platform well means watching the pipeline into it, not only the service itself, because a confidently-wrong dashboard is worse than a broken one.</p>
             </div>
@@ -128,7 +124,7 @@
             <ul>
                 <li>Give it a read-only user. A reporting tool should never be able to write to source data.</li>
                 <li>Point analytical reads at a replica. Keep heavy dashboards off the node that serves the product.</li>
-                <li>Index for the query. A timing-out dashboard is usually a missing composite index, not a tool problem.</li>
+                <li>Index for the query. Trace metadata loading separately from source queries, then test the index against the exact SQL.</li>
                 <li>Watch the data in, not just the service. A stale dashboard that still renders is the quiet failure mode.</li>
                 <li>Upgrade on a schedule. Staying a few minors behind is cheaper than catching up by years.</li>
             </ul>

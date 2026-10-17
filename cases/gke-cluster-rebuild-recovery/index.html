@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Rebuilding GKE without reissuing certificates — Vitor Schiavo</title>
+    <meta name="description" content="A real rebuild rehearsal exposed failures that code review missed, then enabled three cluster rebuilds without consuming certificate issuance quota.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Rebuilding GKE without reissuing certificates">
+    <meta property="og:description" content="A real rebuild rehearsal exposed failures that code review missed, then enabled three cluster rebuilds without consuming certificate issuance quota.">
+    <meta property="og:url" content="https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Rebuilding GKE without reissuing certificates — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Rebuilding GKE without reissuing certificates">
+    <meta name="twitter:description" content="A real rebuild rehearsal exposed failures that code review missed, then enabled three cluster rebuilds without consuming certificate issuance quota.">
+    <meta name="twitter:image" content="https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/og.png">
+    <meta name="twitter:image:alt" content="Rebuilding GKE without reissuing certificates — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Rebuilding GKE without reissuing certificates", "description": "A real rebuild rehearsal exposed failures that code review missed, then enabled three cluster rebuilds without consuming certificate issuance quota.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorspk.github.io/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/", "mainEntityOfPage": "https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/", "image": "https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<header class="doc-header"><span class="doc-eyebrow">Case study · Platform engineering · September 2026</span>
+<h1 class="doc-title">Rebuilding GKE without reissuing certificates</h1>
+<p class="doc-dek">A real rebuild rehearsal exposed failures that code review missed, then enabled three cluster rebuilds without consuming certificate issuance quota.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated October 2026</span><span>~4 min read</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="gke-cluster-rebuild-recovery" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Restore the identity before recreating the controller intent.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Preserve state</strong><span>Inventory TLS and reserved IPs</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Rebuild &amp; restore</strong><span>Restore TLS before Certificates</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Prove recovery</strong><span>Check certificates and GitOps</span></div>
+</div>
+<p class="case-map-note">The rehearsal adopted 49 of 49 certificates without reissuing. It is a recovery test, not a production recovery-time SLA.</p>
+</figure>
+
+
+<h2>The problem</h2>
+<p>Overlapping network ranges prevented private connectivity between a newer platform and legacy services. Some GKE address ranges are immutable, so the change required rebuilding clusters. A rebuild that silently reissued every TLS certificate could exhaust a shared weekly issuance quota before the platform was healthy.</p>
+<h2>My contribution</h2>
+<p>I ran a destructive rebuild rehearsal in an isolated environment, corrected failures in the bootstrap and teardown scripts, and verified certificate adoption, reserved load-balancer addresses and GitOps recovery. I then used that process for three environment rebuilds as part of network renumbering.</p>
+<div class="stat-strip"><div class="stat"><strong class="stat-value">49 / 49</strong><span class="stat-label">Certificates adopted in the rehearsal</span></div><div class="stat"><strong class="stat-value">0</strong><span class="stat-label">Certificates reissued in the rehearsal</span></div><div class="stat"><strong class="stat-value">35</strong><span class="stat-label">ArgoCD applications restored to Synced/Healthy</span></div></div>
+<h2>The order of recovery matters</h2>
+<p>I restored TLS Secrets before recreating Certificate resources. That let cert-manager adopt existing certificates instead of requesting replacements. Reserved external addresses were preserved independently of the old subnet, so replacing the cluster did not require changing the associated DNS records.</p>
+<p>Running the process exposed defects that a static review had missed: a guard rejected state created by the preceding step, missing resource kinds broke otherwise idempotent deletion, and removing External Secrets Operator before its finalizers completed could deadlock teardown. I fixed the lifecycle ordering and checked the resulting cluster state.</p>
+<h2>Results and measurement</h2>
+<p>The rehearsal reported 49 certificates found, 49 adopted, zero reissued and none left unready. They became Ready in about 20 seconds; that is certificate readiness time, not the duration of the complete rebuild. The certificate issuance quota remained at the same value before and after. The node identity changed, confirming this was a new cluster rather than a restart of the old one.</p>
+<p>The method subsequently supported three cluster rebuilds during network renumbering without consuming additional issuance quota. Private peering was then activated and checked with a before/after connectivity test. This does not establish a production RTO or a company-wide disaster recovery guarantee.</p>
+<h2>What I would repeat</h2>
+<p>A recovery plan becomes credible when its destructive steps have actually run. Preserve the resources that carry identity, exercise restore order, and validate the recovered applications before calling the platform rebuilt.</p>
+<p>Related work: <a href="/cases/gke-terraform-shared-vpc/">the Terraform and Shared VPC foundation</a> and <a href="/cases/zero-downtime-cluster-migration/">staged workload migration</a>.</p>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

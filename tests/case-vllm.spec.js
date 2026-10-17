@@ -8,14 +8,14 @@ test.use({ viewport: { width: 1280, height: 800 } });
 test.describe('Case page — self-hosting Gemma 3 vLLM', () => {
   test('loads the standalone page (not the SPA fallback)', async ({ page }) => {
     await page.goto(PAGE);
-    await expect(page).toHaveTitle(/Self-hosting Gemma 3 12B/);
+    await expect(page).toHaveTitle(/Operating multimodal LLMs/);
   });
 
   test('has exactly one h1 with the article title', async ({ page }) => {
     await page.goto(PAGE);
     const h1 = page.locator('h1');
     await expect(h1).toHaveCount(1);
-    await expect(h1).toContainText('Self-hosting Gemma 3 12B');
+    await expect(h1).toContainText('Operating multimodal LLMs');
   });
 
   test('axe-core: no violations', async ({ page }) => {

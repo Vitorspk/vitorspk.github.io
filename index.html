@@ -174,22 +174,22 @@
 <div class="featured-copy">
 <p class="work-domain"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg>AI infrastructure &amp; LLM serving</p>
 <h3>
-<a href="/cases/self-hosting-gemma-3-vllm/">Gemma 3 &amp; vLLM: multi-provider LLM inference</a>
+<a href="/cases/self-hosting-gemma-3-vllm/">Operating multimodal LLMs across engines and clouds</a>
 </h3>
-<p>I built GPU-serving workflows for Gemma 3 12B with vLLM and tested a FastAPI router across three providers, covering warm and cold fallback paths. The router was validated as a proof of concept.</p>
+<p>I built serving workflows with vLLM and llama.cpp, isolated incompatible model runtimes and validated authenticated fallback across environments. The work spans a router POC and later production integration.</p>
 <a class="text-link" href="/cases/self-hosting-gemma-3-vllm/">Read the decisions and results <span aria-hidden="true">↗</span>
 </a>
 </div>
 <figure class="work-visual">
-<figcaption>FastAPI router · tested fallback paths</figcaption>
+<figcaption>From model compatibility to operated inference</figcaption>
 <div class="flow-path">
-<span>RunPod · vLLM</span>
+<span>Model → vLLM or llama.cpp</span>
 <span aria-hidden="true">↓</span>
-<span>Cloud Run GPU</span>
+<span>RunPod / Cloud Run GPU</span>
 <span aria-hidden="true">↓</span>
-<span>GCE Managed Instance Group</span>
+<span>Identity · health checks · fallback</span>
 </div>
-<p>Router POC · six test scenarios passed.</p>
+<p>Two serving engines. Production rollout validated separately from the router POC.</p>
 </figure>
 </article>
 <article class="featured-case featured-finops">
@@ -441,6 +441,96 @@
 </a>
 </div>
 </article>
+<article class="case-study" data-category="platform" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg></span>
+<div><h3 class="case-title">Rebuilding GKE without reissuing certificates</h3><p class="case-date">September 2026 · A real rebuild rehearsal exposed failures that code review missed, then enabled three cluster rebuilds without consuming certificate issuance quota.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="gke-cluster-rebuild-recovery" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Restore the identity before recreating the controller intent.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Preserve state</strong><span>Inventory TLS and reserved IPs</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Rebuild &amp; restore</strong><span>Restore TLS before Certificates</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Prove recovery</strong><span>Check certificates and GitOps</span></div>
+</div>
+<p class="case-map-note">The rehearsal adopted 49 of 49 certificates without reissuing. It is a recovery test, not a production recovery-time SLA.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I rehearsed a full cluster rebuild, repaired restore-order and controller-lifecycle defects, then reused the process while renumbering three environments.</p></div>
+<a class="case-readmore" href="/cases/gke-cluster-rebuild-recovery/">Read the case study <span aria-hidden="true">→</span></a></div></article>
+<article class="case-study" data-category="reliability" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+<div><h3 class="case-title">Finding the latency hidden in Kubernetes DNS</h3><p class="case-date">July 2026 · Separating DNS lookup time from TCP connection time revealed why a healthy API kept triggering latency alerts.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="kubernetes-dns-latency" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Measure each layer before changing capacity.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Trace the latency</strong><span>Separate lookup and TCP time</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Adjust resolution</strong><span>Tune ndots in the shared chart</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Validate in production</strong><span>Repeat the original measurement</span></div>
+</div>
+<p class="case-map-note">The roughly 9× improvement describes the measured DNS lookup, not every API request or a sustained service-level guarantee.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I isolated DNS overhead from database network latency, changed the shared Helm DNS configuration and verified the production rollout against the original measurement.</p></div>
+<a class="case-readmore" href="/cases/kubernetes-dns-latency/">Read the case study <span aria-hidden="true">→</span></a></div></article>
+<article class="case-study" data-category="ai" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="ai" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg></span>
+<div><h3 class="case-title">Observing an ephemeral AI inference fleet</h3><p class="case-date">April 2026 · Dynamic Prometheus discovery kept GPU workers and inference pods visible as their provider addresses changed.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="ai-fleet-observability" data-visual-area="ai">
+<figcaption><span>Solution at a glance</span><strong>Discover the fleet from the component that already knows it.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Router inventory</strong><span>Track worker heartbeats</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>HTTP discovery</strong><span>Refresh ephemeral targets</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Fleet dashboard</strong><span>Inspect GPU and inference signals</span></div>
+</div>
+<p class="case-map-note">Five targets were UP in the rollout snapshot. This delivery added visibility; paging rules were a separate follow-up.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I connected the router inventory to Prometheus HTTP service discovery and a fleet dashboard, removing the need to maintain a static target list after each GPU deployment.</p></div>
+<a class="case-readmore" href="/cases/ai-fleet-observability/">Read the case study <span aria-hidden="true">→</span></a></div></article>
+<article class="case-study" data-category="reliability" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+<div><h3 class="case-title">Making scheduled jobs observable</h3><p class="case-date">August 2026 · A reusable execution wrapper made short-lived jobs visible without changing their business logic or letting telemetry failures break them.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="scheduled-jobs-observability" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>A job that disappears still needs a lasting health signal.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Scheduled job</strong><span>Wrap execution and preserve exit code</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Persistent signals</strong><span>Push completion and timestamps</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Freshness rules</strong><span>Alert according to the schedule</span></div>
+</div>
+<p class="case-map-note">24 of 26 active entries were instrumented. Freshness thresholds reflect each schedule; telemetry failures do not replace the job result.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I instrumented 24 of 26 active cron entries, added schedule-aware freshness rules and tested that monitoring preserved the real outcome of each job.</p></div>
+<a class="case-readmore" href="/cases/scheduled-jobs-observability/">Read the case study <span aria-hidden="true">→</span></a></div></article>
+<article class="case-study" data-category="platform" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="platform" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+<div><h3 class="case-title">Fix the worker before scaling the fleet</h3><p class="case-date">September 2026 · A queue-based autoscaling rollout exposed stuck browser workers; scaling became useful only after the resource leak was contained.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="queue-driven-autoscaling" data-visual-area="platform">
+<figcaption><span>Solution at a glance</span><strong>Release the stuck work before adding more workers.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Queue backlog</strong><span>Measure actual waiting work</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Worker lifecycle</strong><span>Bound and release child processes</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>KEDA scaling</strong><span>Scale the corrected workload</span></div>
+</div>
+<p class="case-map-note">KEDA was active in four environments. The 50-replica production ceiling is configuration, not demonstrated throughput capacity.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I traced backlog and OOMs to stuck child processes, fixed their lifecycle and replaced CPU/memory scaling with a Pub/Sub backlog trigger across four environments.</p></div>
+<a class="case-readmore" href="/cases/queue-driven-autoscaling/">Read the case study <span aria-hidden="true">→</span></a></div></article>
 <article class="case-study" data-category="finops" data-expanded="false">
 <div class="case-header">
 <span class="case-header-mark" data-visual-area="finops" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg></span>
@@ -557,29 +647,29 @@
 </article>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
-<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg></span>
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
 
 <div>
 <h3 class="case-title">Keeping Metabase useful in production</h3>
-<p class="case-date">Upgrades, read-only access, indexes and query isolation on a replica.</p>
+<p class="case-date">Controlled dashboard load: ~49.7 s → ~3.1 s; upgrades, read-only access and query isolation.</p>
 </div>
 </div>
 <div class="case-body">
 <figure class="case-map" data-case-visual="metabase-production-ops" data-visual-area="reliability">
-<figcaption><span>Solution at a glance</span><strong>Give analytics a safer query path.</strong></figcaption>
+<figcaption><span>Solution at a glance</span><strong>Find the metadata bottleneck before scaling the database.</strong></figcaption>
 <div class="case-map-flow">
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 6a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM4 22v-3a8 8 0 0 1 16 0v3"></path></svg><strong>Analyst</strong><span>Use controlled read access</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Trace the delay</strong><span>Separate metadata from data queries</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Metabase</strong><span>Run dashboards and queries</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Test the index</strong><span>Rehearse on a disposable clone</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Read replica</strong><span>Isolate analytics queries</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Production check</strong><span>Repeat the load with rollback ready</span></div>
 </div>
-<p class="case-map-note">Read-only access and replica-based queries help isolate analytics from the primary workload.</p>
+<p class="case-map-note">A controlled production load improved from ~49.7 s to ~3.1 s; a separate MongoDB filter bottleneck remained.</p>
 </figure>
 
 <div class="impact-metrics">
 <h4>What changed</h4>
-<p>Upgrades, read-only access, indexes and query isolation on a replica.</p>
+<p>Controlled dashboard load: ~49.7 s → ~3.1 s; upgrades, read-only access and query isolation.</p>
 </div>
 <a class="case-readmore" href="/cases/metabase-production-ops/">Read the case study <span aria-hidden="true">→</span>
 </a>
@@ -591,7 +681,7 @@
 
 <div>
 <h3 class="case-title">Security posture as an observable system</h3>
-<p class="case-date">Monthly scans across 14 cloud projects, enriched metrics and a dashboard for triage.</p>
+<p class="case-date">Security scans, verified probe reachability and reversible secret controls, with documented rollout scopes.</p>
 </div>
 </div>
 <div class="case-body">
@@ -609,7 +699,7 @@
 
 <div class="impact-metrics">
 <h4>What changed</h4>
-<p>I connected batch scan results to Prometheus and Grafana, preserving project/service/risk dimensions and scan freshness. End-to-end metric ingestion and dashboard data were verified.</p>
+<p>I connected security scans to Prometheus and Grafana, improved scanner reliability and verified configuration-exposure probes. Related work added scoped secret delivery and reversible version controls.</p>
 </div>
 <a class="case-readmore" href="/cases/security-posture-observability/">Read the case study <span aria-hidden="true">→</span>
 </a>
@@ -986,6 +1076,7 @@
 <ul class="impact-list">
 <li class="impact-item">
 <strong>60+ databases secured</strong> (MongoDB Atlas + PostgreSQL)</li>
+<li class="impact-item"><strong>Later platform controls:</strong> piloted External Secrets in three repositories; made secret updates preserve existing fields; reversibly disabled 133 older versions across 97 secrets in four projects. Production identity exceptions remained documented.</li>
 <li class="impact-item">
 <strong>Zero security incidents</strong> post-implementation</li>
 <li class="impact-item">
@@ -1228,29 +1319,29 @@
 </div>
 <article class="case-study" data-category="ai" data-expanded="false">
 <div class="case-header">
-<span class="case-header-mark" data-visual-area="ai" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
+<span class="case-header-mark" data-visual-area="ai" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg></span>
 
 <div>
-<h3 class="case-title">LLM inference fallback — three-provider proof of concept</h3>
-<p class="case-date">Six controlled scenarios tested, including complete provider failure.</p>
+<h3 class="case-title">Multimodal LLM serving across engines and clouds</h3>
+<p class="case-date">Model-aware runtime selection, served-revision checks and authenticated fallback.</p>
 </div>
 </div>
 <div class="case-body">
 <figure class="case-map" data-case-visual="self-hosting-gemma-3-vllm" data-visual-area="ai">
-<figcaption><span>Solution at a glance</span><strong>Exercise the fallback path before relying on it.</strong></figcaption>
+<figcaption><span>Solution at a glance</span><strong>Match the model to its runtime, then validate the served path.</strong></figcaption>
 <div class="case-map-flow">
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Inference request</strong><span>Enter the FastAPI router</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><strong>Model compatibility</strong><span>Choose vLLM or llama.cpp</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Provider routing</strong><span>Try warm and cold fallback</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>GPU serving</strong><span>Isolate images and deployments</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><strong>GPU serving</strong><span>Validate the returned response</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Operated fallback</strong><span>Validate identity and response</span></div>
 </div>
-<p class="case-map-note">Three-provider proof of concept; test infrastructure was removed pending a production decision.</p>
+<p class="case-map-note">The router POC and the later production fallback integration have separate measurements and rollout scopes.</p>
 </figure>
 
 <div class="impact-metrics">
 <h4>Scope and result</h4>
-<p>A FastAPI router demonstrated warm and cold fallback across RunPod, Cloud Run GPU and a GCE Managed Instance Group. The test infrastructure was removed afterward, pending production adoption.</p>
+<p>I built model-aware vLLM and llama.cpp serving paths, repaired deployments that served an old revision, and validated authenticated application fallback across four environments. The earlier three-provider router remains a separate POC.</p>
 </div>
 <a class="case-readmore" href="/cases/self-hosting-gemma-3-vllm/">Read the case study <span aria-hidden="true">→</span>
 </a>
@@ -2194,7 +2285,7 @@
 <th scope="row">AI infrastructure</th>
 <td>GPU serving, startup optimization, failover experiments</td>
 <td>
-<a href="/cases/self-hosting-gemma-3-vllm/">LLM infrastructure and fallback POC</a>
+<a href="/cases/self-hosting-gemma-3-vllm/">Multimodal LLM serving and operated fallback</a>
 </td>
 </tr>
 </tbody>

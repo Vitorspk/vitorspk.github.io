@@ -228,24 +228,24 @@
     "id": "metabase-production-ops",
     "cardTitle": "Keeping Metabase useful in production",
     "category": "reliability",
-    "title": "Give analytics a safer query path.",
-    "note": "Read-only access and replica-based queries help isolate analytics from the primary workload.",
+    "title": "Find the metadata bottleneck before scaling the database.",
+    "note": "A controlled production load improved from ~49.7 s to ~3.1 s; a separate MongoDB filter bottleneck remained.",
     "article": "metabase-production-ops",
     "nodes": [
       {
-        "icon": "person",
-        "label": "Analyst",
-        "detail": "Use controlled read access"
-      },
-      {
         "icon": "activity",
-        "label": "Metabase",
-        "detail": "Run dashboards and queries"
+        "label": "Trace the delay",
+        "detail": "Separate metadata from data queries"
       },
       {
         "icon": "database",
-        "label": "Read replica",
-        "detail": "Isolate analytics queries"
+        "label": "Test the index",
+        "detail": "Rehearse on a disposable clone"
+      },
+      {
+        "icon": "check",
+        "label": "Production check",
+        "detail": "Repeat the load with rollback ready"
       }
     ]
   },
@@ -526,26 +526,26 @@
   },
   {
     "id": "self-hosting-gemma-3-vllm",
-    "cardTitle": "LLM inference fallback — three-provider proof of concept",
+    "cardTitle": "Multimodal LLM serving across engines and clouds",
     "category": "ai",
-    "title": "Exercise the fallback path before relying on it.",
-    "note": "Three-provider proof of concept; test infrastructure was removed pending a production decision.",
+    "title": "Match the model to its runtime, then validate the served path.",
+    "note": "The router POC and the later production fallback integration have separate measurements and rollout scopes.",
     "article": "self-hosting-gemma-3-vllm",
     "nodes": [
       {
-        "icon": "code",
-        "label": "Inference request",
-        "detail": "Enter the FastAPI router"
-      },
-      {
-        "icon": "branch",
-        "label": "Provider routing",
-        "detail": "Try warm and cold fallback"
-      },
-      {
         "icon": "chip",
+        "label": "Model compatibility",
+        "detail": "Choose vLLM or llama.cpp"
+      },
+      {
+        "icon": "cloud",
         "label": "GPU serving",
-        "detail": "Validate the returned response"
+        "detail": "Isolate images and deployments"
+      },
+      {
+        "icon": "shield",
+        "label": "Operated fallback",
+        "detail": "Validate identity and response"
       }
     ]
   },
@@ -796,6 +796,131 @@
         "icon": "check",
         "label": "Billing validation",
         "detail": "Compare scoped results"
+      }
+    ]
+  },
+  {
+    "id": "gke-cluster-rebuild-recovery",
+    "cardTitle": "Rebuilding GKE without reissuing certificates",
+    "category": "platform",
+    "title": "Restore the identity before recreating the controller intent.",
+    "note": "The rehearsal adopted 49 of 49 certificates without reissuing. It is a recovery test, not a production recovery-time SLA.",
+    "article": "gke-cluster-rebuild-recovery",
+    "nodes": [
+      {
+        "icon": "database",
+        "label": "Preserve state",
+        "detail": "Inventory TLS and reserved IPs"
+      },
+      {
+        "icon": "layers",
+        "label": "Rebuild & restore",
+        "detail": "Restore TLS before Certificates"
+      },
+      {
+        "icon": "check",
+        "label": "Prove recovery",
+        "detail": "Check certificates and GitOps"
+      }
+    ]
+  },
+  {
+    "id": "kubernetes-dns-latency",
+    "cardTitle": "Finding the latency hidden in Kubernetes DNS",
+    "category": "reliability",
+    "title": "Measure each layer before changing capacity.",
+    "note": "The roughly 9× improvement describes the measured DNS lookup, not every API request or a sustained service-level guarantee.",
+    "article": "kubernetes-dns-latency",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Trace the latency",
+        "detail": "Separate lookup and TCP time"
+      },
+      {
+        "icon": "layers",
+        "label": "Adjust resolution",
+        "detail": "Tune ndots in the shared chart"
+      },
+      {
+        "icon": "check",
+        "label": "Validate in production",
+        "detail": "Repeat the original measurement"
+      }
+    ]
+  },
+  {
+    "id": "ai-fleet-observability",
+    "cardTitle": "Observing an ephemeral AI inference fleet",
+    "category": "ai",
+    "title": "Discover the fleet from the component that already knows it.",
+    "note": "Five targets were UP in the rollout snapshot. This delivery added visibility; paging rules were a separate follow-up.",
+    "article": "ai-fleet-observability",
+    "nodes": [
+      {
+        "icon": "branch",
+        "label": "Router inventory",
+        "detail": "Track worker heartbeats"
+      },
+      {
+        "icon": "activity",
+        "label": "HTTP discovery",
+        "detail": "Refresh ephemeral targets"
+      },
+      {
+        "icon": "layers",
+        "label": "Fleet dashboard",
+        "detail": "Inspect GPU and inference signals"
+      }
+    ]
+  },
+  {
+    "id": "scheduled-jobs-observability",
+    "cardTitle": "Making scheduled jobs observable",
+    "category": "reliability",
+    "title": "A job that disappears still needs a lasting health signal.",
+    "note": "24 of 26 active entries were instrumented. Freshness thresholds reflect each schedule; telemetry failures do not replace the job result.",
+    "article": "scheduled-jobs-observability",
+    "nodes": [
+      {
+        "icon": "code",
+        "label": "Scheduled job",
+        "detail": "Wrap execution and preserve exit code"
+      },
+      {
+        "icon": "activity",
+        "label": "Persistent signals",
+        "detail": "Push completion and timestamps"
+      },
+      {
+        "icon": "check",
+        "label": "Freshness rules",
+        "detail": "Alert according to the schedule"
+      }
+    ]
+  },
+  {
+    "id": "queue-driven-autoscaling",
+    "cardTitle": "Fix the worker before scaling the fleet",
+    "category": "platform",
+    "title": "Release the stuck work before adding more workers.",
+    "note": "KEDA was active in four environments. The 50-replica production ceiling is configuration, not demonstrated throughput capacity.",
+    "article": "queue-driven-autoscaling",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Queue backlog",
+        "detail": "Measure actual waiting work"
+      },
+      {
+        "icon": "code",
+        "label": "Worker lifecycle",
+        "detail": "Bound and release child processes"
+      },
+      {
+        "icon": "layers",
+        "label": "KEDA scaling",
+        "detail": "Scale the corrected workload"
       }
     ]
   }

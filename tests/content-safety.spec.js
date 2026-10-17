@@ -71,3 +71,13 @@ test.describe('Content Safety', () => {
     expect(html).not.toMatch(/0b397135-7b70/);
   });
 });
+
+test('Metabase search and sharing summaries retain the controlled measurement scope', async ({ page }) => {
+  await page.goto('/cases/metabase-production-ops/');
+  for (const selector of ['meta[name="description"]', 'meta[property="og:description"]', 'meta[name="twitter:description"]']) {
+    await expect(page.locator(selector)).toHaveAttribute('content', /controlled/i);
+  }
+  const article = JSON.parse(await page.locator('script[type="application/ld+json"]').textContent());
+  expect(article.description).toMatch(/controlled/i);
+  await expect(page.locator('.doc-dek')).toContainText('controlled');
+});
