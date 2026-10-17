@@ -75,25 +75,37 @@
   <url>
     <loc>https://vitorspk.github.io/cases/jenkins-qa-signal-recovery/</loc>
     <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vitorspk.github.io/cases/ephemeral-preview-environments/</loc>
     <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vitorspk.github.io/cases/gen2-observability-repair/</loc>
     <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vitorspk.github.io/cases/security-posture-observability/</loc>
     <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vitorspk.github.io/cases/monitoring-ingestion-cost/</loc>
     <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://vitorspk.github.io/resume.html</loc>
     <lastmod>2026-10-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

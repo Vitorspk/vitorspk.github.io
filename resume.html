@@ -9,10 +9,9 @@
          'unsafe-inline' on script-src/style-src is required because:
            - blocking theme script in <head> (FOUC prevention)
            - inline ld+json structured data
-           - inline <style> block in 404.html
-           - Google Fonts injects inline styles -->
+         Styles and fonts load from the site and Google Fonts. -->
     <meta http-equiv="Content-Security-Policy"
-          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+          content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <!-- SEO -->
     <title>Vitor Schiavo — Résumé</title>
@@ -23,7 +22,7 @@
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Vitor Schiavo — Platforms teams can trust">
+    <meta property="og:title" content="Vitor Schiavo — Résumé">
     <meta property="og:description" content="Engineering decisions and results: trustworthy CI, ephemeral preview environments and useful observability.">
     <meta property="og:url" content="https://vitorspk.github.io/resume.html">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
@@ -34,7 +33,7 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Vitor Schiavo — Site Reliability Engineer">
+    <meta name="twitter:title" content="Vitor Schiavo — Résumé">
     <meta name="twitter:description" content="Engineering decisions and results: trustworthy CI, ephemeral preview environments and useful observability.">
     <meta name="twitter:image" content="https://vitorspk.github.io/og-image.png">
     <meta name="twitter:image:alt" content="Vitor Schiavo — Site Reliability and Platform Engineer">
@@ -145,4 +144,7 @@
 <h2>Education</h2>
 <p>MBA — Software Engineering, Wyden Educacional (2015–2016)<br>Analysis and Systems Development, Anhanguera Educacional (2012–2014)</p>
 <h2>Languages</h2>
-<p>Portuguese — native · Spanish — full professional · English — professional working proficiency</p></main><script src="/resume.js" defer></script></body></html>
+<p>Portuguese — native · Spanish — full professional · English — professional working proficiency</p></main>
+<script src="/resume.js" defer></script>
+</body>
+</html>

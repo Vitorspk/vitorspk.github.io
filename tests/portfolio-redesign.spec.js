@@ -57,6 +57,8 @@ test('contact supports a real email fallback and a printable résumé', async ({
   await page.getByRole('link', { name: 'View printable résumé', exact: true }).click();
   await expect(page.locator('h1')).toHaveText('Vitor Schiavo');
   await expect(page.getByRole('button', { name: 'Print or save as PDF' })).toBeVisible();
+  const resumeAccessibility = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
+  expect(resumeAccessibility.violations).toEqual([]);
   await page.emulateMedia({ media: 'print' });
   await expect(page.locator('.resume-actions')).not.toBeVisible();
   await expect(page.locator('.resume-role').first()).toBeVisible();
@@ -132,8 +134,15 @@ test('theme control stays in the navigation chrome while reading', async ({ page
   const control = await page.locator('#themeToggle').boundingBox();
   const sidebar = await page.locator('.sidebar').boundingBox();
   expect(control.x + control.width).toBeLessThanOrEqual(sidebar.x + sidebar.width);
+  await page.locator('#themeToggle').focus();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator('.topbar #themeToggle')).toBeVisible();
+  await expect(page.locator('#themeToggle')).toBeFocused();
+  await page.setViewportSize({ width: 800, height: 768 });
+  await expect(page.locator('.sidebar #themeToggle')).toBeFocused();
+  await page.locator('#main-content').focus();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('#main-content')).toBeFocused();
 });
 
 

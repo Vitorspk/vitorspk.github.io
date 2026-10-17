@@ -236,13 +236,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (sidebarNav && mobileNav) {
         const mq = window.matchMedia('(max-width: 768px)');
+        // A breakpoint can hide the focused parent before matchMedia runs.
+        // Remember focus intent, but clear it when the user targets another control.
+        let themeHadFocus = false;
+        const rememberThemeFocus = event => {
+            themeHadFocus = Boolean(event.target.closest('#themeToggle'));
+        };
+        document.addEventListener('focusin', rememberThemeFocus);
+        document.addEventListener('pointerdown', rememberThemeFocus);
 
         const syncTablists = function syncTablists() {
             const isMobile = mq.matches;
             const themeControl = document.getElementById('themeToggle');
             const themeContainer = document.querySelector(isMobile ? '.topbar' : '.brand-controls');
             if (themeControl && themeContainer && themeControl.parentElement !== themeContainer) {
-                const hadFocus = document.activeElement === themeControl;
+                const hadFocus = document.activeElement === themeControl || themeHadFocus;
                 themeContainer.appendChild(themeControl);
                 if (hadFocus) themeControl.focus({ preventScroll: true });
             }
