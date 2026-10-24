@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /404.html
 
-Sitemap: https://vitorspk.github.io/sitemap.xml
+Sitemap: https://vitorschiavo.dev/sitemap.xml

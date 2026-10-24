@@ -15,7 +15,7 @@ const subtitle = slug ? source.match(/<meta name="description" content="([^"]*)"
 const html = `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><style>
 * { box-sizing: border-box; margin: 0; } body { width: 1200px; height: 630px; background: #0a0f1e; color: #f1f5f9; padding: 64px 76px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; display: flex; flex-direction: column; justify-content: space-between; }
 .name { font-size: 28px; font-weight: 600; } .role { color: #94a3b8; font-size: 20px; margin-top: 8px; } h1 { font-size: 60px; line-height: 1.1; letter-spacing: -2px; font-weight: 700; max-width: 1050px; } .subtitle { font-size: 23px; line-height: 1.4; color: #94a3b8; margin-top: 22px; max-width: 960px; } footer { border-top: 1px solid #334155; padding-top: 20px; color: #60a5fa; display: flex; justify-content: space-between; font-size: 20px; }
-</style></head><body><header><p class="name">Vitor Schiavo</p><p class="role">Site Reliability &amp; Platform Engineer</p></header><main><h1>${title}</h1><p class="subtitle">${subtitle}</p></main><footer><span>${slug ? 'Engineering case study' : 'Selected engineering work'}</span><span>vitorspk.github.io</span></footer></body></html>`;
+</style></head><body><header><p class="name">Vitor Schiavo</p><p class="role">Site Reliability &amp; Platform Engineer</p></header><main><h1>${title}</h1><p class="subtitle">${subtitle}</p></main><footer><span>${slug ? 'Engineering case study' : 'Selected engineering work'}</span><span>vitorschiavo.dev</span></footer></body></html>`;
 (async () => {
     const browser = await chromium.launch();
     try {

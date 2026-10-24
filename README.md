@@ -1,6 +1,6 @@
 # Vitor Schiavo — Portfolio
 
-Static portfolio for Site Reliability and Platform Engineering, hosted at https://vitorspk.github.io/.
+Static portfolio for Site Reliability and Platform Engineering, hosted at https://vitorschiavo.dev/.
 
 ## Structure
 

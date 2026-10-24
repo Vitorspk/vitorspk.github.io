@@ -29,7 +29,7 @@ Each phase is delivered as one or more PRs. Items are completed sequentially wit
 - **Where:** [index.html](index.html) `<head>`, new asset file (PNG/JPG 1200x630).
 - **How:**
   - Create `og-image.png` (1200x630) with hero excerpt: name, role, key metric ($331K savings).
-  - Add `<meta property="og:image" content="https://vitorspk.github.io/og-image.png">`.
+  - Add `<meta property="og:image" content="https://vitorschiavo.dev/og-image.png">`.
   - Add `<meta name="twitter:image" content="...">`.
 - **Risk:** Low — additive.
 - **Acceptance:** [opengraph.xyz/url/...](https://www.opengraph.xyz/) shows preview correctly.
