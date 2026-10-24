@@ -7,7 +7,7 @@ Instructions for AI assistants (Claude Code, @claude in PRs, etc.) working on th
 ## Project overview
 
 Static personal portfolio for **Vitor Schiavo** (SRE / Platform Engineer).
-Deployed on **GitHub Pages** at `https://vitorspk.github.io/` (this repo is the `vitorspk.github.io` user site, served at the domain root).
+Deployed on **GitHub Pages** at `https://vitorschiavo.dev/` (this repo is the `vitorspk.github.io` user site, served at the domain root).
 
 - No framework, no bundler — `index.html` and `script.js` ship as-is
 - CSS is authored as modules in `css/` and concatenated into `styles.css` (committed, served directly by GitHub Pages) via `npm run build:css` — **edit the modules, never `styles.css` directly**
@@ -92,7 +92,7 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 
 ## Standalone case pages
 
-Long-form case studies live as their own indexable pages under `cases/<slug>/index.html`, served by GitHub Pages at `https://vitorspk.github.io/cases/<slug>/` (directory index, trailing slash). They are the SEO and cross-post surface; the SPA cards stay as the short version and link to them with a `.case-readmore` anchor (normal link tab order; hidden/inert panels and disclosure bodies manage focus access).
+Long-form case studies live as their own indexable pages under `cases/<slug>/index.html`, served by GitHub Pages at `https://vitorschiavo.dev/cases/<slug>/` (directory index, trailing slash). They are the SEO and cross-post surface; the SPA cards stay as the short version and link to them with a `.case-readmore` anchor (normal link tab order; hidden/inert panels and disclosure bodies manage focus access).
 
 Recipe for a new one (first page: `cases/self-hosting-gemma-3-vllm/`):
 1. **Files:** `cases/<slug>/index.html`. Link `/styles.css` first (tokens, theme, fonts, components), then reuse `/cases/evidence-case.css` for the shared article layout. Use a small `cases/<slug>/page.css` only when the article needs a distinct layout. Reference root assets with absolute paths (`/styles.css`, `/og-image.png`).

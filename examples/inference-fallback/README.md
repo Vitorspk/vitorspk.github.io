@@ -86,7 +86,7 @@ operators must decide whether a request is permitted to use each destination.
 
 ## Relation to the portfolio
 
-The professional [LLM serving case](https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/)
+The professional [LLM serving case](https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/)
 explains separate real-world work and its measured scopes. This sample makes a
 small part of the reasoning executable without exposing internal systems.
 

@@ -1,145 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://vitorspk.github.io/</loc>
+    <loc>https://vitorschiavo.dev/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/self-hosting-gemma-3-vllm/</loc>
+    <loc>https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/gke-terraform-shared-vpc/</loc>
+    <loc>https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/gcp-storage-cost-reduction/</loc>
+    <loc>https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/cloud-functions-gen1-gen2/</loc>
+    <loc>https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/kubernetes-supply-chain-defense/</loc>
+    <loc>https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/grafana-prometheus-modernization/</loc>
+    <loc>https://vitorschiavo.dev/cases/grafana-prometheus-modernization/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/gke-dataplane-v2-cilium/</loc>
+    <loc>https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/kubernetes-finops-kubecost/</loc>
+    <loc>https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/zero-downtime-cluster-migration/</loc>
+    <loc>https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/strapi-v4-to-v5-upgrade/</loc>
+    <loc>https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/metabase-production-ops/</loc>
+    <loc>https://vitorschiavo.dev/cases/metabase-production-ops/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/jenkins-qa-signal-recovery/</loc>
+    <loc>https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/ephemeral-preview-environments/</loc>
+    <loc>https://vitorschiavo.dev/cases/ephemeral-preview-environments/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/gen2-observability-repair/</loc>
+    <loc>https://vitorschiavo.dev/cases/gen2-observability-repair/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/security-posture-observability/</loc>
+    <loc>https://vitorschiavo.dev/cases/security-posture-observability/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/monitoring-ingestion-cost/</loc>
+    <loc>https://vitorschiavo.dev/cases/monitoring-ingestion-cost/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/resume.html</loc>
+    <loc>https://vitorschiavo.dev/resume.html</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/cloud-cost-engineering/</loc>
+    <loc>https://vitorschiavo.dev/cases/cloud-cost-engineering/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/gke-cluster-rebuild-recovery/</loc>
+    <loc>https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/kubernetes-dns-latency/</loc>
+    <loc>https://vitorschiavo.dev/cases/kubernetes-dns-latency/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/ai-fleet-observability/</loc>
+    <loc>https://vitorschiavo.dev/cases/ai-fleet-observability/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/scheduled-jobs-observability/</loc>
+    <loc>https://vitorschiavo.dev/cases/scheduled-jobs-observability/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://vitorspk.github.io/cases/queue-driven-autoscaling/</loc>
+    <loc>https://vitorschiavo.dev/cases/queue-driven-autoscaling/</loc>
     <lastmod>2026-10-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
