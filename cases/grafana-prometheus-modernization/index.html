@@ -10,12 +10,21 @@
     <title>Modernizing a Grafana + Prometheus stack — Vitor Schiavo</title>
     <meta name="description" content="Two major Grafana upgrades to 11.6 LTS, Prometheus to 2.53 LTS, and recording rules that made heavy dashboards about 30 times faster, with no data loss and no alert changes.">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
+<meta property="og:url" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="Modernizing a Grafana + Prometheus stack">
     <meta property="og:description" content="Grafana to 11.6 LTS, Prometheus to 2.53 LTS, and recording rules that made heavy dashboards about 30 times faster.">
-    <meta property="og:url" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png">
     <meta property="og:image:width" content="1200">
@@ -38,6 +47,7 @@
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
       "url": "https://vitorschiavo.dev/cases/grafana-prometheus-modernization/",
+      "inLanguage": "en",
       "mainEntityOfPage": "https://vitorschiavo.dev/cases/grafana-prometheus-modernization/",
       "image": "https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png",
       "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
@@ -72,6 +82,13 @@
     <main class="doc" id="main-content">
 
         <a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Language">
+<span class="lang-switcher__item lang-switcher__item--current" lang="en" aria-current="true">EN</span>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/grafana-prometheus-modernization/">PT</a>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/grafana-prometheus-modernization/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
 
         <header class="doc-header">
             <span class="doc-eyebrow">Case study · Observability</span>
@@ -121,7 +138,7 @@
             <p>The heavy ingress dashboards were painful: 8 to 33 seconds per render. The cause was <code>histogram_quantile()</code> being recomputed from tens of thousands of bucket series (about 57k) on every single refresh. The fix is a classic one that is easy to forget to reach for: <strong>recording rules</strong>.</p>
             <p>I added three recording rules per environment that pre-aggregate the P50, P90 and P99 of the request-duration histogram, and pointed the dashboards at the pre-computed series instead of the raw buckets.</p>
 
-            <div class="table-container">
+            <div class="table-container" tabindex="0">
                 <table>
                     <thead>
                         <tr><th scope="col">Environment</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Speedup</th></tr>

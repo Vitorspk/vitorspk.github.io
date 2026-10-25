@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=138430a85f131e9d4d4e6e93cc36f6ae43ad9159 src=cases/kubernetes-supply-chain-defense/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Defesa do Kubernetes: ataques à cadeia de suprimentos — Vitor Schiavo</title>
+    <meta name="description" content="Como uma dependência npm comprometida pode contrabandear um minerador de criptomoedas para dentro de um build e passar pela revisão de código, como detectá-lo em um node e as defesas de pipeline e runtime que o impedem.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/kubernetes-supply-chain-defense/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/kubernetes-supply-chain-defense/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/kubernetes-supply-chain-defense/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/kubernetes-supply-chain-defense/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Defendendo o Kubernetes contra ataques à cadeia de suprimentos">
+    <meta property="og:description" content="Como uma dependência npm comprometida contrabandeia um minerador de criptomoedas pela revisão de código, e as defesas de pipeline e runtime que o impedem.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Defendendo o Kubernetes contra ataques à cadeia de suprimentos — um guia de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Defendendo o Kubernetes contra ataques à cadeia de suprimentos">
+    <meta name="twitter:description" content="Como uma dependência npm comprometida contrabandeia um minerador de criptomoedas pela revisão de código, e como impedi-lo.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/og.png">
+    <meta name="twitter:image:alt" content="Defendendo o Kubernetes contra ataques à cadeia de suprimentos — um guia de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Defendendo o Kubernetes contra ataques à cadeia de suprimentos",
+      "description": "Como uma dependência npm comprometida pode contrabandear um minerador de criptomoedas para dentro de um build e passar pela revisão de código, como detectá-lo em um node e as defesas de pipeline e runtime que o impedem.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/kubernetes-supply-chain-defense/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/kubernetes-supply-chain-defense/",
+      "image": "https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "supply chain security, Kubernetes, npm audit, Trivy, Pod Security Standards, network policy, cryptomining, xmrig, dependency pinning"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/kubernetes-supply-chain-defense/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/kubernetes-supply-chain-defense/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/kubernetes-supply-chain-defense/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Guia · Segurança do Kubernetes</span>
+            <h1 class="doc-title">Defendendo o Kubernetes contra ataques à cadeia de suprimentos</h1>
+            <p class="doc-dek">Uma dependência comprometida pode contrabandear um minerador de criptomoedas para dentro do seu build, passar pela revisão de código e consumir CPU silenciosamente em um node de produção sem nenhum sintoma na aplicação. Veja como esse ataque funciona e as defesas de pipeline e runtime que o impedem.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Atualizado em outubro de 2026</span>
+                <span>~6 min de leitura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="kubernetes-supply-chain-defense" data-visual-area="security">
+<figcaption><span>Visão geral da solução</span><strong>Detecte, contenha e previna um build comprometido.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Dependência &amp; build</strong><span>Audite a cadeia de suprimentos</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Sinais de runtime</strong><span>Detecte atividade suspeita de CPU</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Contenção</strong><span>Isole os nodes e remedie</span></div>
+</div>
+<p class="case-map-note">Combine verificações de pipeline com detecção de anomalias em nível de node e um procedimento de contenção explícito.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Defesa em camadas da cadeia de suprimentos e técnicas operacionais de contenção.</dd></div>
+<div><dt>Escopo</dt><dd>Um relato técnico de controles de dependência/build e padrões de resposta em runtime.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>O caso explica a abordagem de engenharia; ele não atribui cada controle nem a ausência de incidentes futuros a uma única pessoa.</dd></div>
+<div><dt>Resultado</dt><dd>Verificações de pipeline, sinais de runtime e um caminho de contenção explícito tratam de diferentes estágios de um comprometimento.</dd></div>
+</dl></section>
+
+
+            <p>A classe mais assustadora de comprometimento é a silenciosa. Nenhuma indisponibilidade, nenhum pico de erros, nenhum alerta da aplicação. Apenas um node rodando mais quente do que deveria, com um processo como o <code>xmrig</code> (um minerador de Monero) consumindo CPU dentro de um container que, de resto, parece normal. Este é um relato de como isso acontece através da cadeia de suprimentos de software e das defesas em camadas que o tornam tanto difícil de executar quanto rápido de detectar.</p>
+
+            <h2>Como um minerador entra sem tocar em um pull request</h2>
+            <p>A parte perigosa de um ataque à cadeia de suprimentos é que o código malicioso nunca está em um diff que alguém leia. Um pacote nas profundezas da árvore de dependências (uma dependência transitiva de uma dependência) é comprometido na origem. Quando o frontend é compilado, o código ruim é puxado e montado no bundle. A revisão de código, estruturalmente, não consegue pegar isso, porque os revisores olham o conjunto de alterações, não cada linha de cada pacote transitivo. O resultado vai para produção parecendo completamente normal.</p>
+
+            <div class="callout callout--fail">
+                <p class="callout-title">Por que a revisão de código é a camada errada para isso</p>
+                <p>A revisão humana inspeciona o que mudou no pull request. Uma dependência transitiva envenenada não muda nada no diff; ela muda o que é baixado e compilado. É por isso que a defesa da cadeia de suprimentos precisa viver no pipeline e no runtime, não na revisão.</p>
+            </div>
+
+            <h2>Detecção: observe o node, não apenas a aplicação</h2>
+            <p>Como a aplicação se comporta normalmente, o único sinal precoce está na camada de infraestrutura. O propósito inteiro de um minerador de criptomoedas é consumir CPU, então a detecção de anomalias de CPU em nível de node é o gatilho. Concretamente:</p>
+            <ul>
+                <li>Alerte sobre CPU anômala em qualquer node, com uma janela de limiar curta (por exemplo, cinco minutos), direcionado ao canal de plantão.</li>
+                <li>Quando ele disparar e as métricas da aplicação parecerem normais, suspeite do node, não do serviço. Inspecione os processos rodando dentro dos containers naquele node.</li>
+                <li>Um processo que não pertence a nenhuma das suas imagens (um minerador, um shell, um binário inesperado) é a prova definitiva.</li>
+            </ul>
+
+            <h2>Contenção, se um entrar</h2>
+            <p>A resposta é a higiene padrão do Kubernetes, feita rapidamente:</p>
+            <ul>
+                <li><strong>Faça cordon</strong> no node afetado para que nenhum novo workload seja alocado nele.</li>
+                <li><strong>Faça drain</strong> dele e deixe os workloads serem reagendados em nodes limpos.</li>
+                <li><strong>Remedie a origem</strong>: atualize cada biblioteca vulnerável e fixe as versões transitivas para que o pacote envenenado não possa voltar no próximo build.</li>
+            </ul>
+
+            <h2>As defesas que realmente o impedem</h2>
+            <p>Detecção e limpeza são o último recurso. Estas são as camadas que o previnem, ou o neutralizam se ele ainda assim passar.</p>
+            <ul>
+                <li><strong>Audite no CI.</strong> Faça cada build passar por <code>npm audit --audit-level=high</code> para que dependências com vulnerabilidades conhecidas quebrem o build.</li>
+                <li><strong>Escaneie a imagem.</strong> Rode um scanner de imagens como o Trivy em cada build pré-deploy, para que um payload malicioso embutido na imagem seja pego antes de ir ao ar.</li>
+                <li><strong>Exija lockfiles.</strong> Exija um lockfile commitado em cada repositório e faça o CI falhar se ele estiver ausente ou tiver sido alterado sem revisão, para que as versões das dependências sejam determinísticas e auditáveis.</li>
+                <li><strong>Fixe as versões transitivas.</strong> Versões flutuantes são a forma como um pacote envenenado ganha uma segunda chance; a fixação fecha essa porta.</li>
+                <li><strong>Restrinja o runtime.</strong> Aplique Pod Security Standards (restricted) em todos os namespaces para que um container comprometido não consiga escalar privilégios.</li>
+                <li><strong>Negue o egress por padrão.</strong> Network policies que bloqueiam conexões de saída para pools de mineração e endpoints desconhecidos transformam uma intrusão bem-sucedida em um beco sem saída: o minerador não consegue alcançar seu pool nem se comunicar com o exterior.</li>
+            </ul>
+
+            <div class="callout callout--win">
+                <p class="callout-title">Defesa em profundidade, em uma frase</p>
+                <p>A auditoria no CI e o escaneamento de imagens tornam difícil a entrada, lockfiles e fixação tornam difícil o retorno, os Pod Security Standards tornam difícil a escalada, negar egress por padrão torna o ataque inútil caso ele entre, e os alertas de anomalia de CPU no node tornam rápida a detecção. Nenhuma camada isolada precisa ser perfeita.</p>
+            </div>
+
+            <h2>O que eu diria a quem está fortalecendo um cluster</h2>
+            <ul>
+                <li>Presuma que uma dependência será comprometida em algum momento e projete de modo que isso não importe muito quando acontecer.</li>
+                <li>Coloque as verificações da cadeia de suprimentos no pipeline. Elas pegam o que a revisão de código estruturalmente não consegue.</li>
+                <li>Negar egress por padrão é o controle de maior alavancagem: ele transforma a maioria das intrusões em becos sem saída com quase nenhuma desvantagem.</li>
+                <li>Observe os sinais de infraestrutura, não apenas os da aplicação. Os comprometimentos silenciosos só aparecem no node.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e dos seus limites. A próxima melhoria é uma proposta, não um resultado já entregue.</p><h3>Alternativa e justificativa</h3><p>A revisão de pull request continua útil, mas os controles de dependência e de runtime cobrem código e comportamento fora do conjunto de alterações revisado.</p><h3>Trade-off</h3><p>Qualquer detector isolado tem pontos cegos. Detecção, contenção e rebuilds limpos precisam de validação independente.</p><h3>O que eu melhoraria a seguir</h3><p>Próxima melhoria: ensaiar um comprometimento simulado e seguro e verificar o tempo da detecção até a contenção e a recuperação a partir de artefatos confiáveis.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Sou Vitor Schiavo, engenheiro de Site Reliability e Platform. Este é um dos casos do meu portfólio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

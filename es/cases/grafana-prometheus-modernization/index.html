@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=d8dfb239c9221b0ff259a4da2549faaa0bb71c33 src=cases/grafana-prometheus-modernization/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Modernización de un stack Grafana + Prometheus — Vitor Schiavo</title>
+    <meta name="description" content="Dos actualizaciones mayores de Grafana a 11.6 LTS, Prometheus a 2.53 LTS y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos, sin pérdida de datos ni cambios en las alertas.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/grafana-prometheus-modernization/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/grafana-prometheus-modernization/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Modernización de un stack Grafana + Prometheus">
+    <meta property="og:description" content="Grafana a 11.6 LTS, Prometheus a 2.53 LTS y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Modernización de un stack de Grafana y Prometheus — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Modernización de un stack Grafana + Prometheus">
+    <meta name="twitter:description" content="Grafana a 11.6 LTS, Prometheus a 2.53 LTS y dashboards unas 30 veces más rápidos.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png">
+    <meta name="twitter:image:alt" content="Modernización de un stack de Grafana y Prometheus — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Modernización de un stack de observabilidad con Grafana y Prometheus",
+      "description": "Dos actualizaciones mayores de Grafana a 11.6 LTS, Prometheus a 2.53 LTS y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos, sin pérdida de datos ni cambios en las alertas.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/es/cases/grafana-prometheus-modernization/",
+      "inLanguage": "es",
+      "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/grafana-prometheus-modernization/",
+      "image": "https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "Grafana, Prometheus, observability, recording rules, histogram_quantile, LTS upgrade, dashboards, SRE, monitoring"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/grafana-prometheus-modernization/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/grafana-prometheus-modernization/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/grafana-prometheus-modernization/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Estudio de caso · Observabilidad</span>
+            <h1 class="doc-title">Modernización de un stack de observabilidad con Grafana y Prometheus</h1>
+            <p class="doc-dek">El stack se había quedado atrás: Grafana ya sin soporte, Prometheus con ocho versiones menores de atraso y los dashboards pesados tardando decenas de segundos en renderizar. Así fue como llevé ambos a LTS e hice que esos dashboards fueran unas 30 veces más rápidos, sin pérdida de datos y sin tocar ninguna alerta.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Actualizado en octubre de 2026</span>
+                <span>~7 min de lectura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="grafana-prometheus-modernization" data-visual-area="reliability">
+<figcaption><span>Solución de un vistazo</span><strong>Mantener el monitoreo útil a través de actualizaciones mayores.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Fuentes de métricas</strong><span>Preservar la cobertura de scrape</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Prometheus</strong><span>Actualizar y afinar reglas</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Grafana</strong><span>Validar consultas y vistas</span></div>
+</div>
+<p class="case-map-note">El trabajo combinó actualizaciones de versión, recording rules y validación operativa.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Actualizaciones escalonadas del monitoreo, limpieza de dashboards y trabajo con recording rules.</dd></div>
+<div><dt>Alcance</dt><dd>Modernización de Grafana y Prometheus con backups y validación operativa.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Mantuve el stack de monitoreo y verifiqué el comportamiento de las consultas y los dashboards a través de los cambios de versión.</dd></div>
+<div><dt>Resultado</dt><dd>Actualicé el stack de monitoreo y persistí los dashboards migrados; este caso no establece una mejora de latency a nivel de toda la flota.</dd></div>
+</dl></section>
+
+
+            <p>Los stacks de observabilidad se deterioran en silencio. Las actualizaciones parecen riesgosas, así que se posponen, y un día te encuentras con un Grafana sin soporte, con dashboards en los que nadie confía y consultas que tardan medio minuto. Este es el relato de cómo devolví uno al día: dos versiones mayores de Grafana, un salto de Prometheus a LTS y las recording rules que fueron la verdadera victoria.</p>
+
+            <h2>Grafana: de fin de soporte a 11.6 LTS</h2>
+            <p>Grafana estaba en una versión sin soporte, a solo una versión mayor de distancia de que el runtime de plugins de Angular desapareciera por completo. Lo llevé a <strong>11.6 LTS</strong> de forma deliberada y reversible:</p>
+            <ul>
+                <li><strong>Salto de imagen en dos pasos</strong> (a través de una versión menor intermedia) en lugar de un gran salto único, de modo que cada paso fuera pequeño y fácil de revertir.</li>
+                <li><strong>Eliminación del runtime de Angular.</strong> Grafana 11 deshabilita el runtime de plugins de Angular, así que primero desinstalé los plugins de panel heredados en Angular y luego llevé los dashboards con el esquema antiguo por la migración automática para que los nuevos tipos de panel en React se persistieran.</li>
+                <li><strong>Limpieza de dashboards.</strong> Exporté cada dashboard de la instancia en vivo a git (se había desincronizado de la base de datos) y luego eliminé los abandonados.</li>
+                <li><strong>Backups defensivos.</strong> Snapshots de disco antes de cada cambio. Los dos quedaron sin usar, que es exactamente como deberían terminar los backups.</li>
+                <li><strong>Cero interrupciones.</strong> Todas las alert rules y los datasources pasaron por la actualización sin cambios. Una pasada posterior lo llevó a la siguiente versión mayor con una auditoría completa de dashboards.</li>
+            </ul>
+
+            <h2>La verdadera victoria: las recording rules de Prometheus</h2>
+            <p>Los dashboards pesados de ingress eran un suplicio: de 8 a 33 segundos por render. La causa era que <code>histogram_quantile()</code> se recalculaba a partir de decenas de miles de series de buckets (unas 57k) en cada actualización. La solución es un clásico que es fácil olvidar: las <strong>recording rules</strong>.</p>
+            <p>Agregué tres recording rules por entorno que preagregan el P50, el P90 y el P99 del histograma de duración de las solicitudes, y apunté los dashboards a las series precomputadas en lugar de a los buckets crudos.</p>
+
+            <div class="table-container" tabindex="0">
+                <table>
+                    <thead>
+                        <tr><th scope="col">Entorno</th><th scope="col">Antes</th><th scope="col">Después</th><th scope="col">Aceleración</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Producción (mayor cardinalidad)</td><td>8 a 33 s</td><td>~0.66 s</td><td>~30×</td></tr>
+                        <tr><td>Sandbox (menor cardinalidad)</td><td>3.5 a 9 s</td><td>~0.66 s</td><td>~5 a 13×</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">~30×</span><span class="stat-label">dashboards más rápidos</span></div>
+                <div class="stat"><span class="stat-value">0.66 s</span><span class="stat-label">tiempo de consulta constante</span></div>
+                <div class="stat"><span class="stat-value">LTS</span><span class="stat-label">Grafana 11.6 + Prom 2.53</span></div>
+                <div class="stat"><span class="stat-value">0</span><span class="stat-label">datos perdidos o alertas modificadas</span></div>
+            </div>
+
+            <h2>Prometheus: de 2.45 a 2.53 LTS</h2>
+            <p>Actualicé Prometheus ocho versiones menores hasta <strong>2.53 LTS</strong>, de forma escalonada y segura: primero el cluster de sandbox y luego producción tras un periodo de estabilización de 24 horas. Vale la pena mencionar una restricción del mundo real: el stack usa el fork gestionado (GMP) de Prometheus porque las alertas y los dashboards de Cloud Monitoring del entorno dependen de su exporter integrado. El Prometheus upstream ya va por la 3.x, pero el fork gestionado llega como máximo a 2.53 LTS, así que ese era el techo. Saber en qué fork estás, y por qué, es la mitad de la actualización.</p>
+
+            <h2>Un refactor de configuración que vale la pena</h2>
+            <p>Las configuraciones de Prometheus por entorno se habían desviado hacia órdenes de sección distintos, lo que convertía en una molestia comparar (diff) un entorno con otro. Las reordené a una única estructura canónica (persistent volumes, config, RBAC, StatefulSet, services, ingress). Sin cambios funcionales, pero ahora un diff lado a lado muestra solo las diferencias que importan.</p>
+
+            <div class="callout callout--win">
+                <p class="callout-title">Un bug latente, encontrado de paso</p>
+                <p>Mientras validaba las recording rules encontré un panel que mostraba "No data" sobre una consulta que claramente tenía datos. La causa era una configuración de thresholds de Grafana (<code>thresholdsStyle: line+area</code>) con un último paso de threshold al que le faltaba su valor. El tipo de bug que se esconde durante meses hasta que alguien mira con atención el panel correcto.</p>
+            </div>
+
+            <h2>Lo que le diría a alguien que recién empieza con esto</h2>
+            <ul>
+                <li>Recurre a las recording rules antes de culpar al dashboard. Si un panel recalcula un cuantil sobre decenas de miles de series en cada render, preagrégalo.</li>
+                <li>Actualiza en pasos pequeños y reversibles, y toma un snapshot antes de cada uno. El salto de fin de soporte a LTS da menos miedo como dos saltos pequeños que como uno grande.</li>
+                <li>Conoce tu fork. El fork gestionado de Prometheus y el upstream no son el mismo tren de versiones; elige la LTS más alta que tu fork realmente publique.</li>
+                <li>Mantén la configuración en un orden canónico en todos los entornos. La desviación en la estructura esconde la desviación en el significado.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Una única actualización grande reduce los pasos, pero combina los modos de falla. Los cambios escalonados y los backups facilitan aislar las incompatibilidades.</p><h3>Contrapartida</h3><p>Las recording rules reducen el trabajo repetido de consultas, pero introducen definiciones adicionales cuyo significado y vigencia deben mantenerse.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: mantener consultas representativas de dashboards y pruebas de reglas en una suite repetible de aceptación de actualizaciones.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Soy Vitor Schiavo, Site Reliability and Platform engineer. Este es uno de los casos de mi portafolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/es/#cases">Ver más estudios de caso</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

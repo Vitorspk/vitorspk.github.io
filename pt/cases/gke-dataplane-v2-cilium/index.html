@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=60e6ea820cb23ac552376c9f91e84fe09ac1698a src=cases/gke-dataplane-v2-cilium/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Migração do GKE para Dataplane V2 (Cilium / eBPF) — Vitor Schiavo</title>
+    <meta name="description" content="Um campo imutável do GKE obrigou a destruir e recriar o cluster para migrar do Dataplane V1 para o V2 (Cilium / eBPF). Veja como transformei isso em um bootstrap GitOps versionado e um plano de validação de 18 pontos.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/gke-dataplane-v2-cilium/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gke-dataplane-v2-cilium/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gke-dataplane-v2-cilium/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/gke-dataplane-v2-cilium/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Migração do GKE para Dataplane V2 (Cilium / eBPF)">
+    <meta property="og:description" content="Um campo imutável obrigou a destruir e recriar, então transformei isso em um bootstrap GitOps versionado e uma validação de 18 pontos.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Migração do GKE para Dataplane V2 (Cilium / eBPF) — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Migração do GKE para Dataplane V2 (Cilium / eBPF)">
+    <meta name="twitter:description" content="Um campo imutável obrigou a destruir e recriar, transformado em um bootstrap GitOps e uma validação de 18 pontos.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/og.png">
+    <meta name="twitter:image:alt" content="Migração do GKE para Dataplane V2 (Cilium / eBPF) — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Migração do GKE para Dataplane V2 (Cilium / eBPF)",
+      "description": "Um campo imutável do GKE obrigou a destruir e recriar o cluster para migrar do Dataplane V1 para o V2 (Cilium / eBPF). Veja como transformei isso em um bootstrap GitOps versionado e um plano de validação de 18 pontos.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/gke-dataplane-v2-cilium/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/gke-dataplane-v2-cilium/",
+      "image": "https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "GKE, Dataplane V2, Cilium, eBPF, Kubernetes networking, Terraform, GitOps, bootstrap, ArgoCD, cert-manager, KEDA"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/gke-dataplane-v2-cilium/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/gke-dataplane-v2-cilium/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/gke-dataplane-v2-cilium/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Estudo de caso · Redes de plataforma</span>
+            <h1 class="doc-title">Migração do GKE para Dataplane V2 (Cilium / eBPF)</h1>
+            <p class="doc-dek">O GKE está trocando sua rede padrão de iptables para Cilium e eBPF, e o campo que controla isso não pode ser alterado em um cluster em execução. Veja como transformei uma destruição e recriação forçada em um bootstrap GitOps versionado e um plano de validação de 18 pontos.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Atualizado em outubro de 2026</span>
+                <span>~7 min de leitura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="gke-dataplane-v2-cilium" data-visual-area="platform">
+<figcaption><span>Visão geral da solução</span><strong>Troque a rede em um ambiente controlado.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Cluster existente</strong><span>Capture uma baseline funcional</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Dataplane V2</strong><span>Aplique as mudanças de rede</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Validação</strong><span>Teste os caminhos e o rollback</span></div>
+</div>
+<p class="case-map-note">Entrega fora de produção com verificações explícitas e rollback; produção ficou fora deste escopo.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Migração de rede fora de produção e bootstrap de plataforma repetível.</dd></div>
+<div><dt>Escopo</dt><dd>Migração de development, staging e sandbox; produção excluída desta entrega.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Validei a compatibilidade de infraestrutura e dos controllers na janela fora de produção disponível.</dd></div>
+<div><dt>Resultado</dt><dd>Uma entrega fora de produção em etapas, com validação explícita e rollback; nenhum resultado de migração em toda a produção é reivindicado.</dd></div>
+</dl></section>
+
+
+            <p>O GKE anunciou que, a partir de 30 de março de 2027, novos clusters passam a usar o <strong>Dataplane V2</strong> (DPv2) por padrão, que substitui o antigo data plane de kube-proxy e iptables (Dataplane V1) por <strong>Cilium e eBPF</strong>. O detalhe: o campo <code>datapath_provider</code> é <strong>imutável</strong>. Não dá para trocar um cluster em execução de V1 para V2. O único caminho é destruir e recriar o cluster.</p>
+
+            <h2>Por que migrar cedo, e não no prazo final</h2>
+            <p>Esperar até 2027 é a opção cara. Eu migrei enquanto era barato e seguro:</p>
+            <ul>
+                <li><strong>A janela estava aberta.</strong> Três dos quatro clusters (dev, staging e sandbox) estavam vazios, zero nodes e zero workloads ativos. Esse é o momento de menor risco e menor custo que esta migração jamais terá.</li>
+                <li><strong>Evitar uma surpresa depois.</strong> Se eu esperasse, na próxima vez que qualquer cluster fosse recriado após o prazo ele herdaria o DPv2 por padrão, sem nenhuma validação prévia da stack da plataforma (ingress, cert-manager, external secrets, autoscaling, progressive delivery, GitOps).</li>
+                <li><strong>Quitar dívida no processo.</strong> Recriar um cluster obriga você a ter um bootstrap de verdade. Essa foi a oportunidade de substituir anos de configuração manual por um pipeline repetível.</li>
+            </ul>
+
+            <h2>Tornando o campo imutável explícito</h2>
+            <p>A causa raiz do risco de "surpresa em 2027" é que o campo sempre tinha ficado no padrão da nuvem. Eu tornei o <code>datapath_provider</code> uma <strong>variável do Terraform explícita e obrigatória</strong> no módulo do cluster, para que nenhum cluster seja criado sem uma escolha consciente:</p>
+            <ul>
+                <li>dev, staging e sandbox recriados com <code>ADVANCED_DATAPATH</code> (DPv2 / Cilium).</li>
+                <li>produção mantida explicitamente em <code>LEGACY_DATAPATH</code>; migrar um cluster de produção ativo é um projeto à parte que precisa de uma janela de manutenção de verdade.</li>
+            </ul>
+            <p>A lição se generaliza: qualquer campo de infraestrutura imutável deveria ser uma variável explícita no código, nunca um padrão herdado. Os padrões mudam sem avisar.</p>
+
+            <h2>O lado bom: um bootstrap GitOps</h2>
+            <p>Antes disso, subir um cluster significava um monte de <code>kubectl apply</code> manuais e instalações ad-hoc de Helm: cert-manager, dois ingress controllers, o autoscaler, cluster issuers. Esse conhecimento vivia na cabeça das pessoas. Como um destruir e recriar teria perdido tudo isso, eu converti em um <strong>diretório de bootstrap versionado mais um workflow de CI</strong>, de forma que subir um cluster do zero agora é uma execução de pipeline determinística e revisada. A recriação também me permitiu atualizar o autoscaler algumas versões minor e fixar versões exatas do cert-manager e do resto.</p>
+            <p>Cada cluster recriado então se registra novamente no controller central de GitOps, já que o endpoint de API do cluster, o token e o certificado CA mudam todos na recriação.</p>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">eBPF</span><span class="stat-label">data plane do Cilium</span></div>
+                <div class="stat"><span class="stat-value">GitOps</span><span class="stat-label">bootstrap repetível</span></div>
+                <div class="stat"><span class="stat-value">18 pontos</span><span class="stat-label">plano de validação</span></div>
+                <div class="stat"><span class="stat-value">0 → prod</span><span class="stat-label">risco em etapas, prod por último</span></div>
+            </div>
+
+            <div class="callout callout--win">
+                <p class="callout-title">Valide o data plane, não presuma</p>
+                <p>Trocar o data plane pode mudar comportamentos sutis (aplicação de NetworkPolicy, IPs de origem, conectividade). Validei cada cluster recriado contra um plano de 18 pontos: NetworkPolicies, external secrets com Workload Identity, sincronização do GitOps, scraping do Prometheus, emissão do cert-manager e egress pelo Cloud NAT, entre outros. Tudo verde antes que qualquer coisa passasse a depender disso.</p>
+            </div>
+
+            <h2>O que eu diria para quem está começando isto</h2>
+            <ul>
+                <li>Torne os campos imutáveis explícitos na sua IaC. Se mudar um campo significa recriar o recurso, ele deveria ser uma variável obrigatória e revisada, não um padrão silencioso.</li>
+                <li>Aproveite a janela de cluster vazio. O momento mais barato para fazer uma migração destrutiva é antes de qualquer coisa estar rodando nele.</li>
+                <li>Deixe uma recriação forçada quitar dívida. Se você precisa reconstruir, reconstrua como código: transforme o bootstrap manual em um pipeline GitOps repetível.</li>
+                <li>Deixe a produção por último, com a sua própria janela. Prove o padrão primeiro nos clusters vazios.</li>
+                <li>Valide o data plane explicitamente. Uma troca de rede é exatamente onde o "provavelmente ainda funciona" te pega.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e dos seus limites. A próxima melhoria é uma proposta, não um resultado já entregue.</p><h3>Alternativa e justificativa</h3><p>Manter o dataplane anterior evita o trabalho de migração imediato; uma reconstrução controlada oferece a chance de validar o substituto antes de uma futura mudança de dependência.</p><h3>Trade-off</h3><p>A rede imutável do cluster exige recriação. A compatibilidade dos controllers e a ordem de restauração importam tanto quanto a criação do cluster.</p><h3>O que eu melhoraria a seguir</h3><p>Próxima melhoria: manter um checklist de compatibilidade e ensaiar os pré-requisitos de produção antes de planejar qualquer migração de produção à parte.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Sou Vitor Schiavo, engenheiro de Site Reliability e Platform. Este é um dos casos do meu portfólio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

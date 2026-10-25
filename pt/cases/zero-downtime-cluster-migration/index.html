@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=b514b7c4624cc7e4d59d278698315c2744279cde src=cases/zero-downtime-cluster-migration/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Migração sem downtime para novos clusters Kubernetes — Vitor Schiavo</title>
+    <meta name="description" content="Mover uma plataforma inteira — apps, Cloud Functions, agendadores, tarefas e dados — para novos clusters Kubernetes com uma virada blue-green, uma troca de DNS interno e scale-to-zero como rollback instantâneo.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/zero-downtime-cluster-migration/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/zero-downtime-cluster-migration/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/zero-downtime-cluster-migration/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/zero-downtime-cluster-migration/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Migração sem downtime para novos clusters Kubernetes">
+    <meta property="og:description" content="Uma mudança de plataforma inteira com uma virada blue-green, uma troca de DNS interno e scale-to-zero como rollback instantâneo.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Migração sem downtime para novos clusters Kubernetes — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Migração sem downtime para novos clusters Kubernetes">
+    <meta name="twitter:description" content="Uma mudança de plataforma inteira com virada blue-green, troca de DNS e rollback com scale-to-zero.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/og.png">
+    <meta name="twitter:image:alt" content="Migração sem downtime para novos clusters Kubernetes — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Migração sem downtime para novos clusters Kubernetes",
+      "description": "Mover uma plataforma inteira — apps, Cloud Functions, agendadores, tarefas e dados — para novos clusters Kubernetes com uma virada blue-green, uma troca de DNS interno e scale-to-zero como rollback instantâneo.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/zero-downtime-cluster-migration/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/zero-downtime-cluster-migration/",
+      "image": "https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "Kubernetes, cluster migration, blue-green, zero downtime, DNS cutover, GKE, Cloud Functions, Firestore, platform engineering"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/zero-downtime-cluster-migration/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/zero-downtime-cluster-migration/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/zero-downtime-cluster-migration/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Estudo de caso · Migração de plataforma</span>
+            <h1 class="doc-title">Migração sem downtime para novos clusters Kubernetes</h1>
+            <p class="doc-dek">Mover uma plataforma inteira para novos clusters é o tipo de mudança que dá errado às 2 da manhã. Veja como fiz isso sem downtime: uma virada blue-green no nível do cluster, uma troca de DNS interno e scale-to-zero como rollback de um comando só.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Atualizado em outubro de 2026</span>
+                <span>~6 min de leitura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="zero-downtime-cluster-migration" data-visual-area="platform">
+<figcaption><span>A solução em resumo</span><strong>Mova workloads com um caminho de volta.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Cluster de origem</strong><span>Inventariar apps e dados</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Cluster de destino</strong><span>Restaurar e validar</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Virada de tráfego</strong><span>Trocar o DNS com rollback</span></div>
+</div>
+<p class="case-map-note">Prepare a migração de aplicações e dados antes da virada de DNS e, então, valide o destino.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Movimentação faseada de workloads/dados, validação do destino e virada de DNS com rollback.</dd></div>
+<div><dt>Escopo</dt><dd>Migração no nível do cluster, mantendo os workloads legados durante a transição.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Coordenei a mudança de infraestrutura em torno das dependências de workloads e dados; cada serviço exige sua própria aceitação da virada.</dd></div>
+<div><dt>Resultado</dt><dd>Uma estratégia de migração faseada e repetível, com um caminho de rollback. Nenhuma garantia universal de tempo de recuperação ou disponibilidade é inferida.</dd></div>
+</dl></section>
+
+
+            <p>Reconstruir clusters é só metade do trabalho. Depois que os novos clusters existem, cada workload ainda precisa ser movido para eles, e "mover a produção para um cluster diferente" é exatamente a frase que faz as pessoas agendarem uma janela de manutenção à meia-noite. Eu não queria janela nem downtime, então tratei tudo como um deployment blue-green, só que no nível do cluster, em vez de um único serviço.</p>
+
+            <h2>A estratégia: blue-green no nível do cluster</h2>
+            <p>Os novos clusters rodaram em paralelo com os legados. Nada foi apagado até que o novo lado estivesse comprovado. A sequência:</p>
+            <ul>
+                <li><strong>Suba os workloads nos novos clusters</strong> enquanto os clusters legados continuam atendendo todo o tráfego em produção.</li>
+                <li><strong>Faça a virada apontando o DNS interno</strong> de cada app migrado para os novos clusters. O tráfego muda na camada de DNS, sem reimplantar quem faz as chamadas.</li>
+                <li><strong>Escale os workloads legados a zero</strong> em vez de apagá-los. Eles ficam como um rollback a quente: se algo parecer errado, escalar o lado antigo de volta e apontar o DNS de volta é uma reversão de um único comando.</li>
+                <li><strong>Desative somente após o período de estabilização</strong>, quando o novo lado já tiver rodado limpo por tempo suficiente para confiar.</li>
+            </ul>
+
+            <h2>O que de fato precisou ser movido</h2>
+            <p>Uma plataforma é mais do que seus pods sem estado. A migração cobriu toda a superfície:</p>
+            <ul>
+                <li><strong>Aplicações</strong> — os serviços sem estado, reimplantados nos novos clusters.</li>
+                <li><strong>Cloud Functions, agendadores e filas de tarefas</strong> — a cola orientada a eventos e a cron que é fácil de esquecer até algo parar de disparar.</li>
+                <li><strong>Dados do Firestore</strong> — a parte com estado, migrada para o novo projeto para que os apps nos novos clusters leiam do lugar certo.</li>
+                <li><strong>Agendamentos de escala</strong> — as janelas de escalonamento para cima/para baixo em ambientes fora de produção, recriadas para que os novos clusters custem o mesmo ociosos que os antigos.</li>
+            </ul>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">0</span><span class="stat-label">downtime</span></div>
+                <div class="stat"><span class="stat-value">DNS</span><span class="stat-label">virada na camada</span></div>
+                <div class="stat"><span class="stat-value">scale-to-0</span><span class="stat-label">rollback a quente</span></div>
+                <div class="stat"><span class="stat-value">stack completa</span><span class="stat-label">apps · funções · dados</span></div>
+            </div>
+
+            <div class="callout callout--win">
+                <p class="callout-title">Escale a zero, não apague</p>
+                <p>A jogada mais valiosa em uma migração de cluster é manter os workloads antigos com zero réplicas em vez de apagá-los. Custa quase nada deixar um deployment ocioso estacionado, e isso transforma o rollback de uma reconstrução em um comando de escala de uma linha mais uma troca de DNS. Apague somente depois que o novo lado tiver conquistado sua confiança.</p>
+            </div>
+
+            <h2>As partes que as pessoas esquecem</h2>
+            <p>A migração não termina quando o tráfego flui. Duas limpezas foram importantes:</p>
+            <ul>
+                <li><strong>Monitoramento que ainda sonda os hosts antigos.</strong> Depois da virada, as sondas blackbox estavam verificando os hostnames internos legados e exibindo uma parede de alertas falsos de "fora do ar". Reapontá-las para os hosts migrados foi o que de fato deixou a migração "concluída".</li>
+                <li><strong>Ferramental deixado para trás nos clusters legados.</strong> Agentes de custo e outros add-ons com escopo de cluster precisaram ser desinstalados de forma limpa (releases do Helm, além de CRDs e namespaces remanescentes), para que os clusters vazios estivessem realmente vazios antes de serem desmontados.</li>
+            </ul>
+
+            <h2>O que eu diria a quem está começando isso</h2>
+            <ul>
+                <li>Trate a mudança de cluster como blue-green. Rode os dois em paralelo, faça a virada na camada de DNS e nunca apague o lado antigo até que o novo esteja comprovado.</li>
+                <li>Escale os workloads antigos a zero, não os apague. Esse é o seu rollback, e mantê-lo custa quase nada.</li>
+                <li>Inventarie toda a superfície primeiro: funções, agendadores, filas de tarefas e dados com estado, não apenas os pods óbvios.</li>
+                <li>Termine o serviço. Reaponte o monitoramento para os novos hosts e limpe os clusters antigos, ou você vai caçar alertas fantasmas por semanas.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Uma migração in-place reduz a capacidade paralela; clusters paralelos permitem a validação do destino antes de desviar o tráfego.</p><h3>Trade-off</h3><p>A operação em paralelo adiciona custo temporário, além de riscos de comportamento de DNS/cache e de sincronização de estado.</p><h3>O que eu melhoraria em seguida</h3><p>Próxima melhoria: registrar a aceitação por serviço, o tempo de rollback e as condições para remover a capacidade legada com segurança.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Sou Vitor Schiavo, engenheiro de Site Reliability e Platform. Este é um caso do meu portfólio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

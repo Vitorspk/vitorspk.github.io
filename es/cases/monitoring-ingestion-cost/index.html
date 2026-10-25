@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=3b3dc7301c09c544ae7a820c64bf9e26f05f02f3 src=cases/monitoring-ingestion-cost/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Eliminar un costo innecesario de ingesta de monitoreo — Vitor Schiavo</title>
+    <meta name="description" content="Una reducción medida en una línea de facturación, con la funcionalidad de monitoreo verificada por separado.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/monitoring-ingestion-cost/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/monitoring-ingestion-cost/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/monitoring-ingestion-cost/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/monitoring-ingestion-cost/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/monitoring-ingestion-cost/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/monitoring-ingestion-cost/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Eliminar un costo innecesario de ingesta de monitoreo">
+    <meta property="og:description" content="Una reducción medida en una línea de facturación, con la funcionalidad de monitoreo verificada por separado.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/monitoring-ingestion-cost/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Eliminar un costo innecesario de ingesta de monitoreo — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Eliminar un costo innecesario de ingesta de monitoreo">
+    <meta name="twitter:description" content="Una reducción medida en una línea de facturación, con la funcionalidad de monitoreo verificada por separado.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/monitoring-ingestion-cost/og.png">
+    <meta name="twitter:image:alt" content="Eliminar un costo innecesario de ingesta de monitoreo — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Eliminar un costo innecesario de ingesta de monitoreo", "description": "Una reducción medida en una línea de facturación, con la funcionalidad de monitoreo verificada por separado.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/es/cases/monitoring-ingestion-cost/",
+      "inLanguage": "es", "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/monitoring-ingestion-cost/", "image": "https://vitorschiavo.dev/cases/monitoring-ingestion-cost/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/monitoring-ingestion-cost/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/monitoring-ingestion-cost/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudio de caso · FinOps · julio de 2025</span>
+<h1 class="doc-title">Eliminar un costo innecesario de ingesta de monitoreo</h1>
+<p class="doc-dek">Una reducción medida en una línea de facturación, con la funcionalidad de monitoreo verificada por separado.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en octubre de 2026</span><span>~5 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="monitoring-ingestion-cost" data-visual-area="finops">
+<figcaption><span>Solución de un vistazo</span><strong>Conserva la visibilidad. Cambia la ruta facturable.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Scrape targets</strong><span>Conservar las métricas existentes</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Prometheus</strong><span>Reemplazar la ingesta gestionada</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Grafana y alertas</strong><span>Validar la visibilidad conservada</span></div>
+</div>
+<p class="case-map-note">Se eliminó la línea de ingesta gestionada; el cómputo, el almacenamiento y el mantenimiento autogestionados siguen teniendo costos.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Reemplacé la ingesta gestionada de métricas y conservé los targets, los dashboards y la configuración de alertas.</dd></div>
+<div><dt>Alcance</dt><dd>Una línea de facturación de ingesta gestionada de Prometheus, denominada en GBP.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Cambié la infraestructura de monitoreo y verifiqué la salud de los targets, el acceso a consultas y la ausencia de más ingesta gestionada.</dd></div>
+<div><dt>Resultado</dt><dd>£1,165.80/mes eliminados de esa línea; £13,989.60 anualizados. Los costos de alojamiento y mantenimiento permanecen.</dd></div>
+</dl></section>
+
+<h2>El problema</h2>
+<p>Un despliegue de Prometheus reenviaba métricas a una ruta gestionada de ingesta de monitoreo. El registro operativo atribuía £1,165.80 por mes a esa línea de facturación, mientras el equipo también mantenía un stack de monitoreo local.</p>
+<h2>Mi contribución</h2>
+<p>Reemplacé la ruta de ingesta gestionada por un stack estándar de Prometheus y actualicé su configuración conservando los scrape targets, los dashboards y las alertas existentes. El cambio se aplicó con verificaciones de la salud de los targets, el acceso a consultas y la ausencia de más ingesta gestionada.</p>
+<h2>La contrapartida</h2>
+<p>Eliminar la ingesta gestionada transfiere la responsabilidad del almacenamiento, la disponibilidad y las operaciones al stack autogestionado. Una reducción de facturación solo es valiosa si el equipo comprende esas responsabilidades y valida la capacidad de monitoreo que todavía necesita.</p>
+<h2>Resultados y medición</h2>
+<p>La línea de ingesta registrada bajó de £1,165.80 por mes a cero. El equivalente anualizado es <strong>£13,989.60</strong>, calculado como doce veces esa reducción mensual. La moneda es GBP.</p>
+<p>Esto no significa un costo total de monitoreo de cero. El cómputo, el almacenamiento, el mantenimiento y los requisitos futuros de capacidad siguen siendo aparte. La cifra anualizada es una estimación de run-rate, no una afirmación de doce meses de ahorro realizado, y no se suma a otros totales de ahorro del portafolio.</p>
+<p>La validación cubrió más de 120 targets de blackbox, más de 20 aplicaciones con métricas personalizadas, el acceso a Grafana y la configuración de scrape existente. El registro operativo informó que esas funciones se conservaron tras el cambio.</p>
+<h2>Lo que aprendí</h2>
+<p>La ingeniería de costos empieza por identificar el mecanismo facturable exacto. Publicar su moneda, su alcance y su contrapartida operativa hace que el resultado sea más útil que una gran afirmación de ahorro agregado.</p><section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>La ingesta gestionada transfiere el trabajo operativo a un proveedor; un Prometheus autogestionado cambia la ruta de facturación y mantiene esa responsabilidad en el equipo.</p><h3>Contrapartida</h3><p>La reducción bruta de la línea de facturación no es un ahorro neto después del cómputo, el almacenamiento y el mantenimiento de ingeniería.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: hacer seguimiento del costo neto de propiedad y probar periódicamente la recuperación del stack de monitoreo.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más estudios de caso</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
