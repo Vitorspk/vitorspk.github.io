@@ -67,6 +67,15 @@ for (const pg of PAGES) {
       });
 
       if (pg.name === 'home') {
+        test('runtime I18N strings render in the page language', async ({ page }) => {
+          // The theme-toggle aria-label is set by script.js from the I18N map
+          // keyed on <html lang>; a missing/renamed key would surface here.
+          const themeToDark = { en: 'Switch to dark theme', 'pt-BR': 'Mudar para o tema escuro', es: 'Cambiar al tema oscuro' };
+          await page.goto(path);
+          await page.locator('#themeToggle').click(); // dark -> light; JS rewrites the label
+          await expect(page.locator('#themeToggle')).toHaveAttribute('aria-label', themeToDark[loc.lang]);
+        });
+
         test('platform explorer updates the case link and it resolves', async ({ page }) => {
           await page.goto(path);
           await page.locator('[data-platform-view="reliability"]').click();

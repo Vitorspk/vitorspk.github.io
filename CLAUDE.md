@@ -117,7 +117,7 @@ The site is trilingual: **English at the root** (`/`, `/resume.html`, `/cases/<s
 - **The source-hash stamp is an anti-drift guard.** If an English page changes, `build:i18n:check` fails until the translation is refreshed. **Only run `--restamp` *after* actually retranslating** — never to silence the check. (The hash ignores the generator-managed regions, so plumbing changes alone don't trigger it.)
 - **One English résumé PDF**, linked from every locale.
 - **Runtime strings:** `script.js` keys a small `I18N` map off `<html lang>`; the platform explorer reads its content (with locale-correct links) from the per-page `#platform-views-data` JSON block. No translated prose lives in `script.js`.
-- **Adding a language:** add it to `LOCALES` in `scripts/build-i18n.js`, add the `pt/es`-style globs to `lint:html`, add an `I18N` block to `script.js`, translate the pages, then run `build:i18n`.
+- **Adding a language:** add it to `LOCALES` in `scripts/build-i18n.js`, add the `pt/es`-style globs to `lint:html`, add an `I18N` block to `script.js` (**its key must match the locale's `lang`, e.g. `pt-BR`** — the lookup is exact-match and falls back to English otherwise), translate the pages, then run `build:i18n`.
 - **Translating a case page** flips its locale links automatically (the generator detects the new file); open it as its own PR **without auto-merge** (case content is the employer carve-out), then tell the owner to resubmit `sitemap.xml` in Search Console.
 
 ---

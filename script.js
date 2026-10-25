@@ -248,6 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let platformViews = {};
     const platformData = document.getElementById('platform-views-data');
     if (platformData) {
+        // A broken block disables the explorer at runtime; build-i18n.js --check
+        // validates every locale's JSON (keys + array shapes), so CI catches it.
         try { platformViews = JSON.parse(platformData.textContent); } catch { platformViews = {}; }
     }
     const platformButtons = Array.from(document.querySelectorAll('[data-platform-view]'));
