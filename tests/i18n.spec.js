@@ -17,10 +17,6 @@ const PAGES = [
   { name: 'resume', paths: { en: '/resume.html', 'pt-BR': '/pt/resume.html', es: '/es/resume.html' } },
 ];
 
-function prefixFor(lang) {
-  return lang === 'en' ? '' : lang === 'pt-BR' ? '/pt' : '/es';
-}
-
 for (const pg of PAGES) {
   for (const loc of LOCALES) {
     const path = pg.paths[loc.lang];
@@ -60,12 +56,25 @@ for (const pg of PAGES) {
         expect(results.violations).toEqual([]);
       });
 
+      test('every internal link resolves (no dead links)', async ({ page }) => {
+        await page.goto(path);
+        const hrefs = await page.$$eval('a[href^="/"]', els => els.map(a => a.getAttribute('href')));
+        const unique = [...new Set(hrefs.map(h => h.split('#')[0]).filter(Boolean))];
+        for (const href of unique) {
+          const res = await page.request.get(href);
+          expect(res.status(), `${href} should resolve`).toBe(200);
+        }
+      });
+
       if (pg.name === 'home') {
-        test('platform explorer swaps to locale-prefixed case links', async ({ page }) => {
+        test('platform explorer updates the case link and it resolves', async ({ page }) => {
           await page.goto(path);
           await page.locator('[data-platform-view="reliability"]').click();
-          await expect(page.locator('#platform-story-link'))
-            .toHaveAttribute('href', prefixFor(loc.lang) + '/cases/gen2-observability-repair/');
+          // The link is locale-prefixed only once that case is translated; until
+          // then it falls back to the English case page. Either way it resolves.
+          const href = await page.locator('#platform-story-link').getAttribute('href');
+          expect(href).toMatch(/^(\/(?:pt|es))?\/cases\/gen2-observability-repair\/$/);
+          expect((await page.request.get(href)).status()).toBe(200);
         });
       }
     });

@@ -93,10 +93,61 @@ function pageFile(srcRel, locale) {
   return locale.dir ? path.join(ROOT, locale.dir, srcRel) : path.join(ROOT, srcRel);
 }
 
-/** sha1 of a file's bytes, normalising CRLF so the stamp is OS-stable. */
-function sha1File(file) {
-  const buf = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
-  return crypto.createHash('sha1').update(buf).digest('hex');
+/** Blank out the generator-managed regions + stamp so plumbing churn on the
+ *  English source (a new locale, a switcher tweak, a links-format change) does
+ *  NOT falsely mark every translation stale. Only real content changes do. */
+function stripManaged(html) {
+  html = replaceBlock(html, LINKS, LINKS.start + LINKS.end).html;
+  html = replaceBlock(html, SWITCH, SWITCH.start + SWITCH.end).html;
+  return html.replace(STAMP_RE, '');
+}
+
+/** The source-hash a translation is stamped against: the English page's content
+ *  with managed regions stripped, CRLF-normalised for OS stability. */
+function hashSource(srcRel) {
+  const raw = fs.readFileSync(pageFile(srcRel, DEFAULT_LOCALE), 'utf8').replace(/\r\n/g, '\n');
+  return crypto.createHash('sha1').update(stripManaged(raw)).digest('hex');
+}
+
+/**
+ * Rewrite internal case / résumé / home links on a translated page to the
+ * locale version when that file exists on disk, else fall back to the English
+ * path (which always exists). Idempotent: each case batch flips its own links
+ * automatically, and nothing ever points at a page that isn't there yet.
+ */
+function localizeInternalLinks(html, locale) {
+  const pick = (srcRel) => {
+    const target = fs.existsSync(pageFile(srcRel, locale)) ? locale : DEFAULT_LOCALE;
+    return pageUrl(srcRel, target).replace(ORIGIN, '') || '/';
+  };
+  // Case links in href="…" and in the "href": "…" platform JSON.
+  html = html.replace(/(href=")\/(?:pt\/|es\/)?cases\/([a-z0-9-]+)\/(")/g,
+    (_m, a, slug, b) => a + pick(`cases/${slug}/index.html`) + b);
+  html = html.replace(/("href":\s*")\/(?:pt\/|es\/)?cases\/([a-z0-9-]+)\/(")/g,
+    (_m, a, slug, b) => a + pick(`cases/${slug}/index.html`) + b);
+  // Résumé page link.
+  html = html.replace(/(href=")\/(?:pt\/|es\/)?resume\.html(")/g,
+    (_m, a, b) => a + pick('resume.html') + b);
+  // Home root and same-site home anchors (e.g. /#contact).
+  html = html.replace(/(href=")\/(?:pt\/|es\/)?(#[a-z0-9-]+)?(")/g,
+    (_m, a, frag, b) => a + pick('index.html') + (frag || '') + b);
+  return html;
+}
+
+/** Fail if any internal href/src ("/…") on the page does not resolve on disk. */
+function auditInternalLinks(html, rel, errors) {
+  const re = /(?:href|src)="(\/[^"#?]*)/g;
+  const seen = new Set();
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    if (!m[1].startsWith('//')) seen.add(m[1]);
+  }
+  for (const p of seen) {
+    const onDisk = p.endsWith('/') ? p.slice(1) + 'index.html' : p.slice(1);
+    if (!fs.existsSync(path.join(ROOT, onDisk))) {
+      errors.push(`${rel}: internal link "${p}" does not resolve on disk (${onDisk})`);
+    }
+  }
 }
 
 /** Which locales actually have a file on disk for this source page. */
@@ -205,10 +256,13 @@ function processTranslatedPage(srcRel, locale, mode) {
   let html = fs.readFileSync(file, 'utf8');
   const original = html;
   const present = existingLocales(srcRel);
-  const currentSrcSha = sha1File(srcFile);
+  const currentSrcSha = hashSource(srcRel);
 
   // 1. <html lang="...">
   html = html.replace(/<html lang="[^"]*">/, `<html lang="${locale.lang}">`);
+
+  // 1b. Point internal links at the locale page when it exists, else English.
+  html = localizeInternalLinks(html, locale);
 
   // 2. Managed head links block (exactly one expected, in <head>).
   const linksRes = replaceBlock(html, LINKS, buildLinksBlock(srcRel, locale, present));
@@ -284,6 +338,11 @@ function processTranslatedPage(srcRel, locale, mode) {
     errors.push(`${rel}: JSON-LD failed to parse (${ld.__parseError})`);
   }
 
+  // 8. Dead-link guard (check mode): every internal href/src must resolve.
+  if (mode === 'check') {
+    auditInternalLinks(html, rel, errors);
+  }
+
   const changed = html !== original;
   if (mode !== 'check' && changed && errors.length === 0) {
     fs.writeFileSync(file, html);
@@ -316,6 +375,11 @@ function processEnglishPage(srcRel, mode) {
   if (mode !== 'check' && changed) fs.writeFileSync(file, html);
   if (mode === 'check' && changed) {
     errors.push(`${srcRel}: plumbing is out of date — run "node scripts/build-i18n.js" and commit`);
+  }
+  // Audit internal links only on pages this script manages (index, résumé),
+  // not the case pages (out of scope here, and they predate this work).
+  if (mode === 'check' && html.includes(LINKS.start)) {
+    auditInternalLinks(html, srcRel, errors);
   }
   return { changed, errors };
 }

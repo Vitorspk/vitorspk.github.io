@@ -130,7 +130,7 @@
                 <li><strong>Remote state.</strong> Terraform state in a GCS backend, not on anyone's laptop.</li>
             </ul>
 
-            <figure class="architecture-diagram" tabindex="0" aria-label="Shared VPC topology: a host project owns the VPC, subnets, Cloud NAT and firewall; four service projects (dev, stg, prd, sdx) each run a private GKE cluster attached to the shared network, with egress routed through Cloud NAT.">
+            <figure class="architecture-diagram" tabindex="0" aria-label="Shared VPC topology: a host project owns the VPC, subnets, Cloud NAT and firewall; four service projects (dev, stg, prd, sandbox) each run a private GKE cluster attached to the shared network, with egress routed through Cloud NAT.">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 440" aria-hidden="true" focusable="false">
                     <rect width="820" height="440" rx="12" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
                     <text x="410" y="34" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-primary)">Shared VPC Topology</text>
@@ -171,7 +171,7 @@
                         <rect x="424" y="220" width="176" height="92" rx="10" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
                         <text x="512" y="243" text-anchor="middle" fill="var(--text-primary)">Service Project · prd</text>
                         <rect x="616" y="220" width="164" height="92" rx="10" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
-                        <text x="698" y="243" text-anchor="middle" fill="var(--text-primary)">Service Project · sdx</text>
+                        <text x="698" y="243" text-anchor="middle" fill="var(--text-primary)">Service Project · sandbox</text>
                     </g>
                     <g font-size="9" fill="var(--text-secondary)" text-anchor="middle">
                         <text x="128" y="266">Private GKE cluster</text>
@@ -203,7 +203,7 @@
                 <li><strong>3. Network.</strong> Shared VPC host project, subnets, Cloud NAT and firewall rules, all via Terraform.</li>
                 <li><strong>4. Modular Terraform.</strong> Refactored from monolithic inline resources to reusable modules; the root config became module calls plus a variable file per environment.</li>
                 <li><strong>5. CI/CD.</strong> GitHub Actions: <code>terraform plan</code> on pull request, <code>terraform apply</code> on merge, a separate workflow per environment.</li>
-                <li><strong>6. Clusters.</strong> All four GKE clusters (dev, stg, prd, sdx) deployed through the pipelines.</li>
+                <li><strong>6. Clusters.</strong> All four GKE clusters (dev, stg, prd, sandbox) deployed through the pipelines.</li>
                 <li><strong>7. Guardrails.</strong> <code>prevent_destroy = true</code> on the VPC, subnets and Cloud NAT.</li>
                 <li><strong>8. Documentation.</strong> Architecture diagrams, runbooks and module docs for handover.</li>
             </ul>

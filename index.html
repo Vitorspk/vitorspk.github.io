@@ -1202,7 +1202,7 @@
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
-                                    Deployments across four GKE clusters (dev · stg · prd · sdx) were manual, inconsistent, and error-prone. No single source of truth for cluster state, no audit trail, and high risk of configuration drift between environments. Teams needed kubectl access to deploy with no self-service model in place.
+                                    Deployments across four GKE clusters (dev · stg · prd · sandbox) were manual, inconsistent, and error-prone. No single source of truth for cluster state, no audit trail, and high risk of configuration drift between environments. Teams needed kubectl access to deploy with no self-service model in place.
                                 </p>
 </div>
 <div class="case-section">
@@ -1215,7 +1215,7 @@
 <li class="impact-item">
 <strong>Phase 2:</strong> Configured ArgoCD Applications and AppProjects with RBAC boundaries per team and namespace</li>
 <li class="impact-item">
-<strong>Phase 3:</strong> Multi-cluster registration; all four GKE clusters (dev · stg · prd · sdx) as ArgoCD targets with cluster credentials stored in Secrets</li>
+<strong>Phase 3:</strong> Multi-cluster registration; all four GKE clusters (dev · stg · prd · sandbox) as ArgoCD targets with cluster credentials stored in Secrets</li>
 <li class="impact-item">
 <strong>Phase 4:</strong> CI/CD pipeline integration via GitHub Actions image updater for automatic image tag propagation, branch promotion dev → stg → prd</li>
 <li class="impact-item">
@@ -1232,7 +1232,7 @@
 <h4 class="impact-title">Business Impact</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>4 GKE clusters</strong> managed as a single GitOps fleet (dev · stg · prd · sdx)</li>
+<strong>4 GKE clusters</strong> managed as a single GitOps fleet (dev · stg · prd · sandbox)</li>
 <li class="impact-item">
 <strong>Drift management</strong>: Git provides desired state, with reconciliation and self-healing where enabled</li>
 <li class="impact-item">
@@ -1306,7 +1306,7 @@
 <li class="impact-item">
 <strong>Phase 5 — CI/CD Automation:</strong> GitHub Actions workflows for terraform plan on PR and terraform apply on merge; separate workflows per environment</li>
 <li class="impact-item">
-<strong>Phase 6 — GKE Cluster Deployment:</strong> Deployed all four GKE clusters (dev · stg · prd · sdx) using the automated pipelines</li>
+<strong>Phase 6 — GKE Cluster Deployment:</strong> Deployed all four GKE clusters (dev · stg · prd · sandbox) using the automated pipelines</li>
 <li class="impact-item">
 <strong>Phase 7 — Safety Guardrails:</strong> Added <code>prevent_destroy = true</code> lifecycle blocks on VPC, subnets, and Cloud NAT to protect against accidental terraform destroy</li>
 <li class="impact-item">
