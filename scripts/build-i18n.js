@@ -44,6 +44,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { execFileSync } = require('child_process');
 
 const ROOT = path.join(__dirname, '..');
 const ORIGIN = 'https://vitorschiavo.dev';
@@ -155,6 +156,26 @@ function existingLocales(srcRel) {
   return LOCALES.filter((l) => fs.existsSync(pageFile(srcRel, l)));
 }
 
+/** The page's real last-modified date (YYYY-MM-DD) from git, so <lastmod>
+ *  reflects when the page actually changed rather than when the build ran.
+ *  Falls back to today for an untracked file or when git is unavailable. */
+function lastmodFor(srcRel, locale) {
+  const rel = path.relative(ROOT, pageFile(srcRel, locale));
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cs', '--', rel],
+      { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(out)) return out;
+  } catch (e) { /* untracked or no git — fall through */ }
+  return new Date().toISOString().slice(0, 10);
+}
+
+/** Parse the #platform-views-data JSON block (the explorer's content). */
+function extractPlatformViews(html) {
+  const m = html.match(/<script type="application\/json" id="platform-views-data">([\s\S]*?)<\/script>/);
+  if (!m) return null;
+  try { return JSON.parse(m[1]); } catch (e) { return { __parseError: e.message }; }
+}
+
 /** Build the managed <head> links block for one page in one locale. */
 function buildLinksBlock(srcRel, locale, present) {
   const lines = [LINKS.start];
@@ -219,9 +240,10 @@ function replaceBlock(html, marker, block) {
   return { html: result, count };
 }
 
-/** Extract the sorted set of attribute values for a given attribute name. */
+/** Extract the sorted set of values for a given attribute name. Anchored so
+ *  `id` does not also match `data-id`, `aria-labelledby`, etc. */
 function attrSet(html, attr) {
-  const re = new RegExp(`${attr}="([^"]+)"`, 'g');
+  const re = new RegExp(`(?:^|\\s)${attr}="([^"]+)"`, 'g');
   const set = new Set();
   let m;
   while ((m = re.exec(html)) !== null) set.add(m[1]);
@@ -232,22 +254,22 @@ function arraysEqual(a, b) {
   return a.length === b.length && a.every((v, i) => v === b[i]);
 }
 
-/** Parse the first application/ld+json Person/TechArticle block. */
-function parseJsonLd(html) {
-  const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
-  if (!m) return null;
-  try {
-    return JSON.parse(m[1]);
-  } catch (e) {
-    return { __parseError: e.message };
+/** Parse every application/ld+json block on the page. */
+function parseJsonLdBlocks(html) {
+  const re = /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g;
+  const blocks = [];
+  let m;
+  while ((m = re.exec(html)) !== null) {
+    try { blocks.push(JSON.parse(m[1])); } catch (e) { blocks.push({ __parseError: e.message }); }
   }
+  return blocks;
 }
 
 /**
  * Process one translated page: inject plumbing (or verify it in check mode).
  * Returns { changed, errors[] }.
  */
-function processTranslatedPage(srcRel, locale, mode) {
+function processTranslatedPage(srcRel, locale, mode, restampTarget) {
   const file = pageFile(srcRel, locale);
   const srcFile = pageFile(srcRel, DEFAULT_LOCALE);
   const errors = [];
@@ -280,10 +302,13 @@ function processTranslatedPage(srcRel, locale, mode) {
     html = switcherRes.html;
   }
 
-  // 4. Source-hash stamp.
+  // 4. Source-hash stamp. --restamp updates it (optionally only for a targeted
+  // locale code or page path); any non-check mode initialises a missing stamp.
   const stampMatch = original.match(STAMP_RE);
   let stampSha = stampMatch ? stampMatch[1] : null;
-  if (mode === 'restamp' || (mode === 'write' && !stampSha)) {
+  const restampHit = mode === 'restamp' &&
+    (!restampTarget || restampTarget === locale.code || restampTarget === rel);
+  if (restampHit || (mode !== 'check' && !stampSha)) {
     stampSha = currentSrcSha;
   }
   const stampComment = `<!-- i18n:src-sha=${stampSha || currentSrcSha} src=${srcRel} -->`;
@@ -322,23 +347,52 @@ function processTranslatedPage(srcRel, locale, mode) {
     }
   }
 
-  // 7. JSON-LD sanity. The Person/TechArticle url varies by page (a résumé's
-  // Person points at the locale home, not /resume.html), so we only require the
-  // url to live under this locale's subtree — and inLanguage to match the lang.
-  const ld = parseJsonLd(html);
-  if (ld && !ld.__parseError) {
-    const localeBase = `${ORIGIN}/${locale.dir ? locale.dir + '/' : ''}`;
+  // 7. JSON-LD sanity across every ld+json block. The Person/TechArticle url
+  // varies by page (a résumé's Person points at the locale home, not
+  // /resume.html), so we only require the url to live under this locale's
+  // subtree — and inLanguage to match the lang.
+  const localeBase = `${ORIGIN}/${locale.dir ? locale.dir + '/' : ''}`;
+  for (const ld of parseJsonLdBlocks(html)) {
+    if (ld.__parseError) {
+      errors.push(`${rel}: JSON-LD failed to parse (${ld.__parseError})`);
+      continue;
+    }
     if (ld.url && !ld.url.startsWith(localeBase)) {
       errors.push(`${rel}: JSON-LD url "${ld.url}" is not under ${localeBase}`);
     }
     if (ld.inLanguage && ld.inLanguage !== locale.lang) {
       errors.push(`${rel}: JSON-LD inLanguage is "${ld.inLanguage}", expected "${locale.lang}"`);
     }
-  } else if (ld && ld.__parseError) {
-    errors.push(`${rel}: JSON-LD failed to parse (${ld.__parseError})`);
   }
 
-  // 8. Dead-link guard (check mode): every internal href/src must resolve.
+  // 8. Platform-explorer JSON (home only): script.js silently falls back to {}
+  // on a parse error, so validate it here instead — same keys and array shapes
+  // as English, so a translator's typo fails CI rather than killing the explorer.
+  if (srcRel === 'index.html') {
+    const en = extractPlatformViews(srcHtml);
+    const loc = extractPlatformViews(html);
+    if (!loc) {
+      errors.push(`${rel}: #platform-views-data block is missing`);
+    } else if (loc.__parseError) {
+      errors.push(`${rel}: #platform-views-data is invalid JSON (${loc.__parseError})`);
+    } else if (en && !en.__parseError) {
+      const ek = Object.keys(en).sort();
+      const lk = Object.keys(loc).sort();
+      if (ek.join(',') !== lk.join(',')) {
+        errors.push(`${rel}: #platform-views-data keys ${lk.join(',')} differ from English ${ek.join(',')}`);
+      } else {
+        for (const k of ek) {
+          for (const arr of ['nodes', 'foundation', 'details']) {
+            if ((en[k][arr] || []).length !== (loc[k][arr] || []).length) {
+              errors.push(`${rel}: #platform-views-data ${k}.${arr} length differs from English`);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // 9. Dead-link guard (check mode): every internal href/src must resolve.
   if (mode === 'check') {
     auditInternalLinks(html, rel, errors);
   }
@@ -386,7 +440,6 @@ function processEnglishPage(srcRel, mode) {
 
 /** Regenerate sitemap.xml with per-page xhtml:link alternates. */
 function buildSitemap(pages, mode) {
-  const today = new Date().toISOString().slice(0, 10);
   const PRIORITY = (srcRel) => (srcRel === 'index.html' ? '1.0' : srcRel === 'resume.html' ? '0.7' : '0.9');
   const CHANGEFREQ = (srcRel) => (srcRel === 'index.html' ? 'weekly' : 'monthly');
 
@@ -398,9 +451,12 @@ function buildSitemap(pages, mode) {
   for (const srcRel of pages) {
     const present = existingLocales(srcRel);
     for (const locale of present) {
+      // In check mode <lastmod> is normalised away before comparing, so use a
+      // placeholder and skip the git lookups.
+      const lastmod = mode === 'check' ? 'x' : lastmodFor(srcRel, locale);
       lines.push('  <url>');
       lines.push(`    <loc>${pageUrl(srcRel, locale)}</loc>`);
-      lines.push(`    <lastmod>${today}</lastmod>`);
+      lines.push(`    <lastmod>${lastmod}</lastmod>`);
       lines.push(`    <changefreq>${CHANGEFREQ(srcRel)}</changefreq>`);
       lines.push(`    <priority>${PRIORITY(srcRel)}</priority>`);
       // Only declare hreflang alternates when a page actually has more than one
@@ -434,6 +490,8 @@ function buildSitemap(pages, mode) {
 function main() {
   const arg = process.argv[2];
   const mode = arg === '--check' ? 'check' : arg === '--restamp' ? 'restamp' : 'write';
+  // Optional --restamp target: a locale code ("pt") or a page path ("pt/index.html").
+  const restampTarget = mode === 'restamp' ? (process.argv[3] || null) : null;
 
   const pages = discoverSourcePages();
   const allErrors = [];
@@ -446,7 +504,7 @@ function main() {
 
     for (const locale of TRANSLATED) {
       if (!fs.existsSync(pageFile(srcRel, locale))) continue;
-      const res = processTranslatedPage(srcRel, locale, mode);
+      const res = processTranslatedPage(srcRel, locale, mode, restampTarget);
       allErrors.push(...res.errors);
       anyChanged = anyChanged || res.changed;
     }
