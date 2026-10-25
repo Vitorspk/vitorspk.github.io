@@ -72,6 +72,30 @@
     <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/cloud-cost-engineering/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/cloud-cost-engineering/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/"/>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/</loc>
@@ -84,18 +108,90 @@
     <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/ephemeral-preview-environments/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/"/>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/</loc>
     <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/gcp-storage-cost-reduction/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/"/>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/gen2-observability-repair/</loc>
     <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gen2-observability-repair/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/gen2-observability-repair/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gen2-observability-repair/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/gen2-observability-repair/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gen2-observability-repair/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gen2-observability-repair/"/>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/</loc>
@@ -114,6 +210,30 @@
     <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/gke-terraform-shared-vpc/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/"/>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/grafana-prometheus-modernization/</loc>
@@ -180,6 +300,30 @@
     <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/self-hosting-gemma-3-vllm/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/self-hosting-gemma-3-vllm/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/"/>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/</loc>

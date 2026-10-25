@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=3f75ca16b6b27445a628977fd4337c0c284d9a3f src=cases/cloud-cost-engineering/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Ingeniería de costos en la nube en todo el stack — Vitor Schiavo</title>
+    <meta name="description" content="Reducción del desperdicio en la nube mediante rightsizing de Kubernetes, cambios de observabilidad y retiro seguro de servicios.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/cloud-cost-engineering/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/cloud-cost-engineering/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/cloud-cost-engineering/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/cloud-cost-engineering/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Ingeniería de costos en la nube en todo el stack">
+    <meta property="og:description" content="Reducción del desperdicio en la nube mediante rightsizing de Kubernetes, cambios de observabilidad y retiro seguro de servicios.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/cloud-cost-engineering/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Ingeniería de costos en la nube en todo el stack — un caso de estudio de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ingeniería de costos en la nube en todo el stack">
+    <meta name="twitter:description" content="Reducción del desperdicio en la nube mediante rightsizing de Kubernetes, cambios de observabilidad y retiro seguro de servicios.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/cloud-cost-engineering/og.png">
+    <meta name="twitter:image:alt" content="Ingeniería de costos en la nube en todo el stack — un caso de estudio de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Ingeniería de costos en la nube en todo el stack", "description": "Reducción del desperdicio en la nube mediante rightsizing de Kubernetes, cambios de observabilidad y retiro seguro de servicios.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/es/cases/cloud-cost-engineering/",
+      "inLanguage": "es", "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/cloud-cost-engineering/", "image": "https://vitorschiavo.dev/cases/cloud-cost-engineering/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/cloud-cost-engineering/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/cloud-cost-engineering/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Caso de estudio · FinOps · 2025–2026</span>
+<h1 class="doc-title">Ingeniería de costos en la nube en todo el stack</h1>
+<p class="doc-dek">Reducción del desperdicio en la nube mediante rightsizing de Kubernetes, cambios de observabilidad y retiro seguro de servicios.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en octubre de 2026</span><span>~6 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="cloud-cost-engineering" data-visual-area="finops">
+<figcaption><span>Solución de un vistazo</span><strong>Encuentra el desperdicio. Cambia el sistema. Verifica la factura.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg><strong>Baseline de costos</strong><span>Asignar el gasto a los recursos</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Cambio de ingeniería</strong><span>Aplicar rightsizing, migrar o retirar</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Validación de facturación</strong><span>Comparar resultados acotados</span></div>
+</div>
+<p class="case-map-note">Preservar los datos requeridos y el comportamiento del servicio; medir cada iniciativa contra su propio baseline de facturación.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Rightsizing, cambios en la ruta de ingesta y retiro seguro de infraestructura heredada.</dd></div>
+<div><dt>Alcance</dt><dd>Iniciativas separadas en Kubernetes, monitoreo y servicios heredados en 2025–2026.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Coordiné los cambios de infraestructura con los requisitos de retención de datos y de servicio; los ahorros se atribuyen a cada iniciativa acotada.</dd></div>
+<div><dt>Resultado</dt><dd>Equivalentes anualizados: ~US$30.1K por retiro de infraestructura heredada, £26.5K por rightsizing de Kubernetes y £14K por ingesta de monitoreo. Diferentes monedas y baselines.</dd></div>
+</dl></section>
+
+<h2>La oportunidad</h2>
+<p>Los ahorros en la nube provinieron de una secuencia de decisiones de ingeniería: reducir la capacidad ociosa, cambiar las rutas de ingesta costosas, ajustar el almacenamiento a los patrones de acceso y retirar los servicios cuyo rol de negocio había terminado. Trabajé a lo largo de esas capas en lugar de tratar la factura de la nube como una única optimización.</p>
+<div class="stat-strip">
+<div class="stat"><strong class="stat-value">~US$30.1K</strong><span class="stat-label">Reducción anualizada por retiro de infraestructura heredada · USD</span></div>
+<div class="stat"><strong class="stat-value">£26.5K</strong><span class="stat-label">Reducción anualizada por rightsizing de Kubernetes · GBP</span></div>
+<div class="stat"><strong class="stat-value">£14K</strong><span class="stat-label">Reducción anualizada por ingesta de monitoreo · GBP</span></div>
+</div>
+<h2>Retirar el servicio, preservar los datos</h2>
+<p>Coordiné el retiro de un servicio heredado en Kubernetes y MongoDB Atlas. Antes de eliminar los recursos, exporté y verifiqué los datos conservados, y luego eliminé los clústeres de base de datos, el cómputo dedicado y la infraestructura temporal de respaldo.</p>
+<p>El primer ciclo de facturación de Atlas tras el retiro, abril de 2026, cayó de <strong>US$2,424.31 a US$131.30</strong> para ese servicio: <strong>US$2,293.01 menos por mes, una reducción del 94.6%</strong>. El monto restante incluía runtime parcial y retención de respaldos. No fue una factura en cero.</p>
+<p>El cierre combinó esa reducción observada en la base de datos con aproximadamente US$218/mes de infraestructura GKE eliminada, lo que da <strong>alrededor de US$2,511/mes, o US$30,132/año anualizado</strong>. El componente de GKE es una estimación de infraestructura; el componente de Atlas es una comparación de facturación. No atribuí a este servicio todo el cambio de la factura a nivel de la organización.</p>
+<h2>Aplicar rightsizing a Kubernetes antes de comprar más capacidad</h2>
+<p>Una instantánea de la flota de enero de 2025 registró una reducción de <strong>69 a 55 nodos</strong> en cuatro entornos. La reducción mensual registrada fue de <strong>£2,208.33</strong>, equivalente a <strong>£26,499.96/año anualizado</strong>.</p>
+<p>Un cambio posterior en el sandbox redujo el mínimo de la aplicación de dos pods a uno, lo que permitió eliminar cuatro máquinas más. Esa tarea registró <strong>US$1,009.74/mes</strong>, o <strong>US$12,116.88/año anualizado</strong>. Representa un paso de optimización independiente, con un baseline y una moneda diferentes; lo mantengo separado de la instantánea anterior de la flota.</p>
+<h2>Cambiar la ruta de ingesta de monitoreo</h2>
+<p>Reemplacé una ruta de ingesta de Prometheus administrada de pago por un stack estándar de Prometheus. La línea de ingesta registrada bajó <strong>£1,165.80/mes</strong>, equivalente a <strong>£13,989.60/año anualizado</strong>. La validación cubrió los scrape targets, dashboards y alertas existentes.</p>
+<p>El monitoreo autoadministrado todavía necesita cómputo, almacenamiento y mantenimiento. Este resultado describe la línea de ingesta eliminada. <a href="/cases/monitoring-ingestion-cost/">Lee la migración de monitoreo y sus contrapartidas.</a></p>
+<h2>Seguir optimizando en todo el stack</h2>
+<p>El trabajo más amplio incluyó cambios en el ciclo de vida del almacenamiento, cambios de clase de almacenamiento y de región de los buckets, cómputo compartido para workers de IA, programación de entornos no productivos, limpieza del registry y eliminación de VMs y bases de datos sin uso. Esos cambios demuestran la amplitud del trabajo; no les asigno totales financieros inventados.</p>
+<p>Para el almacenamiento, el registro de configuración de enero de 2025 muestra Nearline tras 30 días y Archive tras 365 días. Esa configuración por sí sola no establece el monto histórico de ahorro en almacenamiento. Los análisis de precios con descuentos por compromiso también se mantienen separados de las reducciones incrementales medidas.</p>
+<h2>Cómo leer los resultados financieros</h2>
+<p>Cada equivalente anualizado es doce veces su reducción mensual documentada. Se trata de iniciativas históricas con diferentes períodos de medición, no de doce meses de ahorros materializados ni de un pronóstico de la factura actual. GBP y USD permanecen en sus monedas originales, y las iniciativas no se combinan en un único total destacado.</p>
+<h2>El principio de ingeniería</h2>
+<p>Sigue el recurso facturable hasta una decisión operativa. Verifica las dependencias y la retención antes de eliminarlo, valida el comportamiento del servicio resultante y luego vuelve a la facturación para comprobar el impacto.</p>
+<section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Aplicar rightsizing a un servicio activo o retirar uno sin uso: la dependencia de negocio y los requisitos de retención determinan qué cambio se justifica.</p><h3>Contrapartida</h3><p>Reducir una línea de facturación administrada puede agregar operaciones autoadministradas. Las reducciones mensuales anualizadas no son doce meses de ahorros materializados.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: conciliar los períodos superpuestos y los costos de mantenimiento antes de reportar un ahorro neto consolidado.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más casos de estudio</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

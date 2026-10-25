@@ -17,6 +17,23 @@ const PAGES = [
   { name: 'resume', paths: { en: '/resume.html', 'pt-BR': '/pt/resume.html', es: '/es/resume.html' } },
 ];
 
+// Auto-discover translated case pages so every batch is covered without editing
+// this file: any slug that exists in cases/, pt/cases/ and es/cases/ is added.
+const nodeFs = require('fs');
+const nodePath = require('path');
+const ROOT = nodePath.join(__dirname, '..');
+const ptCasesDir = nodePath.join(ROOT, 'pt/cases');
+if (nodeFs.existsSync(ptCasesDir)) {
+  for (const slug of nodeFs.readdirSync(ptCasesDir)) {
+    const hasAll = ['cases', 'pt/cases', 'es/cases'].every(
+      (d) => nodeFs.existsSync(nodePath.join(ROOT, d, slug, 'index.html'))
+    );
+    if (hasAll) {
+      PAGES.push({ name: `case:${slug}`, paths: { en: `/cases/${slug}/`, 'pt-BR': `/pt/cases/${slug}/`, es: `/es/cases/${slug}/` } });
+    }
+  }
+}
+
 for (const pg of PAGES) {
   for (const loc of LOCALES) {
     const path = pg.paths[loc.lang];

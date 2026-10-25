@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=4232d35ade439c0010c4edb8746c1f0e34de8046 src=cases/self-hosting-gemma-3-vllm/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Operando LLMs multimodais entre engines e nuvens — Vitor Schiavo</title>
+    <meta name="description" content="Seleção de runtime orientada ao modelo, deployment em GPU, fallback autenticado e as verificações que distinguem um deployment saudável de um pipeline verde.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/self-hosting-gemma-3-vllm/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Operando LLMs multimodais entre engines e nuvens">
+    <meta property="og:description" content="Seleção de runtime orientada ao modelo, deployment em GPU, fallback autenticado e as verificações que distinguem um deployment saudável de um pipeline verde.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Operando LLMs multimodais entre engines e nuvens — um estudo de caso de Vitor Schiavo.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Operando LLMs multimodais entre engines e nuvens">
+    <meta name="twitter:description" content="Seleção de runtime orientada ao modelo, deployment em GPU, fallback autenticado e as verificações que distinguem um deployment saudável de um pipeline verde.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/og.png">
+    <meta name="twitter:image:alt" content="Operando LLMs multimodais entre engines e nuvens — um estudo de caso de Vitor Schiavo.">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Operando LLMs multimodais entre engines e nuvens",
+      "description": "Seleção de runtime orientada ao modelo, deployment em GPU, fallback autenticado e as verificações que distinguem um deployment saudável de um pipeline verde.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/",
+      "image": "https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "vLLM, Gemma 3 12B, self-hosted LLM, serverless GPU, RunPod, cold start optimization, GPU inference, fallback router, CUDA"
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Favicon — inline SVG matching the VS avatar brand. -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/self-hosting-gemma-3-vllm/page.css">
+
+    <!-- Blocking theme init — prevents FOUC when user has saved light mode. -->
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Skip navigation — first focusable element in <body> -->
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <!-- Theme Toggle -->
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/self-hosting-gemma-3-vllm/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/self-hosting-gemma-3-vllm/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Estudo de caso · Infraestrutura de IA</span>
+            <h1 class="doc-title">Operando LLMs multimodais entre engines e nuvens</h1>
+            <p class="doc-dek">Seleção de runtime orientada ao modelo, deployment em GPU, fallback autenticado e as verificações que distinguem um deployment saudável de um pipeline verde.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Atualizado em outubro de 2026</span>
+                <span>~9 min de leitura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="self-hosting-gemma-3-vllm" data-visual-area="ai">
+<figcaption><span>A solução em resumo</span><strong>Combine o modelo ao seu runtime e então valide o caminho servido.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg><strong>Compatibilidade de modelo</strong><span>Escolha vLLM ou llama.cpp</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Serving em GPU</strong><span>Isole imagens e deployments</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Fallback operado</strong><span>Valide identidade e resposta</span></div>
+</div>
+<p class="case-map-note">O POC do router e a integração posterior de fallback em produção têm medições e escopos de rollout separados.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Fluxos de serving em GPU, seleção de runtime, correções de deployment e identidade de invocação.</dd></div>
+<div><dt>Escopo</dt><dd>Um POC de router, caminhos de serving orientados ao modelo e um rollout posterior e separado de fallback em produção.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>A infraestrutura e a validação operacional eram minha responsabilidade; a integração de fallback na aplicação foi colaborativa.</dd></div>
+<div><dt>Resultado</dt><dd>Dois engines de serving; 164 testes de deployment registrados; integração posterior verificada em quatro ambientes. Esses são registros de validação separados.</dd></div>
+</dl></section>
+
+<h2>Minha contribuição</h2>
+<p>Construí fluxos de serving em GPU e de deployment, selecionei runtimes conforme a compatibilidade de modelo, corrigi falhas silenciosas de build e de roteamento de tráfego, e provisionei a identidade necessária para a inferência autenticada. Trabalhei com o time da aplicação para promover e validar a integração de fallback entre ambientes.</p>
+<p>O trabalho evoluiu em etapas: uma prova de conceito (POC) de router com três provedores, caminhos de serving específicos por modelo usando vLLM e llama.cpp, e uma integração posterior de fallback de detecção de impressão em produção. São peças de engenharia relacionadas, com registros de validação separados.</p>
+<div class="stat-strip"><div class="stat"><strong class="stat-value">2 engines</strong><span class="stat-label">Caminhos de serving vLLM e llama.cpp</span></div><div class="stat"><strong class="stat-value">164 testes</strong><span class="stat-label">Registrados para a entrega de deployment orientada ao modelo</span></div><div class="stat"><strong class="stat-value">4 ambientes</strong><span class="stat-label">Identidade e integração verificadas no rollout posterior</span></div></div>
+<h2>Escolha o runtime a partir do modelo</h2>
+<p>Um identificador de modelo não basta para garantir que um engine de serving consiga carregar sua arquitetura, quantização e projetor de visão. Adicionei um resolver que lê os metadados do modelo e seleciona vLLM ou llama.cpp, com imagens, fluxos de deployment e grupos de concorrência separados.</p>
+<p>O caminho do vLLM continuou servindo seu modelo existente enquanto o runtime alternativo era desenvolvido isoladamente. Guardas cruzadas rejeitavam um modelo no fluxo errado antes de construir uma imagem ou provisionar um pod. Os testes também verificavam se uma requisição nominalmente bem-sucedida de fato continha uma resposta utilizável: um modelo de reasoning poderia esgotar seu orçamento de tokens antes de produzir o conteúdo da resposta.</p>
+<h2>Depure a camada que de fato falhou</h2>
+<p>Em pods de GPU reais, um ciclo de vida de container aparentemente saudável escondia uma falha de carregamento de biblioteca compartilhada. A imagem upstream do llama.cpp esperava suas bibliotecas sob seu próprio diretório de trabalho; mudar esse diretório quebrava a inicialização. Tornar o caminho da biblioteca explícito resolveu o crash. Hipóteses anteriores sobre o tratamento do entrypoint e a compatibilidade de driver não explicavam aquela falha específica.</p>
+<p>Os perfis de GPU, o contexto do modelo e as configurações de cache key/value permaneceram explícitos por runtime. Um valor de concorrência configurado maior não foi tratado como uma melhoria de throughput medida. A entrega registrou 164 testes aprovados e validação em pods de GPU reais; os pods experimentais foram removidos depois.</p>
+<h2>Um deploy verde ainda pode servir a revisão antiga</h2>
+<p>Um pipeline de deployment no Cloud Run tinha três falhas que se mascaravam mutuamente: pins de dependência incompatíveis, tráfego permanecendo em uma revisão mais antiga e smoke tests exercitando aquela imagem mais antiga. Corrigi a cadeia de dependências, movi as atualizações de tráfego para o comando correto e verifiquei que o digest servido correspondia à imagem construída pelo CI.</p>
+<p>A validação pré-merge constrói o estágio de dependências sem baixar pesos de modelo de múltiplos gigabytes. Os smoke tests de runtime rodam a partir do caminho de rede que os chamadores reais usam, e as guardas de deployment rejeitam argumentos inconsistentes ou mudanças inseguras de ingress. A saída bem-sucedida de um comando é um sinal; servir a revisão pretendida é o resultado.</p>
+<h2>Fallback em produção e identidade</h2>
+<p>A integração posterior na aplicação usou um provedor hospedado, um modelo multimodal auto-hospedado e um caminho final de CNN. Provisionei uma identidade dedicada de service account do Kubernetes e do Google em desenvolvimento, staging e sandbox, concedendo invocação no serviço-alvo em vez de papéis amplos de projeto. O cluster de produção legado continuou usando sua identidade de nó existente; ele não foi convertido para Workload Identity por esta mudança.</p>
+<figure class="case-detail-flow"><figcaption class="case-detail-flow-caption">Cadeia de detecção de impressão em produção (posterior)</figcaption><ol><li><strong>Provedor primário</strong><span class="case-detail-flow-description">Usa o primeiro caminho de inferência da aplicação</span></li><li><strong>Modelo auto-hospedado</strong><span class="case-detail-flow-description">Invoca o serviço de GPU privado com OIDC</span></li><li><strong>Caminho final de CNN</strong><span class="case-detail-flow-description">Continua quando o modelo está indisponível ou frio</span></li></ol></figure>
+<p>Todos os quatro ambientes passaram em suas verificações de identidade e de provedor no encerramento. Na amostra pós-deploy registrada em produção, 395 requisições HTTP retornaram 200. Três timeouts do provedor primário alcançaram um modelo auto-hospedado frio e então foram concluídos pelo fallback final. Isto descreve o rollout observado, não um SLA de disponibilidade.</p>
+<p>O scale-to-zero é um trade-off operacional: um serviço de GPU frio pode levar cerca de cinco minutos para iniciar, enquanto o orçamento da aplicação é de cerca de 30 segundos. Por isso o pré-aquecimento e o próximo fallback importam. Verificações de autenticação e monitoramento de alto tráfego foram adicionados com limiares calibrados conforme o uso real, em vez de alertar a cada requisição de fallback esperada.</p>
+<h2>Resultados e medição</h2>
+<p>A entrega de serving orientada ao modelo registrou dois caminhos de runtime isolados e 164 testes aprovados. O rollout posterior de fallback verificou identidade e comportamento da aplicação em quatro ambientes. Esses resultados são separados do POC anterior de router descrito abaixo.</p>
+<p>As medições de otimização de boot também precisam de seu próprio escopo: um teste de imagem melhorou de 5m16s para 3m32s; um teste posterior de clean-boot registrou cerca de 4m05s. Configurações e caminhos de teste diferentes não devem ser combinados em uma afirmação universal de cold-start.</p>
+<h2>O POC anterior de router com três provedores</h2>
+<p>Construí um router FastAPI para exercitar o fluxo normal, o fallback a frio e a quente, o caminho do provedor final, os health checks e a falha de todos os provedores. Seis cenários passaram. A infraestrutura de testes foi removida depois, à espera de uma decisão de adoção em produção para aquele router; a integração posterior de fallback na aplicação é uma entrega distinta.</p>
+<figure class="architecture-diagram" tabindex="0" aria-label="POC anterior: uma requisição de cliente alcança um router FastAPI e três caminhos de provedor testados. O painel inferior descreve uma capacidade separada de failover de fornecimento de deployment.">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 520" aria-hidden="true" focusable="false">
+                    <rect width="820" height="520" rx="12" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="35" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-primary)">Multi-Provider Inference Architecture</text>
+                    <rect x="335" y="55" width="150" height="44" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="76" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Client Request</text>
+                    <text x="410" y="91" text-anchor="middle" font-family="monospace" font-size="9" fill="var(--text-muted)">/v1/chat/completions</text>
+                    <line x1="410" y1="99" x2="410" y2="125" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <polygon points="405,122 410,132 415,122" fill="var(--text-muted)"/>
+                    <rect x="295" y="132" width="230" height="50" rx="10" fill="var(--primary)" fill-opacity="0.12" stroke="var(--primary)" stroke-width="1.5"/>
+                    <text x="410" y="154" text-anchor="middle" font-size="12" font-weight="700" fill="var(--primary)">FastAPI Fallback Router</text>
+                    <text x="410" y="172" text-anchor="middle" font-size="9" fill="var(--text-muted)">~150 lines · OpenAI-compatible · 503 diagnostics</text>
+                    <line x1="340" y1="182" x2="155" y2="228" stroke="var(--success)" stroke-width="1.5"/>
+                    <polygon points="150,224 158,233 162,223" fill="var(--success)"/>
+                    <text x="230" y="200" text-anchor="middle" font-size="9" font-weight="600" fill="var(--success)">Primary</text>
+                    <line x1="410" y1="182" x2="410" y2="228" stroke="var(--warning)" stroke-width="1.5"/>
+                    <polygon points="405,225 410,235 415,225" fill="var(--warning)"/>
+                    <text x="440" y="212" text-anchor="start" font-size="9" font-weight="600" fill="var(--warning)">Fallback 1</text>
+                    <line x1="480" y1="182" x2="665" y2="228" stroke="var(--danger)" stroke-width="1.5"/>
+                    <polygon points="660,224 668,233 672,223" fill="var(--danger)"/>
+                    <text x="590" y="200" text-anchor="middle" font-size="9" font-weight="600" fill="var(--danger)">Fallback 2</text>
+                    <rect x="40" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--success)" stroke-width="1.5"/>
+                    <text x="155" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--success)">Serverless GPUs</text>
+                    <text x="155" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">RTX 4090 · POC test path</text>
+                    <text x="155" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">568 ms observed request</text>
+                    <text x="155" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">6 GPU profiles · Cost-optimized burst</text>
+                    <text x="155" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Ada Lovelace / Ampere</text>
+                    <rect x="295" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--warning)" stroke-width="1.5"/>
+                    <text x="410" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--warning)">Managed Serverless GPU</text>
+                    <text x="410" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">NVIDIA L4</text>
+                    <text x="410" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">1.9 s warm · 41 s cold</text>
+                    <text x="410" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">Managed serverless · Ada Lovelace</text>
+                    <text x="410" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">Auto-scales to zero</text>
+                    <rect x="550" y="235" width="230" height="95" rx="10" fill="var(--bg-elevated)" stroke="var(--danger)" stroke-width="1.5"/>
+                    <text x="665" y="257" text-anchor="middle" font-size="12" font-weight="700" fill="var(--danger)">GCE Managed Instance Group</text>
+                    <text x="665" y="274" text-anchor="middle" font-size="10" fill="var(--text-secondary)">NVIDIA L4</text>
+                    <text x="665" y="292" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">7.7 s observed request</text>
+                    <text x="665" y="308" text-anchor="middle" font-size="9" fill="var(--text-muted)">Dedicated · Final tested fallback</text>
+                    <text x="665" y="322" text-anchor="middle" font-size="9" fill="var(--text-muted)">GCE VM group</text>
+                    <rect x="40" y="355" width="230" height="65" rx="8" fill="var(--bg-card)" stroke="var(--secondary)" stroke-width="1" stroke-dasharray="5,3"/>
+                    <text x="155" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--secondary)">Deployment supply failover</text>
+                    <text x="155" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">Separate deployment capability</text>
+                    <text x="155" y="408" text-anchor="middle" font-size="9" fill="var(--text-muted)">Per-DC weight volumes · Exponential backoff</text>
+                    <line x1="155" y1="330" x2="155" y2="355" stroke="var(--secondary)" stroke-width="1" stroke-dasharray="4,3"/>
+                    <polygon points="150,352 155,360 160,352" fill="var(--secondary)"/>
+                    <rect x="295" y="355" width="230" height="65" rx="8" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">Gemma 3 12B (GGUF Q4)</text>
+                    <text x="410" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">vLLM 0.15.1 · OpenAI API</text>
+                    <text x="410" y="408" text-anchor="middle" font-size="9" fill="var(--text-muted)">Profile-driven GPU selection</text>
+                    <rect x="550" y="355" width="230" height="65" rx="8" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="665" y="374" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">All Providers Down</text>
+                    <text x="665" y="392" text-anchor="middle" font-size="10" fill="var(--text-secondary)">HTTP 503 + per-provider errors</text>
+                    <text x="665" y="408" text-anchor="middle" font-size="9" fill="var(--text-muted)">Failure scenarios validated end-to-end</text>
+                    <rect x="40" y="445" width="740" height="55" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <circle cx="70" cy="467" r="5" fill="var(--success)"/>
+                    <text x="82" y="471" font-size="9" fill="var(--text-secondary)">Primary (568 ms)</text>
+                    <circle cx="200" cy="467" r="5" fill="var(--warning)"/>
+                    <text x="212" y="471" font-size="9" fill="var(--text-secondary)">Fallback 1 (1.9 s)</text>
+                    <circle cx="340" cy="467" r="5" fill="var(--danger)"/>
+                    <text x="352" y="471" font-size="9" fill="var(--text-secondary)">Fallback 2 (7.7 s)</text>
+                    <circle cx="480" cy="467" r="5" fill="var(--secondary)"/>
+                    <text x="492" y="471" font-size="9" fill="var(--text-secondary)">EU DC Failover</text>
+                    <text x="410" y="490" text-anchor="middle" font-size="9" fill="var(--text-muted)">Three-provider POC · Six test scenarios passed</text>
+                </svg>
+            </figure>
+<p>As observações registradas de requisições do POC foram 568 ms no RunPod, 1,917 ms no Cloud Run GPU e 7,681 ms no caminho do GCE Managed Instance Group, com uma observação de fallback a frio de cerca de 41 segundos. Foram requisições de teste específicas, não percentis de latência de produção. GCE Managed Instance Group não significa particionamento GPU Multi-Instance GPU.</p>
+<h2>Opere a frota, não pods individuais</h2>
+<p>Também conectei o inventário do router à descoberta dinâmica do Prometheus, para que o monitoramento acompanhasse workers de GPU efêmeros em vez de depender de uma lista de endereços atualizada manualmente. <a href="/cases/ai-fleet-observability/">Leia o estudo de caso de observabilidade de frota</a> para conhecer seus limites de rollout e monitoramento.</p>
+<h2>A lição</h2>
+<p>O serving de modelos é um sistema de decisões de compatibilidade, identidade, deployment e falha. Valide o modelo carregado, a revisão servida e o comportamento de fallback de forma independente; um build verde ou uma resposta de health HTTP não conseguem provar os três.</p>
+<section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Um único engine de serving simplifica a operação, mas não consegue carregar toda arquitetura de modelo; runtimes isolados preservam a compatibilidade ao custo de mais caminhos de deployment.</p><h3>Trade-off</h3><p>A inicialização de uma GPU fria pode exceder o orçamento da requisição. Um container saudável não prova que o modelo está pronto nem que o roteamento de tráfego está correto.</p><h3>O que eu melhoraria a seguir</h3><p>Próxima melhoria: medir as taxas de fallback a quente e a frio, a latência end-to-end e o custo por requisição concluída ao longo de uma janela de produção representativa.</p></section>
+</div>
+<footer class="doc-footer">
+            <p>Sou Vitor Schiavo, engenheiro de Site Reliability e Platform. Este é um dos estudos de caso do meu portfólio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Theme toggle wiring (no tablist logic; this page is standalone). -->
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <!-- Cloudflare Web Analytics: privacy-first, cookieless (see CLAUDE.md § Analytics). Token is public by design. -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

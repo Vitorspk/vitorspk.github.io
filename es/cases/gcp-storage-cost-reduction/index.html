@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=3bbc78e4a29b3e603f885dc77bd52442e56f3046 src=cases/gcp-storage-cost-reduction/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Reducir la factura de almacenamiento de GCP un 95.9% — Vitor Schiavo</title>
+    <meta name="description" content="Cómo el escalonamiento automático de niveles con lifecycle y las políticas de eliminación de Cloud Storage redujeron una factura en un 95.9%, una reducción histórica reportada, con lifecycle policies que tienen en cuenta la retención.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gcp-storage-cost-reduction/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Reducir una factura de almacenamiento de GCP un 95.9% con lifecycle policies">
+    <meta property="og:description" content="Una factura de almacenamiento un 95.9% menor, una reducción histórica reportada, lograda con lifecycle policies que tienen en cuenta la retención.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Almacenamiento en GCP, reducción de costos del 95.9% — un caso de estudio de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Reducir una factura de almacenamiento de GCP un 95.9% con lifecycle policies">
+    <meta name="twitter:description" content="Una factura de almacenamiento un 95.9% menor, una reducción histórica reportada, lograda con lifecycle policies que tienen en cuenta la retención.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/og.png">
+    <meta name="twitter:image:alt" content="Almacenamiento en GCP, reducción de costos del 95.9% — un caso de estudio de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Reducir una factura de almacenamiento de GCP un 95.9% con lifecycle policies",
+      "description": "Cómo el escalonamiento automático de niveles con lifecycle y las políticas de eliminación de Cloud Storage redujeron una factura en un 95.9%, una reducción histórica reportada, con lifecycle policies que tienen en cuenta la retención.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/",
+      "inLanguage": "es",
+      "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/gcp-storage-cost-reduction/",
+      "image": "https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "GCP, Cloud Storage, FinOps, cost optimization, lifecycle policies, archive storage class"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/gcp-storage-cost-reduction/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/gcp-storage-cost-reduction/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/gcp-storage-cost-reduction/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Caso de estudio · FinOps</span>
+            <h1 class="doc-title">Reducir una factura de almacenamiento de GCP un 95.9% con lifecycle policies</h1>
+            <p class="doc-dek">El almacenamiento en la nube es el costo que crece sin que nadie lo note: nadie borra nada y cada byte cae en el nivel más caro. Así es como un puñado de lifecycle policies redujo una factura en un 95.9%, una reducción histórica reportada, con lifecycle policies que tienen en cuenta la retención.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Actualizado en octubre de 2026</span>
+                <span>~5 min de lectura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="gcp-storage-cost-reduction" data-visual-area="finops">
+<figcaption><span>Solución de un vistazo</span><strong>Haz coincidir el nivel de almacenamiento con la política de retención.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Datos activos</strong><span>Conservar los objetos usados recientemente</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Reglas de lifecycle</strong><span>Mover los datos a niveles más fríos</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Límite de retención</strong><span>Aplicar la expiración autorizada</span></div>
+</div>
+<p class="case-map-note">Un lifecycle simplificado: deben validarse la versión efectiva de la política y los requisitos de eliminación.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Revisión de acceso/retención, configuración de lifecycle policies y trabajo sobre la huella de almacenamiento.</dd></div>
+<div><dt>Alcance</dt><dd>Optimización histórica del almacenamiento; la conciliación financiera completa sigue incompleta.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Trabajé con el equipo de producto en los requisitos de acceso y retención antes de cambiar el comportamiento del almacenamiento.</dd></div>
+<div><dt>Resultado</dt><dd>El portafolio histórico reportó un costo de almacenamiento un 95.9% menor. Los ahorros absolutos se reservan hasta conciliar la moneda, el baseline y la versión de la política.</dd></div>
+</dl></section>
+
+
+            <p>El almacenamiento es el costo que crece sin que nadie lo note. Nadie borra nada, cada byte cae en la clase predeterminada (y más cara), y la factura crece en silencio hasta que alguien la revisa. Este es un relato de la técnica que usé para reducir una de estas facturas en un <strong>95.9%</strong>, con escalonamiento de niveles consciente del acceso y cambios de retención.</p>
+
+            <h2>Mi contribución</h2><p>Revisé los patrones de acceso y retención con el equipo de producto, configuré cambios de lifecycle y trabajé en la ubicación regional y la reducción de la huella de almacenamiento.</p><h2>Resultados y medición</h2><p>El portafolio histórico reportó un costo de almacenamiento un 95.9% menor y una huella un 94.2% más pequeña. Los registros de trabajo confirman los cambios de lifecycle y de retención, pero no establecen una moneda, un baseline de facturación y una versión de política coherentes para la estimación completa. Por eso, los ahorros absolutos y acumulados se omiten aquí a la espera de la conciliación.</p><h2>El problema</h2>
+            <p>No todos los datos eran calientes. La mayoría se escribió una vez y nunca se volvió a leer, pero quedaba en almacenamiento Standard, con un precio pensado para el acceso frecuente. No había escalonamiento hacia clases más baratas y nada expiraba nunca, así que la huella y la factura solo iban en una dirección.</p>
+
+            <h2>Lo que cambié</h2>
+            <p>Sin nueva infraestructura, sin herramientas de migración de datos, solo lifecycle policies aplicadas a los buckets:</p>
+            <ul>
+                <li><strong>Mantén los datos calientes en Standard.</strong> Basa la ventana caliente en los patrones de acceso observados y los requisitos de retención aplicables.</li>
+                <li><strong>Escalona los datos más antiguos automáticamente.</strong> Una iteración registrada movió los objetos a Nearline después de 30 días y a Archive después de 365 días. Las políticas anteriores diferían, así que son decisiones versionadas y no una regla universal.</li>
+                <li><strong>Revisa la eliminación por separado.</strong> Acuerda con el equipo de producto qué registros pueden expirar; el archivado y la eliminación tienen efectos y requisitos distintos.</li>
+                <li><strong>Aplicado en todas partes.</strong> Las mismas políticas se usaron tanto en los buckets multirregión como en los de una sola región.</li>
+            </ul>
+            <p>Lo importante: esto funciona en piloto automático. Una vez que las políticas están en su lugar, el archivado y la eliminación funcionan por sí solos. Los patrones de acceso, los requisitos de retención y los efectos en la facturación aún necesitan una revisión periódica.</p>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">95.9%</span><span class="stat-label">reducción del costo mensual</span></div>
+                <div class="stat"><span class="stat-value">Lifecycle</span><span class="stat-label">escalonamiento automatizado</span></div>
+                <div class="stat"><span class="stat-value">94.2%</span><span class="stat-label">huella más pequeña</span></div>
+                <div class="stat"><span class="stat-value">Retención</span><span class="stat-label">revisada por separado</span></div>
+            </div>
+
+            <div class="callout callout--win">
+                <p class="callout-title">El resultado en una línea</p>
+                <p>El portafolio histórico reportó una reducción del 95.9%. La moneda, el período de facturación y la contribución exacta del escalonamiento frente a la eliminación deben conciliarse antes de publicar un total de ahorros absoluto o acumulado. El resultado transferible es un proceso de lifecycle repetible, vinculado a los requisitos reales de acceso y retención.</p>
+            </div>
+
+            <h2>Lo que le diría a alguien que empieza con esto</h2>
+            <ul>
+                <li>Mira la factura de almacenamiento antes que la de cómputo. Suele ser más sencilla de corregir y los ahorros se acumulan mes a mes.</li>
+                <li>Escalona según el patrón de acceso, no por conjeturas. Valida qué datos todavía se leen antes de elegir la ventana de transición.</li>
+                <li>Agrega una política de eliminación, no solo archivado. El archivado frena el crecimiento; la eliminación lo detiene.</li>
+                <li>Deja que la plataforma haga el trabajo. Las lifecycle policies se configuran y se olvidan, lo que significa que los ahorros no dependen de que nadie se acuerde.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Mantener todo en Standard es simple; los niveles más fríos y la expiración autorizada deben coincidir con los requisitos reales de acceso y retención.</p><h3>Contrapartida</h3><p>Los cargos por recuperación, los períodos mínimos de retención y los requisitos de eliminación determinan si una factura de almacenamiento más baja es un mejor resultado total.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: conciliar la versión de la política y el período de facturación, y luego calcular el ahorro neto incluyendo los cargos de recuperación y de retención.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Soy Vitor Schiavo, ingeniero de Site Reliability y Platform. Este es uno de los casos de mi portafolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/es/#cases">Ver más casos de estudio</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
