@@ -1,147 +1,196 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://vitorschiavo.dev/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/"/>
   </url>
   <url>
-    <loc>https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <loc>https://vitorschiavo.dev/pt/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/resume.html</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/resume.html"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/resume.html</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/resume.html"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/resume.html</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/resume.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/resume.html"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/ai-fleet-observability/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <loc>https://vitorschiavo.dev/cases/cloud-cost-engineering/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <loc>https://vitorschiavo.dev/cases/ephemeral-preview-environments/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorschiavo.dev/cases/grafana-prometheus-modernization/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <loc>https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/gen2-observability-repair/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/</loc>
+    <lastmod>2026-10-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/grafana-prometheus-modernization/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/kubernetes-dns-latency/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <loc>https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/metabase-production-ops/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/monitoring-ingestion-cost/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/queue-driven-autoscaling/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/scheduled-jobs-observability/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/security-posture-observability/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://vitorschiavo.dev/cases/metabase-production-ops/</loc>
-    <lastmod>2026-10-17</lastmod>
+    <loc>https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/</loc>
+    <lastmod>2026-10-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/ephemeral-preview-environments/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/gen2-observability-repair/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/security-posture-observability/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/monitoring-ingestion-cost/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/resume.html</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/cloud-cost-engineering/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/kubernetes-dns-latency/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/ai-fleet-observability/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/scheduled-jobs-observability/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://vitorschiavo.dev/cases/queue-driven-autoscaling/</loc>
-    <lastmod>2026-10-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
 </urlset>

@@ -22,7 +22,6 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Vitor Schiavo — Platforms teams can trust">
 <meta property="og:description" content="Engineering decisions and results: trustworthy CI, ephemeral preview environments and useful observability.">
-<meta property="og:url" content="https://vitorschiavo.dev/">
 <meta property="og:site_name" content="Vitor Schiavo Portfolio">
 <meta property="og:image" content="https://vitorschiavo.dev/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -34,8 +33,18 @@
 <meta name="twitter:description" content="Engineering decisions and results: trustworthy CI, ephemeral preview environments and useful observability.">
 <meta name="twitter:image" content="https://vitorschiavo.dev/og-image.png">
 <meta name="twitter:image:alt" content="Vitor Schiavo — Site Reliability and Platform Engineer">
-<!-- Canonical -->
+<!-- Canonical + hreflang + og:url/og:locale — managed by scripts/build-i18n.js (do not hand-edit) -->
+<!-- i18n:links:start -->
 <link rel="canonical" href="https://vitorschiavo.dev/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/">
+<meta property="og:url" content="https://vitorschiavo.dev/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,6 +57,7 @@
       "name": "Vitor Schiavo",
       "jobTitle": "Site Reliability Engineer",
       "url": "https://vitorschiavo.dev/",
+      "inLanguage": "en",
       "sameAs": [
         "https://www.linkedin.com/in/vitorschiavo/",
         "https://github.com/Vitorspk"
@@ -63,7 +73,7 @@
 <!-- Favicon — inline SVG matching the VS avatar brand.
          %233b82f6 mirrors --primary (#3b82f6); update both if brand colour changes. -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="/styles.css">
 <!-- Blocking theme init — prevents FOUC when user has saved light mode.
          Must run before first paint (no defer/async). -->
 <script>
@@ -89,6 +99,13 @@
 <div class="sidebar-name">Vitor Schiavo</div>
 <div class="sidebar-role">Site Reliability Engineer<br>Platform engineering</div>
 <p class="sidebar-status"><span class="status-dot" aria-hidden="true"></span>Open to Senior &amp; Staff roles</p>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Language">
+<span class="lang-switcher__item lang-switcher__item--current" lang="en" aria-current="true">EN</span>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/">PT</a>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
 </div>
 <nav class="sidebar-nav" role="tablist" aria-label="Portfolio sections" aria-orientation="vertical">
 <button id="tab-overview" type="button" role="tab" class="nav-item active" data-tab="overview" aria-selected="true" aria-controls="overview" tabindex="0"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10 12 3l9 7M5 9v12h5v-7h4v7h5V9"></path></svg><span>Home</span></button>
@@ -112,6 +129,13 @@
 <span class="topbar-avatar" aria-hidden="true">VS</span>
 <span class="topbar-name">Vitor Schiavo</span>
 </div>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Language">
+<span class="lang-switcher__item lang-switcher__item--current" lang="en" aria-current="true">EN</span>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/">PT</a>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
 </header>
 <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme">
 <span aria-hidden="true" id="themeIcon">◐</span>
@@ -1178,7 +1202,7 @@
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <p class="case-description">
-                                    Deployments across four GKE clusters (dev · stg · prd · sdx) were manual, inconsistent, and error-prone. No single source of truth for cluster state, no audit trail, and high risk of configuration drift between environments. Teams needed kubectl access to deploy with no self-service model in place.
+                                    Deployments across four GKE clusters (dev · stg · prd · sandbox) were manual, inconsistent, and error-prone. No single source of truth for cluster state, no audit trail, and high risk of configuration drift between environments. Teams needed kubectl access to deploy with no self-service model in place.
                                 </p>
 </div>
 <div class="case-section">
@@ -1191,7 +1215,7 @@
 <li class="impact-item">
 <strong>Phase 2:</strong> Configured ArgoCD Applications and AppProjects with RBAC boundaries per team and namespace</li>
 <li class="impact-item">
-<strong>Phase 3:</strong> Multi-cluster registration; all four GKE clusters (dev · stg · prd · sdx) as ArgoCD targets with cluster credentials stored in Secrets</li>
+<strong>Phase 3:</strong> Multi-cluster registration; all four GKE clusters (dev · stg · prd · sandbox) as ArgoCD targets with cluster credentials stored in Secrets</li>
 <li class="impact-item">
 <strong>Phase 4:</strong> CI/CD pipeline integration via GitHub Actions image updater for automatic image tag propagation, branch promotion dev → stg → prd</li>
 <li class="impact-item">
@@ -1208,7 +1232,7 @@
 <h4 class="impact-title">Business Impact</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>4 GKE clusters</strong> managed as a single GitOps fleet (dev · stg · prd · sdx)</li>
+<strong>4 GKE clusters</strong> managed as a single GitOps fleet (dev · stg · prd · sandbox)</li>
 <li class="impact-item">
 <strong>Drift management</strong>: Git provides desired state, with reconciliation and self-healing where enabled</li>
 <li class="impact-item">
@@ -1282,7 +1306,7 @@
 <li class="impact-item">
 <strong>Phase 5 — CI/CD Automation:</strong> GitHub Actions workflows for terraform plan on PR and terraform apply on merge; separate workflows per environment</li>
 <li class="impact-item">
-<strong>Phase 6 — GKE Cluster Deployment:</strong> Deployed all four GKE clusters (dev · stg · prd · sdx) using the automated pipelines</li>
+<strong>Phase 6 — GKE Cluster Deployment:</strong> Deployed all four GKE clusters (dev · stg · prd · sandbox) using the automated pipelines</li>
 <li class="impact-item">
 <strong>Phase 7 — Safety Guardrails:</strong> Added <code>prevent_destroy = true</code> lifecycle blocks on VPC, subnets, and Cloud NAT to protect against accidental terraform destroy</li>
 <li class="impact-item">
@@ -2367,7 +2391,38 @@
 </footer>
 </div>
 </div>
-<script src="script.js" defer>
+<script type="application/json" id="platform-views-data">
+{
+  "delivery": {
+    "title": "Build once. Promote with confidence.",
+    "summary": "An isolated preview, the same tested image and an explicit cleanup path.",
+    "result": "Two-repository pilot · 34 automated checks",
+    "href": "/cases/ephemeral-preview-environments/",
+    "foundation": ["GitHub Actions", "ArgoCD", "Helm"],
+    "nodes": ["Commit", "Platform", "Runtime"],
+    "details": ["Build & test", "Preview & validate", "Promote & clean up"]
+  },
+  "reliability": {
+    "title": "Make the signal trustworthy.",
+    "summary": "Validate alert filters against real log messages, not an empty green dashboard.",
+    "result": "22 alert policies and 2 log-based metrics repaired",
+    "href": "/cases/gen2-observability-repair/",
+    "foundation": ["Cloud Functions", "Logs", "Monitoring"],
+    "nodes": ["Runtime", "Log pipeline", "Alerting"],
+    "details": ["Known message", "Match the format", "Verify the signal"]
+  },
+  "efficiency": {
+    "title": "Find the waste. Verify the savings.",
+    "summary": "Right-size Kubernetes, replace costly ingestion and safely retire legacy infrastructure.",
+    "result": "~US$30.1K/year annualized · one legacy retirement",
+    "href": "/cases/cloud-cost-engineering/",
+    "foundation": ["Kubernetes", "MongoDB Atlas", "Cloud billing"],
+    "nodes": ["Baseline", "Resources", "Validation"],
+    "details": ["Map the spend", "Right-size or retire", "Check the bill"]
+  }
+}
+</script>
+<script src="/script.js" defer>
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'>
 </script>

@@ -107,6 +107,21 @@ Recipe for a new one (first page: `cases/self-hosting-gemma-3-vllm/`):
 
 ---
 
+## Multilingual pages (i18n)
+
+The site is trilingual: **English at the root** (`/`, `/resume.html`, `/cases/<slug>/`), **Portuguese under `/pt/`**, **Spanish under `/es/`** — separate URLs with reciprocal `hreflang` (the SEO-correct approach; a JS language toggle would leave the other languages unindexed).
+
+- **English is the single source of truth.** Each translated page is its own committed file under `pt/` and `es/` (full prose — *not* a key/dictionary system). Translate only human-visible text + the listed `<head>` metadata; keep every `id`, `data-tab`, `class`, `role`, `#fragment`, `data-*` and all inline SVG byte-identical to the English source.
+- **`scripts/build-i18n.js` owns the shared plumbing — never hand-edit it.** Between the `<!-- i18n:links:start -->…<!-- i18n:links:end -->` and `<!-- i18n:switcher:start -->…<!-- i18n:switcher:end -->` markers it generates the self-canonical, reciprocal `hreflang` (+ `x-default`), `og:locale`, and the language switcher. It also sets `<html lang>`, rewrites internal case/résumé/home links to the locale version **when that file exists, else the English fallback** (so a page never links to a translation that isn't there yet), stamps a per-page source hash, regenerates `sitemap.xml`, and checks `id`/`data-tab` parity + that every internal link resolves on disk.
+- **Commands:** `npm run build:i18n` (write), `build:i18n:check` (CI gate, wired into `validate`), and `node scripts/build-i18n.js --restamp`.
+- **The source-hash stamp is an anti-drift guard.** If an English page changes, `build:i18n:check` fails until the translation is refreshed. **Only run `--restamp` *after* actually retranslating** — never to silence the check. (The hash ignores the generator-managed regions, so plumbing changes alone don't trigger it.)
+- **One English résumé PDF**, linked from every locale.
+- **Runtime strings:** `script.js` keys a small `I18N` map off `<html lang>`; the platform explorer reads its content (with locale-correct links) from the per-page `#platform-views-data` JSON block. No translated prose lives in `script.js`.
+- **Adding a language:** add it to `LOCALES` in `scripts/build-i18n.js`, add the `pt/es`-style globs to `lint:html`, add an `I18N` block to `script.js` (**its key must match the locale's `lang`, e.g. `pt-BR`** — the lookup is exact-match and falls back to English otherwise), translate the pages, then run `build:i18n`.
+- **Translating a case page** flips its locale links automatically (the generator detects the new file); open it as its own PR **without auto-merge** (case content is the employer carve-out), then tell the owner to resubmit `sitemap.xml` in Search Console.
+
+---
+
 ## Adding a new tab/section
 
 1. Add a `<section role="tabpanel" id="<name>" ...>` block to `index.html`
