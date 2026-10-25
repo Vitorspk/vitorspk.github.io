@@ -138,7 +138,7 @@
             <p>The heavy ingress dashboards were painful: 8 to 33 seconds per render. The cause was <code>histogram_quantile()</code> being recomputed from tens of thousands of bucket series (about 57k) on every single refresh. The fix is a classic one that is easy to forget to reach for: <strong>recording rules</strong>.</p>
             <p>I added three recording rules per environment that pre-aggregate the P50, P90 and P99 of the request-duration histogram, and pointed the dashboards at the pre-computed series instead of the raw buckets.</p>
 
-            <div class="table-container">
+            <div class="table-container" tabindex="0">
                 <table>
                     <thead>
                         <tr><th scope="col">Environment</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Speedup</th></tr>

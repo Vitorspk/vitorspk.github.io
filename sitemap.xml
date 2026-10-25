@@ -63,7 +63,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/ai-fleet-observability/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/ai-fleet-observability/"/>
@@ -225,7 +225,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gke-dataplane-v2-cilium/"/>
@@ -285,7 +285,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/grafana-prometheus-modernization/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/"/>
@@ -315,7 +315,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/"/>
@@ -351,7 +351,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/"/>
@@ -381,7 +381,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/kubernetes-supply-chain-defense/"/>
@@ -417,7 +417,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/monitoring-ingestion-cost/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/monitoring-ingestion-cost/"/>
@@ -501,7 +501,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/zero-downtime-cluster-migration/"/>

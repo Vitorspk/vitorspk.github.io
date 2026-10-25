@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=013c42013696b8269df4d80916e7233d62ba1b27 src=cases/grafana-prometheus-modernization/index.html -->
+<!-- i18n:src-sha=d8dfb239c9221b0ff259a4da2549faaa0bb71c33 src=cases/grafana-prometheus-modernization/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -139,7 +139,7 @@
             <p>Os dashboards pesados de ingress eram sofríveis: de 8 a 33 segundos por render. A causa era o <code>histogram_quantile()</code> sendo recalculado a partir de dezenas de milhares de séries de bucket (cerca de 57k) a cada atualização. A correção é clássica e fácil de esquecer de usar: <strong>recording rules</strong>.</p>
             <p>Adicionei três recording rules por ambiente que pré-agregam o P50, o P90 e o P99 do histograma de duração de requisições, e apontei os dashboards para as séries pré-computadas em vez dos buckets brutos.</p>
 
-            <div class="table-container">
+            <div class="table-container" tabindex="0">
                 <table>
                     <thead>
                         <tr><th scope="col">Ambiente</th><th scope="col">Antes</th><th scope="col">Depois</th><th scope="col">Aceleração</th></tr>
