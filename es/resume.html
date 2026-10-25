@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=167004c266952d8f05e754e12dde3bb94958cbdc src=resume.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+
+    <!-- Content Security Policy: defense-in-depth against XSS.
+         GitHub Pages can't set headers, so we use the meta-equiv form.
+         'unsafe-inline' on script-src/style-src is required because:
+           - blocking theme script in <head> (FOUC prevention)
+           - inline ld+json structured data
+         Styles and fonts load from the site and Google Fonts. -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <!-- SEO -->
+    <title>Vitor Schiavo — Currículum</title>
+    <meta name="description" content="Senior Platform and Site Reliability Engineer especializado en plataformas cloud, infraestructura de inferencia de IA, confiabilidad e ingeniería de costos.">
+    <meta name="author" content="Vitor Schiavo">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#0a0f1e">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Vitor Schiavo — Currículum">
+    <meta property="og:description" content="Decisiones y resultados de ingeniería: CI confiable, entornos de preview efímeros y observabilidad útil.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Vitor Schiavo — Site Reliability and Platform Engineer. Sistemas confiables, equipos de ingeniería más fuertes.">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Vitor Schiavo — Currículum">
+    <meta name="twitter:description" content="Decisiones y resultados de ingeniería: CI confiable, entornos de preview efímeros y observabilidad útil.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/og-image.png">
+    <meta name="twitter:image:alt" content="Vitor Schiavo — Site Reliability and Platform Engineer">
+
+    <!-- Canonical + hreflang + og:url/og:locale — managed by scripts/build-i18n.js (do not hand-edit) -->
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/resume.html">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/resume.html">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/resume.html">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/resume.html">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/resume.html">
+<meta property="og:url" content="https://vitorschiavo.dev/es/resume.html">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Vitor Schiavo",
+      "jobTitle": "Site Reliability Engineer",
+      "url": "https://vitorschiavo.dev/es/",
+      "inLanguage": "es",
+      "sameAs": [
+        "https://www.linkedin.com/in/vitorschiavo/",
+        "https://github.com/Vitorspk"
+      ],
+      "knowsAbout": [
+        "Site Reliability Engineering", "Platform Engineering", "FinOps",
+        "Cloud Cost Optimization", "Kubernetes", "Google Cloud Platform",
+        "Amazon Web Services", "Microsoft Azure", "DevOps", "Multi-Cloud Architecture"
+      ],
+      "description": "Site Reliability and Platform Engineer enfocado en la experiencia de desarrollador, la observabilidad y sistemas cloud confiables."
+    }
+    </script>
+
+    <!-- Favicon — inline SVG matching the VS avatar brand.
+         %233b82f6 mirrors --primary (#3b82f6); update both if brand colour changes. -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+
+    <!-- Blocking theme init — prevents FOUC when user has saved light mode.
+         Must run before first paint (no defer/async). -->
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body><a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<main class="resume-page" id="main-content">
+<div class="resume-actions"><a class="btn-ghost" href="/es/#experience">Volver al portafolio</a><a class="btn-ghost" href="/Vitor-Schiavo-Resume.pdf" download>Descargar currículum · PDF</a><button class="btn-primary" type="button" id="print-resume">Imprimir o guardar como PDF</button><!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/resume.html">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/resume.html">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end --></div>
+<h1>Vitor Schiavo</h1>
+<p class="hero-role">Senior Platform &amp; Site Reliability Engineer</p>
+<div class="resume-contact"><span>Abierto a oportunidades remotas internacionales</span><a href="mailto:vitorspk@gmail.com">vitorspk@gmail.com</a><a href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a><a href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a><a href="https://vitorschiavo.dev/" rel="noopener noreferrer">vitorschiavo.dev</a></div>
+<p>En TI desde 2013, en SRE desde 2018, con experiencia en desarrollo de software. Automatización de plataformas, entregas confiables y observabilidad accionable en GCP, AWS y Azure. Infraestructura de inferencia de IA, confiabilidad e ingeniería de costos de cloud. Abierto a oportunidades Senior y Staff en Platform Engineering y SRE.</p>
+<h2>Resultados de ingeniería destacados</h2>
+<ul>
+<li>Construí flujos de trabajo de serving y despliegue en GPU conscientes del modelo con vLLM y llama.cpp; colaboré en la validación autenticada de fallback en producción en cuatro entornos.</li>
+<li>Logré reducciones de costos acotadas con equivalentes anualizados de ~US$30.1K por el retiro de sistemas heredados, £26.5K por el rightsizing de Kubernetes y £14K por una línea de ingesta de monitoreo. Líneas base y monedas separadas; no es un ahorro anual combinado ya realizado.</li>
+<li>Reparé 22 políticas de alertas y dos métricas basadas en logs tras una migración de runtime, validando filtros contra mensajes conocidos.</li>
+<li>Ensayé la reconstrucción completa de un clúster: 49 certificados adoptados sin reemisión y 35 aplicaciones de ArgoCD restauradas; reutilicé el proceso para tres reconstrucciones de entornos.</li>
+</ul>
+<h2>Experiencia</h2>
+<section class="resume-role">
+<h3>VerifyMy · Site Reliability Engineer</h3>
+<p>Jun 2021 – Actualidad</p>
+<p>Platform engineering para seguridad en línea regulada.</p>
+<ul>
+<li>Construí y operé infraestructura cloud, pipelines de entrega y monitoreo en múltiples entornos.</li>
+<li>Desarrollé un piloto de entornos de preview efímeros y probé la promoción de imágenes sin reconstrucciones.</li>
+<li>Diagnostiqué fallas en la plataforma de CI compartida y reparé brechas de alertas introducidas por migraciones de runtime.</li>
+<li>Aporté controles de infraestructura, evidencia operativa y procedimientos de recuperación para auditorías de seguridad.</li></ul></section>
+<section class="resume-role">
+<h3>Intelipost · Site Reliability Engineer</h3>
+<p>Feb 2020 – Jun 2021</p>
+<p>Confiabilidad y modernización de infraestructura para tecnología de logística.</p>
+<ul>
+<li>Consolidé despliegues heredados de Elastic Stack en Kubernetes con roles de nodo dedicados y backups automatizados.</li>
+<li>Construí pipelines de logs especializados y streaming de eventos para monitoreo operativo e inteligencia de negocios.</li>
+<li>Apoyé la planificación de capacidad y la preparación de infraestructura para los picos de demanda estacional.</li></ul></section>
+<section class="resume-role">
+<h3>Dasa · Site Reliability Engineer</h3>
+<p>Jan 2018 – Feb 2020</p>
+<p>Operaciones de cloud en un gran entorno del sector salud.</p>
+<ul>
+<li>Aprovisioné entornos de Kubernetes y redes con Terraform y pipelines de despliegue automatizados.</li>
+<li>Trabajé en Azure y AWS en observabilidad, automatización de infraestructura y respuesta a incidentes.</li>
+<li>Creé discovery de monitoreo y documentación operativa para mejorar la cobertura y la transferencia de conocimiento.</li></ul></section>
+<h2>Trayectoria anterior</h2>
+<section class="resume-role">
+<h3>Dasa · Software Developer</h3>
+<p>Jul – Dec 2017 · Integración de API Gateway y REST/SOAP.</p></section>
+<section class="resume-role">
+<h3>PRÓPONTO · Software Developer</h3>
+<p>Jan – Jul 2017 · Servicios web e integración continua.</p></section>
+<section class="resume-role">
+<h3>Microdata Sistemas · Java Developer</h3>
+<p>Jan – Dec 2016 · Servicios web en Java y e-commerce.</p></section>
+<section class="resume-role">
+<h3>Microdata Sistemas · Systems Analyst</h3>
+<p>Nov 2014 – Dec 2015 · Delphi, SQL Server y soporte empresarial.</p></section>
+<section class="resume-role">
+<h3>GZ Sistemas · Junior IT Support Analyst</h3>
+<p>Mar 2013 – Jul 2014 · Soporte al cliente, bases de datos, redes y Linux.</p></section>
+<section class="resume-role">
+<h3>Coca-Cola FEMSA · Administrative Assistant &amp; Supervisor</h3>
+<p>Feb 2012 – Mar 2013 · Operaciones de entrega, reportes y cierre mensual.</p></section>
+<h2>Capacidades principales</h2>
+<p>Kubernetes · Terraform · ArgoCD · Helm · Jenkins · GitHub Actions · Prometheus · Grafana · GCP · AWS · Azure · Python · Bash · vLLM · llama.cpp · Inferencia en GPU · Redes cloud · Controles de seguridad · Ingeniería de costos</p>
+<h2>Educación</h2>
+<p>MBA — Ingeniería de Software, Wyden Educacional (2015–2016)<br>Análisis y Desarrollo de Sistemas, Anhanguera Educacional (2012–2014)</p>
+<h2>Idiomas</h2>
+<p>Portugués — nativo · Español — competencia profesional completa · Inglés — competencia profesional de trabajo</p></main>
+<script src="/resume.js" defer></script>
+</body>
+</html>

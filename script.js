@@ -39,6 +39,53 @@ document.addEventListener('DOMContentLoaded', () => {
     // Evaluate once — used by activateTab (mobile auto-scroll) and barObserver
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    // ─── Localised UI strings ─────────────────────────────────────────────────
+    // Longer prose (the platform explorer) is authored per page in a JSON block
+    // (#platform-views-data); only these short, JS-generated strings live here,
+    // keyed off <html lang>. English is the fallback for any unknown locale.
+    const I18N = {
+        en: {
+            caseCount: (shown, total) => shown + ' of ' + total + ' case studies and projects',
+            emailCopied: 'Email address copied.',
+            emailCopyFail: addr => 'Copy unavailable. Please select ' + addr + ' above, or use Email Vitor.',
+            themeToLight: 'Switch to light theme',
+            themeToDark: 'Switch to dark theme',
+            tenure: (years, months) => {
+                const parts = [];
+                if (years > 0) parts.push(years + (years === 1 ? ' year' : ' years'));
+                if (months > 0) parts.push(months + (months === 1 ? ' month' : ' months'));
+                return parts.length ? parts.join(' ') : 'less than a month';
+            },
+        },
+        'pt-BR': {
+            caseCount: (shown, total) => shown + ' de ' + total + ' estudos de caso e projetos',
+            emailCopied: 'Endereço de e-mail copiado.',
+            emailCopyFail: addr => 'Cópia indisponível. Selecione ' + addr + ' acima, ou use Enviar e-mail.',
+            themeToLight: 'Mudar para o tema claro',
+            themeToDark: 'Mudar para o tema escuro',
+            tenure: (years, months) => {
+                const parts = [];
+                if (years > 0) parts.push(years + (years === 1 ? ' ano' : ' anos'));
+                if (months > 0) parts.push(months + (months === 1 ? ' mês' : ' meses'));
+                return parts.length ? parts.join(' e ') : 'menos de um mês';
+            },
+        },
+        es: {
+            caseCount: (shown, total) => shown + ' de ' + total + ' casos de estudio y proyectos',
+            emailCopied: 'Dirección de correo copiada.',
+            emailCopyFail: addr => 'Copia no disponible. Selecciona ' + addr + ' arriba, o usa Enviar correo.',
+            themeToLight: 'Cambiar al tema claro',
+            themeToDark: 'Cambiar al tema oscuro',
+            tenure: (years, months) => {
+                const parts = [];
+                if (years > 0) parts.push(years + (years === 1 ? ' año' : ' años'));
+                if (months > 0) parts.push(months + (months === 1 ? ' mes' : ' meses'));
+                return parts.length ? parts.join(' y ') : 'menos de un mes';
+            },
+        },
+    };
+    const T = I18N[document.documentElement.getAttribute('lang')] || I18N.en;
+
     let activeFilter = 'all';
 
     // ─── activateTab ─────────────────────────────────────────────────────────
@@ -148,7 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
             study.hidden = !matches;
             if (matches) shown++;
         });
-        if (caseCount) caseCount.textContent = shown + ' of ' + catalogCases.length + ' case studies and projects';
+        if (caseCount) caseCount.textContent = T.caseCount(shown, catalogCases.length);
     }
 
     function restoreLocation() {
@@ -189,42 +236,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (copyEmail && copyStatus && emailAddress) copyEmail.addEventListener('click', async () => {
         try {
             await navigator.clipboard.writeText(emailAddress);
-            copyStatus.textContent = 'Email address copied.';
+            copyStatus.textContent = T.emailCopied;
         } catch {
-            copyStatus.textContent = 'Copy unavailable. Please select ' + emailAddress + ' above, or use Email Vitor.';
+            copyStatus.textContent = T.emailCopyFail(emailAddress);
         }
     });
 
     // The home explorer shows documented decisions, never simulated live status.
-    const platformViews = {
-        delivery: {
-            title: 'Build once. Promote with confidence.',
-            summary: 'An isolated preview, the same tested image and an explicit cleanup path.',
-            result: 'Two-repository pilot · 34 automated checks',
-            href: '/cases/ephemeral-preview-environments/',
-            foundation: ['GitHub Actions', 'ArgoCD', 'Helm'],
-            nodes: ['Commit', 'Platform', 'Runtime'],
-            details: ['Build & test', 'Preview & validate', 'Promote & clean up'],
-        },
-        reliability: {
-            title: 'Make the signal trustworthy.',
-            summary: 'Validate alert filters against real log messages, not an empty green dashboard.',
-            result: '22 alert policies and 2 log-based metrics repaired',
-            href: '/cases/gen2-observability-repair/',
-            foundation: ['Cloud Functions', 'Logs', 'Monitoring'],
-            nodes: ['Runtime', 'Log pipeline', 'Alerting'],
-            details: ['Known message', 'Match the format', 'Verify the signal'],
-        },
-        efficiency: {
-            title: 'Find the waste. Verify the savings.',
-            summary: 'Right-size Kubernetes, replace costly ingestion and safely retire legacy infrastructure.',
-            result: '~US$30.1K/year annualized · one legacy retirement',
-            href: '/cases/cloud-cost-engineering/',
-            foundation: ['Kubernetes', 'MongoDB Atlas', 'Cloud billing'],
-            nodes: ['Baseline', 'Resources', 'Validation'],
-            details: ['Map the spend', 'Right-size or retire', 'Check the bill'],
-        },
-    };
+    // Content (incl. locale-correct case hrefs) is authored per page in the
+    // #platform-views-data JSON block, so no prose lives in this shared script.
+    let platformViews = {};
+    const platformData = document.getElementById('platform-views-data');
+    if (platformData) {
+        try { platformViews = JSON.parse(platformData.textContent); } catch { platformViews = {}; }
+    }
     const platformButtons = Array.from(document.querySelectorAll('[data-platform-view]'));
     platformButtons.forEach(button => button.addEventListener('click', () => {
         const view = platformViews[button.dataset.platformView];
@@ -426,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (themeIcon) themeIcon.textContent = theme === 'dark' ? '◐' : '◑';
         if (themeToggle) {
             themeToggle.setAttribute('aria-label',
-                theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'
+                theme === 'dark' ? T.themeToLight : T.themeToDark
             );
         }
         // Update meta theme-color from the active CSS --bg-base value
@@ -455,11 +480,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (months < 0) return;
         const years = Math.floor(months / 12);
         const rem = months % 12;
-        const parts = [];
-        if (years > 0) parts.push(years + (years === 1 ? ' year' : ' years'));
-        if (rem > 0) parts.push(rem + (rem === 1 ? ' month' : ' months'));
-        // months === 0 (start month == current month) → no years/months parts;
-        // fall back to a sensible label instead of leaving the static text.
-        tenureEl.textContent = parts.length ? parts.join(' ') : 'less than a month';
+        // months === 0 (start month == current month) → T.tenure returns a
+        // "less than a month" label instead of leaving the static text.
+        tenureEl.textContent = T.tenure(years, rem);
     });
 });

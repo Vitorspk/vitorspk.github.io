@@ -1332,3 +1332,31 @@ body:has(.doc) .theme-toggle { position: absolute; top: var(--space-md); right: 
 .case-detail-flow ol { display: grid; gap: var(--space-md); padding-left: var(--space-lg); }
 .case-detail-flow li { padding-left: var(--space-xs); }
 .case-detail-flow-description { display: block; color: var(--text-secondary); font-size: 0.875rem; }
+
+
+/* ── Language switcher — markup managed by scripts/build-i18n.js ────────── */
+.lang-switcher { display: flex; gap: var(--space-xs); align-items: center; }
+.sidebar-brand .lang-switcher { margin-top: var(--space-md); justify-content: center; }
+.topbar .lang-switcher { margin-left: auto; }
+.lang-switcher__item {
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    padding: 0.35rem var(--space-xs);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--t-fast), background-color var(--t-fast), border-color var(--t-fast);
+}
+.lang-switcher__item:hover {
+    color: var(--text-primary);
+    background-color: var(--bg-hover);
+    border-color: var(--border-hover);
+}
+.lang-switcher__item--current {
+    color: var(--on-brand);
+    background-color: var(--primary-dark);
+    border-color: var(--primary-dark);
+}
