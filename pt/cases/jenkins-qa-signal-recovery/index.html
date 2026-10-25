@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=1a29b1ae1a3ae02fe26a6c0740a25016ea33d501 src=cases/jenkins-qa-signal-recovery/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Restaurando a confiança no pipeline de QA — Vitor Schiavo</title>
+    <meta name="description" content="Uma falha na plataforma compartilhada fazia testes que passavam parecerem quebrados. Restaurar o sinal veio antes de corrigir suítes de teste individuais.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/jenkins-qa-signal-recovery/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Restaurando a confiança no pipeline de QA">
+    <meta property="og:description" content="Uma falha na plataforma compartilhada fazia testes que passavam parecerem quebrados. Restaurar o sinal veio antes de corrigir suítes de teste individuais.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Restaurando a confiança no pipeline de QA — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Restaurando a confiança no pipeline de QA">
+    <meta name="twitter:description" content="Uma falha na plataforma compartilhada fazia testes que passavam parecerem quebrados. Restaurar o sinal veio antes de corrigir suítes de teste individuais.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/og.png">
+    <meta name="twitter:image:alt" content="Restaurando a confiança no pipeline de QA — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Restaurando a confiança no pipeline de QA", "description": "Uma falha na plataforma compartilhada fazia testes que passavam parecerem quebrados. Restaurar o sinal veio antes de corrigir suítes de teste individuais.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/jenkins-qa-signal-recovery/",
+      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/jenkins-qa-signal-recovery/", "image": "https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/jenkins-qa-signal-recovery/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/jenkins-qa-signal-recovery/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudo de caso · Confiabilidade · setembro de 2026</span>
+<h1 class="doc-title">Restaurando a confiança no pipeline de QA</h1>
+<p class="doc-dek">Uma falha na plataforma compartilhada fazia testes que passavam parecerem quebrados. Restaurar o sinal veio antes de corrigir suítes de teste individuais.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Atualizado em outubro de 2026</span><span>~5 min de leitura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="jenkins-qa-signal-recovery" data-visual-area="reliability">
+<figcaption><span>A solução em resumo</span><strong>Separe as falhas de teste do ruído da plataforma.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Jobs de teste</strong><span>Rodar a suíte de regressão</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Plataforma de agentes</strong><span>Reparar os relatórios compartilhados</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Sinal de QA</strong><span>Identificar as falhas reais</span></div>
+</div>
+<p class="case-map-note">O defeito nos relatórios compartilhados foi reparado; as falhas de aplicação continuaram sendo uma investigação à parte.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Diagnóstico da falha nos relatórios compartilhados e reparo da plataforma de agentes.</dd></div>
+<div><dt>Escopo</dt><dd>Uma frota de jobs de QA; a validação incluiu uma execução com 65 jobs.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Separei os defeitos de plataforma das falhas de testes de aplicação para que QA e desenvolvedores pudessem investigar as falhas restantes por seus próprios méritos.</dd></div>
+<div><dt>Resultado</dt><dd>A falha de plataforma comum vista em 40 jobs caiu a zero; isso não significa que todos os testes de aplicação passaram.</dd></div>
+</dl></section>
+
+<h2>O problema</h2>
+<p>Uma visão de QA continha 73 jobs, com 45 em vermelho. A resposta óbvia era reparar os testes que falhavam, um a um. Mas o resultado de um build só é útil se a plataforma de relatórios e de execução por trás dele for confiável.</p>
+<p>A investigação descobriu que 40 desses jobs em vermelho compartilhavam uma falha após a execução dos testes: um plugin de relatórios atualizado já não encontrava sua instalação de linha de comando. Uma suíte que passava podia, portanto, produzir um build com falha. Alguns jobs aparentemente verdes não rodavam havia muito tempo, de modo que a cor do status sozinha era enganosa nos dois sentidos.</p>
+<h2>Minha contribuição</h2>
+<p>Investiguei o caminho da falha compartilhada, comparei builds históricos para isolar a transição do plugin, reparei a configuração de relatórios e segui os erros restantes até a plataforma de agentes. Tratei as falhas de plataforma e as falhas de testes de aplicação como frentes de trabalho distintas, para que o time pudesse enxergar qual problema estava de fato resolvendo.</p>
+<h2>A decisão</h2>
+<p>Corrigir primeiro a camada comum de execução e de relatórios. Editar dezenas de testes enquanto seu mecanismo de relatórios estava quebrado teria ocultado o efeito de cada mudança e criado trabalho desnecessário.</p>
+<p>A investigação dos agentes expôs problemas adicionais de compatibilidade: o runtime disponível para builds não interativos diferia do ambiente de usuário interativo, as ferramentas de navegador estavam incompletas e a combinação de sistema operacional e ferramentas de container bloqueava alguns workloads. Isso exigia mudanças na camada de plataforma, em vez de contornos repetidos em jobs individuais.</p>
+<figure class="work-visual">
+<figcaption>Recupere o sinal antes de interpretá-lo</figcaption>
+<div class="flow-path"><span>Separar a execução dos testes da publicação dos relatórios</span><span aria-hidden="true">↓</span><span>Reparar os defeitos de relatórios compartilhados e dos agentes</span><span aria-hidden="true">↓</span><span>Validar a frota de jobs e classificar as falhas restantes</span></div></figure>
+<h2>Validação</h2>
+<p>As imagens dos agentes foram validadas em máquinas virtuais inicializadas. Uma execução em toda a frota, cobrindo 65 jobs, verificou a existência de regressões, enquanto as categorias de erro eram acompanhadas separadamente. Isso tornou possível confirmar que uma correção de plataforma funcionou sem fingir que todos os testes de aplicação também haviam sido reparados.</p>
+<h2>Resultados e medição</h2>
+<p>O registro operacional relata que o erro comum de relatórios caiu de 40 ocorrências para zero em toda a visão, com os erros de plataforma identificados — de runtime, navegador e ferramentas — também eliminados. A execução de validação com 65 jobs não registrou regressões.</p>
+<p>Isso não significa que todos os 73 jobs ficaram saudáveis. As falhas restantes incluíam defeitos em testes de aplicação, contas de teste expiradas e repositórios cujo caminho de entrega havia mudado. O resultado foi uma base confiável para triagem, com essas responsabilidades remanescentes tornadas explícitas.</p>
+<h2>O que eu aprendi</h2>
+<p>Um dashboard de testes é um produto de observabilidade para desenvolvedores. Sua atualidade e a semântica de suas falhas merecem o mesmo escrutínio que um alerta de produção. Antes de otimizar o número de caixas verdes, estabeleça o que cada caixa realmente significa.</p><section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Reparar os testes individualmente ocultaria uma falha comum de relatórios. Estabeleça uma camada de execução confiável antes de agir sobre os resultados das suítes.</p><h3>Trade-off</h3><p>Um status verde em um job antigo é uma evidência fraca. Verifique a execução recente e distinga os relatórios dos resultados reais dos testes.</p><h3>O que eu melhoraria em seguida</h3><p>Próxima melhoria: adicionar uma verificação de compatibilidade entre agentes e relatórios antes de atualizações de plugins e acompanhar a atualidade junto ao status dos jobs.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+<a class="cta" href="/pt/#contact">Entre em contato</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

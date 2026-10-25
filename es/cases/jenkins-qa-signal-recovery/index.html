@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=1a29b1ae1a3ae02fe26a6c0740a25016ea33d501 src=cases/jenkins-qa-signal-recovery/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Restaurar la confianza en el pipeline de QA — Vitor Schiavo</title>
+    <meta name="description" content="Una falla de plataforma compartida hacía que las pruebas que pasaban parecieran fallidas. Recuperar la señal fue prioritario antes de corregir las suites de pruebas individuales.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/jenkins-qa-signal-recovery/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/jenkins-qa-signal-recovery/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Restaurar la confianza en el pipeline de QA">
+    <meta property="og:description" content="Una falla de plataforma compartida hacía que las pruebas que pasaban parecieran fallidas. Recuperar la señal fue prioritario antes de corregir las suites de pruebas individuales.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Restaurar la confianza en el pipeline de QA — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Restaurar la confianza en el pipeline de QA">
+    <meta name="twitter:description" content="Una falla de plataforma compartida hacía que las pruebas que pasaban parecieran fallidas. Recuperar la señal fue prioritario antes de corregir las suites de pruebas individuales.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/og.png">
+    <meta name="twitter:image:alt" content="Restaurar la confianza en el pipeline de QA — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Restaurar la confianza en el pipeline de QA", "description": "Una falla de plataforma compartida hacía que las pruebas que pasaban parecieran fallidas. Recuperar la señal fue prioritario antes de corregir las suites de pruebas individuales.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/es/cases/jenkins-qa-signal-recovery/",
+      "inLanguage": "es", "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/jenkins-qa-signal-recovery/", "image": "https://vitorschiavo.dev/cases/jenkins-qa-signal-recovery/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/jenkins-qa-signal-recovery/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/jenkins-qa-signal-recovery/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudio de caso · Confiabilidad · septiembre de 2026</span>
+<h1 class="doc-title">Restaurar la confianza en el pipeline de QA</h1>
+<p class="doc-dek">Una falla de plataforma compartida hacía que las pruebas que pasaban parecieran fallidas. Recuperar la señal fue prioritario antes de corregir las suites de pruebas individuales.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en octubre de 2026</span><span>~5 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="jenkins-qa-signal-recovery" data-visual-area="reliability">
+<figcaption><span>Solución de un vistazo</span><strong>Separar las fallas de pruebas del ruido de la plataforma.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Jobs de prueba</strong><span>Ejecutar la suite de regresión</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Plataforma de agentes</strong><span>Reparar el reporte compartido</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Señal de QA</strong><span>Identificar fallas reales</span></div>
+</div>
+<p class="case-map-note">El defecto del reporte compartido fue reparado; las fallas de la aplicación quedaron como una investigación aparte.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Diagnóstico de la falla del reporte compartido y reparación de la plataforma de agentes.</dd></div>
+<div><dt>Alcance</dt><dd>Una flota de jobs de QA; la validación incluyó una ejecución de 65 jobs.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Separé los defectos de plataforma de las fallas de pruebas de la aplicación para que QA y los desarrolladores pudieran investigar las fallas restantes por sus propios méritos.</dd></div>
+<div><dt>Resultado</dt><dd>La falla común de plataforma observada en 40 jobs cayó a cero; esto no significa que todas las pruebas de la aplicación hayan pasado.</dd></div>
+</dl></section>
+
+<h2>El problema</h2>
+<p>Una vista de QA contenía 73 jobs, con 45 en rojo. La respuesta obvia era reparar las pruebas que fallaban una por una. Pero el resultado de un build solo es útil si se puede confiar en su plataforma de reportes y ejecución.</p>
+<p>La investigación encontró que 40 de esos jobs en rojo compartían una falla después de la ejecución de las pruebas: un plugin de reportes actualizado ya no encontraba su instalación de línea de comandos. Por lo tanto, una suite que pasaba podía producir un build fallido. Algunos jobs aparentemente en verde no se ejecutaban desde hacía mucho tiempo, así que el color de estado por sí solo resultaba engañoso en ambas direcciones.</p>
+<h2>Mi contribución</h2>
+<p>Investigué la ruta de la falla compartida, comparé builds históricos para aislar la transición del plugin, reparé la configuración de reportes y seguí los errores restantes hasta la plataforma de agentes. Traté las fallas de plataforma y las fallas de pruebas de la aplicación como flujos de trabajo distintos, para que el equipo pudiera ver qué problema estaba resolviendo en realidad.</p>
+<h2>La decisión</h2>
+<p>Reparar primero la capa común de ejecución y reportes. Editar decenas de pruebas mientras su mecanismo de reportes estaba roto habría ocultado el efecto de cada cambio y generado trabajo innecesario.</p>
+<p>La investigación de los agentes expuso problemas de compatibilidad adicionales: el runtime disponible para los builds no interactivos difería del entorno interactivo del usuario, las herramientas de navegador estaban incompletas y la combinación de sistema operativo y herramientas de contenedores bloqueaba algunos workloads. Eso requería cambios en la capa de la plataforma, en lugar de soluciones alternativas repetidas en jobs individuales.</p>
+<figure class="work-visual">
+<figcaption>Recuperar la señal antes de interpretarla</figcaption>
+<div class="flow-path"><span>Separar la ejecución de las pruebas de la publicación de reportes</span><span aria-hidden="true">↓</span><span>Reparar los defectos de reportes compartidos y de agentes</span><span aria-hidden="true">↓</span><span>Validar la flota de jobs y clasificar las fallas restantes</span></div></figure>
+<h2>Validación</h2>
+<p>Las imágenes de los agentes se validaron en máquinas virtuales ya iniciadas. Una ejecución en toda la flota de 65 jobs comprobó si había regresiones, mientras que las categorías de error se rastreaban por separado. Eso permitió confirmar que una corrección de plataforma funcionaba sin fingir que todas las pruebas de la aplicación también se habían reparado.</p>
+<h2>Resultados y medición</h2>
+<p>El registro operativo indica que el error común de reportes cayó de 40 ocurrencias a cero en toda la vista, y que también se eliminaron los errores de plataforma identificados de runtime, navegador y herramientas. La ejecución de validación de 65 jobs no registró regresiones.</p>
+<p>Esto no significa que los 73 jobs hayan quedado sanos. Las fallas restantes incluían defectos en las pruebas de la aplicación, cuentas de prueba vencidas y repositorios cuya ruta de entrega había cambiado. El resultado fue una base confiable para el triage, con esas responsabilidades restantes hechas explícitas.</p>
+<h2>Lo que aprendí</h2>
+<p>Un dashboard de pruebas es un producto de observabilidad para desarrolladores. Su frescura y la semántica de sus fallas merecen el mismo escrutinio que una alerta de producción. Antes de optimizar la cantidad de casillas en verde, establece qué significa realmente cada casilla.</p><section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Reparar las pruebas de forma individual ocultaría una falla común de reportes. Establece una capa de ejecución confiable antes de actuar sobre los resultados de las suites.</p><h3>Contrapartida</h3><p>Un estado en verde en un job viejo es evidencia débil. Verifica la ejecución reciente y distingue los reportes de los resultados reales de las pruebas.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: agregar una verificación de compatibilidad de agentes/reportes antes de actualizar los plugins y rastrear la frescura junto con el estado de los jobs.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más estudios de caso</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

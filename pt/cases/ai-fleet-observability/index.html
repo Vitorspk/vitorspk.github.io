@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=2e2ebf89b4391a2f3039ecb8d09f7f5def000477 src=cases/ai-fleet-observability/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Observando uma frota efêmera de inferência de IA — Vitor Schiavo</title>
+    <meta name="description" content="A descoberta dinâmica do Prometheus manteve os workers de GPU e os pods de inferência visíveis à medida que seus endereços de provedor mudavam.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/ai-fleet-observability/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/ai-fleet-observability/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/ai-fleet-observability/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/ai-fleet-observability/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/ai-fleet-observability/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/ai-fleet-observability/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Observando uma frota efêmera de inferência de IA">
+    <meta property="og:description" content="A descoberta dinâmica do Prometheus manteve os workers de GPU e os pods de inferência visíveis à medida que seus endereços de provedor mudavam.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/ai-fleet-observability/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Observando uma frota efêmera de inferência de IA — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Observando uma frota efêmera de inferência de IA">
+    <meta name="twitter:description" content="A descoberta dinâmica do Prometheus manteve os workers de GPU e os pods de inferência visíveis à medida que seus endereços de provedor mudavam.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/ai-fleet-observability/og.png">
+    <meta name="twitter:image:alt" content="Observando uma frota efêmera de inferência de IA — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Observando uma frota efêmera de inferência de IA", "description": "A descoberta dinâmica do Prometheus manteve os workers de GPU e os pods de inferência visíveis à medida que seus endereços de provedor mudavam.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/ai-fleet-observability/",
+      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/ai-fleet-observability/", "image": "https://vitorschiavo.dev/cases/ai-fleet-observability/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/ai-fleet-observability/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/ai-fleet-observability/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudo de caso · Infraestrutura de IA · abril de 2026</span>
+<h1 class="doc-title">Observando uma frota efêmera de inferência de IA</h1>
+<p class="doc-dek">A descoberta dinâmica do Prometheus manteve os workers de GPU e os pods de inferência visíveis à medida que seus endereços de provedor mudavam.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Atualizado em outubro de 2026</span><span>~4 min de leitura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="ai-fleet-observability" data-visual-area="ai">
+<figcaption><span>A solução em resumo</span><strong>Descubra a frota a partir do componente que já a conhece.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Inventário do router</strong><span>Acompanhe os heartbeats dos workers</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Descoberta HTTP</strong><span>Atualize os targets efêmeros</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Dashboard da frota</strong><span>Inspecione sinais de GPU e inferência</span></div>
+</div>
+<p class="case-map-note">Cinco targets estavam UP no snapshot do rollout. Esta entrega adicionou visibilidade; as regras de paging foram um trabalho de acompanhamento à parte.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Inventário dinâmico de targets, integração com a descoberta do Prometheus e dashboards da frota.</dd></div>
+<div><dt>Escopo</dt><dd>Workers de inferência efêmeros; a descoberta era atualizada a cada 30 segundos.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Conectei as camadas de inventário e de monitoramento. As regras de paging foram um trabalho de acompanhamento à parte.</dd></div>
+<div><dt>Resultado</dt><dd>Cinco targets estavam UP no snapshot do rollout; os redeployments de workers deixaram de exigir uma lista estática mantida manualmente.</dd></div>
+</dl></section>
+
+
+<h2>O problema</h2>
+<p>Pods de GPU alugados recebem novos endereços de provedor após o redeployment. Uma lista estática de targets do Prometheus quebra à medida que esses endereços mudam, e uma visualização web restrita ao operador não oferece o histórico nem a visibilidade compartilhada necessários para o diagnóstico.</p>
+<h2>Minha contribuição</h2>
+<p>Expus um inventário dinâmico de targets a partir do router, conectei-o à descoberta de serviços via HTTP do Prometheus e construí uma visão no Grafana da frota de inferência. O router já acompanhava os heartbeats dos workers, então era o lugar certo para descrever a topologia ativa.</p>
+<h2>Como a descoberta funcionava</h2>
+<p>O Prometheus consultava o inventário via HTTPS a cada 30 segundos. A lista incluía o router, os workers ativos e os pods de inferência; workers obsoletos desapareciam automaticamente. O endpoint de inventário usava autenticação bearer, e as métricas dos workers eram protegidas antes de serem anunciadas para scraping.</p>
+<p>O dashboard reunia os streams ativos, a utilização dos workers e os tokens de inferência por segundo. Mantive os identificadores de stream de alta cardinalidade fora dos gauges em nível de router e preservei as métricas detalhadas de stream na camada dos workers.</p>
+<h2>Resultados e medição</h2>
+<p>O rollout verificou cinco targets UP: um router, dois workers e dois pods de inferência. O dashboard mostrava dados de stream e de inferência ao vivo. Esses números descrevem o snapshot de validação, não o tamanho máximo da plataforma.</p>
+<h2>O limite operacional</h2>
+<p>Esta entrega estabeleceu a observabilidade, com os limiares de alerta e a responsabilidade pelo on-call deixados como uma decisão à parte. O endpoint de métricas agregadas do engine de inferência manteve uma exceção de autenticação documentada; a integração de descoberta não tornou, por si só, todos os endpoints privados.</p>
+<p>A definição do dashboard era versionada, mas a importação continuava sendo um passo manual. O provisionamento automático era uma melhoria futura, não uma capacidade reivindicada para este rollout.</p>
+<h2>Por que isso importava</h2>
+<p>A abstração útil era a frota, não um pod alugado individual. Reutilizar o inventário do router disponibilizou essa abstração para o sistema de monitoramento sem adicionar uma segunda fonte da verdade mantida manualmente.</p>
+<p>Trabalho relacionado: <a href="/pt/cases/self-hosting-gemma-3-vllm/">servindo modelos multimodais entre engines e nuvens</a>.</p>
+<section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Targets estáticos são simples, mas se degradam após os redeployments. Um inventário de propriedade do router acompanha o componente que já conhece os workers ativos.</p><h3>Trade-off</h3><p>A descoberta depende do endpoint de inventário; labels de stream de alta cardinalidade podem tornar as métricas em nível de frota custosas.</p><h3>O que eu melhoraria a seguir</h3><p>Próxima melhoria: adicionar verificações de atualidade da descoberta e testar o comportamento dos alertas quando o inventário ou um worker desaparece.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+<a class="cta" href="/pt/#contact">Entre em contato</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

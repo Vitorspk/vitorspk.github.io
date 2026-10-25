@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=8e568548001db4d1855fe68c11e253210686dda5 src=cases/kubernetes-finops-kubecost/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Visibilidad de costos de Kubernetes con Kubecost y VPA — Vitor Schiavo</title>
+    <meta name="description" content="Despliegue de Kubecost para la asignación de costos por namespace, rightsizing con el Vertical Pod Autoscaler y consolidación de node pools para reducir la cantidad de nodes del cluster en cerca del 20%.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/kubernetes-finops-kubecost/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/kubernetes-finops-kubecost/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/kubernetes-finops-kubecost/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/kubernetes-finops-kubecost/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Visibilidad de costos de Kubernetes con Kubecost y VPA">
+    <meta property="og:description" content="Asignación de costos por namespace con Kubecost, rightsizing con VPA y consolidación de node pools que redujo la cantidad de nodes en cerca del 20%.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Visibilidad de costos de Kubernetes con Kubecost y VPA — un caso de estudio de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Visibilidad de costos de Kubernetes con Kubecost y VPA">
+    <meta name="twitter:description" content="Asignación de costos por namespace con Kubecost, rightsizing con VPA y consolidación de node pools.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/og.png">
+    <meta name="twitter:image:alt" content="Visibilidad de costos de Kubernetes con Kubecost y VPA — un caso de estudio de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Visibilidad de costos de Kubernetes con Kubecost y VPA",
+      "description": "Despliegue de Kubecost para la asignación de costos por namespace, rightsizing con el Vertical Pod Autoscaler y consolidación de node pools para reducir la cantidad de nodes del cluster en cerca del 20%.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/es/cases/kubernetes-finops-kubecost/",
+      "inLanguage": "es",
+      "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/kubernetes-finops-kubecost/",
+      "image": "https://vitorschiavo.dev/cases/kubernetes-finops-kubecost/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "FinOps, Kubecost, Kubernetes, cost optimization, VPA, Vertical Pod Autoscaler, rightsizing, BigQuery billing, committed use discounts"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/kubernetes-finops-kubecost/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/kubernetes-finops-kubecost/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/kubernetes-finops-kubecost/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Caso de estudio · FinOps</span>
+            <h1 class="doc-title">Visibilidad de costos de Kubernetes con Kubecost y VPA</h1>
+            <p class="doc-dek">No se puede optimizar lo que no se puede ver. Así fue como construí visibilidad de costos en Kubernetes con Kubecost, hice rightsizing de los workloads con el Vertical Pod Autoscaler y consolidé los node pools para reducir la cantidad de nodes en cerca del 20%.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Actualizado en octubre de 2026</span>
+                <span>~6 min de lectura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="kubernetes-finops-kubecost" data-visual-area="finops">
+<figcaption><span>Solución de un vistazo</span><strong>Haz visible el costo antes de cambiar la capacidad.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Workloads</strong><span>Inspeccionar requests y uso</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5H4v14h16V5ZM8 9h.01M8 15h.01M12 9h5M12 15h5"></path></svg><strong>Asignación de costos</strong><span>Atribuir el gasto por namespace</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Decisiones de capacidad</strong><span>Hacer rightsizing y consolidar</span></div>
+</div>
+<p class="case-map-note">La asignación de costos orienta los resource requests y la consolidación; los ahorros necesitan un baseline de facturación.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Despliegue de Kubecost, integración de facturación y visibilidad de la asignación por workload.</dd></div>
+<div><dt>Alcance</dt><dd>Infraestructura de asignación de costos en sandbox y producción.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Hice visible el costo y el uso de recursos para respaldar las decisiones sobre los workloads; la visibilidad es distinta de la adopción o los ahorros verificados.</dd></div>
+<div><dt>Resultado</dt><dd>Información de asignación por namespace/módulo y de rightsizing; los ahorros resultantes requieren su propio baseline de facturación.</dd></div>
+</dl></section>
+
+
+            <p>El costo de Kubernetes es célebremente opaco. La factura de la nube llega como un único número, pero se reparte entre namespaces, equipos y workloads que comparten los mismos nodes, y nadie puede decir cuánto cuesta realmente cada cosa. FinOps empieza por corregir eso: hacer visible el costo por workload y luego actuar sobre lo que se ve.</p>
+
+            <h2>Paso 1: visibilidad de costos con Kubecost</h2>
+            <p>Desplegué <strong>Kubecost</strong> en los clusters de sandbox y producción, conectado a la exportación de facturación de la nube (vía BigQuery) para que sus números se concilien con la factura real en lugar de estimarla. Algunas decisiones que lo hicieron perdurar:</p>
+            <ul>
+                <li><strong>Prometheus independiente.</strong> Dejé que Kubecost ejecutara su propia pila de métricas en lugar de acoplarse al Prometheus existente. Más rápido de desplegar y con recolección de métricas garantizada, sin conexiones frágiles entre servicios.</li>
+                <li><strong>Ingress interno con TLS.</strong> Accesible para el equipo, no desde internet.</li>
+                <li><strong>Asignación por módulo.</strong> Configuré etiquetas de asignación de costos para que la factura se desglose por módulo y equipo, no solo por namespace.</li>
+            </ul>
+            <p>El beneficio es inmediato: costo en tiempo real por namespace y deployment, utilización frente a asignación, recomendaciones de rightsizing y conciliación de facturación contra la factura real de la nube.</p>
+
+            <h2>Paso 2: rightsizing con el Vertical Pod Autoscaler</h2>
+            <p>La visibilidad mostró la historia de siempre: workloads que solicitan mucha más CPU y memoria de la que llegan a usar. Implementé el <strong>Vertical Pod Autoscaler (VPA)</strong> en los entornos de no producción para que los requests sigan el uso real en lugar de la conjetura cautelosa que alguien hizo hace un año. Una advertencia que vale la pena compartir: VPA no está libre de casos límite. En un servicio ávido de memoria interactuó mal con el comportamiento de OOM, así que retiré VPA de ese workload específico en lugar de dejar que peleara con el pod. El rightsizing es un valor por defecto, no una religión.</p>
+
+            <h2>Paso 3: consolidación</h2>
+            <p>Con datos reales de utilización, resultó que muchos nodes cargaban pods casi inactivos. Consolidé los workloads en node pools compartidos para que el scheduler pudiera hacer bin-pack correctamente, lo que <strong>redujo la cantidad de nodes en cerca del 20% en todos los entornos</strong> sin impacto en los workloads.</p>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">~20%</span><span class="stat-label">menos nodes</span></div>
+                <div class="stat"><span class="stat-value">por ns</span><span class="stat-label">asignación de costos</span></div>
+                <div class="stat"><span class="stat-value">VPA</span><span class="stat-label">rightsizing automatizado</span></div>
+                <div class="stat"><span class="stat-value">BigQuery</span><span class="stat-label">conciliación de facturación</span></div>
+            </div>
+
+            <h2>Paso 4: conviértelo en un hábito, no en un proyecto</h2>
+            <p>Los ahorros puntuales se erosionan. La práctica es lo que mantiene la factura baja:</p>
+            <ul>
+                <li><strong>Vigilancia diaria del costo.</strong> El hábito permanente de revisar los reportes de costos e investigar cualquier pico el mismo día, mientras la causa todavía está fresca.</li>
+                <li><strong>Revisión de uso comprometido.</strong> Analicé la flota de cómputo en estado estable para la cobertura de descuentos por uso comprometido, de modo que el baseline que siempre está en ejecución sea también el baseline por el que menos pagas.</li>
+                <li><strong>El análisis de costos guía las decisiones.</strong> Establecí el baseline del costo de workloads específicos para que dar de baja uno viniera con un ahorro medido y validado, no con una conjetura optimista.</li>
+            </ul>
+
+            <div class="callout callout--win">
+                <p class="callout-title">FinOps es un ciclo, no una limpieza</p>
+                <p>Ve el costo por workload, haz rightsizing según el uso real, consolida lo que está inactivo y luego vigila la deriva y repite. Las herramientas (Kubecost, VPA, exportación de facturación) existen para que ese ciclo sea barato de ejecutar, de modo que los ahorros se acumulen en lugar de erosionarse.</p>
+            </div>
+
+            <h2>Lo que le diría a alguien que empieza con esto</h2>
+            <ul>
+                <li>Compra visibilidad primero. La asignación de costos por namespace, conciliada con la factura real, es la base sobre la que se apoya todo lo demás.</li>
+                <li>Haz rightsizing con VPA, pero mantenlo vigilado. Es el valor por defecto correcto; no es el adecuado para todos los workloads (especialmente los servicios sensibles a la memoria).</li>
+                <li>Consolida con evidencia. Los datos reales de utilización convierten un «quizás estamos sobreaprovisionados» en un recorte de la cantidad de nodes concreto y seguro.</li>
+                <li>Convierte el costo en un vistazo diario, no en un simulacro de incendio trimestral. Los picos son más baratos de corregir el día en que ocurren.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Una pila de métricas dedicada simplifica la recolección inicial; reutilizar una pila compartida puede reducir la duplicación pero introduce acoplamiento.</p><h3>Contrapartida</h3><p>La asignación es un modelo de atribución. Los recursos compartidos y las etiquetas afectan cómo se asignan los costos a los equipos.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: conciliar la cobertura de asignación y medir qué recomendaciones adoptan los equipos antes de afirmar un impacto de optimización.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Soy Vitor Schiavo, ingeniero de Site Reliability y Platform. Este es uno de los casos de mi portafolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/es/#cases">Ver más casos de estudio</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
