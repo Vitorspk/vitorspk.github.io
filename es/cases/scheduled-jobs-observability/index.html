@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=f545ed15ed269cef0b95d75208bad77b5d985438 src=cases/scheduled-jobs-observability/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Hacer observables los jobs programados — Vitor Schiavo</title>
+    <meta name="description" content="Un wrapper de ejecución reutilizable hizo visibles los jobs de corta duración sin cambiar su lógica de negocio ni permitir que las fallas de telemetría los hicieran fallar.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/scheduled-jobs-observability/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/scheduled-jobs-observability/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/scheduled-jobs-observability/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/scheduled-jobs-observability/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/scheduled-jobs-observability/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/scheduled-jobs-observability/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Hacer observables los jobs programados">
+    <meta property="og:description" content="Un wrapper de ejecución reutilizable hizo visibles los jobs de corta duración sin cambiar su lógica de negocio ni permitir que las fallas de telemetría los hicieran fallar.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/scheduled-jobs-observability/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Hacer observables los jobs programados — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Hacer observables los jobs programados">
+    <meta name="twitter:description" content="Un wrapper de ejecución reutilizable hizo visibles los jobs de corta duración sin cambiar su lógica de negocio ni permitir que las fallas de telemetría los hicieran fallar.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/scheduled-jobs-observability/og.png">
+    <meta name="twitter:image:alt" content="Hacer observables los jobs programados — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Hacer observables los jobs programados", "description": "Un wrapper de ejecución reutilizable hizo visibles los jobs de corta duración sin cambiar su lógica de negocio ni permitir que las fallas de telemetría los hicieran fallar.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/es/cases/scheduled-jobs-observability/",
+      "inLanguage": "es", "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/scheduled-jobs-observability/", "image": "https://vitorschiavo.dev/cases/scheduled-jobs-observability/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/scheduled-jobs-observability/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/scheduled-jobs-observability/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudio de caso · Confiabilidad · agosto de 2026</span>
+<h1 class="doc-title">Hacer observables los jobs programados</h1>
+<p class="doc-dek">Un wrapper de ejecución reutilizable hizo visibles los jobs de corta duración sin cambiar su lógica de negocio ni permitir que las fallas de telemetría los hicieran fallar.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en octubre de 2026</span><span>~4 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="scheduled-jobs-observability" data-visual-area="reliability">
+<figcaption><span>Solución de un vistazo</span><strong>Un job que desaparece aún necesita una señal de salud duradera.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Job programado</strong><span>Envolver la ejecución y preservar el código de salida</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Señales persistentes</strong><span>Enviar finalización y marcas de tiempo</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Reglas de frescura</strong><span>Alertar según la programación</span></div>
+</div>
+<p class="case-map-note">Se instrumentaron 24 de 26 entradas activas. Los umbrales de frescura reflejan cada programación; las fallas de telemetría no reemplazan el resultado del job.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Wrapper de ejecución, exporter de solo lectura, instrumentación de crontab y reglas según la programación.</dd></div>
+<div><dt>Alcance</dt><dd>24 de 26 entradas de cron activas, 16 reglas de Prometheus y un dashboard de 12 paneles.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Instrumenté la ejecución de los jobs sin reemplazar su lógica de negocio ni su código de salida real.</dd></div>
+<div><dt>Resultado</dt><dd>Las marcas de tiempo de finalización persistentes volvieron observables los jobs de corta duración; una falla de monitoreo no anuló el resultado del job.</dd></div>
+</dl></section>
+
+
+<h2>El problema</h2>
+<p>Una flota heredada de cron procesaba jobs de negocio, pero no exponía ninguna señal confiable de liveness ni de profundidad de cola. Investigar dudas sobre la entrega implicaba buscar en grandes archivos de log y escribir consultas a la base de datos. Un job muerto podía permanecer invisible porque los procesos de corta duración desaparecen antes de que un scraper los vea.</p>
+<h2>Mi contribución</h2>
+<p>Construí un wrapper reutilizable, un exporter de solo lectura de métricas de negocio y un instrumentador idempotente de crontab. El despliegue cubrió 24 de 26 entradas de cron activas y agregó 16 reglas de Prometheus y un dashboard de Grafana de 12 paneles.</p>
+<h2>Hacer medible el silencio</h2>
+<p>La señal de salud principal era la marca de tiempo de la última ejecución exitosa. Una ejecución fallida o ausente no debe adelantarla. Los umbrales se agruparon por programación porque una tarea mensual y un procesador que corre cada minuto no pueden compartir el mismo presupuesto de retraso.</p>
+<p>Se reutilizó el transporte de Pushgateway existente. Un manifiesto de reemplazo no habría aportado ninguna capacidad útil y arriesgaba cambiar un límite de ingress no relacionado, así que dejé esa infraestructura tal como estaba.</p>
+<div class="stat-strip"><div class="stat"><strong class="stat-value">24 / 26</strong><span class="stat-label">Entradas de cron activas instrumentadas</span></div><div class="stat"><strong class="stat-value">16</strong><span class="stat-label">Reglas según la programación validadas</span></div><div class="stat"><strong class="stat-value">12</strong><span class="stat-label">Paneles del dashboard</span></div></div>
+<h2>Proteger el job de negocio de su propio monitoreo</h2>
+<p>El wrapper propagaba el código de salida real del proceso. Un job fallido no actualizaba su marca de tiempo de éxito. Cuando el gateway no estaba accesible, un job de negocio exitoso seguía siendo exitoso. Un proceso reemplazado que recibía SIGTERM se manejaba por separado de una falla de la aplicación, de la misma forma en que funcionaban los procesadores existentes que corrían cada minuto.</p>
+<h2>Resultados y medición</h2>
+<p>El despliegue preservó la cantidad de entradas activas del crontab, verificó la ruta de la VM al gateway, validó las 16 reglas con promtool y revisó el procesamiento de negocio después del cambio. Las pruebas cubrieron el éxito, un código de salida de error, SIGTERM y un gateway no disponible.</p>
+<p>La cobertura fue parcial a propósito: dos entradas activas quedaban fuera del modelo de scripts del wrapper. También se mantuvieron distintos el acuse de recibo del proveedor externo y la entrega real visible para el cliente; este dashboard no prueba que un sistema externo haya mostrado cada resultado.</p>
+<h2>La lección</h2>
+<p>Instrumentar jobs heredados es útil cuando se preserva su comportamiento. Diseña la ruta de fallo de la telemetría de forma tan deliberada como su ruta de éxito.</p>
+<section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Hacer scraping de un proceso efímero puede no captarlo en absoluto. Persistir las señales de finalización preserva la visibilidad después de la salida.</p><h3>Contrapartida</h3><p>Una tarea mensual y una tarea que corre cada minuto necesitan presupuestos de frescura distintos. La telemetría no debe convertirse en una nueva dependencia del job de negocio.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: revisar las dos entradas sin instrumentar y ejercitar las alertas de ejecución ausente contra cada clase de programación.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más estudios de caso</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

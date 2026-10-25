@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=1ff2f3923eceb3edfcf246e1b5637e062faa27d2 src=cases/kubernetes-dns-latency/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Encontrando a latência escondida no DNS do Kubernetes — Vitor Schiavo</title>
+    <meta name="description" content="Separar o tempo de consulta DNS do tempo de conexão TCP revelou por que uma API saudável continuava disparando alertas de latência.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/kubernetes-dns-latency/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/kubernetes-dns-latency/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/kubernetes-dns-latency/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Encontrando a latência escondida no DNS do Kubernetes">
+    <meta property="og:description" content="Separar o tempo de consulta DNS do tempo de conexão TCP revelou por que uma API saudável continuava disparando alertas de latência.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/kubernetes-dns-latency/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Encontrando a latência escondida no DNS do Kubernetes — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Encontrando a latência escondida no DNS do Kubernetes">
+    <meta name="twitter:description" content="Separar o tempo de consulta DNS do tempo de conexão TCP revelou por que uma API saudável continuava disparando alertas de latência.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/kubernetes-dns-latency/og.png">
+    <meta name="twitter:image:alt" content="Encontrando a latência escondida no DNS do Kubernetes — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Encontrando a latência escondida no DNS do Kubernetes", "description": "Separar o tempo de consulta DNS do tempo de conexão TCP revelou por que uma API saudável continuava disparando alertas de latência.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/",
+      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/", "image": "https://vitorschiavo.dev/cases/kubernetes-dns-latency/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/kubernetes-dns-latency/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/kubernetes-dns-latency/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudo de caso · Confiabilidade · julho de 2026</span>
+<h1 class="doc-title">Encontrando a latência escondida no DNS do Kubernetes</h1>
+<p class="doc-dek">Separar o tempo de consulta DNS do tempo de conexão TCP revelou por que uma API saudável continuava disparando alertas de latência.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Atualizado em outubro de 2026</span><span>~4 min de leitura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="kubernetes-dns-latency" data-visual-area="reliability">
+<figcaption><span>Visão geral da solução</span><strong>Meça cada camada antes de alterar a capacidade.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Rastreie a latência</strong><span>Separe o tempo de consulta e de TCP</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Ajuste a resolução</strong><span>Calibre o ndots no chart compartilhado</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Valide em produção</strong><span>Repita a medição original</span></div>
+</div>
+<p class="case-map-note">A melhora de cerca de 9× descreve a consulta DNS medida, não cada requisição de API nem uma garantia sustentada de nível de serviço.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Diagnóstico camada por camada, uma configuração de DNS compartilhada no Helm e validação de rollout em etapas.</dd></div>
+<div><dt>Escopo</dt><dd>Medição de DNS em produção e oito verificações de render por aplicação/ambiente.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Alterei a configuração de deployment compartilhada depois de separar o overhead de DNS do tempo de conexão com o banco de dados.</dd></div>
+<div><dt>Resultado</dt><dd>O p50 da consulta DNS passou de ~18.7 ms para 2.06 ms na medição registrada; isso não é uma aceleração de 9× na API.</dd></div>
+</dl></section>
+
+
+<h2>Um serviço saudável com um sinal de latência instável</h2>
+<p>A API tinha pods saudáveis, uso de recursos normal e nenhum erro 5xx observado, mas seu alerta de latência P95 abria e fechava repetidamente. Adicionar capacidade teria tratado o sintoma antes de identificar onde o tempo da requisição era gasto.</p>
+<h2>Minha contribuição</h2>
+<p>Comparei a resolução de DNS, a consulta totalmente qualificada e a conexão TCP direta de dentro de um pod em produção. A conexão com o banco de dados em si era rápida. O resolver do Kubernetes tentava os domínios de busca locais antes de resolver o hostname de um banco de dados externo.</p>
+<h2>A decisão</h2>
+<p>O valor padrão <code>ndots:5</code> tratava o hostname externo como relativo e o expandia pelos domínios de busca do pod. Adicionei uma configuração <code>ndots:2</code> ajustável ao template Helm compartilhado, verifiquei o render em oito combinações de aplicação/ambiente e promovi a mudança por development e staging até produção.</p>
+<div class="table-container" tabindex="0"><table class="evidence-table"><caption>Consulta DNS medida a partir do workload em produção</caption><thead><tr><th scope="col">Sinal</th><th scope="col">Antes</th><th scope="col">Depois</th></tr></thead><tbody><tr><th scope="row">p50 da consulta DNS</th><td>~18.7 ms</td><td>2.06 ms</td></tr></tbody></table></div>
+<h2>Resultados e medição</h2>
+<p>Os dois deployments em produção receberam a nova opção de DNS. Repetir a consulta que abriu a investigação mostrou uma redução de aproximadamente 18.7 ms p50 para 2.06 ms, cerca de nove vezes mais rápido. Os pods permaneceram saudáveis, sem reinicializações relatadas no snapshot de validação.</p>
+<p>O encerramento registrou o P95 da API em cerca de 0.12 segundos ao longo dos 20 minutos de observação após o rollout, e o alerta parou de oscilar. A comparação de DNS e a observação da API são medições diferentes; a melhora na consulta não deve ser apresentada como uma melhora de nove vezes no tempo total de resposta da API.</p>
+<h2>Trade-offs e acompanhamento</h2>
+<p>Mudar o comportamento de busca do resolver precisa preservar os nomes curtos usados dentro do cluster. A configuração compartilhada continuou ajustável. O cache de DNS em todo o cluster e a capacidade do resolver foram acompanhamentos separados, e não resultados atribuídos a esta correção por aplicação.</p>
+<h2>A lição</h2>
+<p>Um sintoma de latência relacionado ao banco de dados pode se originar antes de o banco receber uma query. Decomponha o caminho da requisição e repita a mesma medição após a mudança.</p>
+<section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e dos seus limites. A próxima melhoria é uma proposta, não um resultado já entregue.</p><h3>Alternativa e justificativa</h3><p>Adicionar réplicas ou capacidade de banco de dados não eliminaria a expansão de busca do resolver. Ajuste a resolução depois de isolar o tempo de consulta do tempo de TCP.</p><h3>Trade-off</h3><p>Um valor menor de ndots muda o comportamento da consulta; valide os nomes internos e as dependências externas antes de generalizar a configuração.</p><h3>O que eu melhoraria em seguida</h3><p>Próxima melhoria: estender a janela de observação e adicionar verificações de regressão do resolver para nomes internos e externos representativos.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+<a class="cta" href="/pt/#contact">Entre em contato</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

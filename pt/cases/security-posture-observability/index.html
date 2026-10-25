@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=f95917086a70e72e4f1c37a32d2fff2c81faacb7 src=cases/security-posture-observability/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Postura de segurança como um sistema observável — Vitor Schiavo</title>
+    <meta name="description" content="Transforme varreduras mensais de segurança na nuvem em métricas dimensionais, sinais de atualidade e um dashboard de triagem útil.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/security-posture-observability/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/security-posture-observability/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/security-posture-observability/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/security-posture-observability/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/security-posture-observability/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/security-posture-observability/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Postura de segurança como um sistema observável">
+    <meta property="og:description" content="Transforme varreduras mensais de segurança na nuvem em métricas dimensionais, sinais de atualidade e um dashboard de triagem útil.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/security-posture-observability/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Postura de segurança como um sistema observável — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Postura de segurança como um sistema observável">
+    <meta name="twitter:description" content="Transforme varreduras mensais de segurança na nuvem em métricas dimensionais, sinais de atualidade e um dashboard de triagem útil.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/security-posture-observability/og.png">
+    <meta name="twitter:image:alt" content="Postura de segurança como um sistema observável — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Postura de segurança como um sistema observável", "description": "Transforme varreduras mensais de segurança na nuvem em métricas dimensionais, sinais de atualidade e um dashboard de triagem útil.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/security-posture-observability/",
+      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/security-posture-observability/", "image": "https://vitorschiavo.dev/cases/security-posture-observability/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/security-posture-observability/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/security-posture-observability/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudo de caso · Operações de segurança · maio de 2026</span>
+<h1 class="doc-title">Postura de segurança como um sistema observável</h1>
+<p class="doc-dek">Transforme varreduras mensais de segurança na nuvem em métricas dimensionais, sinais de atualidade e um dashboard de triagem útil.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Atualizado em outubro de 2026</span><span>~7 min de leitura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="security-posture-observability" data-visual-area="security">
+<figcaption><span>Visão geral da solução</span><strong>Transforme resultados de varreduras em lote em um sinal útil.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Varreduras de segurança</strong><span>Colete resultados por projeto</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Ingestão de métricas</strong><span>Faça push e preserve as dimensões</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Dashboards</strong><span>Mostre risco e atualidade</span></div>
+</div>
+<p class="case-map-note">A visibilidade em lote inclui dimensões de risco e a atualidade da varredura; ela não é detecção de ameaças em tempo real.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Exporter de resultados de segurança, enriquecimento de métricas, construção de dashboards e controles de secrets com escopo definido.</dd></div>
+<div><dt>Escopo</dt><dd>Visibilidade de varreduras em lote, além de mudanças no scanner e na gestão de secrets validadas separadamente.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Eu construí a visibilidade da infraestrutura e controles reversíveis; este trabalho não é uma afirmação de detecção de ameaças em tempo real nem de cobertura completa de vulnerabilidades.</dd></div>
+<div><dt>Resultado</dt><dd>O risco e a atualidade das varreduras tornaram-se observáveis. Trabalhos relacionados verificaram a alcançabilidade das sondagens e controles reversíveis de versões de secrets dentro dos escopos registrados.</dd></div>
+</dl></section>
+
+<h2>O problema</h2>
+<p>Relatórios periódicos de segurança na nuvem exigiam triagem manual. Um relatório pontual tornava difícil comparar os achados entre projetos e serviços ou perceber se a varredura subjacente havia ficado desatualizada.</p>
+<h2>Minha contribuição</h2>
+<p>Conectei os resultados das varreduras mensais de 14 projetos na nuvem a um pipeline de métricas e a um dashboard do Grafana. O trabalho incluiu enriquecimento de CSV, um pequeno exporter, a implantação de um Pushgateway, a configuração do Prometheus e visualizações de dashboard por projeto, serviço e risco.</p>
+<h2>As decisões</h2>
+<p>O scanner é um processo em lote, não um serviço de longa duração. Fazer push dos resultados para um gateway permite que o Prometheus os colete após o encerramento do job. As métricas exportadas distinguem tipos de achado, recursos afetados e o horário da última varredura; esses dados representam perguntas diferentes e não devem ser reduzidos a uma única contagem.</p>
+<p>Mantive o exporter sem dependências para que ele pudesse rodar na imagem de scanner existente e preservei os labels necessários para o drill-down por projeto/serviço/risco. O timestamp da varredura é essencial: um dashboard que ainda exibe os resultados do mês anterior não pode dar a impressão de uma varredura recente.</p>
+<h2>Resultados e medição</h2>
+<p>O registro de entrega inclui um dry run cobrindo todos os 14 projetos, um push end-to-end bem-sucedido, a confirmação de que o Prometheus armazenou a métrica e um dashboard preenchido com resultados ao vivo.</p>
+<p>A cadência das varreduras é mensal. A visibilidade no dashboard entre as execuções não transforma isso em detecção de vulnerabilidades em tempo real. Não se faz aqui nenhuma afirmação sobre uma redução verificada de forma independente de incidentes ou achados de segurança.</p>
+<h2>Tornar a varredura repetível e útil</h2>
+<p>Em uma modernização anterior do pipeline, movi as dependências do scanner para uma imagem versionada, paralelizei varreduras e uploads, corrigi o tratamento de saída e reduzi o ruído relacionado a permissões. A execução end-to-end registrada caiu de cerca de 50 minutos para 15 minutos para aquele conjunto de projetos. O rollout posterior do dashboard cobriu 14 projetos; os dois escopos de validação não devem ser combinados em um único benchmark.</p>
+<p>Um verificador separado de políticas de bucket foi refatorado com workers limitados, resultados tipados e mensagens de relatório acionáveis. Ele registrou 80 testes unitários e 93.62% de cobertura. Uma saída correta ainda mostrava falhas reais de política; consertar o verificador não significou que todo bucket passou a estar em conformidade.</p>
+<h2>Provar que o scanner alcançou seus alvos</h2>
+<p>Consertei um scanner de exposição de configuração para que um host inalcançável não pudesse ser confundido com uma resposta limpa. A execução final registrada recebeu respostas HTTP para 5,681 sondagens em 299 hosts e 19 variantes de caminho, com zero falhas de conexão. Seu runtime foi de cerca de 0.9 minuto, em comparação com cerca de nove minutos anteriormente.</p>
+<p>Nenhum arquivo de configuração exposto foi identificado nessa execução. Esse é um resultado para os caminhos e respostas testados, não uma afirmação de que todos os serviços estavam livres de vulnerabilidades.</p>
+<h2>Levar a mesma disciplina aos secrets</h2>
+<p>Pilotei o External Secrets Operator com o Secret Manager em três repositórios, incluindo 16 ExternalSecrets e atualizações em 12 aplicações do ArgoCD. Desenvolvimento, staging e sandbox usaram workload identity; o caminho legado de produção manteve uma exceção com chave de service account.</p>
+<p>Também alterei um workflow destrutivo de atualização de secrets para preservar os campos existentes. Uma validação em desenvolvimento adicionou um campo mantendo os 183 originais, depois removeu o campo de teste e restaurou a contagem original. Uma normalização posterior desabilitou de forma reversível 133 versões mais antigas em 97 secrets de quatro projetos, mantendo a versão habilitada mais recente em vez de destruir as opções de recuperação.</p>
+<p>Esses são controles com escopo definido e registros de validação. Eles não comprovam que toda credencial foi rotacionada, que toda aplicação usou uma identidade dedicada, ou que o Vitor certificou a organização de forma independente.</p>
+<h2>O que eu aprendi</h2>
+<p>O relatório de segurança se torna uma capacidade operacional quando suas dimensões, atualidade e responsabilidade estão claras. Apenas uma contagem total não consegue dizer a um time onde agir nem se a fonte ainda está atualizada.</p><section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e dos seus limites. A próxima melhoria é uma proposta, não um resultado já entregue.</p><h3>Alternativa e justificativa</h3><p>Manter apenas relatórios estáticos é barato, mas torna a atualidade e as tendências difíceis de inspecionar. Métricas exportadas adicionam visibilidade compartilhada e responsabilidade de manutenção.</p><h3>Trade-off</h3><p>Dados desatualizados podem parecer tranquilizadores; a alcançabilidade da varredura e os timestamps precisam permanecer separados do número de achados.</p><h3>O que eu melhoraria a seguir</h3><p>Próxima melhoria: testar alertas de varredura desatualizada e documentar a responsabilidade pela triagem e a expiração de exceções para cada controle.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+<a class="cta" href="/pt/#contact">Entre em contato</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=7d0efca34a10bcf787d8f8f689f6966796ea9ab6 src=cases/gke-cluster-rebuild-recovery/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Reconstruir GKE sin reemitir certificados — Vitor Schiavo</title>
+    <meta name="description" content="Un ensayo de reconstrucción real expuso fallas que la revisión de código no detectó y luego permitió reconstruir tres clusters sin consumir la cuota de emisión de certificados.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/gke-cluster-rebuild-recovery/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gke-cluster-rebuild-recovery/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gke-cluster-rebuild-recovery/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/gke-cluster-rebuild-recovery/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Reconstruir GKE sin reemitir certificados">
+    <meta property="og:description" content="Un ensayo de reconstrucción real expuso fallas que la revisión de código no detectó y luego permitió reconstruir tres clusters sin consumir la cuota de emisión de certificados.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Reconstruir GKE sin reemitir certificados — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Reconstruir GKE sin reemitir certificados">
+    <meta name="twitter:description" content="Un ensayo de reconstrucción real expuso fallas que la revisión de código no detectó y luego permitió reconstruir tres clusters sin consumir la cuota de emisión de certificados.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/og.png">
+    <meta name="twitter:image:alt" content="Reconstruir GKE sin reemitir certificados — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Reconstruir GKE sin reemitir certificados", "description": "Un ensayo de reconstrucción real expuso fallas que la revisión de código no detectó y luego permitió reconstruir tres clusters sin consumir la cuota de emisión de certificados.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/es/cases/gke-cluster-rebuild-recovery/",
+      "inLanguage": "es", "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/gke-cluster-rebuild-recovery/", "image": "https://vitorschiavo.dev/cases/gke-cluster-rebuild-recovery/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/gke-cluster-rebuild-recovery/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/gke-cluster-rebuild-recovery/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudio de caso · Platform engineering · septiembre de 2026</span>
+<h1 class="doc-title">Reconstruir GKE sin reemitir certificados</h1>
+<p class="doc-dek">Un ensayo de reconstrucción real expuso fallas que la revisión de código no detectó y luego permitió reconstruir tres clusters sin consumir la cuota de emisión de certificados.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en octubre de 2026</span><span>~4 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="gke-cluster-rebuild-recovery" data-visual-area="platform">
+<figcaption><span>Solución de un vistazo</span><strong>Restaura la identidad antes de recrear la intención del controlador.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Preservar el estado</strong><span>Inventariar TLS e IPs reservadas</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Reconstruir y restaurar</strong><span>Restaurar TLS antes de los Certificates</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Demostrar la recuperación</strong><span>Verificar certificados y GitOps</span></div>
+</div>
+<p class="case-map-note">El ensayo adoptó 49 de 49 certificados sin reemitir. Es una prueba de recuperación, no un SLA de tiempo de recuperación en producción.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Ensayo de reconstrucción, reparaciones de bootstrap/teardown y verificaciones de recuperación de certificados y GitOps.</dd></div>
+<div><dt>Alcance</dt><dd>Un ensayo completo seguido de su reutilización para reconstruir tres entornos durante la renumeración de la red.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Fui responsable del procedimiento de infraestructura y su validación; la recuperación de las aplicaciones se verificó a través del estado de GitOps.</dd></div>
+<div><dt>Resultado</dt><dd>El ensayo adoptó 49/49 certificados TLS sin ninguna reemisión y restauró 35 aplicaciones de ArgoCD.</dd></div>
+</dl></section>
+
+
+<h2>El problema</h2>
+<p>Rangos de red superpuestos impedían la conectividad privada entre una plataforma más nueva y los servicios heredados. Algunos rangos de direcciones de GKE son inmutables, por lo que el cambio exigía reconstruir los clusters. Una reconstrucción que reemitiera en silencio cada certificado TLS podía agotar una cuota de emisión semanal compartida antes de que la plataforma estuviera saludable.</p>
+<h2>Mi contribución</h2>
+<p>Ejecuté un ensayo de reconstrucción destructivo en un entorno aislado, corregí fallas en los scripts de bootstrap y teardown, y verifiqué la adopción de certificados, las direcciones reservadas del balanceador de carga y la recuperación de GitOps. Luego usé ese proceso para reconstruir tres entornos como parte de la renumeración de la red.</p>
+<div class="stat-strip"><div class="stat"><strong class="stat-value">49 / 49</strong><span class="stat-label">Certificados adoptados en el ensayo</span></div><div class="stat"><strong class="stat-value">0</strong><span class="stat-label">Certificados reemitidos en el ensayo</span></div><div class="stat"><strong class="stat-value">35</strong><span class="stat-label">Aplicaciones de ArgoCD restauradas a Synced/Healthy</span></div></div>
+<h2>El orden de la recuperación importa</h2>
+<p>Restauré los Secrets de TLS antes de recrear los recursos Certificate. Eso permitió que cert-manager adoptara los certificados existentes en lugar de solicitar reemplazos. Las direcciones externas reservadas se preservaron de forma independiente de la subred antigua, de modo que reemplazar el cluster no exigió cambiar los registros DNS asociados.</p>
+<p>Ejecutar el proceso expuso defectos que una revisión estática no había detectado: una guarda rechazaba el estado creado por el paso anterior, la ausencia de ciertos resource kinds rompía una eliminación que de otro modo sería idempotente, y eliminar External Secrets Operator antes de que sus finalizers terminaran podía provocar un deadlock en el teardown. Corregí el orden del ciclo de vida y verifiqué el estado resultante del cluster.</p>
+<h2>Resultados y medición</h2>
+<p>El ensayo reportó 49 certificados encontrados, 49 adoptados, cero reemitidos y ninguno quedó sin estar listo. Pasaron a Ready en unos 20 segundos; ese es el tiempo hasta quedar Ready del certificado, no la duración de la reconstrucción completa. La cuota de emisión de certificados se mantuvo en el mismo valor antes y después. La identidad del node cambió, lo que confirma que se trataba de un cluster nuevo y no de un reinicio del antiguo.</p>
+<p>Posteriormente, el método permitió reconstruir tres clusters durante la renumeración de la red sin consumir cuota de emisión adicional. Luego se activó el peering privado y se comprobó con una prueba de conectividad de antes/después. Esto no establece un RTO de producción ni una garantía de recuperación ante desastres para toda la empresa.</p>
+<h2>Lo que repetiría</h2>
+<p>Un plan de recuperación se vuelve creíble cuando sus pasos destructivos se han ejecutado de verdad. Preserva los recursos que portan la identidad, pon a prueba el orden de restauración y valida las aplicaciones recuperadas antes de dar por reconstruida la plataforma.</p>
+<p>Trabajo relacionado: <a href="/es/cases/gke-terraform-shared-vpc/">la base de Terraform y Shared VPC</a> y <a href="/es/cases/zero-downtime-cluster-migration/">la migración escalonada de workloads</a>.</p>
+<section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Reemitir certificados es más sencillo que restaurarlos, pero pone en riesgo las cuotas de emisión. Restaurar primero el estado de TLS permite que el controlador adopte la identidad existente.</p><h3>Contrapartida</h3><p>Un ensayo demuestra la ruta de recuperación probada; no establece un SLA de tiempo de recuperación en producción.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: programar ensayos repetidos, registrar los tiempos de recuperación y probar la recuperación cuando falte una de las dependencias preservadas.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más casos de estudio</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
