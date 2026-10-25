@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=3f75ca16b6b27445a628977fd4337c0c284d9a3f src=cases/cloud-cost-engineering/index.html -->
+<!-- i18n:src-sha=0edd7a54ca95b92afd2beb1ebb38cd18b161d125 src=cases/cloud-cost-engineering/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -39,9 +39,20 @@
     <meta name="twitter:image:alt" content="Engenharia de custos de nuvem em toda a stack — um estudo de caso de Vitor Schiavo.">
 
     <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Engenharia de custos de nuvem em toda a stack", "description": "Reduzindo o desperdício de nuvem com rightsizing de Kubernetes, mudanças de observabilidade e desativação segura de serviços.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/",
-      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/", "image": "https://vitorschiavo.dev/cases/cloud-cost-engineering/og.png"}
-</script>
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Engenharia de custos de nuvem em toda a stack",
+      "description": "Reduzindo o desperdício de nuvem com rightsizing de Kubernetes, mudanças de observabilidade e desativação segura de serviços.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/cloud-cost-engineering/",
+      "image": "https://vitorschiavo.dev/cases/cloud-cost-engineering/og.png"
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,25 +103,25 @@
 <div><dt>Minha responsabilidade</dt><dd>Rightsizing, mudanças no caminho de ingestão e desativação segura de infraestrutura legada.</dd></div>
 <div><dt>Escopo</dt><dd>Iniciativas separadas em Kubernetes, monitoramento e serviços legados em 2025–2026.</dd></div>
 <div><dt>Colaboração &amp; limites</dt><dd>Coordenei mudanças de infraestrutura com requisitos de retenção de dados e de serviço; a economia é atribuída a cada iniciativa delimitada.</dd></div>
-<div><dt>Resultado</dt><dd>Equivalentes anualizados: ~US$30.1K na desativação de serviço legado, £26.5K no rightsizing de Kubernetes e £14K na ingestão de monitoramento. Moedas e baselines diferentes.</dd></div>
+<div><dt>Resultado</dt><dd>Equivalentes anualizados: ~US$ 30,1K na desativação de serviço legado, £ 26,5K no rightsizing de Kubernetes e £ 14K na ingestão de monitoramento. Moedas e baselines diferentes.</dd></div>
 </dl></section>
 
 <h2>A oportunidade</h2>
 <p>A economia de nuvem veio de uma sequência de decisões de engenharia: reduzir capacidade ociosa, mudar caminhos de ingestão caros, alinhar o armazenamento aos padrões de acesso e desativar serviços cujo papel de negócio havia terminado. Trabalhei em todas essas camadas em vez de tratar a conta de nuvem como uma única otimização.</p>
 <div class="stat-strip">
-<div class="stat"><strong class="stat-value">~US$30.1K</strong><span class="stat-label">Redução anualizada da desativação de serviço legado · USD</span></div>
-<div class="stat"><strong class="stat-value">£26.5K</strong><span class="stat-label">Redução anualizada do rightsizing de Kubernetes · GBP</span></div>
-<div class="stat"><strong class="stat-value">£14K</strong><span class="stat-label">Redução anualizada da ingestão de monitoramento · GBP</span></div>
+<div class="stat"><strong class="stat-value">~US$ 30,1K</strong><span class="stat-label">Redução anualizada da desativação de serviço legado · USD</span></div>
+<div class="stat"><strong class="stat-value">£ 26,5K</strong><span class="stat-label">Redução anualizada do rightsizing de Kubernetes · GBP</span></div>
+<div class="stat"><strong class="stat-value">£ 14K</strong><span class="stat-label">Redução anualizada da ingestão de monitoramento · GBP</span></div>
 </div>
 <h2>Desative o serviço, preserve os dados</h2>
 <p>Coordenei a desativação de um serviço legado em Kubernetes e MongoDB Atlas. Antes de remover recursos, exportei e verifiquei os dados retidos e, em seguida, removi os clusters de banco de dados, o compute dedicado e a infraestrutura temporária de backup.</p>
-<p>O primeiro ciclo de cobrança do Atlas após a desativação, abril de 2026, caiu de <strong>US$2,424.31 para US$131.30</strong> nesse serviço: <strong>US$2,293.01 a menos por mês, uma redução de 94.6%</strong>. O valor restante incluía runtime parcial e retenção de backup. Não foi uma conta zerada.</p>
-<p>O encerramento combinou essa redução observada no banco de dados com aproximadamente US$218/mês de infraestrutura GKE removida, resultando em <strong>cerca de US$2,511/mês, ou US$30,132/ano anualizados</strong>. O componente de GKE é uma estimativa de infraestrutura; o componente do Atlas é uma comparação de cobrança. Não atribuí a este serviço toda a variação da conta no âmbito da organização.</p>
+<p>O primeiro ciclo de cobrança do Atlas após a desativação, abril de 2026, caiu de <strong>US$ 2.424,31 para US$ 131,30</strong> nesse serviço: <strong>US$ 2.293,01 a menos por mês, uma redução de 94,6%</strong>. O valor restante incluía runtime parcial e retenção de backup. Não foi uma conta zerada.</p>
+<p>O encerramento combinou essa redução observada no banco de dados com aproximadamente US$ 218/mês de infraestrutura GKE removida, resultando em <strong>cerca de US$ 2.511/mês, ou US$ 30.132/ano anualizados</strong>. O componente de GKE é uma estimativa de infraestrutura; o componente do Atlas é uma comparação de cobrança. Não atribuí a este serviço toda a variação da conta no âmbito da organização.</p>
 <h2>Faça rightsizing do Kubernetes antes de comprar mais capacidade</h2>
-<p>Um snapshot da frota em janeiro de 2025 registrou uma redução de <strong>69 para 55 nós</strong> em quatro ambientes. A redução mensal registrada foi de <strong>£2,208.33</strong>, equivalente a <strong>£26,499.96/ano anualizados</strong>.</p>
-<p>Uma mudança posterior no sandbox reduziu o mínimo da aplicação de dois pods para um, permitindo remover mais quatro máquinas. Essa tarefa registrou <strong>US$1,009.74/mês</strong>, ou <strong>US$12,116.88/ano anualizados</strong>. Representa uma etapa de otimização separada, com baseline e moeda diferentes; mantenho-a separada do snapshot de frota anterior.</p>
+<p>Um snapshot da frota em janeiro de 2025 registrou uma redução de <strong>69 para 55 nós</strong> em quatro ambientes. A redução mensal registrada foi de <strong>£ 2.208,33</strong>, equivalente a <strong>£ 26.499,96/ano anualizados</strong>.</p>
+<p>Uma mudança posterior no sandbox reduziu o mínimo da aplicação de dois pods para um, permitindo remover mais quatro máquinas. Essa tarefa registrou <strong>US$ 1.009,74/mês</strong>, ou <strong>US$ 12.116,88/ano anualizados</strong>. Representa uma etapa de otimização separada, com baseline e moeda diferentes; mantenho-a separada do snapshot de frota anterior.</p>
 <h2>Mude o caminho de ingestão do monitoramento</h2>
-<p>Substituí um caminho de ingestão pago e gerenciado do Prometheus por uma stack padrão do Prometheus. A linha de ingestão registrada caiu <strong>£1,165.80/mês</strong>, equivalente a <strong>£13,989.60/ano anualizados</strong>. A validação cobriu os scrape targets, dashboards e alertas existentes.</p>
+<p>Substituí um caminho de ingestão pago e gerenciado do Prometheus por uma stack padrão do Prometheus. A linha de ingestão registrada caiu <strong>£ 1.165,80/mês</strong>, equivalente a <strong>£ 13.989,60/ano anualizados</strong>. A validação cobriu os scrape targets, dashboards e alertas existentes.</p>
 <p>O monitoramento autogerenciado ainda precisa de compute, armazenamento e manutenção. Este resultado descreve a linha de ingestão removida. <a href="/pt/cases/monitoring-ingestion-cost/">Leia sobre a migração do monitoramento e seus trade-offs.</a></p>
 <h2>Continue otimizando em toda a stack</h2>
 <p>O trabalho mais amplo incluiu mudanças no ciclo de vida do armazenamento, mudanças de storage-class e de região dos buckets, compute compartilhado para workers de IA, agendamento em não produção, limpeza de registry e remoção de VMs e bancos de dados não utilizados. Essas mudanças demonstram a amplitude do trabalho; não lhes atribuo totais financeiros inventados.</p>

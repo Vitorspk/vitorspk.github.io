@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
         },
         es: {
-            caseCount: (shown, total) => shown + ' de ' + total + ' casos de estudio y proyectos',
+            caseCount: (shown, total) => shown + ' de ' + total + ' estudios de caso y proyectos',
             emailCopied: 'Dirección de correo copiada.',
             emailCopyFail: addr => 'Copia no disponible. Selecciona ' + addr + ' arriba, o usa Enviar correo.',
             themeToLight: 'Cambiar al tema claro',

@@ -145,20 +145,20 @@
                         <tr><th scope="col">Ambiente</th><th scope="col">Antes</th><th scope="col">Depois</th><th scope="col">Aceleração</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>Produção (cardinalidade maior)</td><td>8 a 33 s</td><td>~0.66 s</td><td>~30×</td></tr>
-                        <tr><td>Sandbox (cardinalidade menor)</td><td>3.5 a 9 s</td><td>~0.66 s</td><td>~5 a 13×</td></tr>
+                        <tr><td>Produção (cardinalidade maior)</td><td>8 a 33 s</td><td>~0,66 s</td><td>~30×</td></tr>
+                        <tr><td>Sandbox (cardinalidade menor)</td><td>3,5 a 9 s</td><td>~0,66 s</td><td>~5 a 13×</td></tr>
                     </tbody>
                 </table>
             </div>
 
             <div class="stat-strip">
                 <div class="stat"><span class="stat-value">~30×</span><span class="stat-label">dashboards mais rápidos</span></div>
-                <div class="stat"><span class="stat-value">0.66 s</span><span class="stat-label">tempo de query consistente</span></div>
+                <div class="stat"><span class="stat-value">0,66 s</span><span class="stat-label">tempo de query consistente</span></div>
                 <div class="stat"><span class="stat-value">LTS</span><span class="stat-label">Grafana 11.6 + Prom 2.53</span></div>
                 <div class="stat"><span class="stat-value">0</span><span class="stat-label">dados perdidos ou alertas alterados</span></div>
             </div>
 
-            <h2>Prometheus: 2.45 to 2.53 LTS</h2>
+            <h2>Prometheus: 2.45 a 2.53 LTS</h2>
             <p>Atualizei o Prometheus em oito versões minor até o <strong>2.53 LTS</strong>, de forma faseada e segura: primeiro o cluster de sandbox, depois a produção após um período de observação de 24 horas. Uma restrição do mundo real que vale mencionar: a stack roda o fork gerenciado (GMP) do Prometheus porque os alertas e dashboards do Cloud Monitoring do ambiente dependem do exporter embutido dele. O Prometheus upstream já está na 3.x, mas o fork gerenciado vai no máximo até o 2.53 LTS, então esse era o teto. Saber em que fork você está, e por quê, é metade do upgrade.</p>
 
             <h2>Um refactor de config que vale a pena</h2>
