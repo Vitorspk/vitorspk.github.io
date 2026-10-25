@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=3b3dc7301c09c544ae7a820c64bf9e26f05f02f3 src=cases/monitoring-ingestion-cost/index.html -->
+<!-- i18n:src-sha=d95fdb69bfc3d80279b8270ae15cceb25b553f0e src=cases/monitoring-ingestion-cost/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -39,9 +39,20 @@
     <meta name="twitter:image:alt" content="Removendo um custo desnecessário de ingestão de monitoramento — um estudo de caso de Vitor Schiavo.">
 
     <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Removendo um custo desnecessário de ingestão de monitoramento", "description": "Uma redução medida em uma linha de cobrança, com a funcionalidade de monitoramento verificada separadamente.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/monitoring-ingestion-cost/",
-      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/monitoring-ingestion-cost/", "image": "https://vitorschiavo.dev/cases/monitoring-ingestion-cost/og.png"}
-</script>
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Removendo um custo desnecessário de ingestão de monitoramento",
+      "description": "Uma redução medida em uma linha de cobrança, com a funcionalidade de monitoramento verificada separadamente.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/monitoring-ingestion-cost/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/monitoring-ingestion-cost/",
+      "image": "https://vitorschiavo.dev/cases/monitoring-ingestion-cost/og.png"
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,17 +103,17 @@
 <div><dt>Minha responsabilidade</dt><dd>Substituí a ingestão gerenciada de métricas e preservei os targets, dashboards e a configuração de alertas.</dd></div>
 <div><dt>Escopo</dt><dd>Uma linha de cobrança de ingestão gerenciada do Prometheus, denominada em GBP.</dd></div>
 <div><dt>Colaboração &amp; limites</dt><dd>Mudei a infraestrutura de monitoramento e verifiquei a saúde dos targets, o acesso de consulta e a ausência de ingestão gerenciada adicional.</dd></div>
-<div><dt>Resultado</dt><dd>£1,165.80/mês removidos dessa linha; £13,989.60 anualizados. Os custos de hospedagem e manutenção permanecem.</dd></div>
+<div><dt>Resultado</dt><dd>£ 1.165,80/mês removidos dessa linha; £ 13.989,60 anualizados. Os custos de hospedagem e manutenção permanecem.</dd></div>
 </dl></section>
 
 <h2>O problema</h2>
-<p>Uma implantação do Prometheus encaminhava métricas para um caminho de ingestão de monitoramento gerenciado. O registro operacional atribuía £1,165.80 por mês a essa linha de cobrança, enquanto o time também mantinha uma stack de monitoramento local.</p>
+<p>Uma implantação do Prometheus encaminhava métricas para um caminho de ingestão de monitoramento gerenciado. O registro operacional atribuía £ 1.165,80 por mês a essa linha de cobrança, enquanto o time também mantinha uma stack de monitoramento local.</p>
 <h2>Minha contribuição</h2>
 <p>Substituí o caminho de ingestão gerenciado por uma stack padrão do Prometheus e atualizei sua configuração, preservando os scrape targets, dashboards e alertas existentes. A mudança foi aplicada com verificações de saúde dos targets, acesso de consulta e a ausência de ingestão gerenciada adicional.</p>
 <h2>O trade-off</h2>
 <p>Remover a ingestão gerenciada transfere a responsabilidade por armazenamento, disponibilidade e operações para a stack autogerenciada. Uma redução na cobrança só tem valor se o time entende essas responsabilidades e valida a capacidade de monitoramento de que ainda precisa.</p>
 <h2>Resultados e medição</h2>
-<p>A linha de ingestão registrada caiu de £1,165.80 por mês para zero. O equivalente anualizado é <strong>£13,989.60</strong>, calculado como doze vezes essa redução mensal. A moeda é GBP.</p>
+<p>A linha de ingestão registrada caiu de £ 1.165,80 por mês para zero. O equivalente anualizado é <strong>£ 13.989,60</strong>, calculado como doze vezes essa redução mensal. A moeda é GBP.</p>
 <p>Isso não significa um custo total de monitoramento zero. Compute, armazenamento, manutenção e requisitos futuros de capacidade continuam separados. O valor anualizado é uma estimativa de run-rate, não uma alegação de doze meses de economia realizada, e não é somado a outros totais de economia do portfólio.</p>
 <p>A validação cobriu mais de 120 blackbox targets, mais de 20 aplicações com métricas personalizadas, acesso ao Grafana e a configuração de scrape existente. O registro operacional reportou que essas funções foram mantidas após a mudança.</p>
 <h2>O que eu aprendi</h2>

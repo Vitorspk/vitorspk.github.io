@@ -9,7 +9,7 @@
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <title>Rodando o Metabase em produção — Vitor Schiavo</title>
-    <meta name="description" content="Um carregamento controlado de dashboard melhorou de cerca de 49.7 segundos para 3.1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.">
+    <meta name="description" content="Um carregamento controlado de dashboard melhorou de cerca de 49,7 segundos para 3,1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.">
     <meta name="robots" content="index, follow">
     <!-- i18n:links:start -->
 <link rel="canonical" href="https://vitorschiavo.dev/pt/cases/metabase-production-ops/">
@@ -25,7 +25,7 @@
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="Rodando o Metabase em produção: upgrades, acesso e performance">
-    <meta property="og:description" content="Um carregamento controlado de dashboard melhorou de cerca de 49.7 segundos para 3.1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.">
+    <meta property="og:description" content="Um carregamento controlado de dashboard melhorou de cerca de 49,7 segundos para 3,1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorschiavo.dev/cases/metabase-production-ops/og.png">
     <meta property="og:image:width" content="1200">
@@ -34,7 +34,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Rodando o Metabase em produção">
-    <meta name="twitter:description" content="Um carregamento controlado de dashboard melhorou de cerca de 49.7 segundos para 3.1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.">
+    <meta name="twitter:description" content="Um carregamento controlado de dashboard melhorou de cerca de 49,7 segundos para 3,1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.">
     <meta name="twitter:image" content="https://vitorschiavo.dev/cases/metabase-production-ops/og.png">
     <meta name="twitter:image:alt" content="Rodando o Metabase em produção — um estudo de caso de Vitor Schiavo.">
 
@@ -94,7 +94,7 @@
         <header class="doc-header">
             <span class="doc-eyebrow">Estudo de caso · BI / Dados</span>
             <h1 class="doc-title">Rodando o Metabase em produção: upgrades, acesso e performance</h1>
-            <p class="doc-dek">Um carregamento controlado de dashboard melhorou de cerca de 49.7 segundos para 3.1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.</p>
+            <p class="doc-dek">Um carregamento controlado de dashboard melhorou de cerca de 49,7 segundos para 3,1 segundos após uma mudança de índice de metadados, junto com acesso a dados mais seguro e backups operacionais.</p>
             <div class="doc-meta">
                 <span>Por Vitor Schiavo</span>
                 <span>Atualizado em outubro de 2026</span>
@@ -112,14 +112,14 @@
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
 <div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Verificação em produção</strong><span>Repita o carregamento com rollback pronto</span></div>
 </div>
-<p class="case-map-note">Um carregamento controlado em produção melhorou de ~49.7 s para ~3.1 s; um gargalo separado de filtro no MongoDB permaneceu.</p>
+<p class="case-map-note">Um carregamento controlado em produção melhorou de ~49,7 s para ~3,1 s; um gargalo separado de filtro no MongoDB permaneceu.</p>
 </figure>
 
 <section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
 <div><dt>Minha responsabilidade</dt><dd>Upgrades, acesso read-only ao banco de dados e diagnóstico de performance de queries de metadados.</dd></div>
 <div><dt>Escopo</dt><dd>Operações de BI e uma medição controlada de carregamento de dashboard em produção.</dd></div>
 <div><dt>Colaboração &amp; limites</dt><dd>Isolei gargalos de infraestrutura e de metadados; um gargalo separado de filtro no MongoDB permaneceu fora da correção medida.</dd></div>
-<div><dt>Resultado</dt><dd>O carregamento controlado de dashboard melhorou de ~49.7 s para ~3.1 s; isto não é uma garantia universal de performance de dashboards.</dd></div>
+<div><dt>Resultado</dt><dd>O carregamento controlado de dashboard melhorou de ~49,7 s para ~3,1 s; isto não é uma garantia universal de performance de dashboards.</dd></div>
 </dl></section>
 
 
@@ -137,7 +137,7 @@
             <h2>Encontre o gargalo de metadados</h2>
 <p>Uma investigação de dashboard lento mostrou que cada card passava boa parte do tempo buscando metadados no próprio banco de dados de aplicação do Metabase, antes de consultar os dados de origem. Campos de origem dinâmicos tinham acumulado uma grande tabela de metadados; o índice existente não correspondia ao filtro de tabela e status ativo.</p>
 <p>Reproduzi o SQL exato em um clone descartável, comparei carregamentos sequenciais e concorrentes, e ensaiei a criação do índice e o rollback. Em produção, fiz um backup novo, esperei as queries ativas se encerrarem e adicionei um índice composto com um lock timeout explícito e DDL online.</p>
-<div class="table-container" tabindex="0"><table class="evidence-table"><caption>Medições controladas em produção, um carregamento antes e depois</caption><thead><tr><th scope="col">Sinal</th><th scope="col">Antes</th><th scope="col">Depois</th></tr></thead><tbody><tr><th scope="row">SQL de metadados, EXPLAIN ANALYZE</th><td>4,356 ms</td><td>8.2 ms</td></tr><tr><th scope="row">Oito cards, cada um</th><td>35.7–37.1 s</td><td>1.15–1.62 s</td></tr><tr><th scope="row">Aba inteira do dashboard</th><td>~49.7 s</td><td>~3.1 s</td></tr></tbody></table></div>
+<div class="table-container" tabindex="0"><table class="evidence-table"><caption>Medições controladas em produção, um carregamento antes e depois</caption><thead><tr><th scope="col">Sinal</th><th scope="col">Antes</th><th scope="col">Depois</th></tr></thead><tbody><tr><th scope="row">SQL de metadados, EXPLAIN ANALYZE</th><td>4.356 ms</td><td>8,2 ms</td></tr><tr><th scope="row">Oito cards, cada um</th><td>35,7–37,1 s</td><td>1,15–1,62 s</td></tr><tr><th scope="row">Aba inteira do dashboard</th><td>~49,7 s</td><td>~3,1 s</td></tr></tbody></table></div>
 <p>A criação do índice levou cerca de 29 segundos, com zero esperas por lock de metadados naquela execução. Estas são medições controladas de antes/depois, não uma distribuição de latency para todos os usuários do dashboard. Um scan separado de filtro no MongoDB permaneceu como um gargalo diferente, e o 524 originalmente reportado não teve uma causa comprovada.</p>
 <p>O acompanhamento confirmou um backup diário automatizado bem-sucedido, com sete pontos de recuperação retidos. Recursos temporários de clone e backups sob demanda aprovados foram removidos. O índice foi adicionado ao checklist de upgrade porque fica fora das próprias migrations do Metabase e precisa ser verificado após um upgrade ou restore.</p>
 <div class="callout callout--win">

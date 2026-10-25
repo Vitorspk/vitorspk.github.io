@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=c842c536bfff1f4da0b483a5660dc3bc808af1a6 src=cases/gen2-observability-repair/index.html -->
+<!-- i18n:src-sha=28ea14aca6679b067ac28b26caea988996e18ba5 src=cases/gen2-observability-repair/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -39,9 +39,20 @@
     <meta name="twitter:image:alt" content="Encontrando a falha por trás de um dashboard verde — um estudo de caso de Vitor Schiavo.">
 
     <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Encontrando a falha por trás de um dashboard verde", "description": "Uma migração de runtime deixou alertas sem corresponder a nada, silenciosamente. Controles positivos expuseram a correção incompleta.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/gen2-observability-repair/",
-      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/gen2-observability-repair/", "image": "https://vitorschiavo.dev/cases/gen2-observability-repair/og.png"}
-</script>
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Encontrando a falha por trás de um dashboard verde",
+      "description": "Uma migração de runtime deixou alertas sem corresponder a nada, silenciosamente. Controles positivos expuseram a correção incompleta.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/gen2-observability-repair/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/gen2-observability-repair/",
+      "image": "https://vitorschiavo.dev/cases/gen2-observability-repair/og.png"
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -110,7 +121,7 @@
 <p>O registro de conclusão confirma 22 políticas e duas métricas corrigidas e verificadas. Uma varredura em todo o projeto não encontrou nenhuma política ou métrica remanescente usando o filtro de recurso obsoleto.</p>
 <p>A comparação de cinco correspondências é um teste de controle positivo para uma mensagem conhecida específica. Ela demonstra por que a correção apenas do recurso era insuficiente; não é uma afirmação de que toda falha futura possível foi coberta. Alguns sinais foram deliberadamente deixados desabilitados onde eram redundantes, em vez de habilitar tudo indiscriminadamente.</p>
 <h2>Estender a cobertura ao fluxo de negócio</h2>
-<p>Em um acompanhamento à parte, descobri que dois escopos de verificação de alto volume estavam ausentes de um monitor que observava um escopo muito menor. O snapshot de produção registrado mostrava aproximadamente 128,000 documentos por dia nesses escopos antes não observados. Adicionei as verificações que faltavam e separei um escopo dormente, em vez de tratar um único total como prova de cobertura completa.</p>
+<p>Em um acompanhamento à parte, descobri que dois escopos de verificação de alto volume estavam ausentes de um monitor que observava um escopo muito menor. O snapshot de produção registrado mostrava aproximadamente 128.000 documentos por dia nesses escopos antes não observados. Adicionei as verificações que faltavam e separei um escopo dormente, em vez de tratar um único total como prova de cobertura completa.</p>
 <p>Esse volume diário descreve a observação usada para encontrar a lacuna. Não é uma contagem de verificações que falharam nem de incidentes evitados.</p>
 <h2>Distinguir ausência de eventos de estado ausente</h2>
 <p>Uma investigação posterior de batch-worker separou contadores de eventos vazios válidos de medidores de estado defeituosos. Um circuit breaker saudável ainda precisa publicar seu estado atual mesmo que nunca faça uma transição. O reparo também deu a cada réplica uma identidade de recurso do OpenTelemetry apropriada, em vez de mesclar seus dados em uma única série ambígua.</p>

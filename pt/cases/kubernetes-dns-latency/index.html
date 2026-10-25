@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=1ff2f3923eceb3edfcf246e1b5637e062faa27d2 src=cases/kubernetes-dns-latency/index.html -->
+<!-- i18n:src-sha=11e0002ffc4adf8b9e3296d71c6f3a6bdece6749 src=cases/kubernetes-dns-latency/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -39,9 +39,20 @@
     <meta name="twitter:image:alt" content="Encontrando a latência escondida no DNS do Kubernetes — um estudo de caso de Vitor Schiavo.">
 
     <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Encontrando a latência escondida no DNS do Kubernetes", "description": "Separar o tempo de consulta DNS do tempo de conexão TCP revelou por que uma API saudável continuava disparando alertas de latência.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/",
-      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/", "image": "https://vitorschiavo.dev/cases/kubernetes-dns-latency/og.png"}
-</script>
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Encontrando a latência escondida no DNS do Kubernetes",
+      "description": "Separar o tempo de consulta DNS do tempo de conexão TCP revelou por que uma API saudável continuava disparando alertas de latência.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/kubernetes-dns-latency/",
+      "image": "https://vitorschiavo.dev/cases/kubernetes-dns-latency/og.png"
+    }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,7 +103,7 @@
 <div><dt>Minha responsabilidade</dt><dd>Diagnóstico camada por camada, uma configuração de DNS compartilhada no Helm e validação de rollout em etapas.</dd></div>
 <div><dt>Escopo</dt><dd>Medição de DNS em produção e oito verificações de render por aplicação/ambiente.</dd></div>
 <div><dt>Colaboração &amp; limites</dt><dd>Alterei a configuração de deployment compartilhada depois de separar o overhead de DNS do tempo de conexão com o banco de dados.</dd></div>
-<div><dt>Resultado</dt><dd>O p50 da consulta DNS passou de ~18.7 ms para 2.06 ms na medição registrada; isso não é uma aceleração de 9× na API.</dd></div>
+<div><dt>Resultado</dt><dd>O p50 da consulta DNS passou de ~18,7 ms para 2,06 ms na medição registrada; isso não é uma aceleração de 9× na API.</dd></div>
 </dl></section>
 
 
@@ -102,10 +113,10 @@
 <p>Comparei a resolução de DNS, a consulta totalmente qualificada e a conexão TCP direta de dentro de um pod em produção. A conexão com o banco de dados em si era rápida. O resolver do Kubernetes tentava os domínios de busca locais antes de resolver o hostname de um banco de dados externo.</p>
 <h2>A decisão</h2>
 <p>O valor padrão <code>ndots:5</code> tratava o hostname externo como relativo e o expandia pelos domínios de busca do pod. Adicionei uma configuração <code>ndots:2</code> ajustável ao template Helm compartilhado, verifiquei o render em oito combinações de aplicação/ambiente e promovi a mudança por development e staging até produção.</p>
-<div class="table-container" tabindex="0"><table class="evidence-table"><caption>Consulta DNS medida a partir do workload em produção</caption><thead><tr><th scope="col">Sinal</th><th scope="col">Antes</th><th scope="col">Depois</th></tr></thead><tbody><tr><th scope="row">p50 da consulta DNS</th><td>~18.7 ms</td><td>2.06 ms</td></tr></tbody></table></div>
+<div class="table-container" tabindex="0"><table class="evidence-table"><caption>Consulta DNS medida a partir do workload em produção</caption><thead><tr><th scope="col">Sinal</th><th scope="col">Antes</th><th scope="col">Depois</th></tr></thead><tbody><tr><th scope="row">p50 da consulta DNS</th><td>~18,7 ms</td><td>2,06 ms</td></tr></tbody></table></div>
 <h2>Resultados e medição</h2>
-<p>Os dois deployments em produção receberam a nova opção de DNS. Repetir a consulta que abriu a investigação mostrou uma redução de aproximadamente 18.7 ms p50 para 2.06 ms, cerca de nove vezes mais rápido. Os pods permaneceram saudáveis, sem reinicializações relatadas no snapshot de validação.</p>
-<p>O encerramento registrou o P95 da API em cerca de 0.12 segundos ao longo dos 20 minutos de observação após o rollout, e o alerta parou de oscilar. A comparação de DNS e a observação da API são medições diferentes; a melhora na consulta não deve ser apresentada como uma melhora de nove vezes no tempo total de resposta da API.</p>
+<p>Os dois deployments em produção receberam a nova opção de DNS. Repetir a consulta que abriu a investigação mostrou uma redução de aproximadamente 18,7 ms p50 para 2,06 ms, cerca de nove vezes mais rápido. Os pods permaneceram saudáveis, sem reinicializações relatadas no snapshot de validação.</p>
+<p>O encerramento registrou o P95 da API em cerca de 0,12 segundos ao longo dos 20 minutos de observação após o rollout, e o alerta parou de oscilar. A comparação de DNS e a observação da API são medições diferentes; a melhora na consulta não deve ser apresentada como uma melhora de nove vezes no tempo total de resposta da API.</p>
 <h2>Trade-offs e acompanhamento</h2>
 <p>Mudar o comportamento de busca do resolver precisa preservar os nomes curtos usados dentro do cluster. A configuração compartilhada continuou ajustável. O cache de DNS em todo o cluster e a capacidade do resolver foram acompanhamentos separados, e não resultados atribuídos a esta correção por aplicação.</p>
 <h2>A lição</h2>

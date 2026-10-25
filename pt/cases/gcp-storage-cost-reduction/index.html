@@ -8,8 +8,8 @@
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
-    <title>Cortando uma conta de armazenamento GCP em 95.9% — Vitor Schiavo</title>
-    <meta name="description" content="Como o tiering automatizado de lifecycle do Cloud Storage e as políticas de exclusão cortaram uma conta em 95.9%, uma redução histórica reportada, com lifecycle policies que respeitam a retenção.">
+    <title>Cortando uma conta de armazenamento GCP em 95,9% — Vitor Schiavo</title>
+    <meta name="description" content="Como o tiering automatizado de ciclo de vida do Cloud Storage e as políticas de exclusão cortaram uma conta em 95,9%, uma redução histórica reportada, com políticas de ciclo de vida que respeitam a retenção.">
     <meta name="robots" content="index, follow">
     <!-- i18n:links:start -->
 <link rel="canonical" href="https://vitorschiavo.dev/pt/cases/gcp-storage-cost-reduction/">
@@ -24,26 +24,26 @@
 <!-- i18n:links:end -->
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Cortando uma conta de armazenamento GCP em 95.9% com lifecycle policies">
-    <meta property="og:description" content="Uma conta de armazenamento 95.9% menor, uma redução histórica reportada, economizada com lifecycle policies que respeitam a retenção.">
+    <meta property="og:title" content="Cortando uma conta de armazenamento GCP em 95,9% com políticas de ciclo de vida">
+    <meta property="og:description" content="Uma conta de armazenamento 95,9% menor, uma redução histórica reportada, economizada com políticas de ciclo de vida que respeitam a retenção.">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/og.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Armazenamento GCP, 95.9% de redução de custo — um estudo de caso de Vitor Schiavo.">
+    <meta property="og:image:alt" content="Armazenamento GCP, 95,9% de redução de custo — um estudo de caso de Vitor Schiavo.">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Cortando uma conta de armazenamento GCP em 95.9% com lifecycle policies">
-    <meta name="twitter:description" content="Uma conta de armazenamento 95.9% menor, uma redução histórica reportada, economizada com lifecycle policies que respeitam a retenção.">
+    <meta name="twitter:title" content="Cortando uma conta de armazenamento GCP em 95,9% com políticas de ciclo de vida">
+    <meta name="twitter:description" content="Uma conta de armazenamento 95,9% menor, uma redução histórica reportada, economizada com políticas de ciclo de vida que respeitam a retenção.">
     <meta name="twitter:image" content="https://vitorschiavo.dev/cases/gcp-storage-cost-reduction/og.png">
-    <meta name="twitter:image:alt" content="Armazenamento GCP, 95.9% de redução de custo — um estudo de caso de Vitor Schiavo.">
+    <meta name="twitter:image:alt" content="Armazenamento GCP, 95,9% de redução de custo — um estudo de caso de Vitor Schiavo.">
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
-      "headline": "Cortando uma conta de armazenamento GCP em 95.9% com lifecycle policies",
-      "description": "Como o tiering automatizado de lifecycle do Cloud Storage e as políticas de exclusão cortaram uma conta em 95.9%, uma redução histórica reportada, com lifecycle policies que respeitam a retenção.",
+      "headline": "Cortando uma conta de armazenamento GCP em 95.9% com políticas de ciclo de vida",
+      "description": "Como o tiering automatizado de ciclo de vida do Cloud Storage e as políticas de exclusão cortaram uma conta em 95.9%, uma redução histórica reportada, com políticas de ciclo de vida que respeitam a retenção.",
       "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
@@ -93,8 +93,8 @@
 
         <header class="doc-header">
             <span class="doc-eyebrow">Estudo de caso · FinOps</span>
-            <h1 class="doc-title">Cortando uma conta de armazenamento GCP em 95.9% com lifecycle policies</h1>
-            <p class="doc-dek">O armazenamento em nuvem é o custo que cresce sorrateiramente: ninguém apaga nada e todo byte cai na camada mais cara. Veja como um punhado de lifecycle policies cortou uma conta em 95.9%, uma redução histórica reportada, com lifecycle policies que respeitam a retenção.</p>
+            <h1 class="doc-title">Cortando uma conta de armazenamento GCP em 95,9% com políticas de ciclo de vida</h1>
+            <p class="doc-dek">O armazenamento em nuvem é o custo que cresce sorrateiramente: ninguém apaga nada e todo byte cai na camada mais cara. Veja como um punhado de políticas de ciclo de vida cortou uma conta em 95,9%, uma redução histórica reportada, com políticas de ciclo de vida que respeitam a retenção.</p>
             <div class="doc-meta">
                 <span>Por Vitor Schiavo</span>
                 <span>Atualizado em outubro de 2026</span>
@@ -108,28 +108,28 @@
 <div class="case-map-flow">
 <div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Dados ativos</strong><span>Mantenha os objetos usados recentemente</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Regras de lifecycle</strong><span>Mova os dados para camadas mais frias</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Regras de ciclo de vida</strong><span>Mova os dados para camadas mais frias</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
 <div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Limite de retenção</strong><span>Aplique a expiração autorizada</span></div>
 </div>
-<p class="case-map-note">Um lifecycle simplificado: a versão efetiva da política e os requisitos de exclusão precisam ser validados.</p>
+<p class="case-map-note">Um ciclo de vida simplificado: a versão efetiva da política e os requisitos de exclusão precisam ser validados.</p>
 </figure>
 
 <section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
-<div><dt>Minha responsabilidade</dt><dd>Revisão de acesso/retenção, configuração de lifecycle policy e trabalho no volume armazenado.</dd></div>
+<div><dt>Minha responsabilidade</dt><dd>Revisão de acesso/retenção, configuração de política de ciclo de vida e trabalho no volume armazenado.</dd></div>
 <div><dt>Escopo</dt><dd>Otimização histórica de armazenamento; a reconciliação financeira completa segue incompleta.</dd></div>
 <div><dt>Colaboração &amp; limites</dt><dd>Trabalhei com o time de produto nos requisitos de acesso e retenção antes de mudar o comportamento do armazenamento.</dd></div>
-<div><dt>Resultado</dt><dd>O portfólio histórico reportou um custo de armazenamento 95.9% menor. A economia absoluta fica retida até que moeda, baseline e versão da política sejam reconciliados.</dd></div>
+<div><dt>Resultado</dt><dd>O portfólio histórico reportou um custo de armazenamento 95,9% menor. A economia absoluta fica retida até que moeda, baseline e versão da política sejam reconciliados.</dd></div>
 </dl></section>
 
 
-            <p>O armazenamento é o custo que cresce sorrateiramente. Ninguém apaga nada, todo byte cai na classe padrão (e mais cara), e a conta cresce silenciosamente até que alguém olhe. Este é um relato da técnica que usei para cortar uma dessas contas em <strong>95.9%</strong>, com tiering guiado pelo acesso e mudanças de retenção.</p>
+            <p>O armazenamento é o custo que cresce sorrateiramente. Ninguém apaga nada, todo byte cai na classe padrão (e mais cara), e a conta cresce silenciosamente até que alguém olhe. Este é um relato da técnica que usei para cortar uma dessas contas em <strong>95,9%</strong>, com tiering guiado pelo acesso e mudanças de retenção.</p>
 
-            <h2>Minha contribuição</h2><p>Revisei os padrões de acesso e retenção com o time de produto, configurei mudanças de lifecycle e trabalhei no posicionamento regional e na redução do volume armazenado.</p><h2>Resultados e medição</h2><p>O portfólio histórico reportou um custo de armazenamento 95.9% menor e um volume armazenado 94.2% menor. Os registros de trabalho confirmam as mudanças de lifecycle e retenção, mas não estabelecem uma moeda, um baseline de cobrança e uma versão da política consistentes para a estimativa completa. A economia absoluta e acumulada é, portanto, omitida aqui enquanto a reconciliação está pendente.</p><h2>O problema</h2>
+            <h2>Minha contribuição</h2><p>Revisei os padrões de acesso e retenção com o time de produto, configurei mudanças de ciclo de vida e trabalhei no posicionamento regional e na redução do volume armazenado.</p><h2>Resultados e medição</h2><p>O portfólio histórico reportou um custo de armazenamento 95,9% menor e um volume armazenado 94,2% menor. Os registros de trabalho confirmam as mudanças de ciclo de vida e retenção, mas não estabelecem uma moeda, um baseline de cobrança e uma versão da política consistentes para a estimativa completa. A economia absoluta e acumulada é, portanto, omitida aqui enquanto a reconciliação está pendente.</p><h2>O problema</h2>
             <p>Nem todos os dados eram quentes. A maior parte foi escrita uma vez e nunca mais lida, mas ficava na classe Standard, com preço para acesso frequente. Não havia tiering para classes mais baratas e nada expirava com o tempo, então o volume armazenado e a conta só iam numa direção.</p>
 
             <h2>O que eu mudei</h2>
-            <p>Nenhuma infraestrutura nova, nenhuma ferramenta de migração de dados, apenas lifecycle policies aplicadas aos buckets:</p>
+            <p>Nenhuma infraestrutura nova, nenhuma ferramenta de migração de dados, apenas políticas de ciclo de vida aplicadas aos buckets:</p>
             <ul>
                 <li><strong>Mantenha os dados quentes no Standard.</strong> Baseie a janela quente nos padrões de acesso observados e nos requisitos de retenção aplicáveis.</li>
                 <li><strong>Mova os dados mais antigos para camadas mais frias automaticamente.</strong> Uma iteração registrada moveu objetos para Nearline após 30 dias e Archive após 365 dias. Políticas anteriores eram diferentes, então essas são decisões versionadas, e não uma regra universal.</li>
@@ -139,15 +139,15 @@
             <p>A parte importante: isso funciona sozinho. Uma vez que as políticas estão no lugar, o arquivamento e a exclusão rodam por conta própria. Padrões de acesso, requisitos de retenção e efeitos na cobrança ainda precisam de revisão periódica.</p>
 
             <div class="stat-strip">
-                <div class="stat"><span class="stat-value">95.9%</span><span class="stat-label">corte de custo mensal</span></div>
-                <div class="stat"><span class="stat-value">Lifecycle</span><span class="stat-label">tiering automatizado</span></div>
-                <div class="stat"><span class="stat-value">94.2%</span><span class="stat-label">volume armazenado menor</span></div>
+                <div class="stat"><span class="stat-value">95,9%</span><span class="stat-label">corte de custo mensal</span></div>
+                <div class="stat"><span class="stat-value">Ciclo de vida</span><span class="stat-label">tiering automatizado</span></div>
+                <div class="stat"><span class="stat-value">94,2%</span><span class="stat-label">volume armazenado menor</span></div>
                 <div class="stat"><span class="stat-value">Retenção</span><span class="stat-label">revisada separadamente</span></div>
             </div>
 
             <div class="callout callout--win">
                 <p class="callout-title">O resultado em uma linha</p>
-                <p>O portfólio histórico reportou uma redução de 95.9%. Moeda, período de cobrança e a contribuição exata do tiering versus exclusão precisam ser reconciliados antes de publicar um total de economia absoluta ou acumulada. O resultado transferível é um processo de lifecycle repetível, atrelado aos requisitos reais de acesso e retenção.</p>
+                <p>O portfólio histórico reportou uma redução de 95,9%. Moeda, período de cobrança e a contribuição exata do tiering versus exclusão precisam ser reconciliados antes de publicar um total de economia absoluta ou acumulada. O resultado transferível é um processo de ciclo de vida repetível, atrelado aos requisitos reais de acesso e retenção.</p>
             </div>
 
             <h2>O que eu diria a quem está começando isso</h2>
@@ -155,7 +155,7 @@
                 <li>Olhe para a conta de armazenamento antes da conta de compute. Costuma ser mais simples de resolver e a economia se acumula mês a mês.</li>
                 <li>Faça o tiering pelo padrão de acesso, não por achismo. Valide quais dados ainda são lidos antes de escolher a janela de transição.</li>
                 <li>Adicione uma política de exclusão, não apenas arquivamento. O arquivamento desacelera o crescimento; a exclusão o interrompe.</li>
-                <li>Deixe a plataforma fazer o trabalho. Lifecycle policies são "configure e esqueça", o que significa que a economia não depende de alguém lembrar.</li>
+                <li>Deixe a plataforma fazer o trabalho. Políticas de ciclo de vida são "configure e esqueça", o que significa que a economia não depende de alguém lembrar.</li>
             </ul>
 
         <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Manter tudo no Standard é simples; camadas mais frias e a expiração autorizada precisam corresponder aos requisitos reais de acesso e retenção.</p><h3>Trade-off</h3><p>Cobranças de recuperação, períodos mínimos de retenção e requisitos de exclusão afetam se uma conta de armazenamento menor é um resultado total melhor.</p><h3>O que eu melhoraria em seguida</h3><p>Próxima melhoria: reconciliar a versão da política e o período de cobrança e, então, calcular a economia líquida incluindo cobranças de recuperação e retenção.</p></section>
