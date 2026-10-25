@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=bd77260db035617d7a162bfbfbbdf5867f83d940 src=cases/gke-terraform-shared-vpc/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>GKE de nivel productivo con Terraform y una Shared VPC — Vitor Schiavo</title>
+    <meta name="description" content="Llevar un parque de GKE aprovisionado a mano al 100% de infraestructura como código: una Shared VPC, clusters privados, un despliegue en 8 fases y protecciones prevent_destroy, además de las landing zones de código abierto para GCP, AWS y Azure construidas con el mismo patrón.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gke-terraform-shared-vpc/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="GKE de nivel productivo con Terraform y una Shared VPC">
+    <meta property="og:description" content="De clusters hechos a mano al 100% de infraestructura como código: Shared VPC, clusters privados, protecciones prevent_destroy y landing zones de código abierto para GCP, AWS y Azure.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="GKE de nivel productivo con Terraform y una Shared VPC — un caso de estudio de Vitor Schiavo.">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GKE de nivel productivo con Terraform y una Shared VPC">
+    <meta name="twitter:description" content="De clusters hechos a mano al 100% de IaC, con landing zones de código abierto para GCP, AWS y Azure.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/og.png">
+    <meta name="twitter:image:alt" content="GKE de nivel productivo con Terraform y una Shared VPC — un caso de estudio de Vitor Schiavo.">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "GKE de nivel productivo con Terraform y una Shared VPC",
+      "description": "Llevar un parque de GKE aprovisionado a mano al 100% de infraestructura como código: una Shared VPC, clusters privados, un despliegue en 8 fases y protecciones prevent_destroy, además de landing zones de código abierto para GCP, AWS y Azure.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/",
+      "inLanguage": "es",
+      "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/gke-terraform-shared-vpc/",
+      "image": "https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "GKE, Terraform, Shared VPC, Kubernetes, infrastructure as code, GitHub Actions, Cloud NAT, Workload Identity, landing zone"
+    }
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Favicon — inline SVG matching the VS avatar brand. -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/gke-terraform-shared-vpc/page.css">
+
+    <!-- Blocking theme init — prevents FOUC when user has saved light mode. -->
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Skip navigation — first focusable element in <body> -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <!-- Theme Toggle -->
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/gke-terraform-shared-vpc/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/gke-terraform-shared-vpc/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Caso de estudio · Infraestructura como código</span>
+            <h1 class="doc-title">GKE de nivel productivo con Terraform y una Shared VPC</h1>
+            <p class="doc-dek">Llevar un parque de GKE aprovisionado a mano al 100% de infraestructura como código: una Shared VPC, clusters privados, un despliegue en 8 fases y las protecciones que detienen un destroy accidental. Además, las landing zones de código abierto que construí para GCP, AWS y Azure con el mismo patrón.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Actualizado en octubre de 2026</span>
+                <span>~8 min de lectura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="gke-terraform-shared-vpc" data-visual-area="platform">
+<figcaption><span>Solución de un vistazo</span><strong>Separar la red compartida de las cargas de trabajo por entorno.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Módulos de Terraform</strong><span>Versionar infraestructura reutilizable</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Shared VPC</strong><span>Definir subnets y límites</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Entornos de GKE</strong><span>Aprovisionar cargas de trabajo aisladas</span></div>
+</div>
+<p class="case-map-note">Módulos reutilizables de Terraform aprovisionan los límites de red y los recursos de GKE de forma consistente.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Terraform modular, límites de red y un despliegue por fases de la plataforma de GKE.</dd></div>
+<div><dt>Alcance</dt><dd>Shared VPC e infraestructura de entornos aislados; los ejemplos públicos de landing zone son código reutilizable aparte.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Diseñé e implementé la base de infraestructura descrita aquí; los ejemplos públicos generalizan el patrón en lugar de exponer la configuración del empleador.</dd></div>
+<div><dt>Resultado</dt><dd>Aprovisionamiento de entornos reutilizable y recursos de red compartida protegidos, entregados mediante una transición de propiedad por fases.</dd></div>
+</dl></section>
+
+
+            <p>Imagina un parque de GKE y la red que lo sostiene, todo aprovisionado a mano. Sin infraestructura como código, sin una historia consistente entre entornos y sin nada que impida que un <code>terraform destroy</code> accidental elimine la red compartida. Este es un relato de cómo reconstruí eso en una Shared VPC, clusters privados, una base de código modular de Terraform y un despliegue en ocho fases que nunca dejó el sistema a medio gestionar.</p>
+
+            <p>Todo lo que hay aquí es la técnica, sin nombres internos ni detalles específicos. Al final enlazo las landing zones de código abierto que construí para GCP, AWS y Azure, para que puedas leer el código real detrás del mismo patrón.</p>
+
+            <h2>El punto de partida</h2>
+            <p>Los clusters y la red se crearon a través de la consola y un archivo de Terraform monolítico, copiado y pegado. No había ningún módulo reutilizable, ninguna estrategia por entorno ni <code>prevent_destroy</code> en la red. En otras palabras, el único recurso que no puedes recrear a la ligera, la VPC, era lo menos protegido del proyecto.</p>
+
+            <h2>La arquitectura objetivo</h2>
+            <ul>
+                <li><strong>Shared VPC.</strong> Un único host project es dueño de la VPC, las subnets, Cloud NAT y el firewall. Cada entorno es un service project adjunto a él, de modo que la red vive en un solo lugar y los clusters nunca son dueños de su propia VPC.</li>
+                <li><strong>Clusters privados.</strong> Los nodos no tienen IPs públicas. Todo el egress sale a través de Cloud NAT, de modo que la superficie expuesta a internet es una sola puerta de enlace, no cada nodo.</li>
+                <li><strong>Workload Identity.</strong> Los pods se autentican como service accounts de GCP sin claves a nivel de nodo que gestionar o filtrar.</li>
+                <li><strong>Shielded nodes.</strong> Secure Boot e Integrity Monitoring en cada nodo.</li>
+                <li><strong>Mínimo privilegio.</strong> Una service account dedicada por entorno, acotada a lo que ese entorno necesita.</li>
+                <li><strong>Estado remoto.</strong> El estado de Terraform en un backend de GCS, no en la laptop de nadie.</li>
+            </ul>
+
+            <figure class="architecture-diagram" tabindex="0" aria-label="Topología de la Shared VPC: un host project es dueño de la VPC, las subnets, Cloud NAT y el firewall; cuatro service projects (dev, stg, prd, sandbox) ejecutan cada uno un cluster privado de GKE adjunto a la red compartida, con el egress enrutado a través de Cloud NAT.">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 440" aria-hidden="true" focusable="false">
+                    <rect width="820" height="440" rx="12" fill="var(--bg-card)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="34" text-anchor="middle" font-size="14" font-weight="600" fill="var(--text-primary)">Shared VPC Topology</text>
+
+                    <!-- Host project -->
+                    <rect x="40" y="52" width="740" height="104" rx="10" fill="var(--primary)" fill-opacity="0.10" stroke="var(--primary)" stroke-width="1.5"/>
+                    <text x="60" y="76" font-size="12" font-weight="700" fill="var(--primary)">Host Project · Shared VPC</text>
+                    <rect x="60" y="88" width="160" height="50" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="140" y="109" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">VPC + Subnets</text>
+                    <text x="140" y="125" text-anchor="middle" font-size="9" fill="var(--text-muted)">one per environment</text>
+                    <rect x="236" y="88" width="160" height="50" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="316" y="109" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Cloud NAT</text>
+                    <text x="316" y="125" text-anchor="middle" font-size="9" fill="var(--text-muted)">centralized egress</text>
+                    <rect x="412" y="88" width="160" height="50" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="492" y="109" text-anchor="middle" font-size="11" font-weight="600" fill="var(--text-primary)">Firewall rules</text>
+                    <text x="492" y="125" text-anchor="middle" font-size="9" fill="var(--text-muted)">centralized</text>
+                    <rect x="588" y="88" width="172" height="50" rx="8" fill="var(--bg-card)" stroke="var(--success)" stroke-width="1" stroke-dasharray="5,3"/>
+                    <text x="674" y="109" text-anchor="middle" font-size="10" font-weight="700" fill="var(--success)">prevent_destroy</text>
+                    <text x="674" y="125" text-anchor="middle" font-size="9" fill="var(--text-muted)">VPC · subnets · NAT</text>
+
+                    <!-- Attach arrows -->
+                    <text x="410" y="176" text-anchor="middle" font-size="9" fill="var(--text-muted)">service projects attach to the shared network</text>
+                    <line x1="140" y1="186" x2="140" y2="212" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <polygon points="135,209 140,219 145,209" fill="var(--text-muted)"/>
+                    <line x1="320" y1="186" x2="320" y2="212" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <polygon points="315,209 320,219 325,209" fill="var(--text-muted)"/>
+                    <line x1="500" y1="186" x2="500" y2="212" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <polygon points="495,209 500,219 505,209" fill="var(--text-muted)"/>
+                    <line x1="680" y1="186" x2="680" y2="212" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <polygon points="675,209 680,219 685,209" fill="var(--text-muted)"/>
+
+                    <!-- Service projects -->
+                    <g font-size="11" font-weight="700">
+                        <rect x="40" y="220" width="176" height="92" rx="10" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                        <text x="128" y="243" text-anchor="middle" fill="var(--text-primary)">Service Project · dev</text>
+                        <rect x="232" y="220" width="176" height="92" rx="10" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                        <text x="320" y="243" text-anchor="middle" fill="var(--text-primary)">Service Project · stg</text>
+                        <rect x="424" y="220" width="176" height="92" rx="10" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                        <text x="512" y="243" text-anchor="middle" fill="var(--text-primary)">Service Project · prd</text>
+                        <rect x="616" y="220" width="164" height="92" rx="10" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                        <text x="698" y="243" text-anchor="middle" fill="var(--text-primary)">Service Project · sbx</text>
+                    </g>
+                    <g font-size="9" fill="var(--text-secondary)" text-anchor="middle">
+                        <text x="128" y="266">Private GKE cluster</text>
+                        <text x="128" y="281">Workload Identity</text>
+                        <text x="128" y="296">Shielded nodes</text>
+                        <text x="320" y="266">Private GKE cluster</text>
+                        <text x="320" y="281">Workload Identity</text>
+                        <text x="320" y="296">Shielded nodes</text>
+                        <text x="512" y="266">Private GKE cluster</text>
+                        <text x="512" y="281">Workload Identity</text>
+                        <text x="512" y="296">Shielded nodes</text>
+                        <text x="698" y="266">Private GKE cluster</text>
+                        <text x="698" y="281">Workload Identity</text>
+                        <text x="698" y="296">Shielded nodes</text>
+                    </g>
+
+                    <!-- Egress -->
+                    <rect x="40" y="356" width="740" height="56" rx="8" fill="var(--bg-elevated)" stroke="var(--border)" stroke-width="1"/>
+                    <text x="410" y="380" text-anchor="middle" font-size="10" font-weight="600" fill="var(--text-primary)">Private nodes → Cloud NAT → Internet</text>
+                    <text x="410" y="398" text-anchor="middle" font-size="9" fill="var(--text-muted)">No public node IPs · one centralized egress path · 100% Terraform · GitHub Actions plan on PR, apply on merge</text>
+                </svg>
+            </figure>
+
+            <h2>El despliegue, en ocho fases</h2>
+            <p>El objetivo de dividirlo en fases era no tener nunca una ventana en la que la red estuviera a medio gestionar. Cada fase dejó el sistema en un estado funcional.</p>
+            <ul>
+                <li><strong>1. Diseño de arquitectura.</strong> Topología de la Shared VPC, estrategia de subnets y requisitos de los clusters para cuatro entornos.</li>
+                <li><strong>2. Configuración de proyectos.</strong> Proyectos, APIs habilitadas y service accounts de IAM con asignaciones de mínimo privilegio.</li>
+                <li><strong>3. Red.</strong> Host project de la Shared VPC, subnets, Cloud NAT y reglas de firewall, todo mediante Terraform.</li>
+                <li><strong>4. Terraform modular.</strong> Se refactorizó de recursos monolíticos en línea a módulos reutilizables; la configuración raíz pasó a ser llamadas a módulos más un archivo de variables por entorno.</li>
+                <li><strong>5. CI/CD.</strong> GitHub Actions: <code>terraform plan</code> en el pull request, <code>terraform apply</code> en el merge, un workflow separado por entorno.</li>
+                <li><strong>6. Clusters.</strong> Los cuatro clusters de GKE (dev, stg, prd, sandbox) desplegados a través de los pipelines.</li>
+                <li><strong>7. Protecciones.</strong> <code>prevent_destroy = true</code> en la VPC, las subnets y Cloud NAT.</li>
+                <li><strong>8. Documentación.</strong> Diagramas de arquitectura, runbooks y documentación de los módulos para el traspaso.</li>
+            </ul>
+
+            <div class="callout callout--win">
+                <p class="callout-title">La protección que más importa</p>
+                <p>Un bloque lifecycle <code>prevent_destroy</code> en la VPC, las subnets y Cloud NAT hace que un <code>terraform destroy</code> accidental de la red <strong>falle</strong> en lugar de tener éxito. La red es lo único que no puedes recrear a la ligera, así que es lo único que debería negarse a ser eliminado. Cuesta tres líneas y ha evitado caídas reales.</p>
+            </div>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">100%</span><span class="stat-label">infraestructura como código</span></div>
+                <div class="stat"><span class="stat-value">4</span><span class="stat-label">clusters de GKE, un pipeline</span></div>
+                <div class="stat"><span class="stat-value">0</span><span class="stat-label">IPs públicas de nodos</span></div>
+                <div class="stat"><span class="stat-value">3</span><span class="stat-label">landing zones de código abierto</span></div>
+            </div>
+
+            <h2>Resultados</h2>
+            <ul>
+                <li>Cada recurso de red y de cluster se gestiona en Terraform. Ya nada se crea a clics.</li>
+                <li>Los cuatro clusters se levantan en una sola ejecución automatizada del pipeline.</li>
+                <li>Un nuevo entorno es un nuevo archivo de variables, no código nuevo.</li>
+                <li>La red compartida está protegida contra la destrucción accidental, y todos los service projects enrutan el egress a través de una sola puerta de enlace NAT.</li>
+            </ul>
+
+            <h2>El mismo patrón, como código abierto</h2>
+            <p>El relato anterior se mantiene genérico, así que aquí está el mismo patrón como código que sí puedes leer. Construí una landing zone para cada nube principal: una configuración de Terraform más GitHub Actions para Kubernetes multientorno, con los valores de seguridad por defecto ya integrados (estado remoto, sin secrets en el repositorio, IAM de mínimo privilegio, un aviso de seguridad destacado en cada README).</p>
+            <ul>
+                <li><strong>GCP landing zone</strong> — GKE, Shared VPC, Terraform y GitHub Actions. El reflejo más cercano de la arquitectura anterior.</li>
+                <li><strong>AWS landing zone</strong> — la misma forma sobre EKS: VPC, IAM y Terraform multientorno.</li>
+                <li><strong>Azure landing zone</strong> — AKS con foco en gobernanza, seguridad y despliegues multientorno.</li>
+            </ul>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="https://github.com/Vitorspk/gcp-landing-zone" rel="noopener noreferrer">GCP landing zone</a>
+                <a class="cta" href="https://github.com/Vitorspk/aws-landing-zone" rel="noopener noreferrer">AWS landing zone</a>
+                <a class="cta" href="https://github.com/Vitorspk/azure-landing-zone" rel="noopener noreferrer">Azure landing zone</a>
+            </div>
+
+            <h2>Lo que le diría a alguien que empieza esto</h2>
+            <ul>
+                <li>Pon la red en un host project con Shared VPC desde el primer día. Adaptarla después a clusters que ya son dueños de su VPC es doloroso.</li>
+                <li>Agrega <code>prevent_destroy</code> a todo lo que no puedas permitirte recrear, antes de necesitarlo, no después del primer susto.</li>
+                <li>Haz que un nuevo entorno sea un archivo de variables, no un copiar y pegar del código. Si agregar un entorno implica editar recursos, la configuración todavía no es modular.</li>
+                <li>Mantén el estado remoto y los secrets fuera del repositorio. Las landing zones de arriba muestran los valores por defecto que uso.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Un stack monolítico es rápido de empezar; separar la red compartida de las cargas de trabajo por entorno reduce el acoplamiento destructivo.</p><h3>Contrapartida</h3><p>Los módulos añaden interfaces y límites de estado que requieren propiedad, versionado y migración segura.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: automatizar las verificaciones de drift y validar la recuperación desde cada límite de estado de la infraestructura.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Soy Vitor Schiavo, ingeniero de Site Reliability y Platform. Este es uno de los casos de mi portafolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/es/#cases">Ver más casos de estudio</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Theme toggle wiring (no tablist logic; this page is standalone). -->
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <!-- Cloudflare Web Analytics: privacy-first, cookieless (see CLAUDE.md § Analytics). Token is public by design. -->
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

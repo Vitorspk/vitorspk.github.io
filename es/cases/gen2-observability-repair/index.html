@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=c842c536bfff1f4da0b483a5660dc3bc808af1a6 src=cases/gen2-observability-repair/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Encontrar la falla detrás de un dashboard en verde — Vitor Schiavo</title>
+    <meta name="description" content="Una migración de runtime dejó, en silencio, alertas que no coincidían con nada. Los controles positivos revelaron la corrección incompleta.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/gen2-observability-repair/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/gen2-observability-repair/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/gen2-observability-repair/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/gen2-observability-repair/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/gen2-observability-repair/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/gen2-observability-repair/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Encontrar la falla detrás de un dashboard en verde">
+    <meta property="og:description" content="Una migración de runtime dejó, en silencio, alertas que no coincidían con nada. Los controles positivos revelaron la corrección incompleta.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/gen2-observability-repair/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Encontrar la falla detrás de un dashboard en verde — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Encontrar la falla detrás de un dashboard en verde">
+    <meta name="twitter:description" content="Una migración de runtime dejó, en silencio, alertas que no coincidían con nada. Los controles positivos revelaron la corrección incompleta.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/gen2-observability-repair/og.png">
+    <meta name="twitter:image:alt" content="Encontrar la falla detrás de un dashboard en verde — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Encontrar la falla detrás de un dashboard en verde", "description": "Una migración de runtime dejó, en silencio, alertas que no coincidían con nada. Los controles positivos revelaron la corrección incompleta.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/es/cases/gen2-observability-repair/",
+      "inLanguage": "es", "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/gen2-observability-repair/", "image": "https://vitorschiavo.dev/cases/gen2-observability-repair/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/gen2-observability-repair/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/gen2-observability-repair/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudio de caso · Observabilidad · julio de 2026</span>
+<h1 class="doc-title">Encontrar la falla detrás de un dashboard en verde</h1>
+<p class="doc-dek">Una migración de runtime dejó, en silencio, alertas que no coincidían con nada. Los controles positivos revelaron la corrección incompleta.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en octubre de 2026</span><span>~5 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="gen2-observability-repair" data-visual-area="reliability">
+<figcaption><span>Solución de un vistazo</span><strong>Sigue un mensaje real hasta llegar a una alerta.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Log de runtime</strong><span>Empezar con un mensaje conocido</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Filtro de log</strong><span>Coincidir recurso y formato</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Alert policy</strong><span>Verificar una coincidencia positiva</span></div>
+</div>
+<p class="case-map-note">Cambiar solo el tipo de recurso no bastaba; los filtros también debían coincidir con los formatos de log específicos del runtime.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Inventario de alertas, reparación de filtros según el runtime y validación con controles positivos.</dd></div>
+<div><dt>Alcance</dt><dd>22 alert policies y dos log-based metrics afectadas por una migración de runtime.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Reparé la ruta de monitoreo y revisé el logging de la aplicación donde cambiar solo el filtro no bastaba.</dd></div>
+<div><dt>Resultado</dt><dd>Políticas y métricas reparadas contra mensajes de log conocidos; cambiar solo el tipo de recurso seguía devolviendo cero coincidencias.</dd></div>
+</dl></section>
+
+<h2>El problema</h2>
+<p>Después de que las funciones pasaran a una nueva generación de runtime, los dashboards de la aplicación seguían viéndose sanos. Pero el tipo de recurso y las etiquetas de los logs habían cambiado, mientras que las alert policies y las log-based metrics seguían filtrando el formato anterior.</p>
+<p>Una auditoría identificó 22 políticas y dos métricas en alcance. Veintiuna políticas estaban habilitadas, pero los filtros antiguos ya no podían coincidir con los eventos que debían detectar. La ausencia de alertas se había vuelto indistinguible de la ausencia de incidentes.</p>
+<h2>Mi contribución</h2>
+<p>Rastreé el efecto de la migración sobre las etiquetas de recurso y los formatos de payload, audité las políticas y métricas relacionadas, apliqué los cambios específicos del runtime y validé los nuevos filtros contra mensajes de log que se sabía que existían. También revisé la ruta de logging de la aplicación, donde cambiar solo el filtro no restauraría la visibilidad.</p>
+<h2>Por qué la corrección obvia era incompleta</h2>
+<p>Reemplazar el tipo de recurso parecía suficiente. No lo era: algunas funciones en Go emitían JSON estructurado, mientras que las funciones en Python emitían texto plano. Una política que usaba un campo de texto plano podía seguir ciega incluso después de corregir su filtro de recurso.</p>
+<p>Otras políticas usaban una expresión de búsqueda que ya coincidía con cualquiera de los dos formatos de payload. Tratar todos los filtros por igual habría introducido cambios innecesarios. Verifiqué cada forma en lugar de aplicar un reemplazo universal.</p>
+<figure class="work-visual">
+<figcaption>Validación de tres vías usando un mensaje que se sabe que existe</figcaption>
+<div class="filter-proof"><span>Filtro original</span><strong>0 coincidencias</strong><span>Solo cambio del tipo de recurso</span><strong>0 coincidencias</strong><span>Recurso + campo de payload correcto</span><strong class="signal-good">5 coincidencias</strong></div></figure>
+<h2>Resultados y medición</h2>
+<p>El registro de cierre confirma 22 políticas y dos métricas corregidas y verificadas. Un barrido en todo el proyecto no encontró ninguna política o métrica que siguiera usando el filtro de recurso obsoleto.</p>
+<p>La comparación de cinco coincidencias es una prueba de control positivo para un mensaje conocido específico. Demuestra por qué la corrección limitada al recurso era insuficiente; no afirma que se haya cubierto toda posible falla futura. Algunas señales se dejaron deshabilitadas a propósito donde eran redundantes, en lugar de habilitar todo de forma indiscriminada.</p>
+<h2>Extender la cobertura al flujo de negocio</h2>
+<p>En un seguimiento aparte, descubrí que dos ámbitos de verificación de alto volumen estaban ausentes de un monitor que observaba un ámbito mucho más pequeño. La instantánea de producción registrada mostró aproximadamente 128,000 documentos por día en esos ámbitos que antes no se observaban. Agregué las verificaciones faltantes y separé un ámbito inactivo en lugar de tratar un único total como prueba de cobertura completa.</p>
+<p>Ese volumen diario describe la observación usada para encontrar la brecha. No es un conteo de verificaciones fallidas ni de incidentes evitados.</p>
+<h2>Distinguir la ausencia de eventos de un estado faltante</h2>
+<p>Una investigación posterior de un batch worker separó los contadores de eventos vacíos válidos de los indicadores de estado defectuosos. Un circuit breaker sano debe seguir publicando su estado actual aunque nunca cambie de estado. La reparación también dio a cada réplica una identidad de recurso de OpenTelemetry apropiada, en lugar de combinar sus datos en una sola serie ambigua.</p>
+<p>La validación en producción registró cero errores de ordenamiento en una ventana de 3h28m, frente a errores que se repetían cada minuto antes del cambio. La misma consulta devolvió los errores previos como control positivo. Los paneles de eventos aún podían, legítimamente, no tener datos cuando no se había ejecutado ningún batch; la reparación no fabricó eventos para que un dashboard pareciera poblado.</p>
+<h2>Lo que aprendí</h2>
+<p>Un filtro que devuelve cero filas no es un resultado de validación hasta que existe un evento conocido con el que debería coincidir. La aceptación de una migración necesita una verificación de observabilidad que ejercite payloads reales, no solo un health endpoint exitoso.</p><section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Reemplazar solo el tipo de recurso es más simple, pero los logs estructurados de Go y los de texto plano de Python requieren una coincidencia de payload distinta.</p><h3>Contrapartida</h3><p>Un dashboard en silencio no puede distinguir una aplicación sana de una ruta de logging o de alertas rota.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: automatizar verificaciones periódicas de control positivo e incluir la compatibilidad de alertas en los criterios de aceptación de las migraciones.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más estudios de caso</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

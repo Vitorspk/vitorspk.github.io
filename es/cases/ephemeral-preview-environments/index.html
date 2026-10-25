@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=2ff7192f3e0fea209b646b6fa94a4c9995a72d94 src=cases/ephemeral-preview-environments/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Un lugar seguro para probar cada funcionalidad — Vitor Schiavo</title>
+    <meta name="description" content="Un piloto de dos repositorios para preview environments aislados, image promotion probada y cleanup automatizado.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/ephemeral-preview-environments/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/ephemeral-preview-environments/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Un lugar seguro para probar cada funcionalidad">
+    <meta property="og:description" content="Un piloto de dos repositorios para preview environments aislados, image promotion probada y cleanup automatizado.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/ephemeral-preview-environments/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Un lugar seguro para probar cada funcionalidad — un caso de estudio de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Un lugar seguro para probar cada funcionalidad">
+    <meta name="twitter:description" content="Un piloto de dos repositorios para preview environments aislados, image promotion probada y cleanup automatizado.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/ephemeral-preview-environments/og.png">
+    <meta name="twitter:image:alt" content="Un lugar seguro para probar cada funcionalidad — un caso de estudio de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Un lugar seguro para probar cada funcionalidad", "description": "Un piloto de dos repositorios para preview environments aislados, image promotion probada y cleanup automatizado.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/",
+      "inLanguage": "es", "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/ephemeral-preview-environments/", "image": "https://vitorschiavo.dev/cases/ephemeral-preview-environments/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/ephemeral-preview-environments/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/ephemeral-preview-environments/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Caso de estudio · Platform engineering · abril de 2026</span>
+<h1 class="doc-title">Un lugar seguro para probar cada funcionalidad</h1>
+<p class="doc-dek">Un piloto de dos repositorios para preview environments aislados, image promotion probada y cleanup automatizado.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en octubre de 2026</span><span>~5 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="ephemeral-preview-environments" data-visual-area="platform">
+<figcaption><span>Solución de un vistazo</span><strong>Un preview es un ciclo de vida completo.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Pull request</strong><span>Construye y prueba la imagen</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Preview aislado</strong><span>Valida cambios relacionados</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Promueve y limpia</strong><span>Reutiliza el digest de la imagen</span></div>
+</div>
+<p class="case-map-note">Piloto de dos repositorios: promueve la imagen probada y luego elimina los recursos de preview cuando se cierra el PR.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Flujos de trabajo de CI, ArgoCD ApplicationSets, configuración de Helm y ciclo de vida de los previews.</dd></div>
+<div><dt>Alcance</dt><dd>Un piloto de dos repositorios en Go/Node; una adopción más amplia en la empresa queda fuera del alcance entregado.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Construí la integración de plataforma que conecta repositorios relacionados; el caso no afirma una adopción por parte de desarrolladores en toda la organización.</dd></div>
+<div><dt>Resultado</dt><dd>34 verificaciones antes de los builds, promotion verificada de la misma imagen y cleanup cuando se cierra el pull request.</dd></div>
+</dl></section>
+
+<h2>El problema</h2>
+<p>QA dependía de entornos compartidos de desarrollo y staging. Muchas veces las funcionalidades solo se encontraban entre sí después del merge, lo que dificultaba probar un cambio de backend/frontend de forma aislada y coordinar el trabajo entre equipos.</p>
+<h2>Mi contribución</h2>
+<p>Construí un piloto de preview environments en un backend de Go y un frontend de Node. El trabajo abarcó flujos de trabajo de CI, ArgoCD ApplicationSets, configuración de Helm, ciclo de vida de namespaces, TLS, la integración entre las dos aplicaciones y la ruta de cleanup cuando se cerraba un pull request.</p>
+<h2>Las decisiones</h2>
+<p>Una convención compartida de nombres de rama permite que los repositorios relacionados lleguen al mismo namespace de preview. Eso permite que un frontend alcance su backend correspondiente a través de un servicio interno, sin tratar cada repositorio como una demostración aislada.</p>
+<p>Separé los flujos de trabajo de build/test de los flujos de trabajo de deploy. La promotion a producción y a sandbox reutilizó la imagen de staging probada en lugar de reconstruirla. El digest de la imagen se verificaba entre entornos, de modo que la promotion significaba mover el binario probado en lugar de reproducir un build y asumir equivalencia.</p>
+<p>Los previews usaban una configuración de runtime deliberadamente más pequeña que los entornos persistentes. La creación era solo la mitad de la funcionalidad: cerrar o hacer merge del pull request también debía eliminar la aplicación, el namespace y las imágenes de preview.</p>
+<figure class="work-visual">
+<figcaption>Un preview es un ciclo de vida, no solo una URL temporal</figcaption>
+<div class="flow-path"><span>PR de funcionalidad y verificaciones automatizadas</span><span aria-hidden="true">↓</span><span>Preview aislado de backend + frontend</span><span aria-hidden="true">↓</span><span>Validación de QA y merge</span><span aria-hidden="true">↓</span><span>Promueve la imagen probada; limpia los recursos de preview</span></div></figure>
+<h2>Validación</h2>
+<p>El piloto ejecutó 34 verificaciones automatizadas antes de los builds: 16 para Go y 18 para Node. El cleanup se ejercitó de extremo a extremo, y la salud y la sincronización de la aplicación se verificaron en ArgoCD. Pruebas separadas verificaron la image promotion sin reconstruir.</p>
+<h2>Resultados y medición</h2>
+<p>El registro de finalización documenta ambos repositorios del piloto recorriendo el flujo de preview, ocho aplicaciones de ArgoCD sincronizadas y sanas, y digests de imagen idénticos durante la promotion. Una ruta observada de push-to-deploy tardó aproximadamente 2 minutos 14 segundos; es una observación del piloto, no una garantía de tiempo de deploy para toda la flota.</p>
+<p>El alcance fueron dos repositorios piloto. La adopción más amplia, el tiempo total ahorrado por los desarrolladores y los cambios en la tasa de escape de defectos no se midieron en este registro. Un piloto completado no establece una adopción en toda la empresa ni un resultado de endurecimiento para producción.</p>
+<h2>Lo que aprendí</h2>
+<p>Una funcionalidad de plataforma se vuelve útil cuando se conecta con el flujo de trabajo del equipo. Los namespaces de preview compartidos, una promotion confiable y un cleanup explícito importaron tanto como crear el deploy inicial.</p><section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Un staging compartido usa menos entornos; los previews aislados reducen las colisiones entre funcionalidades, pero requieren convenciones de ciclo de vida y entre repositorios.</p><h3>Contrapartida</h3><p>Un entorno fácil de crear aún necesita una promotion segura y un cleanup confiable para evitar recursos obsoletos y gasto.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: medir la adopción, el tiempo de preparación de los previews y el costo de recursos huérfanos antes de expandir más allá del piloto.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más casos de estudio</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
