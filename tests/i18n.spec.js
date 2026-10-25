@@ -76,14 +76,17 @@ for (const pg of PAGES) {
           await expect(page.locator('#themeToggle')).toHaveAttribute('aria-label', themeToDark[loc.lang]);
         });
 
-        test('platform explorer updates the case link and it resolves', async ({ page }) => {
+        test('every platform-explorer view yields a resolving case link', async ({ page }) => {
           await page.goto(path);
-          await page.locator('[data-platform-view="reliability"]').click();
-          // The link is locale-prefixed only once that case is translated; until
-          // then it falls back to the English case page. Either way it resolves.
-          const href = await page.locator('#platform-story-link').getAttribute('href');
-          expect(href).toMatch(/^(\/(?:pt|es))?\/cases\/gen2-observability-repair\/$/);
-          expect((await page.request.get(href)).status()).toBe(200);
+          // Exercise all three views: each view's link lives only in the JSON block
+          // until clicked, so a bad slug in one would 404 without this loop.
+          for (const view of ['delivery', 'reliability', 'efficiency']) {
+            await page.locator(`[data-platform-view="${view}"]`).click();
+            const href = await page.locator('#platform-story-link').getAttribute('href');
+            // Locale-prefixed once that case is translated, else the English fallback.
+            expect(href, `${view} link shape`).toMatch(/^(\/(?:pt|es))?\/cases\/[a-z0-9-]+\/$/);
+            expect((await page.request.get(href)).status(), `${view} -> ${href}`).toBe(200);
+          }
         });
       }
     });

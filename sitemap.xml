@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://vitorschiavo.dev/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/pt/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/es/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -33,7 +33,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/resume.html</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/resume.html"/>
@@ -43,7 +43,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/pt/resume.html</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/resume.html"/>
@@ -53,7 +53,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/es/resume.html</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/resume.html"/>
@@ -111,7 +111,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/gke-terraform-shared-vpc/</loc>
-    <lastmod>2026-10-24</lastmod>
+    <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>

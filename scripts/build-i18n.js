@@ -135,12 +135,18 @@ function localizeInternalLinks(html, locale) {
   return html;
 }
 
-/** Fail if any internal href/src ("/…") on the page does not resolve on disk. */
+/** Fail if any internal link ("/…") on the page does not resolve on disk —
+ *  including the "href" values inside the #platform-views-data JSON block, which
+ *  are not HTML attributes but DO become live links in the explorer. */
 function auditInternalLinks(html, rel, errors) {
-  const re = /(?:href|src)="(\/[^"#?]*)/g;
   const seen = new Set();
   let m;
-  while ((m = re.exec(html)) !== null) {
+  const attrRe = /(?:href|src)="(\/[^"#?]*)/g;
+  while ((m = attrRe.exec(html)) !== null) {
+    if (!m[1].startsWith('//')) seen.add(m[1]);
+  }
+  const jsonRe = /"href":\s*"(\/[^"#?]*)/g;
+  while ((m = jsonRe.exec(html)) !== null) {
     if (!m[1].startsWith('//')) seen.add(m[1]);
   }
   for (const p of seen) {
@@ -382,9 +388,22 @@ function processTranslatedPage(srcRel, locale, mode, restampTarget) {
         errors.push(`${rel}: #platform-views-data keys ${lk.join(',')} differ from English ${ek.join(',')}`);
       } else {
         for (const k of ek) {
+          const v = loc[k];
+          // Required non-empty string fields (script.js reads these directly).
+          for (const f of ['title', 'summary', 'result', 'href']) {
+            if (typeof v[f] !== 'string' || v[f].trim() === '') {
+              errors.push(`${rel}: #platform-views-data ${k}.${f} must be a non-empty string`);
+            }
+          }
+          // Parallel arrays the explorer iterates — must be string arrays of the
+          // same length as English (a non-array crashes view.*.forEach at runtime).
           for (const arr of ['nodes', 'foundation', 'details']) {
-            if ((en[k][arr] || []).length !== (loc[k][arr] || []).length) {
+            if (!Array.isArray(v[arr])) {
+              errors.push(`${rel}: #platform-views-data ${k}.${arr} must be an array`);
+            } else if (v[arr].length !== (en[k][arr] || []).length) {
               errors.push(`${rel}: #platform-views-data ${k}.${arr} length differs from English`);
+            } else if (!v[arr].every((s) => typeof s === 'string')) {
+              errors.push(`${rel}: #platform-views-data ${k}.${arr} must contain only strings`);
             }
           }
         }
@@ -430,8 +449,16 @@ function processEnglishPage(srcRel, mode) {
   if (mode === 'check' && changed) {
     errors.push(`${srcRel}: plumbing is out of date — run "node scripts/build-i18n.js" and commit`);
   }
-  // Audit internal links only on pages this script manages (index, résumé),
-  // not the case pages (out of scope here, and they predate this work).
+  // Reciprocity guard: if a translated sibling exists, the English page MUST have
+  // markers, or its HTML won't advertise the return hreflang alternate (the
+  // sitemap and the translation would claim a pair the English page omits).
+  if (mode === 'check' && !html.includes(LINKS.start)) {
+    const translated = TRANSLATED.filter((l) => fs.existsSync(pageFile(srcRel, l)));
+    if (translated.length) {
+      errors.push(`${srcRel}: has ${translated.map((l) => l.code).join('/')} translation(s) but no i18n markers — add the marker regions so English advertises its hreflang alternates`);
+    }
+  }
+  // Audit internal links only on pages this script manages (markers present).
   if (mode === 'check' && html.includes(LINKS.start)) {
     auditInternalLinks(html, srcRel, errors);
   }
