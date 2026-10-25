@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=43c7cb3480f76d4da91658a466a85ac08c49e360 src=cases/cloud-functions-gen1-gen2/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>GCP Cloud Functions: Gen1 a Gen2, builds pela metade — Vitor Schiavo</title>
+    <meta name="description" content="Padronização e aceleração de todo pipeline de Cloud Functions no GCP: checkout 80% mais rápido, builds reduzidos pela metade e um caminho seguro de migração do Gen1 para o Gen2 em dev, staging e produção.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/cloud-functions-gen1-gen2/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/cloud-functions-gen1-gen2/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/cloud-functions-gen1-gen2/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/cloud-functions-gen1-gen2/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Modernização de mais de 60 Cloud Functions no GCP: Gen1 para Gen2, builds pela metade">
+    <meta property="og:description" content="Checkout 80% mais rápido, builds reduzidos pela metade e um caminho seguro de migração do Gen1 para o Gen2.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Cloud Functions Gen1 para Gen2, builds pela metade — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Modernização de mais de 60 Cloud Functions no GCP: Gen1 para Gen2">
+    <meta name="twitter:description" content="Checkout 80% mais rápido, builds pela metade e uma migração segura do Gen1 para o Gen2.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/og.png">
+    <meta name="twitter:image:alt" content="Cloud Functions Gen1 para Gen2, builds pela metade — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Modernização de mais de 60 Cloud Functions no GCP: Gen1 para Gen2, builds pela metade",
+      "description": "Padronização e aceleração de todo pipeline de Cloud Functions no GCP: checkout 80% mais rápido, builds reduzidos pela metade e um caminho seguro de migração do Gen1 para o Gen2 em dev, staging e produção.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/cloud-functions-gen1-gen2/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/cloud-functions-gen1-gen2/",
+      "image": "https://vitorschiavo.dev/cases/cloud-functions-gen1-gen2/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "GCP, Cloud Functions, Gen2, CI/CD, build optimization, Jenkins, pipeline, Eventarc, Cloud Run"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/cloud-functions-gen1-gen2/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/cloud-functions-gen1-gen2/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/cloud-functions-gen1-gen2/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Estudo de caso · Platform engineering</span>
+            <h1 class="doc-title">Modernização de mais de 60 Cloud Functions no GCP: Gen1 para Gen2, builds pela metade</h1>
+            <p class="doc-dek">Cada pipeline de Cloud Functions era um pouco diferente e a maioria era lenta. Padronizei todos eles, reduzi o tempo de checkout em cerca de 80% e o tempo de build pela metade, e estabeleci um caminho seguro do Gen1 para o Gen2.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Atualizado em outubro de 2026</span>
+                <span>~6 min de leitura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="cloud-functions-gen1-gen2" data-visual-area="platform">
+<figcaption><span>A solução em resumo</span><strong>Migrar o runtime e verificar sua identidade.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg><strong>Função Gen1</strong><span>Inventariar runtime e gatilhos</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Deployment Gen2</strong><span>Adaptar pipeline e runtime</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Validação</strong><span>Verificar comportamento e IAM</span></div>
+</div>
+<p class="case-map-note">Uma migração em etapas; o acompanhamento em produção também verificou a service account do runtime.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Padronização dos pipelines de funções, migração de runtime e acompanhamento de identidade.</dd></div>
+<div><dt>Escopo</dt><dd>Entrega faseada em desenvolvimento/staging e operação de produção posterior distinta.</dd></div>
+<div><dt>Colaboração e limites</dt><dd>Trabalhei na infraestrutura e no caminho de deploy; um épico de planejamento não é prova de que toda função em produção concluiu a migração.</dd></div>
+<div><dt>Resultado</dt><dd>Trabalho de deployment padronizado e um acompanhamento em produção que fixou a identidade do runtime após uma mudança implícita de service account.</dd></div>
+</dl></section>
+
+
+            <p>Uma frota de Cloud Functions tende a crescer uma função de cada vez, e os pipelines crescem do mesmo jeito: copiados, ajustados e nunca unificados. O resultado eram dezenas de funções espalhadas por vários repositórios, cada uma fazendo deploy por um pipeline Jenkins um pouco diferente, a maioria lenta e nenhuma pronta para o Gen2. Padronizei todo o conjunto e modernizei os runtimes, com o conteúdo sanitizado aqui para destacar apenas a técnica.</p>
+
+            <h2>Escopo da entrega</h2><p>Este foi um trabalho de migração faseada e padronização de pipelines. O trabalho em DEV/STG e a operação posterior em produção foram etapas distintas. Um acompanhamento em produção encontrou uma mudança implícita na service account do runtime e fixou a identidade de deployment para evitar recorrência. O épico de planejamento sozinho não estabelece o estado de toda função em produção.</p><h2>Para onde o tempo estava indo</h2>
+            <p>Duas coisas dominavam cada build. Primeiro, o checkout: cada build fazia um clone completo do repositório de deploy, 30 a 60 segundos de pura espera antes de qualquer trabalho real. Segundo, as dependências: nada ficava em cache, então cada build reinstalava tudo do zero. Multiplique isso por dezenas de funções fazendo deploy várias vezes ao dia e o total chega a horas reais de engenharia e minutos reais de cloud build.</p>
+
+            <h2>O que eu mudei</h2>
+            <ul>
+                <li><strong>Checkout com clone-ou-atualização.</strong> Em vez de um clone completo a cada build, o pipeline faz fetch e reset quando o repositório já está presente. O checkout caiu de 30 a 60 segundos para 5 a 10.</li>
+                <li><strong>Cache de dependências.</strong> Os builds agora reutilizam dependências em cache em vez de reinstalar, elevando o reaproveitamento de cache de zero para 80 a 90%.</li>
+                <li><strong>Pacotes de deploy menores.</strong> Reduzi o que é enviado, cortando aproximadamente pela metade o tamanho do pacote de deployment.</li>
+                <li><strong>Atualizações de runtime.</strong> Atualizei Go, Node.js e Python para runtimes atuais e suportados no Gen1, e adicionei os equivalentes no Gen2.</li>
+                <li><strong>Pipelines e exemplos de Gen2.</strong> Novos pipelines de deploy para Gen2 mais exemplos funcionais nas três linguagens, de modo que adicionar uma função Gen2 é copiar-e-usar, não pesquisar.</li>
+            </ul>
+            <p>No caminho, corrigi um lote de pequenos incômodos antigos: um caminho de workspace incorreto, uma inconsistência de vendoring causada por blank imports, uma divergência de entry-point entre Gen1 e Gen2 e pacotes de deployment grandes demais.</p>
+
+            <h2>Antes e depois</h2>
+            <div class="table-container" tabindex="0">
+                <table>
+                    <thead>
+                        <tr><th scope="col">Métrica</th><th scope="col">Antes</th><th scope="col">Depois</th><th scope="col">Mudança</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Tempo de checkout</td><td>30 a 60 s</td><td>5 a 10 s</td><td>~80% mais rápido</td></tr>
+                        <tr><td>Tempo total de build</td><td>3 a 5 min</td><td>1.5 a 2.5 min</td><td>~50% mais rápido</td></tr>
+                        <tr><td>Tamanho do deployment</td><td>100%</td><td>40 a 50%</td><td>~50% menor</td></tr>
+                        <tr><td>Reaproveitamento de cache</td><td>0%</td><td>80 a 90%</td><td>novo</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">80%</span><span class="stat-label">checkout mais rápido</span></div>
+                <div class="stat"><span class="stat-value">50%</span><span class="stat-label">builds mais rápidos</span></div>
+                <div class="stat"><span class="stat-value">60+</span><span class="stat-label">funções padronizadas</span></div>
+                <div class="stat"><span class="stat-value">3</span><span class="stat-label">linguagens, Gen1 + Gen2</span></div>
+            </div>
+
+            <h2>Por que Gen2, e como chegar lá com segurança</h2>
+            <p>Gen2 não é apenas um aumento de versão. Ele roda sobre o Cloud Run por baixo dos panos, o que traz concorrência (até 1000 requisições simultâneas por instância em vez de uma), integração nativa com Eventarc, cold starts mais rápidos e cobrança por uso mais granular. A migração é onde as pessoas ficam nervosas, então eu a mantive entediante:</p>
+            <ul>
+                <li>Começar em <strong>dev</strong> com funções HTTP nos runtimes atualizados, e validar cada uma individualmente.</li>
+                <li>Passar para funções <strong>acionadas por Pub/Sub</strong> somente depois que as de HTTP estiverem comprovadas.</li>
+                <li>Usar cutovers <strong>blue-green</strong> para que o tráfego só mude quando a nova versão estiver saudável.</li>
+                <li>Replicar por <strong>staging</strong>, depois produção, começando pelas funções não críticas antes das críticas.</li>
+            </ul>
+
+            <h2>O que eu diria a quem está começando isso</h2>
+            <ul>
+                <li>Padronize o pipeline antes de otimizá-lo. Você não consegue acelerar vinte pipelines diferentes; consegue acelerar um e aplicá-lo vinte vezes.</li>
+                <li>O ganho de build mais barato costuma ser o checkout. Pare de fazer clone completo a cada execução.</li>
+                <li>Faça cache de dependências de forma deliberada. De zero a 80% de reaproveitamento de cache costuma ser a maior queda isolada no tempo de build.</li>
+                <li>Migre os runtimes em uma ordem fixa (dev, staging, produção; HTTP antes de Pub/Sub; não crítico antes de crítico) e a migração assustadora vira rotina.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Pipelines por função oferecem flexibilidade local; um caminho de deploy comum reduz a repetição, mas precisa preservar as diferenças de runtime e de gatilho.</p><h3>Trade-off</h3><p>Novas gerações de runtime podem mudar identidade e logging, além de computação. O sucesso do deployment sozinho é aceitação insuficiente.</p><h3>O que eu melhoraria a seguir</h3><p>Próxima melhoria: manter um inventário de migração por função com verificações de aceitação de gatilho, identidade, logging e rollback.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Sou Vitor Schiavo, engenheiro de Site Reliability e Platform. Este é um caso do meu portfólio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

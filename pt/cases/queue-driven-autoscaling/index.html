@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=3657b1c77dce649069e77bdb64e7216929b95e14 src=cases/queue-driven-autoscaling/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Conserte o worker antes de escalar a frota — Vitor Schiavo</title>
+    <meta name="description" content="Um rollout de autoscaling baseado em fila expôs browser workers travados; escalar só passou a ser útil depois que o vazamento de recursos foi contido.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/queue-driven-autoscaling/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/queue-driven-autoscaling/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/queue-driven-autoscaling/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/queue-driven-autoscaling/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/queue-driven-autoscaling/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/queue-driven-autoscaling/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Conserte o worker antes de escalar a frota">
+    <meta property="og:description" content="Um rollout de autoscaling baseado em fila expôs browser workers travados; escalar só passou a ser útil depois que o vazamento de recursos foi contido.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/queue-driven-autoscaling/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Conserte o worker antes de escalar a frota — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Conserte o worker antes de escalar a frota">
+    <meta name="twitter:description" content="Um rollout de autoscaling baseado em fila expôs browser workers travados; escalar só passou a ser útil depois que o vazamento de recursos foi contido.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/queue-driven-autoscaling/og.png">
+    <meta name="twitter:image:alt" content="Conserte o worker antes de escalar a frota — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Conserte o worker antes de escalar a frota", "description": "Um rollout de autoscaling baseado em fila expôs browser workers travados; escalar só passou a ser útil depois que o vazamento de recursos foi contido.", "author": {"@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/"}, "datePublished": "2026-10-17", "dateModified": "2026-10-17", "url": "https://vitorschiavo.dev/pt/cases/queue-driven-autoscaling/",
+      "inLanguage": "pt-BR", "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/queue-driven-autoscaling/", "image": "https://vitorschiavo.dev/cases/queue-driven-autoscaling/og.png"}
+</script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/queue-driven-autoscaling/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/queue-driven-autoscaling/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudo de caso · Platform engineering · setembro de 2026</span>
+<h1 class="doc-title">Conserte o worker antes de escalar a frota</h1>
+<p class="doc-dek">Um rollout de autoscaling baseado em fila expôs browser workers travados; escalar só passou a ser útil depois que o vazamento de recursos foi contido.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Atualizado em outubro de 2026</span><span>~4 min de leitura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="queue-driven-autoscaling" data-visual-area="platform">
+<figcaption><span>A solução em resumo</span><strong>Libere o trabalho travado antes de adicionar mais workers.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Backlog da fila</strong><span>Meça o trabalho realmente em espera</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Ciclo de vida do worker</strong><span>Limite e libere os processos filhos</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Escalonamento com KEDA</strong><span>Escale o workload corrigido</span></div>
+</div>
+<p class="case-map-note">O KEDA ficou ativo em quatro ambientes. O teto de 50 réplicas em produção é configuração, não capacidade de throughput demonstrada.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Análise do sinal de demanda, configuração do KEDA e diagnóstico e reparo do ciclo de vida do worker.</dd></div>
+<div><dt>Escopo</dt><dd>Um worker orientado por Pub/Sub implantado em quatro ambientes.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Atuei entre o comportamento de processo da aplicação e o escalonamento de infraestrutura; o rollout expôs um defeito no worker que precisava ser reparado primeiro.</dd></div>
+<div><dt>Resultado</dt><dd>O KEDA ficou ativo em quatro ambientes depois de conter os processos filhos travados. Um limite de 50 réplicas é configuração, não capacidade demonstrada.</dd></div>
+</dl></section>
+
+
+<h2>O sinal enganoso</h2>
+<p>O serviço capturava livestreams usando processos filhos de browser. Um pod podia ocupar todos os seus slots de concorrência usando pouca CPU. Uma vez cheio, ele parava de pegar mensagens, de modo que a demanda adicional se acumulava no Pub/Sub em vez de fazer o autoscaler baseado em CPU reagir.</p>
+<h2>Minha contribuição</h2>
+<p>Avaliei o sinal de demanda real do workload, implementei um gatilho Pub/Sub do KEDA e investiguei as falhas descobertas durante o rollout. Essa investigação mudou a tarefa: um incidente ativo em produção exigia uma correção no ciclo de vida do worker antes que escalar pudesse ajudar.</p>
+<h2>O defeito na aplicação por trás do backlog</h2>
+<p>Streams sem nenhum participante deixavam processos filhos esperando indefinidamente por um elemento de vídeo. Cada filho mantinha um browser e um slot de concorrência até os pods ficarem sem memória. Mais réplicas apenas distribuiriam esses processos travados por mais máquinas.</p>
+<p>Verifiquei o comportamento dentro do próprio browser do pod e corrigi o ciclo de vida do health-check no lado do processo pai. Uma hipótese inicial de timeout no lado do browser foi rejeitada pela evidência de produção: o caminho do lado do pai era o que realmente disparava.</p>
+<h2>Escolha um sinal que o workload realmente produz</h2>
+<p>Usei o backlog na subscription consumida por esta aplicação. A contagem de streams ativos de um serviço irmão representava um fluxo de captura diferente, e sua métrica de escalonamento não podia ser reaproveitada com segurança. Um gatilho do Prometheus também era inadequado porque a infraestrutura de scrape necessária não existia nos clusters de desenvolvimento e staging.</p>
+<p>O HPA anterior foi removido quando o KEDA assumiu o controle. Desenvolvimento, staging e sandbox usavam workload identity para o scaler; produção usava um caminho de credenciais verificado separadamente.</p>
+<h2>Resultados e medição</h2>
+<p>O encerramento registrou KEDA Ready em quatro ambientes e as aplicações GitOps relacionadas como Synced/Healthy. O snapshot pós-rollout relatou zero restarts, em comparação com repetidos OOM kills durante o incidente. Esta é uma observação do rollout, não uma afirmação de disponibilidade de longo prazo.</p>
+<p>O máximo de produção foi configurado em 50 réplicas. Isso é um limite de proteção a monitorar, não prova de capacidade sustentada nesse tamanho.</p>
+<h2>Limites e escolhas operacionais</h2>
+<p>A promoção para produção foi uma exceção explícita de incidente, antes da validação de QA habitual. O acompanhamento seguiu pendente em torno dos streams sem participantes, da origem do seu pico de tráfego e da pressão de capacidade em contagens de réplicas mais altas. A mudança conteve a falha no ciclo de vida de recursos; ela não estabeleceu uma taxa de sucesso de captura de ponta a ponta.</p>
+<h2>A lição</h2>
+<p>O autoscaling controla quantos workers existem. Ele não consegue fazer cada worker liberar recursos corretamente. Diagnostique o mecanismo de saturação antes de aumentar a frota.</p>
+<section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Gatilhos de CPU e memória não enxergam um worker cujos slots estão ocupados por processos de browser travados. O backlog representa melhor o trabalho pendente.</p><h3>Trade-off</h3><p>Escalar um worker que vaza recursos multiplica o defeito. O escalonamento baseado em demanda ainda precisa de ciclos de vida e concorrência limitados nos processos filhos.</p><h3>O que eu melhoraria em seguida</h3><p>Próxima melhoria: fazer load-test de throughput e recuperação com falhas de stream realistas antes de tratar os limites de réplicas como garantias de capacidade.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+<a class="cta" href="/pt/#contact">Entre em contato</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

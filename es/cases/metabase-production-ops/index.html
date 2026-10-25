@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=4c63ca48aef0de092c587a8df01d907445d4073f src=cases/metabase-production-ops/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Operar Metabase en producción — Vitor Schiavo</title>
+    <meta name="description" content="Una carga controlada de dashboard mejoró de unos 49.7 segundos a 3.1 segundos tras un cambio de índice de metadatos, junto con un acceso a datos más seguro y backups operativos.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/metabase-production-ops/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/metabase-production-ops/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/metabase-production-ops/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/metabase-production-ops/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/metabase-production-ops/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/metabase-production-ops/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Operar Metabase en producción: actualizaciones, acceso y rendimiento">
+    <meta property="og:description" content="Una carga controlada de dashboard mejoró de unos 49.7 segundos a 3.1 segundos tras un cambio de índice de metadatos, junto con un acceso a datos más seguro y backups operativos.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/metabase-production-ops/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Operar Metabase en producción — un caso de estudio de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Operar Metabase en producción">
+    <meta name="twitter:description" content="Una carga controlada de dashboard mejoró de unos 49.7 segundos a 3.1 segundos tras un cambio de índice de metadatos, junto con un acceso a datos más seguro y backups operativos.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/metabase-production-ops/og.png">
+    <meta name="twitter:image:alt" content="Operar Metabase en producción — un caso de estudio de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Operar Metabase en producción: actualizaciones, acceso y rendimiento",
+      "description": "Una carga controlada de dashboard mejoró de unos 49.7 segundos a 3.1 segundos tras un cambio de índice de metadatos, junto con un acceso a datos más seguro y backups operativos.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/es/cases/metabase-production-ops/",
+      "inLanguage": "es",
+      "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/metabase-production-ops/",
+      "image": "https://vitorschiavo.dev/cases/metabase-production-ops/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "Metabase, BI, analytics, upgrade, least privilege, read-only, MongoDB, read replica, composite index, query performance"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/metabase-production-ops/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/metabase-production-ops/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/metabase-production-ops/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Caso de estudio · BI / Datos</span>
+            <h1 class="doc-title">Operar Metabase en producción: actualizaciones, acceso y rendimiento</h1>
+            <p class="doc-dek">Una carga controlada de dashboard mejoró de unos 49.7 segundos a 3.1 segundos tras un cambio de índice de metadatos, junto con un acceso a datos más seguro y backups operativos.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Actualizado en octubre de 2026</span>
+                <span>~6 min de lectura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="metabase-production-ops" data-visual-area="reliability">
+<figcaption><span>La solución de un vistazo</span><strong>Encuentra el cuello de botella de metadatos antes de escalar la base de datos.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Rastrea la demora</strong><span>Separa los metadatos de las consultas de datos</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Prueba el índice</strong><span>Ensaya en un clon descartable</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Verificación en producción</strong><span>Repite la carga con el rollback listo</span></div>
+</div>
+<p class="case-map-note">Una carga controlada en producción mejoró de ~49.7 s a ~3.1 s; quedó un cuello de botella aparte en un filtro de MongoDB.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Actualizaciones, acceso de solo lectura a la base de datos y diagnóstico de rendimiento de las consultas de metadatos.</dd></div>
+<div><dt>Alcance</dt><dd>Operaciones de BI y una medición controlada de carga de dashboard en producción.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Aislé los cuellos de botella de infraestructura y de metadatos; un cuello de botella aparte en un filtro de MongoDB quedó fuera de la corrección medida.</dd></div>
+<div><dt>Resultado</dt><dd>La carga controlada de dashboard mejoró de ~49.7 s a ~3.1 s; esto no es una garantía universal de rendimiento de dashboards.</dd></div>
+</dl></section>
+
+
+            <p>Una herramienta de BI acumula riesgo en silencio. Se apoya en credenciales de base de datos potentes, sus dashboards se vuelven más lentos a medida que crecen los datos y su versión se queda atrás hasta que actualizar da miedo. Para mantener Metabase sano, lo encaré como tres tareas continuas: mantenerlo al día, aplicar el privilegio mínimo y mantener las consultas rápidas.</p>
+
+            <h2>Mantenerse al día, entorno por entorno</h2>
+            <p>Mantuve Metabase en versiones soportadas en lugar de dejarlo pudrirse, actualizando a través de varias versiones menores en los distintos entornos y planificando cada salto en vez de avanzar a ciegas. Rutinario, pero es esa rutina la que evita que una actualización de un día se convierta en una de una semana.</p>
+
+            <h2>Privilegio mínimo: una herramienta de BI solo debería leer</h2>
+            <p>Metabase se conecta a las bases de datos que visualiza, y resulta tentador darle un usuario amplio porque así "simplemente funciona". Ese usuario amplio también es un riesgo permanente: una herramienta de reportes con acceso de escritura a los datos de origen es un incidente esperando a ocurrir. Reemplacé los usuarios amplios de la base de datos por un usuario <strong>de solo lectura</strong> dedicado, para que la capa de BI pueda consultar todo lo que necesita y no cambie nada. Una herramienta de visualización no tiene por qué poder escribir.</p>
+
+            <h2>Mantener producción fuera del radio de impacto</h2>
+            <p>Las consultas analíticas pesadas y el tráfico de producción en vivo no deberían convivir en el mismo node de base de datos. Mapeé cada fuente de datos de la que Metabase estaba leyendo y encontré consultas que caían en el <strong>primary</strong>, compitiendo con la aplicación. En su lugar, redirigí esas lecturas a una <strong>réplica analítica</strong> dedicada, para reducir la contención con el workload del producto.</p>
+
+            <h2>Encontrar el cuello de botella de metadatos</h2>
+<p>Una investigación de un dashboard lento mostró que cada card pasaba buena parte de su tiempo obteniendo metadatos de la propia base de datos de aplicación de Metabase, antes de consultar los datos de origen. Los campos de origen dinámicos habían acumulado una gran tabla de metadatos; el índice existente no coincidía con el filtro por tabla y estado activo.</p>
+<p>Reproduje el SQL exacto en un clon descartable, comparé cargas secuenciales y concurrentes, y ensayé la creación del índice y el rollback. En producción, tomé un backup nuevo, esperé a que se vaciaran las consultas activas y agregué un índice compuesto con un timeout de bloqueo explícito y DDL en línea.</p>
+<div class="table-container" tabindex="0"><table class="evidence-table"><caption>Mediciones controladas en producción, una carga antes y después</caption><thead><tr><th scope="col">Señal</th><th scope="col">Antes</th><th scope="col">Después</th></tr></thead><tbody><tr><th scope="row">SQL de metadatos, EXPLAIN ANALYZE</th><td>4,356 ms</td><td>8.2 ms</td></tr><tr><th scope="row">Ocho cards, cada una</th><td>35.7–37.1 s</td><td>1.15–1.62 s</td></tr><tr><th scope="row">Pestaña completa del dashboard</th><td>~49.7 s</td><td>~3.1 s</td></tr></tbody></table></div>
+<p>La creación del índice tomó unos 29 segundos sin ninguna espera por bloqueo de metadatos en esa ejecución. Estas son mediciones controladas de antes/después, no una distribución de latency para todos los usuarios del dashboard. Un escaneo de filtro aparte en MongoDB siguió siendo un cuello de botella distinto, y el 524 reportado originalmente no tuvo una causa comprobada.</p>
+<p>El seguimiento confirmó un backup diario automatizado exitoso con siete puntos de recuperación retenidos. Se limpiaron los recursos temporales del clon y los backups bajo demanda aprobados. El índice se agregó a la lista de verificación de la actualización porque queda fuera de las propias migraciones de Metabase y debe verificarse después de una actualización o una restauración.</p>
+<div class="callout callout--win">
+                <p class="callout-title">Además: confía en los datos, no solo en la herramienta</p>
+                <p>Una tarea aparte pero relacionada es la frescura de los datos. Cuando un dashboard dejó de actualizarse en silencio para una integración downstream, la herramienta se veía bien; los datos se habían vuelto obsoletos upstream. Operar bien una plataforma de BI significa vigilar el pipeline que la alimenta, no solo el servicio en sí, porque un dashboard que se equivoca con confianza es peor que uno roto.</p>
+            </div>
+
+            <h2>Lo que le diría a alguien que opera una herramienta de BI</h2>
+            <ul>
+                <li>Dale un usuario de solo lectura. Una herramienta de reportes nunca debería poder escribir en los datos de origen.</li>
+                <li>Apunta las lecturas analíticas a una réplica. Mantén los dashboards pesados fuera del node que sirve el producto.</li>
+                <li>Indexa para la consulta. Rastrea la carga de metadatos por separado de las consultas de origen, y luego prueba el índice contra el SQL exacto.</li>
+                <li>Vigila los datos que entran, no solo el servicio. Un dashboard obsoleto que todavía se renderiza es el modo de falla silencioso.</li>
+                <li>Actualiza con una cadencia programada. Quedarse unas pocas versiones menores atrás es más barato que ponerse al día tras años.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Agregar capacidad de base de datos es una opción; perfilar primero expuso un patrón de acceso a metadatos que podía resolverse con un índice.</p><h3>Contrapartida</h3><p>Los cambios de índice necesitan un backup, un ensayo descartable y un plan de rollback. La latency de metadatos y la de las consultas de origen son cuellos de botella distintos.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: repetir pruebas representativas del dashboard a lo largo del tiempo y abordar por separado el cuello de botella restante de las consultas de origen.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Soy Vitor Schiavo, ingeniero de Site Reliability y Platform. Este es uno de los casos de mi portafolio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/es/#cases">Ver más casos de estudio</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=2c9ea799965dba7cea9e141db0003a0122d08ccd src=cases/strapi-v4-to-v5-upgrade/index.html -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Atualizando o Strapi da v4 para a v5 em produção — Vitor Schiavo</title>
+    <meta name="description" content="Uma atualização de versão maior do Strapi, com mudanças incompatíveis, feita com segurança: um caminho em etapas na base de código, 19 hooks de ciclo de vida movidos para o novo Document Service, testes em um banco de dados clonado e uma virada em fases com fallback legado.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/pt/cases/strapi-v4-to-v5-upgrade/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/strapi-v4-to-v5-upgrade/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/strapi-v4-to-v5-upgrade/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/">
+<meta property="og:url" content="https://vitorschiavo.dev/pt/cases/strapi-v4-to-v5-upgrade/">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Atualizando o Strapi da v4 para a v5 em produção">
+    <meta property="og:description" content="Uma atualização de versão maior com mudanças incompatíveis: caminho em etapas na base de código, 19 hooks de ciclo de vida movidos para o Document Service e uma virada em fases com fallback legado.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Atualizando o Strapi da v4 para a v5 em produção — um estudo de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Atualizando o Strapi da v4 para a v5 em produção">
+    <meta name="twitter:description" content="Uma atualização de versão maior com mudanças incompatíveis, feita com segurança, com virada em fases e fallback legado.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/og.png">
+    <meta name="twitter:image:alt" content="Atualizando o Strapi da v4 para a v5 em produção — um estudo de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Atualizando o Strapi da v4 para a v5 em produção",
+      "description": "Uma atualização de versão maior do Strapi, com mudanças incompatíveis, feita com segurança: um caminho em etapas na base de código, 19 hooks de ciclo de vida movidos para o novo Document Service, testes em um banco de dados clonado e uma virada em fases com fallback legado.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "url": "https://vitorschiavo.dev/pt/cases/strapi-v4-to-v5-upgrade/",
+      "inLanguage": "pt-BR",
+      "mainEntityOfPage": "https://vitorschiavo.dev/pt/cases/strapi-v4-to-v5-upgrade/",
+      "image": "https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/og.png",
+      "publisher": { "@type": "Person", "name": "Vitor Schiavo" },
+      "keywords": "Strapi, Strapi v5, upgrade, migration, Document Service, lifecycle hooks, headless CMS, Node 20, zero downtime"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/strapi-v4-to-v5-upgrade/page.css">
+
+    <script>
+        (function() {
+            var t = localStorage.getItem('theme');
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+
+    <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Mudar para o tema claro">
+        <span aria-hidden="true" id="themeIcon">☀️</span>
+    </button>
+
+    <main class="doc" id="main-content">
+
+        <a class="backlink" href="/pt/#cases"><span aria-hidden="true">←</span> Voltar ao portfólio</a>
+        <!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/strapi-v4-to-v5-upgrade/">EN</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="pt-BR" aria-current="true">PT</span>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/strapi-v4-to-v5-upgrade/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+
+        <header class="doc-header">
+            <span class="doc-eyebrow">Estudo de caso · Atualizações</span>
+            <h1 class="doc-title">Atualizando o Strapi da v4 para a v5 em produção</h1>
+            <p class="doc-dek">O Strapi v5 é uma versão maior incompatível, com uma nova API de acesso a dados no seu núcleo. Veja como atualizei um CMS em produção da v4 para a v5 sem perder conteúdo nem ter downtime: um caminho em etapas, 19 hooks de ciclo de vida reescritos, um banco de dados clonado para ensaiar e uma virada que deixou a produção por último.</p>
+            <div class="doc-meta">
+                <span>Por Vitor Schiavo</span>
+                <span>Atualizado em outubro de 2026</span>
+                <span>~6 min de leitura</span>
+            </div>
+        </header>
+
+        <div class="doc-body">
+<figure class="case-map" data-case-visual="strapi-v4-to-v5-upgrade" data-visual-area="platform">
+<figcaption><span>A solução em resumo</span><strong>Teste a compatibilidade antes de mover o tráfego.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg><strong>Strapi v4</strong><span>Mapeie o comportamento existente</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Strapi v5</strong><span>Adapte hooks e integração</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Verificações de release</strong><span>Valide antes da virada</span></div>
+</div>
+<p class="case-map-note">Mudanças de versão maior incluíram hooks de ciclo de vida e verificações de comportamento antes da virada em produção.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
+<div><dt>Minha responsabilidade</dt><dd>Atualização em etapas da aplicação/runtime, mudanças nos hooks de ciclo de vida e verificações de compatibilidade.</dd></div>
+<div><dt>Escopo</dt><dd>A migração de versão maior de uma plataforma de conteúdo com estado.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>Atuei na compatibilidade da aplicação e na validação de deployment; a preservação do conteúdo e do comportamento existente eram restrições de aceitação.</dd></div>
+<div><dt>Resultado</dt><dd>Adaptei o comportamento de ciclo de vida e validei a compatibilidade antes da virada; o desempenho contínuo do serviço precisa de observação separada.</dd></div>
+</dl></section>
+
+
+            <p>Atualizações de versão maior de uma aplicação com estado, que carrega conteúdo, são onde o "é só um bump de versão" morre. O Strapi v5 muda o modelo de acesso a dados, então a atualização não é só novas dependências: é reescrever como a aplicação lê e grava o próprio conteúdo. O conteúdo no banco de dados tinha que sobreviver, e o site não podia sair do ar. Foi assim que eu fiz.</p>
+
+            <h2>Primeiro, avance até a última v4</h2>
+            <p>O primeiro erro teria sido pular direto de uma v4 antiga para a v5. Atualizei a base de código em etapas: v4 antiga, depois a <strong>última v4</strong> e então a v5. Chegar primeiro à última v4 elimina as depreciações e expõe as mudanças incompatíveis enquanto você ainda está em uma versão maior familiar, de modo que o salto final para a v5 é a única coisa que resta depurar. A mesma passagem moveu o runtime para o Node 20 e trocou o driver de banco de dados pelo que tem manutenção ativa.</p>
+
+            <h2>A verdadeira mudança incompatível: o Document Service</h2>
+            <p>O Strapi v5 substitui a antiga API de dados em nível de entidade por um novo <strong>Document Service</strong>, e isso afeta cada pedaço de lógica personalizada. A parte mais pesada da migração foi reescrever <strong>todos os 19 hooks de ciclo de vida</strong> para a nova API. Os hooks de ciclo de vida são o comportamento personalizado que roda quando um conteúdo é criado, atualizado ou excluído, então errá-los é o jeito de corromper dados silenciosamente. Cada um foi migrado e verificado individualmente.</p>
+
+            <h2>Ensaie em um clone, não em produção</h2>
+            <p>Antes de tocar em qualquer coisa no ar, clonei o banco de dados de desenvolvimento em um <strong>schema v5 isolado</strong> e rodei a migração inteira contra ele. A migração de dados ou funciona em uma cópia de conteúdo real ou não funciona; descobrir isso em um clone descartável é de graça, descobrir isso em produção não é.</p>
+
+            <h2>Faça a virada em fases, produção por último</h2>
+            <p>O build v5 rodou como um novo fluxo ao lado do fluxo v4 existente. Fiz a virada ambiente por ambiente, começando pelos de menor risco (sandbox / legado) e validando cada um antes de seguir. A produção foi <strong>preparada e então retida</strong>, com a virada feita somente após aprovação explícita. Em nenhum momento houve uma única troca big-bang sem caminho de volta.</p>
+
+            <div class="stat-strip">
+                <div class="stat"><span class="stat-value">v4 → v5</span><span class="stat-label">atualização maior</span></div>
+                <div class="stat"><span class="stat-value">19</span><span class="stat-label">hooks de ciclo de vida migrados</span></div>
+                <div class="stat"><span class="stat-value">0</span><span class="stat-label">conteúdo perdido</span></div>
+                <div class="stat"><span class="stat-value">prod por último</span><span class="stat-label">virada em fases</span></div>
+            </div>
+
+            <div class="callout callout--win">
+                <p class="callout-title">A atualização também deixou o serviço mais resiliente</p>
+                <p>Trabalhar tão de perto com a aplicação revelou uma fragilidade latente: os pods entravam em crash-loop quando o upstream do CMS tinha uma breve instabilidade, e uma rajada de tráfego em um endpoint podia saturá-lo. Adicionei um handler de erros compartilhado em cada handler de requisição e reforcei o pool de conexões do banco de dados contra instabilidades transitórias de rede, além de alertas de uptime. A atualização deixou o serviço não apenas mais novo, mas mais difícil de derrubar.</p>
+            </div>
+
+            <h2>O que eu diria a quem está começando isto</h2>
+            <ul>
+                <li>Suba até a última versão menor da sua versão maior atual antes do grande salto. Elimine as depreciações onde o terreno é familiar.</li>
+                <li>Trate a mudança na API de acesso a dados como o trabalho de verdade. No Strapi v5, isso é o Document Service e cada hook de ciclo de vida, não o bump de dependências.</li>
+                <li>Ensaie a migração de dados em um clone de conteúdo real. Uma cópia conta a verdade de graça.</li>
+                <li>Faça a virada em fases e deixe a produção por último, atrás de um aval explícito. Rode o novo fluxo ao lado do antigo para que sempre haja um caminho de volta.</li>
+            </ul>
+
+        <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Um salto direto de versão maior combina depreciações e o novo comportamento da API. Chegar primeiro à última v4 isola parte desse risco.</p><h3>Trade-off</h3><p>Mudanças na API de acesso a dados podem preservar a saúde HTTP enquanto alteram o comportamento de negócio. Valide conteúdo e hooks, não apenas a inicialização.</p><h3>O que eu melhoraria a seguir</h3><p>Próxima melhoria: manter conteúdo representativo e verificações de regressão de ciclo de vida para atualizações subsequentes.</p></section>
+</div>
+
+        <footer class="doc-footer">
+            <p>Sou Vitor Schiavo, engenheiro de Site Reliability e Platform. Este é um dos estudos de caso do meu portfólio.</p>
+            <div class="cta-row">
+                <a class="cta cta--primary" href="/pt/#cases">Veja mais estudos de caso</a>
+                <a class="cta" href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a>
+                <a class="cta" href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a>
+            </div>
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Mudar para o tema escuro' : 'Mudar para o tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
