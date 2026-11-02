@@ -61,32 +61,85 @@ test('technical demonstration has real source, clear scope and an accessible ent
 });
 
 // Guard for the CLAUDE.md "Content accuracy" rule: the positioning copy of every
-// locale page (title, description/OG/Twitter tags, JSON-LD, hero, availability
-// lines, résumé intro) must not carry a seniority level in any language. "SRE" in
-// <title> is a deliberate abbreviation, not drift. The OG image is rendered from
-// scripts/generate-og-image.js, so its template is checked in place of the PNG.
-const LEVEL_WORDS = /\bS[êe]nior\b|\bStaff\b|\bLead\b|\bL[íi]der\b/i;
+// locale page (title, human-readable description/OG/Twitter tags, JSON-LD, hero,
+// availability lines, résumé intro) must not carry a seniority level in any
+// language. "SRE" in <title> is a deliberate abbreviation, not drift.
+//
+// Case-sensitive on purpose: "lead", "staff" and "líder" are ordinary words in
+// prose, while Senior/Sênior is a level claim in any case. Leadership nouns
+// ("leadership", "liderança") and past held titles ("Junior IT Support Analyst")
+// are legitimate content and stay out of the list.
+const LEVEL_WORDS = /\b[Ss][êe]nior\b|\bStaff\b|\bLead\b|\bL[íi]der\b|\bSr\b\.?/;
 const LOCALE_PAGES = ['/', '/pt/', '/es/', '/resume.html', '/pt/resume.html', '/es/resume.html'];
 const POSITIONING = ['.hero-role', '.sidebar-status', '.hero-availability', '.international-fit dd', '#contact .section-subtitle', '.resume-page > p'];
-const HEAD_COPY = 'meta[name="description"], meta[property^="og:"], meta[name^="twitter:"]';
+// Human-readable head copy only; URLs, locale codes and image dimensions are skipped.
+const HEAD_COPY = ['description', 'twitter:title', 'twitter:description', 'twitter:image:alt'].map(name => `meta[name="${name}"]`)
+  .concat(['og:title', 'og:description', 'og:image:alt'].map(property => `meta[property="${property}"]`)).join(', ');
+const JSON_LD = 'script[type="application/ld+json"]';
+const SHARING_META = /<meta (?:name|property)="(?:description|og:title|og:description|og:image:alt|twitter:title|twitter:description|twitter:image:alt)" content="([^"]*)"/g;
+
+test('level-word guard matches the forbidden forms and not ordinary prose', () => {
+  for (const forbidden of ['Senior Platform & Site Reliability Engineer', 'Open to Senior & Staff roles', 'Platform e Site Reliability Engineer Sênior', 'Engineer sênior especializado', 'Abierto a roles Senior y Staff', 'Lead Platform Engineer', 'Líder de SRE', 'Engenheiro Sr.']) {
+    expect(forbidden).toMatch(LEVEL_WORDS);
+  }
+  for (const allowed of ['Site Reliability & Platform Engineering Specialist', 'Especialista em SRE e Platform Engineering', 'Open to SRE & Platform roles', 'the gap between seniors and juniors', 'changes that lead to fewer incidents', 'a small staff of engineers', 'Technical leadership in practice', 'Junior IT Support Analyst']) {
+    expect(allowed).not.toMatch(LEVEL_WORDS);
+  }
+});
 
 test('no seniority level word in the positioning copy of any locale page', async ({ page }) => {
   test.setTimeout(60000);
   for (const route of LOCALE_PAGES) {
     await page.goto(route);
-    await expect(page.locator('.hero-role').first(), `${route}: hero role present`).toHaveText(/\S/);
-    if (!route.endsWith('.html')) {
-      await expect(page.locator('.sidebar-status'), `${route}: sidebar status present`).toHaveCount(1);
-      await expect(page.locator('.hero-availability'), `${route}: hero availability present`).toHaveCount(1);
+    const heroRole = page.locator('.hero-role').first();
+    await expect(heroRole, `${route}: hero role present`).toHaveText(/\S/);
+    // Non-vacuity: every scanned group must be present, so a markup rename fails loudly.
+    expect(await page.locator(HEAD_COPY).count(), `${route}: head copy tags present`).toBeGreaterThanOrEqual(3);
+    expect(await page.locator(JSON_LD).count(), `${route}: JSON-LD present`).toBeGreaterThanOrEqual(1);
+    if (route.endsWith('.html')) {
+      expect(await page.locator('.resume-page > p').count(), `${route}: résumé intro present`).toBeGreaterThanOrEqual(2);
+    } else {
+      for (const selector of ['.sidebar-status', '.hero-availability', '#contact .section-subtitle']) {
+        await expect(page.locator(selector), `${route}: ${selector} present`).toHaveCount(1);
+      }
+      expect(await page.locator('.international-fit dd').count(), `${route}: role list present`).toBeGreaterThanOrEqual(1);
+      // <title> and twitter:title are the hero role with "Site Reliability" abbreviated to
+      // "SRE" (html-validate long-title limit); this keeps the two in step.
+      const expectedTitle = 'Vitor Schiavo — ' + (await heroRole.textContent()).trim().replace('Site Reliability', 'SRE');
+      expect(await page.title(), `${route}: <title> follows the hero role`).toBe(expectedTitle);
+      expect(await page.locator('meta[name="twitter:title"]').getAttribute('content'), `${route}: twitter:title follows <title>`).toBe(expectedTitle);
     }
     const texts = [
       await page.title(),
       ...(await page.locator(HEAD_COPY).evaluateAll(nodes => nodes.map(node => node.getAttribute('content')))),
-      ...(await page.locator('script[type="application/ld+json"]').allTextContents()),
+      ...(await page.locator(JSON_LD).allTextContents()),
       ...(await page.locator(POSITIONING.join(', ')).allTextContents())
     ];
     for (const text of texts) expect(text, `${route}: "${text}"`).not.toMatch(LEVEL_WORDS);
   }
-  const ogTemplate = fs.readFileSync(path.join(__dirname, '../scripts/generate-og-image.js'), 'utf8');
-  expect(ogTemplate, 'OG image template').not.toMatch(LEVEL_WORDS);
+});
+
+// The OG images are rendered by scripts/generate-og-image.js: the root og-image.png
+// from strings hardcoded in that template, each cases/<slug>/og.png from the case
+// page's <h1> and meta description. Checking the template plus every case page's
+// sharing copy covers the wording of all generated images without decoding PNGs.
+test('OG image template and case page sharing copy carry no seniority level word', () => {
+  const root = path.join(__dirname, '..');
+  expect(fs.readFileSync(path.join(root, 'scripts/generate-og-image.js'), 'utf8'), 'OG image template').not.toMatch(LEVEL_WORDS);
+  const casePages = ['cases', 'pt/cases', 'es/cases'].map(dir => path.join(root, dir)).filter(dir => fs.existsSync(dir))
+    .flatMap(dir => fs.readdirSync(dir, { withFileTypes: true }).filter(entry => entry.isDirectory())
+      .map(entry => path.join(dir, entry.name, 'index.html')).filter(file => fs.existsSync(file)));
+  expect(casePages.length, 'case pages found').toBeGreaterThan(0);
+  const strip = value => value.replace(/<[^>]+>/g, '');
+  for (const file of casePages) {
+    const html = fs.readFileSync(file, 'utf8');
+    const label = path.relative(root, file);
+    const copy = [
+      ...[...html.matchAll(/<title>([\s\S]*?)<\/title>/g)].map(match => strip(match[1])),
+      ...[...html.matchAll(/<h1[^>]*>([\s\S]*?)<\/h1>/g)].map(match => strip(match[1])),
+      ...[...html.matchAll(SHARING_META)].map(match => match[1])
+    ];
+    expect(copy.length, `${label}: sharing copy found`).toBeGreaterThanOrEqual(3);
+    for (const text of copy) expect(text, `${label}: "${text}"`).not.toMatch(LEVEL_WORDS);
+  }
 });
