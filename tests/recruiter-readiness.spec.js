@@ -133,7 +133,8 @@ for (const route of LOCALE_PAGES) {
       }
       expect(await page.locator('.international-fit dd').count(), 'role list present').toBeGreaterThanOrEqual(1);
       // <title> and twitter:title are the hero role with "Site Reliability" abbreviated to
-      // "SRE" (html-validate long-title limit); this keeps the two in step.
+      // "SRE" (html-validate long-title limit), per CLAUDE.md § Content accuracy. If that
+      // rule changes, update the derivation here with it; this keeps the two in step.
       const expectedTitle = 'Vitor Schiavo — ' + (await heroRole.textContent()).trim().replace('Site Reliability', 'SRE');
       expect(await page.title(), '<title> follows the hero role').toBe(expectedTitle);
       expect(await page.locator('meta[name="twitter:title"]').getAttribute('content'), 'twitter:title follows <title>').toBe(expectedTitle);
