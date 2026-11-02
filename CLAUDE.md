@@ -80,7 +80,7 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 
 ### Content accuracy
 
-- The public job title is **Site Reliability & Platform Engineer** (held title at every employer since 2018: Site Reliability Engineer). Never add a seniority qualifier (Senior / Staff / Lead) to the title, `<title>`, meta description, hero or résumé — the owner rejected it. Level words belong only in the "open to …" role-target lines. Claims inventory: `docs/content-evidence.md`.
+- The owner is presented as a **Site Reliability & Platform Engineering Specialist** (PT: *Especialista em Site Reliability e Platform Engineering*, ES: *Especialista en Site Reliability y Platform Engineering*) — an expertise framing the owner chose on 2026-11-02, used in the hero, `<title>`, meta description and résumé header. The held title at every employer since 2018 is Site Reliability Engineer, which the JSON-LD `jobTitle`, sidebar and footer keep. Never add a seniority qualifier (Senior / Staff / Lead) anywhere: not to the title, hero or résumé, and not to the "open to …" availability lines — the owner removed them all. Claims inventory: `docs/content-evidence.md`.
 
 ---
 
