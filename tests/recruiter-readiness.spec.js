@@ -61,23 +61,32 @@ test('technical demonstration has real source, clear scope and an accessible ent
 });
 
 // Guard for the CLAUDE.md "Content accuracy" rule: the positioning copy of every
-// locale page (title, meta, hero, availability lines, résumé intro) must not carry
-// a seniority level. "SRE" in <title> is a deliberate abbreviation, not drift.
-const LEVEL_WORDS = /\bS[êe]nior\b|\bStaff\b/i;
+// locale page (title, description/OG/Twitter tags, JSON-LD, hero, availability
+// lines, résumé intro) must not carry a seniority level in any language. "SRE" in
+// <title> is a deliberate abbreviation, not drift. The OG image is rendered from
+// scripts/generate-og-image.js, so its template is checked in place of the PNG.
+const LEVEL_WORDS = /\bS[êe]nior\b|\bStaff\b|\bLead\b|\bL[íi]der\b/i;
 const LOCALE_PAGES = ['/', '/pt/', '/es/', '/resume.html', '/pt/resume.html', '/es/resume.html'];
 const POSITIONING = ['.hero-role', '.sidebar-status', '.hero-availability', '.international-fit dd', '#contact .section-subtitle', '.resume-page > p'];
+const HEAD_COPY = 'meta[name="description"], meta[property^="og:"], meta[name^="twitter:"]';
 
 test('no seniority level word in the positioning copy of any locale page', async ({ page }) => {
   test.setTimeout(60000);
-  for (const path of LOCALE_PAGES) {
-    await page.goto(path);
+  for (const route of LOCALE_PAGES) {
+    await page.goto(route);
+    await expect(page.locator('.hero-role').first(), `${route}: hero role present`).toHaveText(/\S/);
+    if (!route.endsWith('.html')) {
+      await expect(page.locator('.sidebar-status'), `${route}: sidebar status present`).toHaveCount(1);
+      await expect(page.locator('.hero-availability'), `${route}: hero availability present`).toHaveCount(1);
+    }
     const texts = [
       await page.title(),
-      await page.locator('meta[name="description"]').getAttribute('content'),
-      await page.locator('meta[name="twitter:title"]').getAttribute('content'),
+      ...(await page.locator(HEAD_COPY).evaluateAll(nodes => nodes.map(node => node.getAttribute('content')))),
+      ...(await page.locator('script[type="application/ld+json"]').allTextContents()),
       ...(await page.locator(POSITIONING.join(', ')).allTextContents())
     ];
-    expect(texts.length, `${path}: positioning copy found`).toBeGreaterThan(4);
-    for (const text of texts) expect(text, `${path}: "${text}"`).not.toMatch(LEVEL_WORDS);
+    for (const text of texts) expect(text, `${route}: "${text}"`).not.toMatch(LEVEL_WORDS);
   }
+  const ogTemplate = fs.readFileSync(path.join(__dirname, '../scripts/generate-og-image.js'), 'utf8');
+  expect(ogTemplate, 'OG image template').not.toMatch(LEVEL_WORDS);
 });
