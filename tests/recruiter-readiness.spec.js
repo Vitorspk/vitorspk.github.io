@@ -59,3 +59,25 @@ test('technical demonstration has real source, clear scope and an accessible ent
   const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa']).analyze();
   expect(results.violations).toEqual([]);
 });
+
+// Guard for the CLAUDE.md "Content accuracy" rule: the positioning copy of every
+// locale page (title, meta, hero, availability lines, résumé intro) must not carry
+// a seniority level. "SRE" in <title> is a deliberate abbreviation, not drift.
+const LEVEL_WORDS = /\bS[êe]nior\b|\bStaff\b/i;
+const LOCALE_PAGES = ['/', '/pt/', '/es/', '/resume.html', '/pt/resume.html', '/es/resume.html'];
+const POSITIONING = ['.hero-role', '.sidebar-status', '.hero-availability', '.international-fit dd', '#contact .section-subtitle', '.resume-page > p'];
+
+test('no seniority level word in the positioning copy of any locale page', async ({ page }) => {
+  test.setTimeout(60000);
+  for (const path of LOCALE_PAGES) {
+    await page.goto(path);
+    const texts = [
+      await page.title(),
+      await page.locator('meta[name="description"]').getAttribute('content'),
+      await page.locator('meta[name="twitter:title"]').getAttribute('content'),
+      ...(await page.locator(POSITIONING.join(', ')).allTextContents())
+    ];
+    expect(texts.length, `${path}: positioning copy found`).toBeGreaterThan(4);
+    for (const text of texts) expect(text, `${path}: "${text}"`).not.toMatch(LEVEL_WORDS);
+  }
+});

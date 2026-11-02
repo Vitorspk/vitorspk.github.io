@@ -69,11 +69,11 @@ Owner authorized implementation of the nine recommendations on the private resea
 
 No raw Jira exports, account identifiers, internal service names, private URLs or customer identifiers are added to public articles. Pending MDI adoption, KPI automation, alert-delivery validation and unfinished credential rotations are not promoted into completed outcomes. Five new article slugs, four expanded articles, 37 catalog drawings and 22 article drawings use the existing generated-visual contract. Home ordering remains AI, costs, observability.
 
-
 ## Title correction — 2026-11-02
 
 | Claim | Treatment |
 | --- | --- |
 | "Senior Platform & Site Reliability Engineer" (title, `<title>`, meta description, hero, résumé page and PDF — introduced by #87) | Not supported by any held title: the role at Dasa, Intelipost and VerifyMy (2018–present) is Site Reliability Engineer. Owner rejected the qualifier. Public title set, at the owner's request, to "Site Reliability & Platform Engineering Specialist" (PT "Especialista em Site Reliability e Platform Engineering", ES "Especialista en Site Reliability y Platform Engineering") — an expertise framing backed by the 2018–present SRE roles, not a level. The held title stays in the JSON-LD `jobTitle`, sidebar, footer and OG image. Never add Senior / Staff / Lead to the title. |
 | "Open to Senior and Staff …" (sidebar status, hero availability, contact subtitle and role list, résumé blurb) | Removed at the owner's request the same day: the availability lines now name only the field ("Open to SRE & Platform roles", "Open to opportunities in Platform Engineering and SRE"). No level word appears anywhere on the site. |
+| `<title>` / `twitter:title` say "SRE & Platform Engineering Specialist" while the hero spells out "Site Reliability …" | Deliberate: the spelled-out PT/ES title is 72 characters, over html-validate's 70-character `long-title` limit, and search results truncate around 60. Hero and meta description stay spelled out. The level-word regression test in `tests/recruiter-readiness.spec.js` covers title, meta, hero and availability copy on all six locale pages. |
 | "specializing in cloud platforms, AI inference infrastructure, …" (meta description) | Rephrased as "Selected work in …" — describes the published cases; the only specialization asserted is Site Reliability & Platform Engineering itself. |

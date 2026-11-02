@@ -81,6 +81,7 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 ### Content accuracy
 
 - The owner is presented as a **Site Reliability & Platform Engineering Specialist** (PT: *Especialista em Site Reliability e Platform Engineering*, ES: *Especialista en Site Reliability y Platform Engineering*) — an expertise framing the owner chose on 2026-11-02, used in the hero, `<title>`, meta description and résumé header. The held title at every employer since 2018 is Site Reliability Engineer, which the JSON-LD `jobTitle`, sidebar and footer keep. Never add a seniority qualifier (Senior / Staff / Lead) anywhere: not to the title, hero or résumé, and not to the "open to …" availability lines — the owner removed them all. Claims inventory: `docs/content-evidence.md`.
+- `<title>` and `twitter:title` deliberately abbreviate to **SRE** ("SRE & Platform Engineering Specialist", "Especialista em SRE e Platform Engineering", "Especialista en SRE y Platform Engineering"): the spelled-out PT/ES form exceeds html-validate's 70-character `long-title` limit, and search results would truncate the word that matters. Do not "fix" the mismatch with the hero. `tests/recruiter-readiness.spec.js` asserts that no level word appears in the positioning copy of any locale page.
 
 ---
 
