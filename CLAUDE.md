@@ -78,6 +78,11 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 - No inline `onclick` handlers — use `addEventListener` or `data-tab` delegation
 - No hardcoded secrets or tokens
 
+### Content accuracy
+
+- The owner is presented as a **Site Reliability & Platform Engineering Specialist** (PT: *Especialista em Site Reliability e Platform Engineering*, ES: *Especialista en Site Reliability y Platform Engineering*) — an expertise framing the owner chose, used in the hero, `<title>`, meta description, OG images and résumé header. The held title at every employer since 2018 is Site Reliability Engineer, which the JSON-LD `jobTitle`, the sidebar role line and the footer keep. Never add a seniority qualifier (Senior / Staff / Lead / Principal) anywhere: not to that title layer and not to the "open to …" availability lines (sidebar status, hero availability, contact subtitle and role list, résumé intro) — the owner removed them there too; those lines name only the field ("Open to SRE & Platform roles"). Claims inventory: `docs/content-evidence.md`.
+- `<title>` and `twitter:title` deliberately abbreviate to **SRE** ("SRE & Platform Engineering Specialist", "Especialista em SRE e Platform Engineering", "Especialista en SRE y Platform Engineering"): the spelled-out PT/ES form exceeds html-validate's 70-character `long-title` limit, and search results would truncate the word that matters. Do not "fix" the mismatch with the hero. `tests/recruiter-readiness.spec.js` asserts that no level word appears in the positioning copy (title layer and availability lines) of any locale page, and that the OG generator template and every case page's sharing copy are clean.
+
 ---
 
 ## Analytics & SEO
