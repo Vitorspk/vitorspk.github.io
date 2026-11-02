@@ -68,3 +68,11 @@ Owner authorized implementation of the nine recommendations on the private resea
 | Observability follow-ups | NCLS-4797 newly covered scopes ~128k docs/day is observed volume, not failures. NCLS-4979 state gauges/resource identity; zero ordering errors in a 3h28m window with positive control. No annual availability inference. |
 
 No raw Jira exports, account identifiers, internal service names, private URLs or customer identifiers are added to public articles. Pending MDI adoption, KPI automation, alert-delivery validation and unfinished credential rotations are not promoted into completed outcomes. Five new article slugs, four expanded articles, 37 catalog drawings and 22 article drawings use the existing generated-visual contract. Home ordering remains AI, costs, observability.
+
+
+## Title correction — 2026-11-02
+
+| Claim | Treatment |
+| --- | --- |
+| "Senior Platform & Site Reliability Engineer" (title, `<title>`, meta description, hero, résumé page and PDF — introduced by #87) | Not supported by any held title: the role at Dasa, Intelipost and VerifyMy (2018–present) is Site Reliability Engineer. Owner rejected the qualifier. Public title restored to "Site Reliability & Platform Engineer" in EN/PT/ES, matching the JSON-LD `jobTitle`, sidebar, footer and OG image. Never add Senior / Staff / Lead to the title; level words stay only in the "open to …" role-target lines. |
+| "specializing in cloud platforms, AI inference infrastructure, …" (meta description) | Rephrased as "Selected work in …" — describes the published cases rather than asserting a specialization. |

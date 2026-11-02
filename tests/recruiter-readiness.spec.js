@@ -6,7 +6,7 @@ const AxeBuilder = require('@axe-core/playwright').default;
 
 test('recruiter can identify positioning, follow the reading route and download a PDF', async ({ page, request }) => {
   await page.goto('/');
-  await expect(page.locator('.hero-role').first()).toHaveText('Senior Platform & Site Reliability Engineer');
+  await expect(page.locator('.hero-role').first()).toHaveText('Site Reliability & Platform Engineer');
   const route = page.getByRole('navigation', { name: 'Recommended case studies' });
   const links = route.getByRole('link');
   await expect(links).toHaveCount(3);

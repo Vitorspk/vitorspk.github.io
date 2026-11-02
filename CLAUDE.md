@@ -78,6 +78,10 @@ All colour, spacing, and radius values live in `:root` in `css/tokens.css` (comp
 - No inline `onclick` handlers — use `addEventListener` or `data-tab` delegation
 - No hardcoded secrets or tokens
 
+### Content accuracy
+
+- The public job title is **Site Reliability & Platform Engineer** (held title at every employer since 2018: Site Reliability Engineer). Never add a seniority qualifier (Senior / Staff / Lead) to the title, `<title>`, meta description, hero or résumé — the owner rejected it. Level words belong only in the "open to …" role-target lines. Claims inventory: `docs/content-evidence.md`.
+
 ---
 
 ## Analytics & SEO
