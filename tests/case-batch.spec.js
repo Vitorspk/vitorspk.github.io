@@ -24,6 +24,7 @@ const PAGES = [
   { path: '/cases/zero-downtime-cluster-migration/', title: /Zero-downtime migration/i, h1: /Zero-downtime migration/i },
   { path: '/cases/strapi-v4-to-v5-upgrade/', title: /Strapi from v4 to v5/i, h1: /Upgrading Strapi/i },
   { path: '/cases/metabase-production-ops/', title: /Running Metabase/i, h1: /Running Metabase/i },
+  { path: '/cases/shared-redis-eviction-lost-lock/', title: /lock that vanished/i, h1: /lock that vanished/i },
 ];
 
 for (const p of PAGES) {
