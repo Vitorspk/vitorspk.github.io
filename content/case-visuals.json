@@ -923,5 +923,30 @@
         "detail": "Scale the corrected workload"
       }
     ]
+  },
+  {
+    "id": "shared-redis-eviction-lost-lock",
+    "cardTitle": "The lock that vanished: a full Redis and immortal keys",
+    "category": "reliability",
+    "title": "Find who fills the cache, then make the data expire.",
+    "note": "Capacity was raised first as a mitigation. The eviction policy was deliberately left unchanged.",
+    "article": "shared-redis-eviction-lost-lock",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Diagnose read-only",
+        "detail": "Logs, code and instance metrics"
+      },
+      {
+        "icon": "shield",
+        "label": "Alert on the signal",
+        "detail": "Keys that can expire, not just memory"
+      },
+      {
+        "icon": "database",
+        "label": "Fix writers, then expire",
+        "detail": "TTL guards, then a reversible pass"
+      }
+    ]
   }
 ]

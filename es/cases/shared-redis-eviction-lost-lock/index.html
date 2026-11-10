@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=5e75a0cc964ac2a7b89609359deb3311bef630a8 src=cases/shared-redis-eviction-lost-lock/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>El lock que desapareció: Redis lleno de claves eternas — Vitor Schiavo</title>
+    <meta name="description" content="Un job programado perdía su lock: un Redis compartido de producción llevaba un mes lleno, y las claves que nunca expiran habían desplazado todo lo desalojable.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/shared-redis-eviction-lost-lock/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="El lock que desapareció: Redis lleno de claves eternas">
+    <meta property="og:description" content="Un job programado perdía su lock: un Redis compartido de producción llevaba un mes lleno, y las claves que nunca expiran habían desplazado todo lo desalojable.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="El lock que desapareció: Redis lleno de claves eternas — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="El lock que desapareció: Redis lleno de claves eternas">
+    <meta name="twitter:description" content="Un job programado perdía su lock: un Redis compartido de producción llevaba un mes lleno, y las claves que nunca expiran habían desplazado todo lo desalojable.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/og.png">
+    <meta name="twitter:image:alt" content="El lock que desapareció: Redis lleno de claves eternas — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "El lock que desapareció: Redis lleno de claves eternas",
+      "description": "Un job programado perdía su lock: un Redis compartido de producción llevaba un mes lleno, y las claves que nunca expiran habían desplazado todo lo desalojable.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-11-09",
+      "dateModified": "2026-11-09",
+      "url": "https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/",
+      "inLanguage": "es",
+      "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/",
+      "image": "https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/og.png"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/shared-redis-eviction-lost-lock/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/shared-redis-eviction-lost-lock/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudio de caso · Confiabilidad · octubre–noviembre de 2026</span>
+<h1 class="doc-title">El lock que desapareció: Redis lleno de claves eternas</h1>
+<p class="doc-dek">Un job programado perdía su lock: un Redis compartido de producción llevaba un mes lleno, y las claves que nunca expiran habían desplazado todo lo desalojable.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en noviembre de 2026</span><span>~6 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="shared-redis-eviction-lost-lock" data-visual-area="reliability">
+<figcaption><span>Solución de un vistazo</span><strong>Encuentra quién llena el caché y haz que los datos expiren.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Diagnóstico de solo lectura</strong><span>Logs, código y métricas de la instancia</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Alerta sobre la señal</strong><span>Claves que pueden expirar, no solo memoria</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Corregir a quien escribe, luego expirar</strong><span>Guardas de TTL y una pasada reversible</span></div>
+</div>
+<p class="case-map-note">La capacidad se aumentó primero, como mitigación. La política de eviction se mantuvo deliberadamente.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>Diagnóstico de solo lectura, mitigación el mismo día, diseño de las alertas, atribución de las claves sin expiración, las correcciones de TTL y una limpieza del pasivo, por script y autorizada.</dd></div>
+<div><dt>Alcance</dt><dd>Un Redis de producción compartido por muchos servicios; guardas de TTL en producción en seis de ellos.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Cada paso en producción se aprobó de forma individual. Mantuve la política de eviction porque algunos servicios podrían usar Redis como almacén, y no solo como caché.</dd></div>
+<div><dt>Resultado</dt><dd>El job mantuvo su lock tras el primer resize, con la memoria de 100% a 58% y evictions en cero. No se corrigió a todos los productores ni todas las claves históricas.</dd></div>
+</dl></section>
+
+
+<h2>Un lock que nadie borró</h2>
+<p>Un job programado de facturación se detuvo antes de tiempo tres veces en un día con un error de lock perdido. Mantiene un lock en Redis con un TTL de seis horas y lo renueva mientras trabaja; la ejecución se detiene cuando la renovación encuentra la clave ausente. La primera ejecución duró más de dos horas; las dos siguientes, menos de dos minutos. Los logs no mostraban pérdida de lock en los días anteriores, y nada en la aplicación borra ni vacía esa clave, así que algo ajeno a la aplicación la eliminaba.</p>
+<h2>Lleno es normal para un caché. Estrujado, no.</h2>
+<p>El Redis compartido de producción llevaba más de un mes al 100% de su memoria. Con su política de eviction por defecto, volatile-lru, solo se pueden desalojar claves que tengan TTL. Se habían escrito millones de claves sin él, unos 9,8 millones en una sola base y creciendo unas 200.000 al mes, así que nunca salían. Estrujaron el espacio desalojable de unas 160.000 claves a finales de septiembre a unas 2.000 el día del incidente, y cualquier clave nueva con TTL, el lock incluido, sobrevivía solo minutos.</p>
+<p>La siguiente etapa serían errores de escritura por falta de memoria para todos los servicios de la instancia. Ninguna de las alertas existentes podía dispararse: una vigilaba la memoria del host, estable cerca del 70%, mientras Redis estaba en su propio límite.</p>
+<h2>Mitigar primero, diagnosticar sin tocar los datos</h2>
+<p>Aumenté la instancia de 5 a 8 GB ese mismo día y medí el efecto: la memoria bajó de 100% a 58%, las evictions pasaron de unas nueve mil cada tres minutos a cero, y todos los pods de la aplicación siguieron listos, sin reinicios. La siguiente ejecución de facturación mantuvo su lock y siguió procesando en dos verificaciones de solo lectura.</p>
+<p>El diagnóstico fue de solo lectura: logs del job, revisión de código y las métricas de la propia instancia. Mirar las claves exigió autorización explícita. Entonces muestreé 400 claves aleatorias por base, con tipo, TTL y tamaño, nombres enmascarados y sin KEYS, SCAN ni escrituras, y las agrupé por patrón de clave. Con ese tamaño de muestra, cada proporción tiene una precisión de unos cinco puntos porcentuales, suficiente para señalar a los productores.</p>
+<h2>Alerta sobre la falla, no sobre el llenado</h2>
+<p>Un caché al 100% es funcionamiento normal; alertar por eso solo enseñaría a ignorar la alerta. La política crítica vigila el número de claves que aún pueden expirar: por debajo de 100.000 durante 30 minutos. Un aviso se dispara con el 98% de memoria. Probada retroactivamente en el incidente, la política crítica se habría disparado cinco días antes de que el job fallara, y ambas políticas incluyen documentación sobre la causa y los siguientes pasos.</p>
+<h2>Haz que quien escribe defina un TTL</h2>
+<p>La muestra vinculó las claves sin expiración con patrones concretos: almacenes de sesión creados sin TTL, claves de estado de OAuth sin expiración por defecto, marcadores de livestream y de moderación, y una biblioteca de sesión que pasaba un MaxAge de cookie igual a cero como TTL de Redis, lo que significa no expirar nunca.</p>
+<p>La retención se fijó por servicio con una regla: TTL positivo y explícito, limitado a 48 horas para cachés comunes (un marcador de coordinación, de alcance acotado, mantiene un límite mayor), y un servicio que se niega a arrancar si la configuración falta, no es positiva o supera el límite. Las correcciones pasaron primero por desarrollo y staging, con la configuración de producción definida antes de activar cualquier código. El 9 de noviembre, las guardas de TTL habían llegado a producción en seis servicios.</p>
+<h2>Expira el pasivo; no lo borres</h2>
+<p>Corregir a quien escribe evita nuevas fugas, pero deja millones de claves atrás. Escribí un script reanudable que recorre cada base, clasifica las claves con una regla aprobada por prefijo y vuelve a comprobar, de forma atómica en el momento de escribir, el tipo, la ausencia de TTL y el tiempo inactivo antes de aplicar EXPIRE NX con un jitter aleatorio de 1 a 24 horas. NX nunca sobrescribe un TTL fijado por un servicio ya corregido, no se usa DEL, la expiración se reparte a lo largo de un día y PERSIST puede deshacerla.</p>
+<p>Primero hubo un dry run, y dieciséis pruebas de regresión corrieron contra la versión de Redis de producción y la CLI exacta desplegada. Una prueba local detectó una trampa: EXPIRE renueva la antigüedad de inactividad LRU de la clave. La ejecución se detuvo hasta que el transporte esperó CLIENT NO-TOUCH en la misma conexión, y luego se reanudó. Compilar las reglas del clasificador una vez en lugar de por clave redujo su tiempo de 0,74 s a 0,05 s por cada 5.000 claves. El 29 de octubre, las pasadas aplicaron al menos 7,9 millones de expiraciones.</p>
+<h2>Borra solo lo que se autorizó explícitamente</h2>
+<p>El 9 de noviembre, con autorización explícita, una pasada aparte eliminó unos 1,9 millones de claves persistentes inactivas desde hacía más de 30 días, unos 213 MiB de datos de claves. El uso de memoria registrado bajó de unos 2,99 a unos 2,67 GiB, neto del tráfico concurrente. Una segunda pasada eliminó 38.883 contadores, 2,67 MiB, atribuidos por revisión de código y metadatos a un defecto de constructor ya corregido en producción. Verificaciones independientes de solo lectura no encontraron claves elegibles restantes en el corte fijado.</p>
+<h2>Lo que esto no afirma</h2>
+<p>No han desaparecido todas las claves históricas ni se ha corregido a todos los productores: el registro de cierre no cubre un almacén de sesión heredado que se identificó como la mayor fuente. Al cierre aún no se había observado en producción una clave nueva de 48 horas, aunque las pruebas automáticas de regresión de TTL pasaron, y el enrutamiento de notificaciones de las alertas no se revalidó. La capacidad de la instancia se aumentó más de una vez y los registros de su tamaño final difieren, así que esta página informa solo del efecto medido del primer resize.</p>
+<h2>La lección</h2>
+<p>Un caché lleno no es un incidente. Un caché cuya parte desalojable se ha desplomado, sí. Alerta sobre la magnitud que anticipa la falla, corrige a quien escribe antes de ampliar la política de eviction y prefiere pasos reversibles y autorizados cuando hay datos de producción de por medio.</p>
+<section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Cambiar a allkeys-lru habría detenido el estrujamiento al instante, pero cualquier servicio que use Redis como almacén perdería datos en silencio. Aumenté la capacidad, corregí a quien escribe y esperé a que los responsables confirmaran qué es caché.</p><h3>Contrapartida</h3><p>La expiración es reversible y suave, pero lenta: las claves permanecen en memoria hasta un día y, como mostró la prueba local, puede cambiar lo que LRU considera inactivo. El borrado libera memoria al instante y exige su propia autorización y evidencia.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: un panel de conteo de claves y cobertura de TTL por prefijo, para que el crecimiento de cualquier prefijo sin expiración se vea en días, no en meses.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más estudios de caso</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

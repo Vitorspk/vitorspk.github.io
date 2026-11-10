@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=ae755c1110848432a36fdd6e49c1b32e31100dbd src=index.html -->
+<!-- i18n:src-sha=582c6fb711d3c557356482c1029c387cfe1b5465 src=index.html -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -286,6 +286,24 @@
 </div>
 <p id="case-count" class="catalog-count" role="status" aria-live="polite">
 </p>
+<article class="case-study" data-category="reliability" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+<div><h3 class="case-title">O lock que sumiu: um Redis cheio de chaves imortais</h3><p class="case-date">Novembro de 2026 · Um Redis compartilhado, cheio havia um mês, expulsou toda chave que podia expirar, e um job agendado perdia o lock.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="shared-redis-eviction-lost-lock" data-visual-area="reliability">
+<figcaption><span>A solução em resumo</span><strong>Descubra quem enche o cache e faça os dados expirarem.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Diagnóstico somente leitura</strong><span>Logs, código e métricas da instância</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Alerta no sinal certo</strong><span>Chaves que podem expirar, não só memória</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Corrigir quem escreve, depois expirar</strong><span>Guardas de TTL e uma passada reversível</span></div>
+</div>
+<p class="case-map-note">A capacidade foi aumentada primeiro, como mitigação. A política de eviction foi deliberadamente mantida.</p>
+</figure>
+<div class="impact-metrics"><h4>Minha contribuição e resultado</h4><p>Rastreei os locks perdidos até chaves que nunca expiram, aumentei a instância, alertei sobre o sinal real da falha, corrigi quem escreve e expirei o passivo com passos autorizados e reversíveis.</p></div>
+<a class="case-readmore" href="/pt/cases/shared-redis-eviction-lost-lock/">Ler o estudo de caso <span aria-hidden="true">→</span></a></div></article>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
 <span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
