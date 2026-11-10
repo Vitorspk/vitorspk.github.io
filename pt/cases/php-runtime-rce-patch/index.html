@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=7c833dd830289164369e8b80107563fb8adea092 src=cases/php-runtime-rce-patch/index.html -->
+<!-- i18n:src-sha=181967e8f8fee4e250baafe30b64d4aa3b157819 src=cases/php-runtime-rce-patch/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -115,11 +115,11 @@
 <p>Imagens-base que usam tags flutuantes podem continuar apontando para a versão vulnerável depois que a correção sai: o registry continuou servindo a versão antiga na tag flutuante por várias horas, então um rebuild logo após o anúncio teria entregado a mesma versão. Uma segunda armadilha está na cadência de atualização. Uma base compartilhada é reconstruída em um calendário, mas as aplicações só a recebem no próximo deploy, então um serviço em execução pode ficar atrás da própria base.</p>
 <h2>Fixe, proteja e prove que a troca é neutra</h2>
 <p>A correção fixa a versão corrigida exata nas imagens-base e nos Dockerfiles. Antes do merge, validei o Dockerfile fixado construindo a receita oficial da imagem a partir do código-fonte, conferindo checksum e assinatura da origem e confirmando que a lista de módulos era idêntica à da base atual. As aplicações ganharam uma guarda de build que recusa qualquer base abaixo da versão corrigida, de modo que uma base desatualizada não chega mais à produção em silêncio.</p>
-<p>Para mostrar que a mudança era neutra, comparei um controle, a base antiga com a guarda reduzida, com o build corrigido: os mesmos módulos PHP, as mesmas respostas do servidor web ao FPM nas rotas verificadas, o mesmo comportamento do framework e os mesmos resultados de teste, incluindo as falhas que já existiam antes da mudança.</p>
+<p>Para mostrar que a mudança era neutra, comparei um controle, a base antiga com a guarda reduzida, com o build corrigido: os mesmos módulos PHP, as mesmas respostas nas rotas verificadas, o mesmo comportamento do framework e os mesmos resultados de teste, incluindo as falhas que já existiam antes da mudança.</p>
 <h2>A ordem do rollout importou</h2>
 <p>As mudanças em pré-produção foram mescladas de imediato; produção aguardou revisão e aprovação. A ordem dos merges importava: mesclar uma aplicação antes de a base estar corrigida faria o pipeline falhar na nova guarda e bloquear todo deploy dessa aplicação. A base foi reconstruída e verificada primeiro, e só depois vieram as aplicações.</p>
 <h2>Provando nos containers em execução</h2>
-<p>A etapa final varreu todos os containers em execução em todos os contextos de cluster: 1.603 containers, 511 imagens únicas, e nenhum runtime PHP vulnerável restante. Esta página afirma cobertura apenas desses clusters de containers.</p>
+<p>A etapa final varreu todos os containers em execução em todos os contextos de cluster, e nenhum runtime PHP vulnerável restou. A alegação cobre os clusters de containers que foram varridos.</p>
 <h2>A lição</h2>
 <p>Corrija o que roda e prove onde roda. Uma tag flutuante, uma base agendada e um pipeline verde podem parecer corrigidos enquanto servem o runtime antigo.</p>
 <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Um rebuild no dia do anúncio, confiando na tag flutuante, teria parecido uma correção e entregado a versão vulnerável. Fixar a versão exata tornou o resultado determinístico.</p><h3>Trade-off</h3><p>Fixações exigem manutenção. A guarda de build transforma uma deriva silenciosa em uma falha ruidosa, ao custo de, às vezes, bloquear um deploy até a base ser reconstruída.</p><h3>O que eu melhoraria em seguida</h3><p>Próxima melhoria: varrer os containers em execução de forma agendada, para que o próximo aviso parta de um inventário atual, e não de algo pontual.</p></section>
