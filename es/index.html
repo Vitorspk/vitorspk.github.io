@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=9a51554f3ee6b035b69d14a052653598ee9f444a src=index.html -->
+<!-- i18n:src-sha=6c027588c0001cbb8a842b9e40d7881cc8be7ba4 src=index.html -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -286,6 +286,24 @@
 </div>
 <p id="case-count" class="catalog-count" role="status" aria-live="polite">
 </p>
+<article class="case-study" data-category="reliability" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+<div><h3 class="case-title">El lock que desapareció: Redis lleno de claves eternas</h3><p class="case-date">Noviembre de 2026 · Un Redis compartido, lleno durante un mes, desplazó todas las claves que podían expirar, y un job programado perdía su lock.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="shared-redis-eviction-lost-lock" data-visual-area="reliability">
+<figcaption><span>Solución de un vistazo</span><strong>Encuentra quién llena el caché y haz que los datos expiren.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Diagnóstico de solo lectura</strong><span>Logs, código y métricas de la instancia</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Alerta sobre la señal</strong><span>Claves que pueden expirar, no solo memoria</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Corregir a quien escribe, luego expirar</strong><span>Guardas de TTL y una pasada reversible</span></div>
+</div>
+<p class="case-map-note">La capacidad se aumentó primero, como mitigación. La política de eviction se mantuvo deliberadamente.</p>
+</figure>
+<div class="impact-metrics"><h4>Mi aporte y el resultado</h4><p>Rastreé los locks perdidos hasta claves que nunca expiran, aumenté la instancia, alerté sobre la señal real de la falla, corregí a quien escribe y expiré el pasivo con pasos autorizados y reversibles.</p></div>
+<a class="case-readmore" href="/es/cases/shared-redis-eviction-lost-lock/">Lee el estudio de caso <span aria-hidden="true">→</span></a></div></article>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
 <span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
@@ -1297,6 +1315,42 @@
 </a>
 </div>
 </div>
+<article class="case-study" data-category="security" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>
+<div><h3 class="case-title">Parchear una RCE del runtime de PHP el mismo día</h3><p class="case-date">Octubre de 2026 · Se divulgó una falla crítica en el runtime de PHP; fijar la versión corregida y escanear todos los contenedores en ejecución la cerró el mismo día.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="php-runtime-rce-patch" data-visual-area="security">
+<figcaption><span>Solución de un vistazo</span><strong>Fija la corrección y pruébala en lo que corre.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Evaluación de impacto</strong><span>Leer lo que realmente corre</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Imágenes base fijadas</strong><span>Versión corregida exacta y una guarda de build</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Escaneo del clúster</strong><span>Todos los contenedores en ejecución verificados</span></div>
+</div>
+<p class="case-map-note">La afirmación se limita a los clústeres de contenedores que se escanearon.</p>
+</figure>
+<div class="impact-metrics"><h4>Mi aporte y el resultado</h4><p>Evalué lo que realmente corría, fijé imágenes base corregidas, añadí una guarda de build y probé el resultado con un escaneo de todo el clúster.</p></div>
+<a class="case-readmore" href="/es/cases/php-runtime-rce-patch/">Lee el estudio de caso <span aria-hidden="true">→</span></a></div></article>
+<article class="case-study" data-category="security" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>
+<div><h3 class="case-title">RCE de Node.js parcheada en 24 apps en una semana</h3><p class="case-date">Octubre de 2026 · Una falla de ejecución remota de código en el runtime afectó a todos los servicios Node; las apps y las imágenes base compartidas se parchearon en una semana.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="node-runtime-rce-fleet-patch" data-visual-area="security">
+<figcaption><span>Solución de un vistazo</span><strong>Inventaría lo que corre y despliega una compuerta a la vez.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Inventario en runtime</strong><span>Versiones leídas de las imágenes en ejecución</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Despliegue con compuertas</strong><span>Primero preproducción, luego producción</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Comparación con baseline</strong><span>Validar contra el estado previo al despliegue</span></div>
+</div>
+<p class="case-map-note">El análisis de exposición de un colega dio el punto de partida. Las afirmaciones se limitan al registro de cierre y a las comparaciones posteriores al despliegue.</p>
+</figure>
+<div class="impact-metrics"><h4>Mi aporte y el resultado</h4><p>Armé el plan a partir del análisis de exposición de un colega, inventarié las imágenes en ejecución, actualicé imágenes base y apps con despliegues con compuertas y reconstruí un servicio cuya imagen del proveedor no podía parchearse.</p></div>
+<a class="case-readmore" href="/es/cases/node-runtime-rce-fleet-patch/">Lee el estudio de caso <span aria-hidden="true">→</span></a></div></article>
 <article class="case-study" data-category="ai" data-expanded="false">
 <div class="case-header">
 <span class="case-header-mark" data-visual-area="ai" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg></span>

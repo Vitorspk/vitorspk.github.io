@@ -4,6 +4,8 @@ const AxeBuilder = require('@axe-core/playwright').default;
 test.use({ viewport: { width: 1280, height: 800 } });
 
 const PAGES = [
+  { path: '/cases/php-runtime-rce-patch/', title: /PHP runtime RCE/i, h1: /PHP runtime RCE/i },
+  { path: '/cases/node-runtime-rce-fleet-patch/', title: /Node\.js RCE/i, h1: /Node\.js RCE/i },
   { path: '/cases/gke-cluster-rebuild-recovery/', title: /Rebuilding GKE/i, h1: /Rebuilding GKE/i },
   { path: '/cases/kubernetes-dns-latency/', title: /latency hidden/i, h1: /latency hidden/i },
   { path: '/cases/ai-fleet-observability/', title: /ephemeral AI inference fleet/i, h1: /ephemeral AI inference fleet/i },
@@ -24,6 +26,7 @@ const PAGES = [
   { path: '/cases/zero-downtime-cluster-migration/', title: /Zero-downtime migration/i, h1: /Zero-downtime migration/i },
   { path: '/cases/strapi-v4-to-v5-upgrade/', title: /Strapi from v4 to v5/i, h1: /Upgrading Strapi/i },
   { path: '/cases/metabase-production-ops/', title: /Running Metabase/i, h1: /Running Metabase/i },
+  { path: '/cases/shared-redis-eviction-lost-lock/', title: /lock that vanished/i, h1: /lock that vanished/i },
 ];
 
 for (const p of PAGES) {

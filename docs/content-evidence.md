@@ -78,3 +78,39 @@ No raw Jira exports, account identifiers, internal service names, private URLs o
 | `<title>` / `twitter:title` say "SRE & Platform Engineering Specialist" while the hero spells out "Site Reliability …" | Deliberate: the spelled-out PT/ES title is 72 characters, over html-validate's 70-character `long-title` limit, and search results truncate around 60. Hero and meta description stay spelled out. The level-word regression test in `tests/recruiter-readiness.spec.js` covers the title layer (hero role, title, meta/OG/Twitter tags, JSON-LD) and the availability lines on all six locale pages plus the OG inputs of the 66 case pages. |
 | Two layers on purpose: hero, `<title>`, meta description, OG images and résumé header say "… Specialist" (positioning), while the JSON-LD `jobTitle`, the sidebar role line and the footer say "Site Reliability Engineer" / "Site Reliability & Platform Engineer" (held title) | Intentional, not drift. The positioning layer is the owner's chosen framing; the held-title layer is what employers can verify. Keep both; do not "align" one to the other. The 23 OG images (root + 22 cases) were regenerated on 2026-11-02 at the owner's request so the role line under the name reads "Site Reliability & Platform Engineering Specialist"; until then they had carried the held title since 2026-10-17 (#86) and never said "Senior". |
 | "specializing in cloud platforms, AI inference infrastructure, …" (meta description) | Rephrased as "Selected work in …" — describes the published cases; the only specialization asserted is Site Reliability & Platform Engineering itself. |
+
+
+## Shared Redis eviction case — 2026-11-09
+
+Source: Jira NCLS-5259 and its sub-tasks, read live on 2026-11-09 including the three closure comments of that day. The earlier research brief was unverified (all verifier agents failed on session limits) and was re-checked claim by claim against the Jira text. Public page: `cases/shared-redis-eviction-lost-lock/`.
+
+| Claim | Treatment |
+| --- | --- |
+| Instance capacity | The capacity records contradict each other. Publish only the measured effect of the first increase (memory from 100% to about 58%, evictions to zero, pods ready with no restarts). No instance size or final capacity is stated. |
+| Expiry versus deletion | Two separate operations. 29 Oct: EXPIRE NX passes (at least 7.9M expiry writes, no DEL, existing TTLs never overwritten). 9 Nov, explicitly authorized: about 1.9M persistent keys idle over 30 days removed, then a smaller counter pass. Recorded memory use fell by about 11%, net of concurrent traffic, attributed to the first deletion only; absolute sizes are not published. |
+| Services fixed | Six services have TTL guards deployed to production and pre-production (five PRs merged and deployed in sequence, plus a final lookup-cache PR). The closing record does not cover every producer; the page claims only these six. |
+| TTL cap | 48 h applies to ordinary caches. One coordination marker keeps a narrowly scoped longer limit (not named publicly). |
+| Alert backtest | The critical policy on the count of keys that can still expire would have fired five days before the job broke. The older memory alert watched the wrong metric. Thresholds are not published. |
+| Method figures | 400 random keys per database, masked, no KEYS/SCAN/writes, about +-5 points; 16 regression tests on the production Redis version and deployed CLI; EXPIRE refreshes LRU idle age (local test), CLIENT NO-TOUCH on the same connection preserves it; classifier 0.740 s to 0.053 s per 5,000 synthetic keys. |
+| Not claimed | All historical keys removed; a naturally written 48 h key observed in production (unproven at closure). The page claims only the six services and the two scoped operations. |
+| Omitted on purpose | Business counts of the failing runs, the real payment charge, instance sizes, key families that identify product features, library and framework details, key and service names, repositories, project and cluster identifiers, PR numbers, commit hashes, Jira keys in public copy. Product framed as regulated online safety. |
+
+
+## Runtime RCE cases (PHP and Node.js) — 2026-11-09
+
+Source: Jira records of the October 2026 PHP and Node.js responses, read live on 2026-11-09. An earlier research brief was unverified and was re-checked against those records. Public pages: `cases/php-runtime-rce-patch/` and `cases/node-runtime-rce-fleet-patch/`.
+
+Publishing rule for these pages: technique and verification method only. This repository is public, so neither the pages nor this document state which versions the company ran, which services, frameworks or base images were affected, inventory sizes, how many workloads were vulnerable, which targets a scan did not cover, or any pending security finding. Public advisory facts (CVE number, upstream fixed releases) are kept.
+
+| Claim | Treatment |
+| --- | --- |
+| PHP: "same day", scan of every running container | From the closing summary of the disclosure day: every running container across the container clusters was scanned and no vulnerable PHP runtime was left. The page states no container or image counts and claims coverage of those clusters only. |
+| PHP: why a rebuild would patch nothing | Recorded: the registry kept serving the old release under the floating tag for several hours, and a scheduled shared base lags the applications built on it. |
+| PHP: "neutral change" | Control (old base, guard lowered) versus patched build: same modules, same responses on checked routes, same test results including pre-existing failures. The official-recipe build was a local validation before merge. |
+| Node: "24 applications" | My own count of the application lists in the closing summary, not a figure the record states. Reported as "24 apps", not as a fleet total. |
+| Node: runtime inventory | Every running container image in production was checked, with versions read from running image digests. No counts of images, or of fixed versus vulnerable workloads, are published. |
+| Node: "one week" | Disclosure, colleague analysis, pre-production rollout, production rollout and closing summary all fall within seven days. |
+| Node: "no regressions" | Reworded: post-deploy comparisons found no errors attributable to the upgrade; minor operational hiccups are mentioned without detail. No availability claim. |
+| Node: colleague credit | The original exposure analysis was a colleague's. Credited as "a colleague", not named. |
+| Node: PDF service | Pre-production validated (20 of 20 scenarios, six-locale PDFs text-identical, zero pixel difference over 12 pages, image less than half the size). Production status is not stated; the page says production promotion is outside what it claims. |
+| Omitted on purpose | Every company version and base-image detail, framework and OS names, vendor and image names, service descriptions, counts of vulnerable workloads, services outside the fix, scan coverage gaps, follow-up security findings, build and commit identifiers. |

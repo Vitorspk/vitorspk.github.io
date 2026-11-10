@@ -800,6 +800,56 @@
     ]
   },
   {
+    "id": "node-runtime-rce-fleet-patch",
+    "cardTitle": "Patching a Node.js RCE across 24 apps in one week",
+    "category": "security",
+    "title": "Inventory what runs, then roll out one gate at a time.",
+    "note": "A colleague's exposure analysis started the work. The claims are limited to the closing record and the post-deploy comparisons.",
+    "article": "node-runtime-rce-fleet-patch",
+    "nodes": [
+      {
+        "icon": "cube",
+        "label": "Runtime inventory",
+        "detail": "Versions read from running images"
+      },
+      {
+        "icon": "branch",
+        "label": "Gated rollout",
+        "detail": "Pre-production first, then production"
+      },
+      {
+        "icon": "check",
+        "label": "Baseline compare",
+        "detail": "Validate against the pre-deploy state"
+      }
+    ]
+  },
+  {
+    "id": "php-runtime-rce-patch",
+    "cardTitle": "Patching a PHP runtime RCE on the day it landed",
+    "category": "security",
+    "title": "Pin the fix, then prove it on what runs.",
+    "note": "The claim is limited to the container clusters that were scanned.",
+    "article": "php-runtime-rce-patch",
+    "nodes": [
+      {
+        "icon": "cube",
+        "label": "Impact assessment",
+        "detail": "Read what actually runs"
+      },
+      {
+        "icon": "layers",
+        "label": "Pinned base images",
+        "detail": "Exact patched version plus a build guard"
+      },
+      {
+        "icon": "check",
+        "label": "Cluster-wide scan",
+        "detail": "Every running container checked"
+      }
+    ]
+  },
+  {
     "id": "gke-cluster-rebuild-recovery",
     "cardTitle": "Rebuilding GKE without reissuing certificates",
     "category": "platform",
@@ -921,6 +971,31 @@
         "icon": "layers",
         "label": "KEDA scaling",
         "detail": "Scale the corrected workload"
+      }
+    ]
+  },
+  {
+    "id": "shared-redis-eviction-lost-lock",
+    "cardTitle": "The lock that vanished: a full Redis and immortal keys",
+    "category": "reliability",
+    "title": "Find who fills the cache, then make the data expire.",
+    "note": "Capacity was raised first as a mitigation. The eviction policy was deliberately left unchanged.",
+    "article": "shared-redis-eviction-lost-lock",
+    "nodes": [
+      {
+        "icon": "activity",
+        "label": "Diagnose read-only",
+        "detail": "Logs, code and instance metrics"
+      },
+      {
+        "icon": "shield",
+        "label": "Alert on the signal",
+        "detail": "Keys that can expire, not just memory"
+      },
+      {
+        "icon": "database",
+        "label": "Fix writers, then expire",
+        "detail": "TTL guards, then a reversible pass"
       }
     ]
   }
