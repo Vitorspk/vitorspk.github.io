@@ -8,7 +8,7 @@
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <title>Modernizing a Grafana + Prometheus stack — Vitor Schiavo</title>
-    <meta name="description" content="Two major Grafana upgrades to 11.6 LTS, Prometheus to 2.53 LTS, and recording rules that made heavy dashboards about 30 times faster, with no data loss and no alert changes.">
+    <meta name="description" content="Two major Grafana upgrades, a Prometheus LTS upgrade, and recording rules that made heavy dashboards about 30 times faster, with no data loss and no alert changes.">
     <meta name="robots" content="index, follow">
     <!-- i18n:links:start -->
 <link rel="canonical" href="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/">
@@ -24,7 +24,7 @@
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="Modernizing a Grafana + Prometheus stack">
-    <meta property="og:description" content="Grafana to 11.6 LTS, Prometheus to 2.53 LTS, and recording rules that made heavy dashboards about 30 times faster.">
+    <meta property="og:description" content="Grafana and Prometheus upgraded to supported LTS releases, and recording rules that made heavy dashboards about 30 times faster.">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png">
     <meta property="og:image:width" content="1200">
@@ -33,7 +33,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Modernizing a Grafana + Prometheus stack">
-    <meta name="twitter:description" content="Grafana to 11.6 LTS, Prometheus to 2.53 LTS, and dashboards about 30 times faster.">
+    <meta name="twitter:description" content="Grafana and Prometheus upgraded to supported LTS releases, and dashboards about 30 times faster.">
     <meta name="twitter:image" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png">
     <meta name="twitter:image:alt" content="Modernizing a Grafana and Prometheus stack — a case study by Vitor Schiavo.">
 
@@ -42,7 +42,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "Modernizing a Grafana and Prometheus observability stack",
-      "description": "Two major Grafana upgrades to 11.6 LTS, Prometheus to 2.53 LTS, and recording rules that made heavy dashboards about 30 times faster, with no data loss and no alert changes.",
+      "description": "Two major Grafana upgrades, a Prometheus LTS upgrade, and recording rules that made heavy dashboards about 30 times faster, with no data loss and no alert changes.",
       "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
@@ -124,11 +124,11 @@
 
             <p>Observability stacks rot quietly. The upgrades feel risky, so they get deferred, and one day you are on an end-of-life Grafana with dashboards nobody trusts and queries that take half a minute. This is a write-up of pulling one back to current: two major Grafana versions, a Prometheus LTS bump, and the recording rules that were the real win.</p>
 
-            <h2>Grafana: end-of-life to 11.6 LTS</h2>
-            <p>Grafana was on an end-of-life release, one major version short of the Angular plugin runtime being removed entirely. I took it to <strong>11.6 LTS</strong> in a deliberate, reversible way:</p>
+            <h2>Grafana: end-of-life to a current LTS</h2>
+            <p>Grafana was on an end-of-life release, one major version short of the Angular plugin runtime being removed entirely. I took it to <strong>a current LTS</strong> in a deliberate, reversible way:</p>
             <ul>
                 <li><strong>Two-step image bump</strong> (through an intermediate minor) rather than one big jump, so each step was small and easy to roll back.</li>
-                <li><strong>Angular runtime removal.</strong> Grafana 11 disables the Angular plugin runtime, so I uninstalled the legacy Angular panel plugins first, then walked the old-schema dashboards through the auto-migration so new React panel types persisted.</li>
+                <li><strong>Angular runtime removal.</strong> Recent Grafana releases disable the Angular plugin runtime, so I uninstalled the legacy Angular panel plugins first, then walked the old-schema dashboards through the auto-migration so new React panel types persisted.</li>
                 <li><strong>Dashboard cleanup.</strong> Exported every dashboard from the live instance into git (it had drifted from the database), then deleted abandoned ones.</li>
                 <li><strong>Defensive backups.</strong> Disk snapshots before every change. Both went unused, which is exactly how backups should end.</li>
                 <li><strong>Zero disruption.</strong> All alert rules and datasources came through the upgrade unchanged. A later pass took it to the next major with a full dashboard audit.</li>
@@ -153,12 +153,12 @@
             <div class="stat-strip">
                 <div class="stat"><span class="stat-value">~30×</span><span class="stat-label">faster dashboards</span></div>
                 <div class="stat"><span class="stat-value">0.66 s</span><span class="stat-label">consistent query time</span></div>
-                <div class="stat"><span class="stat-value">LTS</span><span class="stat-label">Grafana 11.6 + Prom 2.53</span></div>
+                <div class="stat"><span class="stat-value">LTS</span><span class="stat-label">Grafana + Prometheus on supported LTS</span></div>
                 <div class="stat"><span class="stat-value">0</span><span class="stat-label">data lost or alerts changed</span></div>
             </div>
 
-            <h2>Prometheus: 2.45 to 2.53 LTS</h2>
-            <p>I patched Prometheus up eight minor versions to <strong>2.53 LTS</strong>, staged safely: the sandbox cluster first, then production after a 24-hour soak. One real-world constraint worth naming: the stack runs the managed (GMP) fork of Prometheus because the environment's Cloud Monitoring alerts and dashboards depend on its built-in exporter. Upstream Prometheus is already on 3.x, but the managed fork tops out at 2.53 LTS, so that was the ceiling. Knowing which fork you are on, and why, is half the upgrade.</p>
+            <h2>Prometheus: to the latest LTS</h2>
+            <p>I upgraded Prometheus to the highest LTS release available, staged safely: the pre-production cluster first, then production after a 24-hour soak. One real-world constraint worth naming: the managed fork of Prometheus trails upstream, so the fork sets the ceiling. Knowing which fork you are on, and why, is half the upgrade.</p>
 
             <h2>A config refactor worth doing</h2>
             <p>The per-environment Prometheus configs had drifted into different section orders, which made diffing one environment against another a chore. I reordered them to a single canonical structure (persistent volumes, config, RBAC, StatefulSet, services, ingress). No functional change, but now a side-by-side diff shows only the differences that matter.</p>

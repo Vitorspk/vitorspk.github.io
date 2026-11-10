@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=d8dfb239c9221b0ff259a4da2549faaa0bb71c33 src=cases/grafana-prometheus-modernization/index.html -->
+<!-- i18n:src-sha=841882098c0dfa9f3622fa7f8cc64743ac73e360 src=cases/grafana-prometheus-modernization/index.html -->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
           content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
 
     <title>Modernización de un stack Grafana + Prometheus — Vitor Schiavo</title>
-    <meta name="description" content="Dos actualizaciones mayores de Grafana a 11.6 LTS, Prometheus a 2.53 LTS y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos, sin pérdida de datos ni cambios en las alertas.">
+    <meta name="description" content="Dos actualizaciones mayores de Grafana, una actualización LTS de Prometheus y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos, sin pérdida de datos ni cambios en las alertas.">
     <meta name="robots" content="index, follow">
     <!-- i18n:links:start -->
 <link rel="canonical" href="https://vitorschiavo.dev/es/cases/grafana-prometheus-modernization/">
@@ -25,7 +25,7 @@
 
     <meta property="og:type" content="article">
     <meta property="og:title" content="Modernización de un stack Grafana + Prometheus">
-    <meta property="og:description" content="Grafana a 11.6 LTS, Prometheus a 2.53 LTS y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos.">
+    <meta property="og:description" content="Grafana y Prometheus actualizados a versiones LTS con soporte y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos.">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png">
     <meta property="og:image:width" content="1200">
@@ -34,7 +34,7 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Modernización de un stack Grafana + Prometheus">
-    <meta name="twitter:description" content="Grafana a 11.6 LTS, Prometheus a 2.53 LTS y dashboards unas 30 veces más rápidos.">
+    <meta name="twitter:description" content="Grafana y Prometheus actualizados a versiones LTS con soporte y dashboards unas 30 veces más rápidos.">
     <meta name="twitter:image" content="https://vitorschiavo.dev/cases/grafana-prometheus-modernization/og.png">
     <meta name="twitter:image:alt" content="Modernización de un stack de Grafana y Prometheus — un estudio de caso de Vitor Schiavo.">
 
@@ -43,7 +43,7 @@
       "@context": "https://schema.org",
       "@type": "TechArticle",
       "headline": "Modernización de un stack de observabilidad con Grafana y Prometheus",
-      "description": "Dos actualizaciones mayores de Grafana a 11.6 LTS, Prometheus a 2.53 LTS y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos, sin pérdida de datos ni cambios en las alertas.",
+      "description": "Dos actualizaciones mayores de Grafana, una actualización LTS de Prometheus y recording rules que hicieron los dashboards pesados unas 30 veces más rápidos, sin pérdida de datos ni cambios en las alertas.",
       "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
       "datePublished": "2026-10-17",
       "dateModified": "2026-10-17",
@@ -125,11 +125,11 @@
 
             <p>Los stacks de observabilidad se deterioran en silencio. Las actualizaciones parecen riesgosas, así que se posponen, y un día te encuentras con un Grafana sin soporte, con dashboards en los que nadie confía y consultas que tardan medio minuto. Este es el relato de cómo devolví uno al día: dos versiones mayores de Grafana, un salto de Prometheus a LTS y las recording rules que fueron la verdadera victoria.</p>
 
-            <h2>Grafana: de fin de soporte a 11.6 LTS</h2>
-            <p>Grafana estaba en una versión sin soporte, a solo una versión mayor de distancia de que el runtime de plugins de Angular desapareciera por completo. Lo llevé a <strong>11.6 LTS</strong> de forma deliberada y reversible:</p>
+            <h2>Grafana: de fin de soporte a una LTS actual</h2>
+            <p>Grafana estaba en una versión sin soporte, a solo una versión mayor de distancia de que el runtime de plugins de Angular desapareciera por completo. Lo llevé a <strong>una LTS actual</strong> de forma deliberada y reversible:</p>
             <ul>
                 <li><strong>Salto de imagen en dos pasos</strong> (a través de una versión menor intermedia) en lugar de un gran salto único, de modo que cada paso fuera pequeño y fácil de revertir.</li>
-                <li><strong>Eliminación del runtime de Angular.</strong> Grafana 11 deshabilita el runtime de plugins de Angular, así que primero desinstalé los plugins de panel heredados en Angular y luego llevé los dashboards con el esquema antiguo por la migración automática para que los nuevos tipos de panel en React se persistieran.</li>
+                <li><strong>Eliminación del runtime de Angular.</strong> Las versiones recientes de Grafana deshabilitan el runtime de plugins de Angular, así que primero desinstalé los plugins de panel heredados en Angular y luego llevé los dashboards con el esquema antiguo por la migración automática para que los nuevos tipos de panel en React se persistieran.</li>
                 <li><strong>Limpieza de dashboards.</strong> Exporté cada dashboard de la instancia en vivo a git (se había desincronizado de la base de datos) y luego eliminé los abandonados.</li>
                 <li><strong>Backups defensivos.</strong> Snapshots de disco antes de cada cambio. Los dos quedaron sin usar, que es exactamente como deberían terminar los backups.</li>
                 <li><strong>Cero interrupciones.</strong> Todas las alert rules y los datasources pasaron por la actualización sin cambios. Una pasada posterior lo llevó a la siguiente versión mayor con una auditoría completa de dashboards.</li>
@@ -154,12 +154,12 @@
             <div class="stat-strip">
                 <div class="stat"><span class="stat-value">~30×</span><span class="stat-label">dashboards más rápidos</span></div>
                 <div class="stat"><span class="stat-value">0.66 s</span><span class="stat-label">tiempo de consulta constante</span></div>
-                <div class="stat"><span class="stat-value">LTS</span><span class="stat-label">Grafana 11.6 + Prom 2.53</span></div>
+                <div class="stat"><span class="stat-value">LTS</span><span class="stat-label">Grafana + Prometheus en LTS con soporte</span></div>
                 <div class="stat"><span class="stat-value">0</span><span class="stat-label">datos perdidos o alertas modificadas</span></div>
             </div>
 
-            <h2>Prometheus: de 2.45 a 2.53 LTS</h2>
-            <p>Actualicé Prometheus ocho versiones menores hasta <strong>2.53 LTS</strong>, de forma escalonada y segura: primero el cluster de sandbox y luego producción tras un periodo de estabilización de 24 horas. Vale la pena mencionar una restricción del mundo real: el stack usa el fork gestionado (GMP) de Prometheus porque las alertas y los dashboards de Cloud Monitoring del entorno dependen de su exporter integrado. El Prometheus upstream ya va por la 3.x, pero el fork gestionado llega como máximo a 2.53 LTS, así que ese era el techo. Saber en qué fork estás, y por qué, es la mitad de la actualización.</p>
+            <h2>Prometheus: hasta la última LTS</h2>
+            <p>Actualicé Prometheus a la LTS más alta disponible, de forma escalonada y segura: primero el cluster de preproducción y luego producción tras un periodo de estabilización de 24 horas. Vale la pena mencionar una restricción del mundo real: el fork gestionado de Prometheus va por detrás del upstream, así que el fork marca el techo. Saber en qué fork estás, y por qué, es la mitad de la actualización.</p>
 
             <h2>Un refactor de configuración que vale la pena</h2>
             <p>Las configuraciones de Prometheus por entorno se habían desviado hacia órdenes de sección distintos, lo que convertía en una molestia comparar (diff) un entorno con otro. Las reordené a una única estructura canónica (persistent volumes, config, RBAC, StatefulSet, services, ingress). Sin cambios funcionales, pero ahora un diff lado a lado muestra solo las diferencias que importan.</p>

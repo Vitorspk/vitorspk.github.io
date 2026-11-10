@@ -426,7 +426,7 @@
   },
   {
     "id": "database-security-hardening",
-    "cardTitle": "Database security hardening — 60+ databases",
+    "cardTitle": "Database security hardening",
     "category": "security",
     "title": "Reduce exposure and protect the connection.",
     "note": "Private networking, encrypted transport and access controls form separate layers of defense.",

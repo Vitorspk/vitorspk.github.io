@@ -1044,7 +1044,7 @@
 <span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
 
 <div>
-<h3 class="case-title"> Database security hardening — 60+ databases</h3>
+<h3 class="case-title"> Database security hardening</h3>
 <p class="case-date">2023–2025 · Security Architecture · Compliance</p>
 <div class="case-tags">
 <span class="case-tag">SSL/TLS</span>
@@ -1069,56 +1069,15 @@
 
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
-<p class="case-description">
-                                    Databases exposed with public IPs, unencrypted connections, password-only authentication. Non-compliant with ISO 27001. Vulnerable to network sniffing and unauthorized access.
-                                </p>
-</div>
-<div class="before-after">
-<div class="before-card">
-<span class="before-label"> Before</span>
-<div class="metric-row">
-<span class="metric-name">Network</span>
-<span class="metric-value">Public IPs</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Encryption</span>
-<span class="metric-value">None (plaintext)</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Auth</span>
-<span class="metric-value">Password only</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Compliance</span>
-<span class="metric-value">Non-compliant</span>
-</div>
-</div>
-<div class="after-card">
-<span class="after-label"> After</span>
-<div class="metric-row">
-<span class="metric-name">Network</span>
-<span class="metric-value">Private IPs only</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Encryption</span>
-<span class="metric-value">SSL/TLS enforced</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Auth</span>
-<span class="metric-value">Certificate + password</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Compliance</span>
-<span class="metric-value">ISO 27001 </span>
-</div>
-</div>
+<p class="case-description">Databases needed private networking, encrypted connections and stronger authentication to meet ISO 27001.</p>
 </div>
 <div class="impact-metrics">
 <h4 class="impact-title">Business Impact</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>60+ databases secured</strong> (MongoDB Atlas + PostgreSQL)</li>
-<li class="impact-item"><strong>Later platform controls:</strong> piloted External Secrets in three repositories; made secret updates preserve existing fields; reversibly disabled 133 older versions across 97 secrets in four projects. Production identity exceptions remained documented.</li>
+<strong>Databases secured</strong> with private networking, enforced TLS and certificate authentication</li>
+<li class="impact-item">
+<strong>Later platform controls:</strong> piloted External Secrets in three repositories and made secret updates preserve existing fields</li>
 <li class="impact-item">
 <strong>Zero security incidents</strong> post-implementation</li>
 <li class="impact-item">
@@ -1126,10 +1085,9 @@
 </ul>
 </div>
 <div class="tech-stack-list">
-<span class="tech-badge">MongoDB Atlas</span>
-<span class="tech-badge">PostgreSQL</span>
-<span class="tech-badge">Redis 7.2</span>
-<span class="tech-badge">VPC Peering</span>
+<span class="tech-badge">Private networking</span>
+<span class="tech-badge">TLS</span>
+<span class="tech-badge">Certificate auth</span>
 </div>
 </div>
 </div>
@@ -1142,7 +1100,6 @@
 <p class="case-date">2023–2024 · API Management · Architecture</p>
 <div class="case-tags">
 <span class="case-tag">Kong Gateway</span>
-<span class="case-tag">160+ APIs</span>
 <span class="case-tag">Rate Limiting</span>
 <span class="case-tag">Kubernetes</span>
 </div>
@@ -1163,15 +1120,13 @@
 
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
-<p class="case-description">
-                                    160+ applications with direct nginx ingress and no centralized API management, rate limiting, or authentication layer. Difficult to enforce policies or monitor API usage consistently.
-                                </p>
+<p class="case-description">Application traffic needed one place to enforce authentication, rate limiting and routing policy, and to monitor API usage consistently.</p>
 </div>
 <div class="impact-metrics">
 <h4 class="impact-title">Business Impact</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>160+ applications</strong> now go through a single gateway, giving one place to enforce policy</li>
+<strong>Applications</strong> now go through a single gateway, giving one place to enforce policy</li>
 <li class="impact-item">
 <strong>Rate limiting</strong> configured centrally; no per-service implementation needed</li>
 <li class="impact-item">
@@ -1496,7 +1451,7 @@
 
 <div>
 <h3 class="case-title"> Production Incident Response — P1 Outage &amp; Partner Auth Failure</h3>
-<p class="case-date">March 2026 · Incident Response · Production Reliability</p>
+<p class="case-date">2026 · Incident Response · Production Reliability</p>
 <div class="case-tags">
 <span class="case-tag">P1 Incident</span>
 <span class="case-tag">Incident Response</span>
@@ -1519,29 +1474,29 @@
 </figure>
 
 <div class="case-section">
-<h4 class="case-section-title">Incident A — Third-Party CMS Loader [P1]: HTTP 500 across two regional markets</h4>
+<h4 class="case-section-title">Incident A — Third-party dependency outage [P1]</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>Impact:</strong> 100% of page loads returning HTTP 500 from 13:08 UTC; full production outage across two regional markets</li>
+<strong>Impact:</strong> page loads failed until a fallback was in place</li>
 <li class="impact-item">
-<strong>Root cause:</strong> Third-party CMS API dependency had an outage; all pages failed server-side rendering</li>
+<strong>Root cause:</strong> a third-party dependency had an outage and server-side rendering depended on it</li>
 <li class="impact-item">
-<strong>Response:</strong> Identified dependency failure, implemented emergency static fallback, and escalated to vendor support</li>
+<strong>Response:</strong> identified the dependency failure, implemented an emergency static fallback and escalated to the vendor</li>
 <li class="impact-item">
-<strong>Resolution:</strong> Service restored; added circuit-breaker pattern and health monitoring for external CMS dependencies</li>
+<strong>Resolution:</strong> service restored; added a circuit-breaker pattern and health monitoring for external dependencies</li>
 </ul>
 </div>
 <div class="case-section">
-<h4 class="case-section-title">Incident B — Partner API [P2]: Credential Rotation Causing Auth Failure</h4>
+<h4 class="case-section-title">Incident B — Partner API [P2]: credential rotation causing authentication failure</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>Impact:</strong> All partner authentication calls returning 401 from ~14:30 UTC after partner-side password rotation</li>
+<strong>Impact:</strong> partner authentication calls failed after a partner-side credential rotation</li>
 <li class="impact-item">
-<strong>Root cause:</strong> Partner rotated credentials without coordinated notification; old password revoked mid-day</li>
+<strong>Root cause:</strong> the partner rotated credentials without coordinated notification</li>
 <li class="impact-item">
-<strong>Response:</strong> Diagnosed authentication failure from logs, obtained new credentials, updated GCP Secret Manager, triggered rolling restart</li>
+<strong>Response:</strong> diagnosed the failure from logs, obtained new credentials, updated the secret store and triggered a rolling restart</li>
 <li class="impact-item">
-<strong>Hardening:</strong> Established credential rotation runbook and pre-agreed notification SLA with partner</li>
+<strong>Hardening:</strong> established a credential-rotation runbook and a pre-agreed notification SLA with the partner</li>
 </ul>
 </div>
 <div class="impact-metrics">
@@ -1556,8 +1511,8 @@
 </ul>
 </div>
 <div class="tech-stack-list">
-<span class="tech-badge">GKE</span>
-<span class="tech-badge">GCP Secret Manager</span>
+<span class="tech-badge">Kubernetes</span>
+<span class="tech-badge">Secret management</span>
 <span class="tech-badge">Prometheus</span>
 <span class="tech-badge">Incident Response</span>
 <span class="tech-badge">SRE</span>
@@ -1572,7 +1527,7 @@
 <h3 class="case-title"> Elastic Stack Migration — EC2 to Kubernetes at Scale</h3>
 <p class="case-date">2020–2021 · Observability · Infrastructure Modernization</p>
 <div class="case-tags">
-<span class="case-tag">Elasticsearch 7.8</span>
+<span class="case-tag">Elasticsearch</span>
 <span class="case-tag">Logstash</span>
 <span class="case-tag">Kibana</span>
 <span class="case-tag">Filebeat</span>
@@ -1597,7 +1552,7 @@
 <div class="case-section">
 <h4 class="case-section-title"> Problem</h4>
 <ul class="impact-list">
-<li class="impact-item">2 legacy Elastic Stack clusters: Elasticsearch 5 on EC2 and Elasticsearch 6 on ECS, both via docker-compose</li>
+<li class="impact-item">2 legacy Elastic Stack clusters: Elasticsearch on EC2 and Elasticsearch on ECS, both via docker-compose</li>
 <li class="impact-item">No role separation: every node handled master election, data storage, and ingest simultaneously</li>
 <li class="impact-item">Manual scaling, no self-healing, single points of failure</li>
 <li class="impact-item">Storage bottleneck: no S3 snapshots, no automated retention policies</li>
@@ -1606,7 +1561,7 @@
 <div class="case-section">
 <h4 class="case-section-title"> Solution</h4>
 <ul class="impact-list">
-<li class="impact-item">Consolidated both clusters into 1 unified EKS cluster on Elasticsearch 7.8</li>
+<li class="impact-item">Consolidated both clusters into 1 unified EKS cluster on Elasticsearch</li>
 <li class="impact-item">Designed multi-node architecture with dedicated roles: 3 master (8 GB), 3 data (16 GB, 50 TB), 3 ingest (16 GB)</li>
 <li class="impact-item">Custom ECR image with S3 snapshot plugin for automated backup and retention</li>
 <li class="impact-item">Deployed via Helm Charts with rolling updates, PDB (maxUnavailable: 1), and soft anti-affinity</li>
@@ -1668,7 +1623,7 @@
 <polygon points="405,307 410,317 415,307" fill="var(--success)"/>
 <!-- === ROW 4: Elasticsearch Cluster === -->
 <rect x="40" y="315" width="740" height="95" rx="10" fill="var(--warning)" fill-opacity="0.08" stroke="var(--warning)" stroke-width="1.5"/>
-<text x="410" y="335" text-anchor="middle" font-size="12" font-weight="700" fill="var(--warning)">Elasticsearch 7.8 Cluster (elk-multi)</text>
+<text x="410" y="335" text-anchor="middle" font-size="12" font-weight="700" fill="var(--warning)">Elasticsearch Cluster (elk-multi)</text>
 <!-- Master nodes -->
 <rect x="60" y="345" width="210" height="55" rx="8" fill="var(--bg-elevated)" stroke="var(--primary)" stroke-width="1.5"/>
 <text x="165" y="365" text-anchor="middle" font-size="11" font-weight="700" fill="var(--primary)">Master Nodes (3x)</text>
@@ -1714,7 +1669,7 @@
 <li class="impact-item">
 <strong>Consolidated 2 → 1 cluster</strong>: eliminated the entire legacy fleet of instances and volumes, replacing it with a handful of EKS nodes</li>
 <li class="impact-item">
-<strong>Version upgrade v5/v6 → v7.8</strong>: major version leap, unlocking ILM, security features, and index lifecycle management</li>
+<strong>Version upgrade</strong>: major version leap, unlocking ILM, security features, and index lifecycle management</li>
 <li class="impact-item">
 <strong>EBS GP2 → Standard migration</strong>: migrated the full volume fleet across two AWS regions, reducing storage costs</li>
 <li class="impact-item">
@@ -1728,8 +1683,8 @@
 </ul>
 </div>
 <div class="tech-stack-list">
-<span class="tech-badge">Elasticsearch 7.8</span>
-<span class="tech-badge">Logstash 7.8</span>
+<span class="tech-badge">Elasticsearch</span>
+<span class="tech-badge">Logstash</span>
 <span class="tech-badge">Kibana 7.8</span>
 <span class="tech-badge">Filebeat 7.8</span>
 <span class="tech-badge">Fluent Bit</span>
@@ -1871,8 +1826,8 @@
 <div class="tech-stack-list">
 <span class="tech-badge">Apache Kafka</span>
 <span class="tech-badge">AWS MSK</span>
-<span class="tech-badge">Logstash 7.8</span>
-<span class="tech-badge">Elasticsearch 7.8</span>
+<span class="tech-badge">Logstash</span>
+<span class="tech-badge">Elasticsearch</span>
 <span class="tech-badge">RabbitMQ</span>
 <span class="tech-badge">GELF</span>
 <span class="tech-badge">Kubernetes</span>
