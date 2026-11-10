@@ -82,18 +82,18 @@ No raw Jira exports, account identifiers, internal service names, private URLs o
 
 ## Shared Redis eviction case — 2026-11-09
 
-Source: Jira NCLS-5259 (parent) with NCLS-5260, 5261, 5262, 5263, 5264 and 5266, read live on 2026-11-09 including the three closure comments of that day. The earlier research brief was unverified (all verifier agents failed on session limits) and was re-checked claim by claim against the Jira text. Public page: `cases/shared-redis-eviction-lost-lock/`.
+Source: Jira NCLS-5259 and its sub-tasks, read live on 2026-11-09 including the three closure comments of that day. The earlier research brief was unverified (all verifier agents failed on session limits) and was re-checked claim by claim against the Jira text. Public page: `cases/shared-redis-eviction-lost-lock/`.
 
 | Claim | Treatment |
 | --- | --- |
-| Instance capacity | The record contradicts itself: 5 to 8 GB resize on 28 Oct, a later increase to 16 GiB recorded on 29 Oct, and a 9 Nov live check that "confirmed 5 GiB". Publish only the measured effect of the first resize (memory 100% to 57.8%, about 8.7-9.3k evictions per 3 minutes to 0, pods ready with 0 restarts). No final size is stated. |
+| Instance capacity | The capacity records contradict each other. Publish only the measured effect of the first increase (memory from 100% to about 58%, evictions to zero, pods ready with no restarts). No instance size or final capacity is stated. |
 | Expiry versus deletion | Two separate operations. 29 Oct: EXPIRE NX passes, at least 7,924,990 expiry writes, no DEL, existing TTLs never overwritten. 9 Nov, explicitly authorized: 1,916,409 persistent keys idle more than 30 days removed (212.62 MiB), then 38,883 counters (2.67 MiB). Recorded used memory 2.99 to 2.67 GiB is net of concurrent traffic and is attributed to the first deletion only. |
-| Services fixed | Six services have TTL guards deployed to production and sandbox (five PRs merged and deployed in sequence, plus a final lookup-cache PR). Two legacy session-store services, the largest source (about 5.2M keys), are not in the closing record; the page does not claim them. |
+| Services fixed | Six services have TTL guards deployed to production and pre-production (five PRs merged and deployed in sequence, plus a final lookup-cache PR). The closing record does not cover every producer; the page claims only these six. |
 | TTL cap | 48 h applies to ordinary caches. One coordination marker keeps a narrowly scoped longer limit (not named publicly). |
 | Alert backtest | CRITICAL policy (sum of keys with expiration below 100k for 30 min) would have fired on 23 Oct about 08:00Z, five days before the job broke. Old memory alert watched host memory (0.68-0.70 against 0.8): wrong metric. |
 | Method figures | 400 random keys per database, masked, no KEYS/SCAN/writes, about +-5 points; 16 regression tests on the production Redis version and deployed CLI; EXPIRE refreshes LRU idle age (local test), CLIENT NO-TOUCH on the same connection preserves it; classifier 0.740 s to 0.053 s per 5,000 synthetic keys. |
 | Not claimed | All historical keys removed; every producer fixed; a naturally written 48 h key observed in production (unproven at closure); alert notification routing revalidated (not done at closure). |
-| Omitted on purpose | Business counts of the failing runs, the real payment charge, key and service names, repositories, project and cluster identifiers, PR numbers, commit hashes, Jira keys in public copy. Product framed as regulated online safety. |
+| Omitted on purpose | Business counts of the failing runs, the real payment charge, instance sizes, key families that identify product features, library and framework details, key and service names, repositories, project and cluster identifiers, PR numbers, commit hashes, Jira keys in public copy. Product framed as regulated online safety. |
 
 
 ## Runtime RCE cases (PHP and Node.js) — 2026-11-09
