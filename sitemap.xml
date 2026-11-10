@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://vitorschiavo.dev/</loc>
-    <lastmod>2026-11-02</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/pt/</loc>
-    <lastmod>2026-11-02</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/es/</loc>
-    <lastmod>2026-11-02</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -660,6 +660,36 @@
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/self-hosting-gemma-3-vllm/"/>
     <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/self-hosting-gemma-3-vllm/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/self-hosting-gemma-3-vllm/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/shared-redis-eviction-lost-lock/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/</loc>
+    <lastmod>2026-11-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/strapi-v4-to-v5-upgrade/</loc>

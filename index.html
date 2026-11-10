@@ -287,6 +287,24 @@
 </p>
 <article class="case-study" data-category="reliability" data-expanded="false">
 <div class="case-header">
+<span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg></span>
+<div><h3 class="case-title">The lock that vanished: a full Redis and immortal keys</h3><p class="case-date">November 2026 · A shared Redis full for a month crowded out every key that could expire, and a scheduled job kept losing its lock.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="shared-redis-eviction-lost-lock" data-visual-area="reliability">
+<figcaption><span>Solution at a glance</span><strong>Find who fills the cache, then make the data expire.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"></path></svg><strong>Diagnose read-only</strong><span>Logs, code and instance metrics</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4ZM8 12l3 3 5-6"></path></svg><strong>Alert on the signal</strong><span>Keys that can expire, not just memory</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 5c0 2-16 2-16 0s16-2 16 0ZM4 5v14c0 3 16 3 16 0V5M4 12c0 3 16 3 16 0"></path></svg><strong>Fix writers, then expire</strong><span>TTL guards, then a reversible pass</span></div>
+</div>
+<p class="case-map-note">Capacity was raised first as a mitigation. The eviction policy was deliberately left unchanged.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I traced lost locks to keys that never expire, resized the instance, alerted on the real failure signal, fixed the writers and expired the backlog with authorized, reversible steps.</p></div>
+<a class="case-readmore" href="/cases/shared-redis-eviction-lost-lock/">Read the case study <span aria-hidden="true">→</span></a></div></article>
+<article class="case-study" data-category="reliability" data-expanded="false">
+<div class="case-header">
 <span class="case-header-mark" data-visual-area="reliability" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 5-6 7 6 7m8-14 6 7-6 7M14 3l-4 18"></path></svg></span>
 
 <div>
