@@ -95,3 +95,21 @@ Source: Jira NCLS-5259 (parent) with NCLS-5260, 5261, 5262, 5263, 5264 and 5266,
 | Not claimed | All historical keys removed; every producer fixed; a naturally written 48 h key observed in production (unproven at closure); alert notification routing revalidated (not done at closure). |
 | Omitted on purpose | Business counts of the failing runs, the real payment charge, key and service names, repositories, project and cluster identifiers, PR numbers, commit hashes, Jira keys in public copy. Product framed as regulated online safety. |
 
+
+## Runtime RCE cases (PHP and Node.js) — 2026-11-09
+
+Source: Jira NCLS-5221 to 5228 (PHP, closed 21 Oct 2026) and NCLS-5249 to 5253, 5255 to 5258 (Node.js, closed 28 Oct 2026), read live on 2026-11-09. The earlier research brief was unverified and was re-checked against the Jira text. Public pages: `cases/php-runtime-rce-patch/` and `cases/node-runtime-rce-fleet-patch/`.
+
+| Claim | Treatment |
+| --- | --- |
+| PHP: "same day", 1,603 containers / 511 unique images | From the closing summary of 21 Oct: a scan of every running container in all cluster contexts found no vulnerable PHP runtime. Three deployed apps (8.3.33 to 8.3.36 for the two production services, demo app to 8.4.27 in four environments) plus the two shared base images. The scan did not cover VMs or Cloud Run outside the main projects; stated on the page. |
+| PHP: why a rebuild would patch nothing | Recorded: the registry kept serving 8.3.35 under the floating tag for several hours; the shared base is rebuilt monthly and a production service was two patch versions behind it; PHP 8.1 is EOL. |
+| PHP: "neutral change" | Control (old base, guard lowered) versus patched build: same modules, same HTTP responses on checked routes, same framework version, 432 tests passing with the same 25 pre-existing failures. The official-recipe build was a local validation before merge, not a workaround for a missing upstream image. |
+| Node: "24 applications and four base images" | The 24 is my own count of the two app lists in the NCLS-5249 closing summary (15 legacy-pipeline apps plus 9 GitOps apps); the four bases are two Node bases and two PHP bases that bundle Node. Apps retired after being updated are not in the 24. Reported as "24 apps", not as a fleet total. |
+| Node: "174 images" | NCLS-5253, 26 Oct: 174 container images checked in production, 26 Node workloads, 1 fixed and 25 vulnerable. Versions read from running image digests. |
+| Node: "one week" | Disclosed 21 Oct, colleague analysis 23 Oct, dev and staging 26 Oct, production and sandbox 27 Oct, closing summary 28 Oct. |
+| Node: "no regressions" | Reworded: post-deploy comparisons found no errors attributable to the upgrade. Two operational hiccups are stated (a sandbox liveness restart on cold start, a CI agent out of disk). No availability claim. |
+| Node: colleague credit | The original exposure analysis was a colleague's (NCLS-5249). Credited as "a colleague", not named. |
+| Node: PDF service | Dev and staging validated (20/20 scenarios, six-locale PDFs text-identical, zero pixel difference over 12 pages, image about 793 MB to about 345 MB). Production promotion was gated on QA and was still on the old Node at the 28 Oct closing; the page does not state production status. |
+| Omitted on purpose | Follow-up security findings recorded outside these tasks (an unverified webhook and a path-traversal write in an undeployed repo, an EOL Go service); the closing "out of scope" list of services still unpatched (named only as "legacy end-of-life services tracked separately"); service, repo, image, project and PR names; build and commit identifiers; the vendor image tags. |
+

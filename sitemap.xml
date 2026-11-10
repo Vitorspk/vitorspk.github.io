@@ -3,7 +3,7 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://vitorschiavo.dev/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -13,7 +13,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/pt/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -23,7 +23,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/es/</loc>
-    <lastmod>2026-11-03</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/"/>
@@ -542,6 +542,66 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/monitoring-ingestion-cost/"/>
   </url>
   <url>
+    <loc>https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/node-runtime-rce-fleet-patch/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/cases/php-runtime-rce-patch/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/php-runtime-rce-patch/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/pt/cases/php-runtime-rce-patch/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/php-runtime-rce-patch/"/>
+  </url>
+  <url>
+    <loc>https://vitorschiavo.dev/es/cases/php-runtime-rce-patch/</loc>
+    <lastmod>2026-11-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/php-runtime-rce-patch/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/php-runtime-rce-patch/"/>
+  </url>
+  <url>
     <loc>https://vitorschiavo.dev/cases/queue-driven-autoscaling/</loc>
     <lastmod>2026-10-25</lastmod>
     <changefreq>monthly</changefreq>
@@ -663,7 +723,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
@@ -673,7 +733,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/pt/cases/shared-redis-eviction-lost-lock/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>
@@ -683,7 +743,7 @@
   </url>
   <url>
     <loc>https://vitorschiavo.dev/es/cases/shared-redis-eviction-lost-lock/</loc>
-    <lastmod>2026-11-10</lastmod>
+    <lastmod>2026-11-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/shared-redis-eviction-lost-lock/"/>

@@ -1359,6 +1359,42 @@
 </a>
 </div>
 </div>
+<article class="case-study" data-category="security" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>
+<div><h3 class="case-title">Patching a PHP runtime RCE on the day it landed</h3><p class="case-date">October 2026 · A critical PHP runtime flaw landed; pinning the patched version and scanning 1,603 running containers closed it the same day.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="php-runtime-rce-patch" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Pin the fix, then prove it on what runs.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Impact assessment</strong><span>PHP versions read from running pods</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Pinned base images</strong><span>Exact patched version plus a build guard</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Cluster-wide scan</strong><span>Every running container checked</span></div>
+</div>
+<p class="case-map-note">The scan covered the main clusters. Virtual machines and serverless services outside the main projects were not covered.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I assessed which PHP versions actually ran, pinned patched base images, added a build guard and proved the result with a cluster-wide scan.</p></div>
+<a class="case-readmore" href="/cases/php-runtime-rce-patch/">Read the case study <span aria-hidden="true">→</span></a></div></article>
+<article class="case-study" data-category="security" data-expanded="false">
+<div class="case-header">
+<span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg></span>
+<div><h3 class="case-title">Patching a Node.js RCE across 24 apps in one week</h3><p class="case-date">October 2026 · A runtime remote-code-execution flaw left every Node service unfixed; 24 apps and four base images were patched in a week.</p></div></div>
+<div class="case-body">
+<figure class="case-map" data-case-visual="node-runtime-rce-fleet-patch" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Inventory what runs, then roll out one gate at a time.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Runtime inventory</strong><span>Versions read from running images</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Gated rollout</strong><span>Development, staging, then production</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Baseline compare</strong><span>Validate against the pre-deploy state</span></div>
+</div>
+<p class="case-map-note">A colleague's exposure analysis started the work. The closing record is explicit about what it does not claim.</p>
+</figure>
+<div class="impact-metrics"><h4>My contribution and outcome</h4><p>I built the plan from a colleague's exposure analysis, inventoried 174 running images, upgraded base images and apps through gated rollouts, and rebuilt a service whose vendor image could not be patched.</p></div>
+<a class="case-readmore" href="/cases/node-runtime-rce-fleet-patch/">Read the case study <span aria-hidden="true">→</span></a></div></article>
 <article class="case-study" data-category="ai" data-expanded="false">
 <div class="case-header">
 <span class="case-header-mark" data-visual-area="ai" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12v12H6V6Zm3 3h6v6H9V9ZM9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"></path></svg></span>

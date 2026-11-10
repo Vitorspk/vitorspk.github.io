@@ -4,6 +4,8 @@ const AxeBuilder = require('@axe-core/playwright').default;
 test.use({ viewport: { width: 1280, height: 800 } });
 
 const PAGES = [
+  { path: '/cases/php-runtime-rce-patch/', title: /PHP runtime RCE/i, h1: /PHP runtime RCE/i },
+  { path: '/cases/node-runtime-rce-fleet-patch/', title: /Node\.js RCE/i, h1: /Node\.js RCE/i },
   { path: '/cases/gke-cluster-rebuild-recovery/', title: /Rebuilding GKE/i, h1: /Rebuilding GKE/i },
   { path: '/cases/kubernetes-dns-latency/', title: /latency hidden/i, h1: /latency hidden/i },
   { path: '/cases/ai-fleet-observability/', title: /ephemeral AI inference fleet/i, h1: /ephemeral AI inference fleet/i },
