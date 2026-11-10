@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=d20c4f1eb0dd8856863458cd6d47da6af1524b6c src=cases/php-runtime-rce-patch/index.html -->
+<!-- i18n:src-sha=7c833dd830289164369e8b80107563fb8adea092 src=cases/php-runtime-rce-patch/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -85,43 +85,43 @@
 <header class="doc-header"><span class="doc-eyebrow">Estudo de caso · Segurança · outubro de 2026</span>
 <h1 class="doc-title">Corrigindo uma RCE do runtime PHP no dia em que saiu</h1>
 <p class="doc-dek">Uma falha crítica no runtime do PHP foi divulgada. Rebuildar no mesmo dia não corrigiria nada; fixei a versão corrigida e verifiquei cada container em execução.</p>
-<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Atualizado em novembro de 2026</span><span>~5 min de leitura</span></div></header>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Atualizado em novembro de 2026</span><span>~4 min de leitura</span></div></header>
 <div class="doc-body">
 <figure class="case-map" data-case-visual="php-runtime-rce-patch" data-visual-area="security">
 <figcaption><span>A solução em resumo</span><strong>Fixe a correção e prove-a no que está rodando.</strong></figcaption>
 <div class="case-map-flow">
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Avaliação de impacto</strong><span>Versões de PHP lidas nos pods em execução</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Avaliação de impacto</strong><span>Ler o que realmente roda</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
 <div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Imagens-base fixadas</strong><span>Versão corrigida exata e uma guarda de build</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
 <div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Varredura no cluster</strong><span>Todos os containers em execução verificados</span></div>
 </div>
-<p class="case-map-note">A varredura cobriu os clusters principais. Máquinas virtuais e serviços serverless fora dos projetos principais não foram cobertos.</p>
+<p class="case-map-note">A alegação se limita aos clusters de containers que foram varridos.</p>
 </figure>
 
 <section class="case-brief" aria-label="Contribuição e escopo de entrega"><h2>Contribuição em resumo</h2><dl>
 <div><dt>Minha responsabilidade</dt><dd>A avaliação de impacto, imagens-base corrigidas e fixadas, uma guarda de build nas aplicações, o rollout e a varredura final de verificação.</dd></div>
-<div><dt>Escopo</dt><dd>Três aplicações PHP implantadas e as duas imagens-base compartilhadas que elas usam; um repositório não implantado saiu de um PHP em fim de vida.</dd></div>
-<div><dt>Colaboração &amp; limites</dt><dd>Desenvolvimento e staging foram mesclados de imediato; os merges de produção aguardaram revisão e aprovação. Máquinas virtuais e serviços serverless fora dos projetos principais não foram varridos.</dd></div>
-<div><dt>Resultado</dt><dd>A varredura final não encontrou runtime PHP vulnerável entre 1.603 containers em execução (511 imagens únicas), no dia da divulgação.</dd></div>
+<div><dt>Escopo</dt><dd>As aplicações PHP e as imagens-base compartilhadas que rodam nos clusters de containers.</dd></div>
+<div><dt>Colaboração &amp; limites</dt><dd>As mudanças em pré-produção foram mescladas de imediato; os merges de produção aguardaram revisão e aprovação.</dd></div>
+<div><dt>Resultado</dt><dd>A varredura final não encontrou runtime PHP vulnerável entre os containers em execução, no dia da divulgação.</dd></div>
 </dl></section>
 
 
 <h2>Duas falhas no próprio runtime</h2>
 <p>Em 21 de outubro de 2026, o projeto PHP lançou atualizações de emergência para duas falhas críticas que permitem a um atacante não autenticado executar código em um servidor web. Elas estão no runtime da linguagem, não no código da aplicação, então qualquer site PHP fica exposto, seja qual for o seu código. As versões corrigidas são 8.5.12, 8.4.27, 8.3.36 e 8.2.35, e só atualizar protege plenamente um servidor.</p>
 <h2>Leia o que roda, não o que o Dockerfile diz</h2>
-<p>Li o PHP_VERSION na configuração de cada imagem e o php -v nos pods de produção em execução. Três aplicações implantadas estavam vulneráveis: uma aplicação de demonstração, uma ferramenta interna e um serviço de notificações com três workers. As duas imagens-base compartilhadas também. Um quarto repositório, não implantado em lugar nenhum, rodava PHP 8.1 em fim de vida, que não recebe correção e precisava migrar para o 8.3.</p>
+<p>Li a versão do PHP na configuração de cada imagem e nos pods de produção em execução, e então mapeei cada workload e imagem-base compartilhada afetada. Ler os pods em execução importa porque um Dockerfile só diz o que se pretendia, não o que foi implantado.</p>
 <h2>Por que um rebuild não corrigiria nada</h2>
-<p>Nossas imagens-base usam tags flutuantes. Depois do lançamento, o registry continuou servindo a versão vulnerável na tag flutuante por várias horas, então um rebuild logo após o anúncio teria entregado a mesma versão. Uma segunda armadilha estava no processo: a base compartilhada é reconstruída todo mês, mas as aplicações só a recebem no próximo deploy, então um serviço de produção já estava duas versões de patch atrás da própria base.</p>
+<p>Imagens-base que usam tags flutuantes podem continuar apontando para a versão vulnerável depois que a correção sai: o registry continuou servindo a versão antiga na tag flutuante por várias horas, então um rebuild logo após o anúncio teria entregado a mesma versão. Uma segunda armadilha está na cadência de atualização. Uma base compartilhada é reconstruída em um calendário, mas as aplicações só a recebem no próximo deploy, então um serviço em execução pode ficar atrás da própria base.</p>
 <h2>Fixe, proteja e prove que a troca é neutra</h2>
-<p>A correção fixa a versão corrigida exata nas imagens-base e nos Dockerfiles. Antes do merge, validei o Dockerfile fixado construindo a receita oficial da imagem a partir do código-fonte, conferindo checksum e assinatura do tarball e confirmando que a lista de módulos era idêntica à da base atual. As aplicações ganharam uma guarda de build que recusa qualquer base abaixo da versão corrigida, de modo que uma base desatualizada não chega mais à produção em silêncio.</p>
-<p>Para mostrar que a mudança era neutra, comparei um controle, a base antiga com a guarda reduzida, com o build corrigido: os mesmos módulos PHP, as mesmas respostas do servidor web ao FPM nas rotas verificadas, a mesma versão do framework e os mesmos resultados de teste, 432 passando, com as mesmas 25 falhas pré-existentes, nenhuma relacionada ao runtime.</p>
+<p>A correção fixa a versão corrigida exata nas imagens-base e nos Dockerfiles. Antes do merge, validei o Dockerfile fixado construindo a receita oficial da imagem a partir do código-fonte, conferindo checksum e assinatura da origem e confirmando que a lista de módulos era idêntica à da base atual. As aplicações ganharam uma guarda de build que recusa qualquer base abaixo da versão corrigida, de modo que uma base desatualizada não chega mais à produção em silêncio.</p>
+<p>Para mostrar que a mudança era neutra, comparei um controle, a base antiga com a guarda reduzida, com o build corrigido: os mesmos módulos PHP, as mesmas respostas do servidor web ao FPM nas rotas verificadas, o mesmo comportamento do framework e os mesmos resultados de teste, incluindo as falhas que já existiam antes da mudança.</p>
 <h2>A ordem do rollout importou</h2>
-<p>Desenvolvimento e staging foram mesclados de imediato; produção aguardou revisão e aprovação. A ordem dos merges importava: mesclar uma aplicação antes de a base estar corrigida faria o pipeline falhar na nova guarda e bloquear todo deploy dessa aplicação. A base foi reconstruída e verificada primeiro, e só depois vieram as aplicações.</p>
-<h2>Provando em todo o cluster</h2>
-<p>A etapa final varreu todos os containers em execução em todos os contextos de cluster: 1.603 containers, 511 imagens únicas, e nenhum runtime PHP vulnerável restante. Os serviços de produção passaram de 8.3.33 para 8.3.36, e a aplicação de demonstração para 8.4.27 nos seus quatro ambientes. A varredura não cobriu máquinas virtuais nem serviços serverless fora dos projetos principais, e esta página diz isso em vez de alegar cobertura universal.</p>
+<p>As mudanças em pré-produção foram mescladas de imediato; produção aguardou revisão e aprovação. A ordem dos merges importava: mesclar uma aplicação antes de a base estar corrigida faria o pipeline falhar na nova guarda e bloquear todo deploy dessa aplicação. A base foi reconstruída e verificada primeiro, e só depois vieram as aplicações.</p>
+<h2>Provando nos containers em execução</h2>
+<p>A etapa final varreu todos os containers em execução em todos os contextos de cluster: 1.603 containers, 511 imagens únicas, e nenhum runtime PHP vulnerável restante. Esta página afirma cobertura apenas desses clusters de containers.</p>
 <h2>A lição</h2>
-<p>Corrija o que roda e prove onde roda. Uma tag flutuante, uma base mensal e um pipeline verde podem parecer corrigidos enquanto servem o runtime antigo.</p>
+<p>Corrija o que roda e prove onde roda. Uma tag flutuante, uma base agendada e um pipeline verde podem parecer corrigidos enquanto servem o runtime antigo.</p>
 <section class="case-decisions" aria-label="Revisão de decisões"><h2>Decisões e próximos passos</h2><p class="decision-context">Uma visão retrospectiva da abordagem e seus limites. A próxima melhoria é uma proposta, não um resultado entregue.</p><h3>Alternativa e justificativa</h3><p>Um rebuild no dia do anúncio, confiando na tag flutuante, teria parecido uma correção e entregado a versão vulnerável. Fixar a versão exata tornou o resultado determinístico.</p><h3>Trade-off</h3><p>Fixações exigem manutenção. A guarda de build transforma uma deriva silenciosa em uma falha ruidosa, ao custo de, às vezes, bloquear um deploy até a base ser reconstruída.</p><h3>O que eu melhoraria em seguida</h3><p>Próxima melhoria: varrer os containers em execução de forma agendada, para que o próximo aviso parta de um inventário atual, e não de algo pontual.</p></section>
 </div>
 <footer class="doc-footer">

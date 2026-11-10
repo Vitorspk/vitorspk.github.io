@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=d20c4f1eb0dd8856863458cd6d47da6af1524b6c src=cases/php-runtime-rce-patch/index.html -->
+<!-- i18n:src-sha=7c833dd830289164369e8b80107563fb8adea092 src=cases/php-runtime-rce-patch/index.html -->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -85,43 +85,43 @@
 <header class="doc-header"><span class="doc-eyebrow">Estudio de caso · Seguridad · octubre de 2026</span>
 <h1 class="doc-title">Parchear una RCE del runtime de PHP el mismo día</h1>
 <p class="doc-dek">Se divulgó una falla crítica en el runtime de PHP. Reconstruir ese día no habría arreglado nada; fijé la versión corregida y verifiqué cada contenedor en ejecución.</p>
-<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en noviembre de 2026</span><span>~5 min de lectura</span></div></header>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en noviembre de 2026</span><span>~4 min de lectura</span></div></header>
 <div class="doc-body">
 <figure class="case-map" data-case-visual="php-runtime-rce-patch" data-visual-area="security">
 <figcaption><span>Solución de un vistazo</span><strong>Fija la corrección y pruébala en lo que corre.</strong></figcaption>
 <div class="case-map-flow">
-<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Evaluación de impacto</strong><span>Versiones de PHP leídas en los pods en ejecución</span></div>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Evaluación de impacto</strong><span>Leer lo que realmente corre</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
 <div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8l10-5Zm-9 10 9 5 9-5M3 18l9 5 9-5"></path></svg><strong>Imágenes base fijadas</strong><span>Versión corregida exacta y una guarda de build</span></div>
 <span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
 <div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Escaneo del clúster</strong><span>Todos los contenedores en ejecución verificados</span></div>
 </div>
-<p class="case-map-note">El escaneo cubrió los clústeres principales. Las máquinas virtuales y los servicios serverless fuera de los proyectos principales no se cubrieron.</p>
+<p class="case-map-note">La afirmación se limita a los clústeres de contenedores que se escanearon.</p>
 </figure>
 
 <section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
 <div><dt>Mi responsabilidad</dt><dd>La evaluación de impacto, imágenes base corregidas y fijadas, una guarda de build en las aplicaciones, el despliegue y el escaneo final de verificación.</dd></div>
-<div><dt>Alcance</dt><dd>Tres aplicaciones PHP desplegadas y las dos imágenes base compartidas que usan; un repositorio no desplegado salió de un PHP al final de su vida útil.</dd></div>
-<div><dt>Colaboración y límites</dt><dd>Desarrollo y staging se fusionaron de inmediato; las fusiones a producción esperaron revisión y aprobación. Las máquinas virtuales y los servicios serverless fuera de los proyectos principales no se escanearon.</dd></div>
-<div><dt>Resultado</dt><dd>El escaneo final no encontró ningún runtime PHP vulnerable entre 1.603 contenedores en ejecución (511 imágenes únicas), el mismo día de la divulgación.</dd></div>
+<div><dt>Alcance</dt><dd>Las aplicaciones PHP y las imágenes base compartidas que corren en los clústeres de contenedores.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>Los cambios en preproducción se fusionaron de inmediato; las fusiones a producción esperaron revisión y aprobación.</dd></div>
+<div><dt>Resultado</dt><dd>El escaneo final no encontró ningún runtime PHP vulnerable entre los contenedores en ejecución, el mismo día de la divulgación.</dd></div>
 </dl></section>
 
 
 <h2>Dos fallas en el propio runtime</h2>
 <p>El 21 de octubre de 2026, el proyecto PHP publicó actualizaciones de emergencia para dos fallas críticas que permiten a un atacante no autenticado ejecutar código en un servidor web. Están en el runtime del lenguaje, no en el código de la aplicación, así que cualquier sitio PHP queda expuesto, sea cual sea su propio código. Las versiones corregidas son 8.5.12, 8.4.27, 8.3.36 y 8.2.35, y solo actualizar protege por completo un servidor.</p>
 <h2>Lee lo que corre, no lo que dice el Dockerfile</h2>
-<p>Leí PHP_VERSION en la configuración de cada imagen y php -v en los pods de producción en ejecución. Tres aplicaciones desplegadas eran vulnerables: una aplicación de demostración, una herramienta interna y un servicio de notificaciones con tres workers. También lo eran las dos imágenes base compartidas. Un cuarto repositorio, no desplegado en ningún sitio, usaba PHP 8.1 al final de su vida útil, que no recibe corrección y tenía que migrar a 8.3.</p>
+<p>Leí la versión de PHP en la configuración de cada imagen y en los pods de producción en ejecución, y luego mapeé cada workload e imagen base compartida afectada. Leer los pods en ejecución importa porque un Dockerfile solo dice lo que se pretendía, no lo que se desplegó.</p>
 <h2>Por qué reconstruir no habría arreglado nada</h2>
-<p>Nuestras imágenes base usan etiquetas flotantes. Tras el lanzamiento, el registry siguió sirviendo la versión vulnerable bajo la etiqueta flotante durante varias horas, así que reconstruir justo después del anuncio habría entregado la misma versión. Una segunda trampa estaba en el proceso: la base compartida se reconstruye cada mes, pero las aplicaciones solo la reciben en su siguiente despliegue, así que un servicio de producción ya iba dos versiones de parche por detrás de su propia base.</p>
+<p>Las imágenes base que usan etiquetas flotantes pueden seguir apuntando a la versión vulnerable después de que sale la corrección: el registry siguió sirviendo la versión antigua bajo la etiqueta flotante durante varias horas, así que reconstruir justo después del anuncio habría entregado la misma versión. Una segunda trampa está en la cadencia de actualización. Una base compartida se reconstruye según un calendario, pero las aplicaciones solo la reciben en su siguiente despliegue, así que un servicio en ejecución puede ir por detrás de su propia base.</p>
 <h2>Fija, protege y prueba que el cambio es neutro</h2>
-<p>La corrección fija la versión corregida exacta en las imágenes base y los Dockerfiles. Antes de fusionar, validé el Dockerfile fijado construyendo la receta oficial de la imagen desde el código fuente, comprobando checksum y firma del tarball y confirmando que la lista de módulos coincidía exactamente con la de la base actual. Las aplicaciones recibieron una guarda de build que rechaza cualquier base por debajo de la versión corregida, de modo que una base obsoleta ya no llega a producción en silencio.</p>
-<p>Para demostrar que el cambio era neutro, comparé un control, la base antigua con la guarda rebajada, con el build corregido: los mismos módulos PHP, las mismas respuestas del servidor web a FPM en las rutas comprobadas, la misma versión del framework y los mismos resultados de pruebas, 432 pasando, con los mismos 25 fallos preexistentes, ninguno relacionado con el runtime.</p>
+<p>La corrección fija la versión corregida exacta en las imágenes base y los Dockerfiles. Antes de fusionar, validé el Dockerfile fijado construyendo la receta oficial de la imagen desde el código fuente, comprobando checksum y firma del origen y confirmando que la lista de módulos coincidía exactamente con la de la base actual. Las aplicaciones recibieron una guarda de build que rechaza cualquier base por debajo de la versión corregida, de modo que una base obsoleta ya no llega a producción en silencio.</p>
+<p>Para demostrar que el cambio era neutro, comparé un control, la base antigua con la guarda rebajada, con el build corregido: los mismos módulos PHP, las mismas respuestas del servidor web a FPM en las rutas comprobadas, el mismo comportamiento del framework y los mismos resultados de pruebas, incluidos los fallos que ya existían antes del cambio.</p>
 <h2>El orden del despliegue importó</h2>
-<p>Desarrollo y staging se fusionaron de inmediato; producción esperó revisión y aprobación. El orden de las fusiones importaba: fusionar una aplicación antes de que su base estuviera corregida habría hecho fallar el pipeline en la nueva guarda y bloqueado cada despliegue de esa aplicación. Primero se reconstruyó y verificó la base, y después vinieron las aplicaciones.</p>
-<h2>Probándolo en todo el clúster</h2>
-<p>El paso final escaneó todos los contenedores en ejecución en todos los contextos de clúster: 1.603 contenedores, 511 imágenes únicas, y ningún runtime PHP vulnerable restante. Los servicios de producción pasaron de 8.3.33 a 8.3.36, y la aplicación de demostración a 8.4.27 en sus cuatro entornos. El escaneo no cubrió máquinas virtuales ni servicios serverless fuera de los proyectos principales, y esta página lo dice en lugar de afirmar cobertura universal.</p>
+<p>Los cambios en preproducción se fusionaron de inmediato; producción esperó revisión y aprobación. El orden de las fusiones importaba: fusionar una aplicación antes de que su base estuviera corregida habría hecho fallar el pipeline en la nueva guarda y bloqueado cada despliegue de esa aplicación. Primero se reconstruyó y verificó la base, y después vinieron las aplicaciones.</p>
+<h2>Probándolo en los contenedores en ejecución</h2>
+<p>El paso final escaneó todos los contenedores en ejecución en todos los contextos de clúster: 1.603 contenedores, 511 imágenes únicas, y ningún runtime PHP vulnerable restante. Esta página afirma cobertura solo de esos clústeres de contenedores.</p>
 <h2>La lección</h2>
-<p>Corrige lo que corre y pruébalo donde corre. Una etiqueta flotante, una base mensual y un pipeline en verde pueden parecer corregidos mientras sirven el runtime antiguo.</p>
+<p>Corrige lo que corre y pruébalo donde corre. Una etiqueta flotante, una base programada y un pipeline en verde pueden parecer corregidos mientras sirven el runtime antiguo.</p>
 <section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Reconstruir el día del anuncio, confiando en la etiqueta flotante, habría parecido una corrección y entregado la versión vulnerable. Fijar la versión exacta hizo el resultado determinista.</p><h3>Contrapartida</h3><p>Las fijaciones requieren mantenimiento. La guarda de build convierte una deriva silenciosa en una falla ruidosa, a costa de bloquear a veces un despliegue hasta que se reconstruya la base.</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: escanear los contenedores en ejecución de forma programada, para que el próximo aviso parta de un inventario actual y no de algo puntual.</p></section>
 </div>
 <footer class="doc-footer">
