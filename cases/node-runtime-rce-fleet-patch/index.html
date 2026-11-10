@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>Patching a Node.js RCE across 24 apps in one week — Vitor Schiavo</title>
+    <meta name="description" content="A runtime remote-code-execution flaw affected every Node service. I patched the apps and shared base images in a week, verified against what was actually running.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/">
+<meta property="og:url" content="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<meta property="og:locale:alternate" content="es_ES">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Patching a Node.js RCE across 24 apps in one week">
+    <meta property="og:description" content="A runtime remote-code-execution flaw affected every Node service. I patched the apps and shared base images in a week, verified against what was actually running.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Patching a Node.js RCE across 24 apps in one week — a case study by Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Patching a Node.js RCE across 24 apps in one week">
+    <meta name="twitter:description" content="A runtime remote-code-execution flaw affected every Node service. I patched the apps and shared base images in a week, verified against what was actually running.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/og.png">
+    <meta name="twitter:image:alt" content="Patching a Node.js RCE across 24 apps in one week — a case study by Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "Patching a Node.js RCE across 24 apps in one week",
+      "description": "A runtime remote-code-execution flaw affected every Node service. I patched the apps and shared base images in a week, verified against what was actually running.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-11-09",
+      "dateModified": "2026-11-09",
+      "url": "https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/",
+      "inLanguage": "en",
+      "mainEntityOfPage": "https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/",
+      "image": "https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/og.png"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Skip to main content</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light theme"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/#cases"><span aria-hidden="true">←</span> Back to portfolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Language">
+<span class="lang-switcher__item lang-switcher__item--current" lang="en" aria-current="true">EN</span>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/node-runtime-rce-fleet-patch/">PT</a>
+<a class="lang-switcher__item" lang="es" hreflang="es" href="/es/cases/node-runtime-rce-fleet-patch/">ES</a>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Case study · Security · October 2026</span>
+<h1 class="doc-title">Patching a Node.js RCE across 24 apps in one week</h1>
+<p class="doc-dek">A runtime remote-code-execution flaw affected every Node service. I patched the apps and shared base images in a week, verified against what was actually running.</p>
+<div class="doc-meta"><span>By Vitor Schiavo</span><span>Updated November 2026</span><span>~5 min read</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="node-runtime-rce-fleet-patch" data-visual-area="security">
+<figcaption><span>Solution at a glance</span><strong>Inventory what runs, then roll out one gate at a time.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Runtime inventory</strong><span>Versions read from running images</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Gated rollout</strong><span>Pre-production first, then production</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Baseline compare</strong><span>Validate against the pre-deploy state</span></div>
+</div>
+<p class="case-map-note">A colleague's exposure analysis started the work. The claims are limited to the closing record and the post-deploy comparisons.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribution and delivery scope"><h2>Contribution at a glance</h2><dl>
+<div><dt>My responsibility</dt><dd>The remediation plan, the runtime inventory, base-image and application upgrades, the rollout and its validation, building on a colleague's exposure analysis.</dd></div>
+<div><dt>Scope</dt><dd>The shared base images and 24 applications, across pre-production and production environments.</dd></div>
+<div><dt>Collaboration &amp; boundaries</dt><dd>A colleague's analysis identified the affected images and the realistic exposure. Production merges were gated on QA approval.</dd></div>
+<div><dt>Outcome</dt><dd>Every in-scope app ran the fixed release in each environment where it ran, and each production deploy was compared with a pre-deploy baseline.</dd></div>
+</dl></section>
+
+
+<h2>A flaw in the runtime, not the code</h2>
+<p>On 21 October 2026 Node.js shipped fixes for CVE-2026-111497, a remote-code-execution flaw in the Brotli decoder bundled with the runtime. The fixed releases are 22.23.4, 24.22.1 and 26.12.1; older lines that are end-of-life get no fix. Two days later a colleague's analysis mapped which of our services needed the change.</p>
+<p>Node reached our services through a few shared base images. A floating tag can lag a release, and a pinned base can sit on an end-of-life line, which turns a rebuild into a major upgrade. Applications only pick up a new base on their next deploy, so running services can differ from the base they were built on.</p>
+<h2>Size the real risk, then plan</h2>
+<p>I assessed which attack paths applied to our services and how realistic the exposure was, then wrote a four-part plan: rebuild floating bases at once, move end-of-life bases to the fixed release after a per-consumer compatibility check, queue the backlog of older images and pinned versions, and close the inventory gaps with a runtime check.</p>
+<h2>Trust the running image, not the repository</h2>
+<p>The first analysis was repository-based, so it could not say what ran in production. I replaced it with a read-only inventory of every production pod, reading each image's Node version from its digest. It covered 174 container images, and it showed that a service classified as fixable by a redeploy never would be, which became the PDF story below.</p>
+<h2>One gate at a time</h2>
+<p>I rebuilt the floating base at once, because its tag already resolved to the fixed release, and checked the base-OS upgrade of the pinned base against each consumer before merging. The rollout went to pre-production on 26 October and to production on 27 October, one pull request per environment, with production merges gated on QA.</p>
+<p>Each service was validated inside its running container (runtime version, pods, endpoints, logs, real traffic), and each production deploy was compared with a baseline taken before it: probes, error logs against the previous version, restarts and, where available, dashboards. The comparisons found no errors attributable to the upgrade, and the two minor operational hiccups along the way were recorded and handled.</p>
+<h2>What broke before production did</h2>
+<p>The base-OS upgrade broke three things in pre-production, all fixed before production: a native library the data layer needs was missing, a file-layout collision appeared in the image build, and a slow boot outran the health-probe delay. A shell-less runtime image kept shipping a vulnerable Node even on the vendor's current tag, so I rebuilt its runtime from a minimal base plus the exact patched binary, keeping it shell-less and non-root. One build ignored its lockfile because of a misspelled flag; the upgrade fixed that too.</p>
+<h2>The service a redeploy could not patch</h2>
+<p>A PDF-rendering service kept reporting the vulnerable Node after every rebuild: its runtime stage inherited Node from a pinned vendor browser image. The obvious fix, bumping that image, would not have worked. Image metadata and the Node security release showed that even the vendor's newest image still shipped an unpatched Node, so the version string would have changed while the flaw stayed.</p>
+<p>Instead I rebuilt the runtime on the official patched Node image and reproduced what the vendor image provided (runtime libraries, fonts, the browser at the same path), keeping the browser library unchanged so no application code changed. I validated the artifact, not the HTTP status: a 20-scenario end-to-end suite passed 20 of 20 locally and again against the real pre-production environments, and PDFs in six locales were text-identical to the old image with zero pixel difference across 12 pages. The image also became less than half the size. Production promotion was gated on QA sign-off and is outside what this page claims.</p>
+<h2>Results</h2>
+<p>The closing record lists 24 applications and the shared base images on the fixed release in every environment where they ran. Several services with no real traffic were retired, with backups kept, instead of being patched. This page claims only what that record and the post-deploy comparisons show.</p>
+<h2>The lesson</h2>
+<p>A rebuild is not a patch until the running image says so. Read versions from what runs, check the advisory before taking the obvious fix, and compare every deploy with a baseline.</p>
+<section class="case-decisions" aria-label="Decision review"><h2>Decisions and next steps</h2><p class="decision-context">A retrospective view of the approach and its limits. The next improvement is a proposal, not a delivered result.</p><h3>Alternative and rationale</h3><p>Waiting for the scheduled rebuild, or bumping the vendor image alone, would have changed version strings without removing the flaw for the services that mattered. Reading versions from running images exposed that.</p><h3>Trade-off</h3><p>A runtime inventory and per-deploy baselines cost more than a repository scan and a green pipeline, but they are the only evidence that answers the audit question: what was actually running?</p><h3>What I would improve next</h3><p>Next improvement: a scheduled job that compares running image versions with published advisories and opens a ticket, so the inventory stops being a one-off.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/#cases">See more case studies</a>
+<a class="cta" href="/#contact">Get in touch</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Switch to dark theme' : 'Switch to light theme');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>
