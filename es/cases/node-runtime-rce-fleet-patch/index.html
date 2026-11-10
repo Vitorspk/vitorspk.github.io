@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<!-- i18n:src-sha=29546ef3fd9d914466d003f88e94f1bf249f3c13 src=cases/node-runtime-rce-fleet-patch/index.html -->
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+    <title>RCE de Node.js parcheada en 24 apps en una semana — Vitor Schiavo</title>
+    <meta name="description" content="Una falla de ejecución remota de código en el runtime afectó a todos los servicios Node. Parcheé las apps y las imágenes base compartidas en una semana, verificando lo que realmente corría.">
+    <meta name="robots" content="index, follow">
+    <!-- i18n:links:start -->
+<link rel="canonical" href="https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="en" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="pt-BR" href="https://vitorschiavo.dev/pt/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="es" href="https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/">
+<link rel="alternate" hreflang="x-default" href="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/">
+<meta property="og:url" content="https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/">
+<meta property="og:locale" content="es_ES">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:locale:alternate" content="pt_BR">
+<!-- i18n:links:end -->
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="RCE de Node.js parcheada en 24 apps en una semana">
+    <meta property="og:description" content="Una falla de ejecución remota de código en el runtime afectó a todos los servicios Node. Parcheé las apps y las imágenes base compartidas en una semana, verificando lo que realmente corría.">
+    <meta property="og:site_name" content="Vitor Schiavo Portfolio">
+    <meta property="og:image" content="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/og.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="RCE de Node.js parcheada en 24 apps en una semana — un estudio de caso de Vitor Schiavo.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RCE de Node.js parcheada en 24 apps en una semana">
+    <meta name="twitter:description" content="Una falla de ejecución remota de código en el runtime afectó a todos los servicios Node. Parcheé las apps y las imágenes base compartidas en una semana, verificando lo que realmente corría.">
+    <meta name="twitter:image" content="https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/og.png">
+    <meta name="twitter:image:alt" content="RCE de Node.js parcheada en 24 apps en una semana — un estudio de caso de Vitor Schiavo.">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "RCE de Node.js parcheada en 24 apps en una semana",
+      "description": "Una falla de ejecución remota de código en el runtime afectó a todos los servicios Node. Parcheé las apps y las imágenes base compartidas en una semana, verificando lo que realmente corría.",
+      "author": { "@type": "Person", "name": "Vitor Schiavo", "url": "https://vitorschiavo.dev/" },
+      "datePublished": "2026-11-09",
+      "dateModified": "2026-11-09",
+      "url": "https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/",
+      "inLanguage": "es",
+      "mainEntityOfPage": "https://vitorschiavo.dev/es/cases/node-runtime-rce-fleet-patch/",
+      "image": "https://vitorschiavo.dev/cases/node-runtime-rce-fleet-patch/og.png"
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%233b82f6'/><text x='16' y='22' font-family='Inter,system-ui,sans-serif' font-size='16' font-weight='800' fill='white' text-anchor='middle'>VS</text></svg>">
+
+    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/cases/evidence-case.css">
+
+    <script>
+        (function() {
+            var t; try { t = localStorage.getItem('theme'); } catch (e) { t = null; }
+            if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        })();
+    </script>
+</head>
+<body>
+<a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+<button type="button" class="theme-toggle" id="themeToggle" aria-label="Cambiar al tema claro"><span aria-hidden="true" id="themeIcon">◐</span></button>
+<main class="doc" id="main-content">
+<a class="backlink" href="/es/#cases"><span aria-hidden="true">←</span> Volver al portafolio</a>
+<!-- i18n:switcher:start -->
+<div class="lang-switcher" role="group" aria-label="Idioma">
+<a class="lang-switcher__item" lang="en" hreflang="en" href="/cases/node-runtime-rce-fleet-patch/">EN</a>
+<a class="lang-switcher__item" lang="pt-BR" hreflang="pt-BR" href="/pt/cases/node-runtime-rce-fleet-patch/">PT</a>
+<span class="lang-switcher__item lang-switcher__item--current" lang="es" aria-current="true">ES</span>
+</div>
+<!-- i18n:switcher:end -->
+<header class="doc-header"><span class="doc-eyebrow">Estudio de caso · Seguridad · octubre de 2026</span>
+<h1 class="doc-title">RCE de Node.js parcheada en 24 apps en una semana</h1>
+<p class="doc-dek">Una falla de ejecución remota de código en el runtime afectó a todos los servicios Node. Parcheé las apps y las imágenes base compartidas en una semana, verificando lo que realmente corría.</p>
+<div class="doc-meta"><span>Por Vitor Schiavo</span><span>Actualizado en noviembre de 2026</span><span>~5 min de lectura</span></div></header>
+<div class="doc-body">
+<figure class="case-map" data-case-visual="node-runtime-rce-fleet-patch" data-visual-area="security">
+<figcaption><span>Solución de un vistazo</span><strong>Inventaría lo que corre y despliega una compuerta a la vez.</strong></figcaption>
+<div class="case-map-flow">
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5ZM3 7l9 5 9-5M12 12v10"></path></svg><strong>Inventario en runtime</strong><span>Versiones leídas de las imágenes en ejecución</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3v12a4 4 0 0 0 4 4h7M6 8h7a4 4 0 0 0 4-4V3M4 3h4M15 3h4M15 17l3 2-3 2"></path></svg><strong>Despliegue con compuertas</strong><span>Primero preproducción, luego producción</span></div>
+<span class="case-map-arrow" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"></path></svg></span>
+<div class="case-map-node"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"></path></svg><strong>Comparación con baseline</strong><span>Validar contra el estado previo al despliegue</span></div>
+</div>
+<p class="case-map-note">El análisis de exposición de un colega dio el punto de partida. Las afirmaciones se limitan al registro de cierre y a las comparaciones posteriores al despliegue.</p>
+</figure>
+
+<section class="case-brief" aria-label="Contribución y alcance de la entrega"><h2>Contribución de un vistazo</h2><dl>
+<div><dt>Mi responsabilidad</dt><dd>El plan de corrección, el inventario en runtime, las actualizaciones de imágenes base y aplicaciones, el despliegue y su validación, a partir del análisis de exposición de un colega.</dd></div>
+<div><dt>Alcance</dt><dd>Las imágenes base compartidas y 24 aplicaciones, entre entornos de preproducción y de producción.</dd></div>
+<div><dt>Colaboración y límites</dt><dd>El análisis de un colega identificó las imágenes afectadas y la exposición realista. Las fusiones a producción dependieron de la aprobación de QA.</dd></div>
+<div><dt>Resultado</dt><dd>Toda app dentro del alcance corrió la versión corregida en cada entorno donde existía, y cada despliegue a producción se comparó con un baseline previo.</dd></div>
+</dl></section>
+
+
+<h2>Una falla en el runtime, no en el código</h2>
+<p>El 21 de octubre de 2026, Node.js publicó correcciones para el CVE-2026-111497, una falla de ejecución remota de código en el decodificador Brotli incluido en el runtime. Las versiones corregidas son 22.23.4, 24.22.1 y 26.12.1. Dos días después, el análisis de un colega mapeó cuáles de nuestros servicios necesitaban el cambio.</p>
+<p>Node llegaba a nuestros servicios a través de unas pocas imágenes base compartidas. Una etiqueta flotante puede ir por detrás de un lanzamiento, y una base fijada puede convertir una reconstrucción en una actualización mayor. Las aplicaciones solo reciben una nueva base en su siguiente despliegue, así que los servicios en ejecución pueden diferir de la base sobre la que se construyeron.</p>
+<h2>Dimensiona el riesgo real y luego planifica</h2>
+<p>Evalué qué rutas de ataque se aplicaban a nuestros servicios y cuán realista era la exposición, y escribí un plan en tres partes: reconstruir de inmediato las bases flotantes, mover las bases fijadas a la versión corregida tras una comprobación de compatibilidad por consumidor, y cerrar las brechas del inventario con una comprobación en runtime.</p>
+<h2>Confía en la imagen en ejecución, no en el repositorio</h2>
+<p>El primer análisis se basaba en repositorios, así que no podía decir qué corría en producción. Lo reemplacé por un inventario de solo lectura de cada pod de producción, leyendo la versión de Node de cada imagen por su digest. Cubrió todas las imágenes de contenedor en ejecución y mostró que un servicio clasificado como corregible con un redeploy nunca lo sería, lo que se convirtió en la historia del PDF más abajo.</p>
+<h2>Una compuerta a la vez</h2>
+<p>Reconstruí de inmediato la base flotante, porque su etiqueta ya apuntaba a la versión corregida, y comprobé la actualización del sistema operativo de la base fijada contra cada consumidor antes de fusionar. El despliegue llegó a preproducción el 26 de octubre y a producción el 27 de octubre, un pull request por entorno, con las fusiones a producción condicionadas a QA.</p>
+<p>Cada servicio se validó dentro de su contenedor en ejecución (versión del runtime, pods, endpoints, logs, tráfico real), y cada despliegue a producción se comparó con un baseline tomado antes: probes, logs de error frente a la versión anterior, reinicios y, cuando estaba disponible, dashboards. Las comparaciones no encontraron errores atribuibles a la actualización, y los dos pequeños contratiempos operativos del camino se registraron y se resolvieron.</p>
+<h2>Lo que se rompió antes que producción</h2>
+<p>La actualización del sistema operativo de la base rompió tres cosas en preproducción, todas corregidas antes de producción: faltaba una biblioteca nativa que necesita la capa de datos, apareció una colisión de estructura de archivos en el build de la imagen, y un arranque lento superó el retraso de la probe de salud. Una imagen de runtime sin shell no podía corregirse solo cambiando a una etiqueta más nueva del proveedor, así que reconstruí su runtime desde una base mínima más el binario exacto corregido, manteniéndolo sin shell y sin root. Un build ignoraba su lockfile por una bandera mal escrita; la actualización arregló eso también.</p>
+<h2>El servicio que un redeploy no podía corregir</h2>
+<p>Un servicio de generación de PDF seguía reportando el Node vulnerable después de cada reconstrucción: su etapa de runtime heredaba Node de una imagen de navegador fijada del proveedor. La corrección obvia, actualizar esa imagen, no habría funcionado. Los metadatos de la imagen y el aviso de seguridad de Node mostraron que actualizar la imagen del proveedor no eliminaría la falla, así que la cadena de versión habría cambiado mientras la falla seguía ahí.</p>
+<p>En su lugar reconstruí el runtime sobre la imagen oficial de Node corregido y reproduje lo que aportaba la imagen del proveedor (bibliotecas de runtime, fuentes, el navegador en la misma ruta), manteniendo la biblioteca del navegador sin cambios para que ningún código de la aplicación cambiara. Validé el artefacto, no el estado HTTP: una suite end-to-end de 20 escenarios pasó 20 de 20 localmente y otra vez contra los entornos reales de preproducción, y los PDF en seis idiomas fueron idénticos en texto a la imagen antigua, con cero diferencia de píxeles en 12 páginas. La imagen también quedó con menos de la mitad del tamaño.</p>
+<h2>Resultados</h2>
+<p>El registro de cierre enumera 24 aplicaciones y las imágenes base compartidas en la versión corregida en todos los entornos donde corrían. Varios servicios sin tráfico real se retiraron, con copias de seguridad conservadas, en lugar de parchearse. Esta página afirma solo lo que ese registro y las comparaciones posteriores al despliegue muestran.</p>
+<h2>La lección</h2>
+<p>Una reconstrucción no es un parche hasta que la imagen en ejecución lo confirma. Lee las versiones de lo que corre, comprueba el aviso antes de tomar la corrección obvia y compara cada despliegue con un baseline.</p>
+<section class="case-decisions" aria-label="Revisión de decisiones"><h2>Decisiones y próximos pasos</h2><p class="decision-context">Una mirada retrospectiva al enfoque y sus límites. La próxima mejora es una propuesta, no un resultado entregado.</p><h3>Alternativa y justificación</h3><p>Esperar la reconstrucción programada, o solo actualizar la imagen del proveedor, habría cambiado cadenas de versión sin quitar la falla de los servicios que importaban. Leer las versiones de las imágenes en ejecución lo dejó claro.</p><h3>Contrapartida</h3><p>Un inventario en runtime y baselines por despliegue cuestan más que un escaneo de repositorios y un pipeline en verde, pero son la única evidencia que responde a la pregunta de auditoría: ¿qué estaba corriendo realmente?</p><h3>Lo que mejoraría a continuación</h3><p>Próxima mejora: un job programado que compare las versiones de las imágenes en ejecución con los avisos publicados y abra un ticket, para que el inventario deje de ser algo puntual.</p></section>
+</div>
+<footer class="doc-footer">
+<p>Vitor Schiavo · Site Reliability &amp; Platform Engineer</p>
+<div class="cta-row">
+<a class="cta cta--primary" href="/es/#cases">Ver más estudios de caso</a>
+<a class="cta" href="/es/#contact">Ponte en contacto</a></div></footer></main>    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var icon = document.getElementById('themeIcon');
+            function sync() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (icon) icon.textContent = light ? '🌙' : '☀️';
+                if (btn) btn.setAttribute('aria-label', light ? 'Cambiar al tema oscuro' : 'Cambiar al tema claro');
+            }
+            sync();
+            if (btn) btn.addEventListener('click', function() {
+                var light = document.documentElement.getAttribute('data-theme') === 'light';
+                if (light) {
+                    document.documentElement.removeAttribute('data-theme');
+                    try { localStorage.setItem('theme', 'dark'); } catch (e) {}
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                    try { localStorage.setItem('theme', 'light'); } catch (e) {}
+                }
+                sync();
+            });
+        })();
+    </script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7021fd4e84404c129ce8890ebaa61817"}'></script>
+</body>
+</html>

@@ -95,3 +95,22 @@ Source: Jira NCLS-5259 and its sub-tasks, read live on 2026-11-09 including the 
 | Not claimed | All historical keys removed; a naturally written 48 h key observed in production (unproven at closure). The page claims only the six services and the two scoped operations. |
 | Omitted on purpose | Business counts of the failing runs, the real payment charge, instance sizes, key families that identify product features, library and framework details, key and service names, repositories, project and cluster identifiers, PR numbers, commit hashes, Jira keys in public copy. Product framed as regulated online safety. |
 
+
+## Runtime RCE cases (PHP and Node.js) — 2026-11-09
+
+Source: Jira records of the October 2026 PHP and Node.js responses, read live on 2026-11-09. An earlier research brief was unverified and was re-checked against those records. Public pages: `cases/php-runtime-rce-patch/` and `cases/node-runtime-rce-fleet-patch/`.
+
+Publishing rule for these pages: technique and verification method only. This repository is public, so neither the pages nor this document state which versions the company ran, which services, frameworks or base images were affected, inventory sizes, how many workloads were vulnerable, which targets a scan did not cover, or any pending security finding. Public advisory facts (CVE number, upstream fixed releases) are kept.
+
+| Claim | Treatment |
+| --- | --- |
+| PHP: "same day", scan of every running container | From the closing summary of the disclosure day: every running container across the container clusters was scanned and no vulnerable PHP runtime was left. The page states no container or image counts and claims coverage of those clusters only. |
+| PHP: why a rebuild would patch nothing | Recorded: the registry kept serving the old release under the floating tag for several hours, and a scheduled shared base lags the applications built on it. |
+| PHP: "neutral change" | Control (old base, guard lowered) versus patched build: same modules, same responses on checked routes, same test results including pre-existing failures. The official-recipe build was a local validation before merge. |
+| Node: "24 applications" | My own count of the application lists in the closing summary, not a figure the record states. Reported as "24 apps", not as a fleet total. |
+| Node: runtime inventory | Every running container image in production was checked, with versions read from running image digests. No counts of images, or of fixed versus vulnerable workloads, are published. |
+| Node: "one week" | Disclosure, colleague analysis, pre-production rollout, production rollout and closing summary all fall within seven days. |
+| Node: "no regressions" | Reworded: post-deploy comparisons found no errors attributable to the upgrade; minor operational hiccups are mentioned without detail. No availability claim. |
+| Node: colleague credit | The original exposure analysis was a colleague's. Credited as "a colleague", not named. |
+| Node: PDF service | Pre-production validated (20 of 20 scenarios, six-locale PDFs text-identical, zero pixel difference over 12 pages, image less than half the size). Production status is not stated; the page says production promotion is outside what it claims. |
+| Omitted on purpose | Every company version and base-image detail, framework and OS names, vendor and image names, service descriptions, counts of vulnerable workloads, services outside the fix, scan coverage gaps, follow-up security findings, build and commit identifiers. |
