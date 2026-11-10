@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=ae755c1110848432a36fdd6e49c1b32e31100dbd src=index.html -->
+<!-- i18n:src-sha=9a51554f3ee6b035b69d14a052653598ee9f444a src=index.html -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1027,7 +1027,7 @@
 <span class="case-header-mark" data-visual-area="security" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 19a5 5 0 0 1-1-10 7 7 0 0 1 13-1 5.5 5.5 0 0 1-1 11H7Z"></path></svg></span>
 
 <div>
-<h3 class="case-title"> Fortalecimiento de seguridad de bases de datos — 60+ bases de datos</h3>
+<h3 class="case-title"> Fortalecimiento de seguridad de bases de datos</h3>
 <p class="case-date">2023–2025 · Arquitectura de seguridad · Cumplimiento</p>
 <div class="case-tags">
 <span class="case-tag">SSL/TLS</span>
@@ -1052,56 +1052,15 @@
 
 <div class="case-section">
 <h4 class="case-section-title"> Problema</h4>
-<p class="case-description">
-                                    Bases de datos expuestas con IPs públicas, conexiones sin cifrar y autenticación solo por contraseña. Sin cumplir con ISO 27001. Vulnerables a sniffing de red y acceso no autorizado.
-                                </p>
-</div>
-<div class="before-after">
-<div class="before-card">
-<span class="before-label"> Antes</span>
-<div class="metric-row">
-<span class="metric-name">Red</span>
-<span class="metric-value">IPs públicas</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Cifrado</span>
-<span class="metric-value">Ninguno (texto plano)</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Autenticación</span>
-<span class="metric-value">Solo contraseña</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Cumplimiento</span>
-<span class="metric-value">Sin cumplimiento</span>
-</div>
-</div>
-<div class="after-card">
-<span class="after-label"> Después</span>
-<div class="metric-row">
-<span class="metric-name">Red</span>
-<span class="metric-value">Solo IPs privadas</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Cifrado</span>
-<span class="metric-value">SSL/TLS obligatorio</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Autenticación</span>
-<span class="metric-value">Certificado + contraseña</span>
-</div>
-<div class="metric-row">
-<span class="metric-name">Cumplimiento</span>
-<span class="metric-value">ISO 27001 </span>
-</div>
-</div>
+<p class="case-description">Las bases de datos necesitaban red privada, conexiones cifradas y una autenticación más fuerte para cumplir la ISO 27001.</p>
 </div>
 <div class="impact-metrics">
 <h4 class="impact-title">Impacto en el negocio</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>60+ bases de datos aseguradas</strong> (MongoDB Atlas + PostgreSQL)</li>
-<li class="impact-item"><strong>Controles de plataforma posteriores:</strong> piloté External Secrets en tres repositorios; hice que las actualizaciones de secretos preservaran los campos existentes; deshabilité de forma reversible 133 versiones antiguas en 97 secretos de cuatro proyectos. Las excepciones de identidad en producción quedaron documentadas.</li>
+<strong>Bases de datos protegidas</strong> con red privada, TLS obligatorio y autenticación por certificado</li>
+<li class="impact-item">
+<strong>Controles posteriores de la plataforma:</strong> piloto de External Secrets en tres repositorios y actualizaciones de secretos que preservan los campos existentes</li>
 <li class="impact-item">
 <strong>Cero incidentes de seguridad</strong> tras la implementación</li>
 <li class="impact-item">
@@ -1109,10 +1068,9 @@
 </ul>
 </div>
 <div class="tech-stack-list">
-<span class="tech-badge">MongoDB Atlas</span>
-<span class="tech-badge">PostgreSQL</span>
-<span class="tech-badge">Redis 7.2</span>
-<span class="tech-badge">VPC Peering</span>
+<span class="tech-badge">Red privada</span>
+<span class="tech-badge">TLS</span>
+<span class="tech-badge">Autenticación por certificado</span>
 </div>
 </div>
 </div>
@@ -1125,7 +1083,6 @@
 <p class="case-date">2023–2024 · Gestión de API · Arquitectura</p>
 <div class="case-tags">
 <span class="case-tag">Kong Gateway</span>
-<span class="case-tag">160+ APIs</span>
 <span class="case-tag">Limitación de tasa</span>
 <span class="case-tag">Kubernetes</span>
 </div>
@@ -1146,15 +1103,13 @@
 
 <div class="case-section">
 <h4 class="case-section-title"> Problema</h4>
-<p class="case-description">
-                                    160+ aplicaciones con ingress directo de nginx y sin gestión de API, limitación de tasa ni capa de autenticación centralizadas. Difícil aplicar políticas o monitorear el uso de las API de forma consistente.
-                                </p>
+<p class="case-description">El tráfico de las aplicaciones necesitaba un único lugar para aplicar autenticación, límites de tasa y políticas de enrutamiento, y para monitorizar el uso de las APIs de forma consistente.</p>
 </div>
 <div class="impact-metrics">
 <h4 class="impact-title">Impacto en el negocio</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>160+ aplicaciones</strong> ahora pasan por un único gateway, ofreciendo un solo lugar para aplicar políticas</li>
+<strong>Aplicaciones</strong> ahora pasan por un único gateway, ofreciendo un solo lugar para aplicar políticas</li>
 <li class="impact-item">
 <strong>Limitación de tasa</strong> configurada de forma centralizada; sin necesidad de implementarla por servicio</li>
 <li class="impact-item">
@@ -1443,7 +1398,7 @@
 
 <div>
 <h3 class="case-title"> Respuesta a incidentes en producción — Caída P1 y falla de autenticación de socio</h3>
-<p class="case-date">Marzo de 2026 · Respuesta a incidentes · Confiabilidad en producción</p>
+<p class="case-date">2026 · Respuesta a incidentes · Confiabilidad en producción</p>
 <div class="case-tags">
 <span class="case-tag">Incidente P1</span>
 <span class="case-tag">Respuesta a incidentes</span>
@@ -1466,29 +1421,29 @@
 </figure>
 
 <div class="case-section">
-<h4 class="case-section-title">Incidente A — Cargador de CMS de terceros [P1]: HTTP 500 en dos mercados regionales</h4>
+<h4 class="case-section-title">Incidente A — Caída de una dependencia de terceros [P1]</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>Impacto:</strong> 100% de las cargas de página devolviendo HTTP 500 desde las 13:08 UTC; caída total de producción en dos mercados regionales</li>
+<strong>Impacto:</strong> las páginas fallaron hasta que hubo un fallback activo</li>
 <li class="impact-item">
-<strong>Causa raíz:</strong> la dependencia de la API del CMS de terceros tuvo una caída; todas las páginas fallaron en el renderizado del lado del servidor</li>
+<strong>Causa raíz:</strong> una dependencia de terceros sufrió una caída y el renderizado en el servidor dependía de ella</li>
 <li class="impact-item">
-<strong>Respuesta:</strong> identifiqué la falla de dependencia, implementé un fallback estático de emergencia y escalé al soporte del proveedor</li>
+<strong>Respuesta:</strong> identifiqué el fallo de la dependencia, implementé un fallback estático de emergencia y escalé al proveedor</li>
 <li class="impact-item">
-<strong>Resolución:</strong> servicio restaurado; agregué un patrón circuit-breaker y monitoreo de salud para las dependencias externas de CMS</li>
+<strong>Resolución:</strong> servicio restaurado; añadí el patrón circuit breaker y monitorización de salud para dependencias externas</li>
 </ul>
 </div>
 <div class="case-section">
-<h4 class="case-section-title">Incidente B — API de socio [P2]: la rotación de credenciales causa falla de autenticación</h4>
+<h4 class="case-section-title">Incidente B — API de socio [P2]: la rotación de credenciales causó un fallo de autenticación</h4>
 <ul class="impact-list">
 <li class="impact-item">
-<strong>Impacto:</strong> todas las llamadas de autenticación del socio devolviendo 401 desde las ~14:30 UTC tras la rotación de contraseña del lado del socio</li>
+<strong>Impacto:</strong> las llamadas de autenticación del socio fallaron tras una rotación de credenciales por su parte</li>
 <li class="impact-item">
-<strong>Causa raíz:</strong> el socio rotó las credenciales sin una notificación coordinada; la contraseña antigua fue revocada a media jornada</li>
+<strong>Causa raíz:</strong> el socio rotó las credenciales sin notificación coordinada</li>
 <li class="impact-item">
-<strong>Respuesta:</strong> diagnostiqué la falla de autenticación a partir de los logs, obtuve nuevas credenciales, actualicé GCP Secret Manager y disparé un reinicio continuo</li>
+<strong>Respuesta:</strong> diagnostiqué el fallo en los logs, obtuve nuevas credenciales, actualicé el almacén de secretos y lancé un rolling restart</li>
 <li class="impact-item">
-<strong>Fortalecimiento:</strong> establecí un runbook de rotación de credenciales y un SLA de notificación acordado con el socio</li>
+<strong>Refuerzo:</strong> establecí un runbook de rotación de credenciales y un SLA de notificación acordado de antemano con el socio</li>
 </ul>
 </div>
 <div class="impact-metrics">
@@ -1503,8 +1458,8 @@
 </ul>
 </div>
 <div class="tech-stack-list">
-<span class="tech-badge">GKE</span>
-<span class="tech-badge">GCP Secret Manager</span>
+<span class="tech-badge">Kubernetes</span>
+<span class="tech-badge">Gestión de secretos</span>
 <span class="tech-badge">Prometheus</span>
 <span class="tech-badge">Respuesta a incidentes</span>
 <span class="tech-badge">SRE</span>
@@ -1519,7 +1474,7 @@
 <h3 class="case-title"> Migración de Elastic Stack — De EC2 a Kubernetes a escala</h3>
 <p class="case-date">2020–2021 · Observabilidad · Modernización de infraestructura</p>
 <div class="case-tags">
-<span class="case-tag">Elasticsearch 7.8</span>
+<span class="case-tag">Elasticsearch</span>
 <span class="case-tag">Logstash</span>
 <span class="case-tag">Kibana</span>
 <span class="case-tag">Filebeat</span>
@@ -1544,7 +1499,7 @@
 <div class="case-section">
 <h4 class="case-section-title"> Problema</h4>
 <ul class="impact-list">
-<li class="impact-item">2 clústeres heredados de Elastic Stack: Elasticsearch 5 en EC2 y Elasticsearch 6 en ECS, ambos vía docker-compose</li>
+<li class="impact-item">2 clústeres heredados de Elastic Stack: Elasticsearch en EC2 y Elasticsearch en ECS, ambos vía docker-compose</li>
 <li class="impact-item">Sin separación de roles: cada nodo manejaba la elección de master, el almacenamiento de datos y el ingest simultáneamente</li>
 <li class="impact-item">Escalado manual, sin self-healing, puntos únicos de falla</li>
 <li class="impact-item">Cuello de botella de almacenamiento: sin snapshots en S3, sin políticas de retención automatizadas</li>
@@ -1553,7 +1508,7 @@
 <div class="case-section">
 <h4 class="case-section-title"> Solución</h4>
 <ul class="impact-list">
-<li class="impact-item">Consolidé ambos clústeres en 1 clúster EKS unificado con Elasticsearch 7.8</li>
+<li class="impact-item">Consolidé ambos clústeres en 1 clúster EKS unificado con Elasticsearch</li>
 <li class="impact-item">Diseñé una arquitectura multinodo con roles dedicados: 3 master (8 GB), 3 data (16 GB, 50 TB), 3 ingest (16 GB)</li>
 <li class="impact-item">Imagen ECR personalizada con plugin de snapshots de S3 para backup y retención automatizados</li>
 <li class="impact-item">Desplegué mediante Helm Charts con rolling updates, PDB (maxUnavailable: 1) y anti-afinidad suave</li>
@@ -1615,7 +1570,7 @@
 <polygon points="405,307 410,317 415,307" fill="var(--success)"/>
 <!-- === ROW 4: Elasticsearch Cluster === -->
 <rect x="40" y="315" width="740" height="95" rx="10" fill="var(--warning)" fill-opacity="0.08" stroke="var(--warning)" stroke-width="1.5"/>
-<text x="410" y="335" text-anchor="middle" font-size="12" font-weight="700" fill="var(--warning)">Elasticsearch 7.8 Cluster (elk-multi)</text>
+<text x="410" y="335" text-anchor="middle" font-size="12" font-weight="700" fill="var(--warning)">Elasticsearch Cluster (elk-multi)</text>
 <!-- Master nodes -->
 <rect x="60" y="345" width="210" height="55" rx="8" fill="var(--bg-elevated)" stroke="var(--primary)" stroke-width="1.5"/>
 <text x="165" y="365" text-anchor="middle" font-size="11" font-weight="700" fill="var(--primary)">Master Nodes (3x)</text>
@@ -1661,7 +1616,7 @@
 <li class="impact-item">
 <strong>Consolidación 2 → 1 clúster</strong>: eliminé toda la flota heredada de instancias y volúmenes, reemplazándola con un puñado de nodos EKS</li>
 <li class="impact-item">
-<strong>Actualización de versión v5/v6 → v7.8</strong>: salto de versión mayor, habilitando ILM, funciones de seguridad y gestión del ciclo de vida de índices</li>
+<strong>Actualización de versión</strong>: salto de versión mayor, habilitando ILM, funciones de seguridad y gestión del ciclo de vida de índices</li>
 <li class="impact-item">
 <strong>Migración EBS GP2 → Standard</strong>: migré toda la flota de volúmenes en dos regiones de AWS, reduciendo los costos de almacenamiento</li>
 <li class="impact-item">
@@ -1675,8 +1630,8 @@
 </ul>
 </div>
 <div class="tech-stack-list">
-<span class="tech-badge">Elasticsearch 7.8</span>
-<span class="tech-badge">Logstash 7.8</span>
+<span class="tech-badge">Elasticsearch</span>
+<span class="tech-badge">Logstash</span>
 <span class="tech-badge">Kibana 7.8</span>
 <span class="tech-badge">Filebeat 7.8</span>
 <span class="tech-badge">Fluent Bit</span>
@@ -1818,8 +1773,8 @@
 <div class="tech-stack-list">
 <span class="tech-badge">Apache Kafka</span>
 <span class="tech-badge">AWS MSK</span>
-<span class="tech-badge">Logstash 7.8</span>
-<span class="tech-badge">Elasticsearch 7.8</span>
+<span class="tech-badge">Logstash</span>
+<span class="tech-badge">Elasticsearch</span>
 <span class="tech-badge">RabbitMQ</span>
 <span class="tech-badge">GELF</span>
 <span class="tech-badge">Kubernetes</span>

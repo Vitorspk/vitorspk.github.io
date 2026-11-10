@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=2c9ea799965dba7cea9e141db0003a0122d08ccd src=cases/strapi-v4-to-v5-upgrade/index.html -->
+<!-- i18n:src-sha=693c8e98333c92e4968885c6f7b070148b56446b src=cases/strapi-v4-to-v5-upgrade/index.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -126,7 +126,7 @@
             <p>Atualizações de versão maior de uma aplicação com estado, que carrega conteúdo, são onde o "é só um bump de versão" morre. O Strapi v5 muda o modelo de acesso a dados, então a atualização não é só novas dependências: é reescrever como a aplicação lê e grava o próprio conteúdo. O conteúdo no banco de dados tinha que sobreviver, e o site não podia sair do ar. Foi assim que eu fiz.</p>
 
             <h2>Primeiro, avance até a última v4</h2>
-            <p>O primeiro erro teria sido pular direto de uma v4 antiga para a v5. Atualizei a base de código em etapas: v4 antiga, depois a <strong>última v4</strong> e então a v5. Chegar primeiro à última v4 elimina as depreciações e expõe as mudanças incompatíveis enquanto você ainda está em uma versão maior familiar, de modo que o salto final para a v5 é a única coisa que resta depurar. A mesma passagem moveu o runtime para o Node 20 e trocou o driver de banco de dados pelo que tem manutenção ativa.</p>
+            <p>O primeiro erro teria sido pular direto de uma v4 antiga para a v5. Atualizei a base de código em etapas: v4 antiga, depois a <strong>última v4</strong> e então a v5. Chegar primeiro à última v4 elimina as depreciações e expõe as mudanças incompatíveis enquanto você ainda está em uma versão maior familiar, de modo que o salto final para a v5 é a única coisa que resta depurar.</p>
 
             <h2>A verdadeira mudança incompatível: o Document Service</h2>
             <p>O Strapi v5 substitui a antiga API de dados em nível de entidade por um novo <strong>Document Service</strong>, e isso afeta cada pedaço de lógica personalizada. A parte mais pesada da migração foi reescrever <strong>todos os 19 hooks de ciclo de vida</strong> para a nova API. Os hooks de ciclo de vida são o comportamento personalizado que roda quando um conteúdo é criado, atualizado ou excluído, então errá-los é o jeito de corromper dados silenciosamente. Cada um foi migrado e verificado individualmente.</p>
