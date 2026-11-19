@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=d4851142f54e0eb3a652474621579072588abcff src=resume.html -->
+<!-- i18n:src-sha=1866fda1d65ffe7c6756905b8d0a0f17ff82f12a src=resume.html -->
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -16,7 +16,7 @@
 
     <!-- SEO -->
     <title>Vitor Schiavo — Currículum</title>
-    <meta name="description" content="Especialista en Site Reliability y Platform Engineering. Trabajos seleccionados en plataformas cloud, infraestructura de inferencia de IA, confiabilidad e ingeniería de costos.">
+    <meta name="description" content="Currículum de Vitor Schiavo: infraestructura de inferencia de IA, corrección de CVEs, arquitectura cloud, redes e ingeniería de plataformas.">
     <meta name="author" content="Vitor Schiavo">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#0a0f1e">
@@ -24,7 +24,7 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Vitor Schiavo — Currículum">
-    <meta property="og:description" content="Decisiones y resultados de ingeniería: CI confiable, entornos de preview efímeros y observabilidad útil.">
+    <meta property="og:description" content="Currículum de Vitor Schiavo: infraestructura de inferencia de IA, corrección de CVEs, arquitectura cloud, redes e ingeniería de plataformas.">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorschiavo.dev/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -34,7 +34,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Vitor Schiavo — Currículum">
-    <meta name="twitter:description" content="Decisiones y resultados de ingeniería: CI confiable, entornos de preview efímeros y observabilidad útil.">
+    <meta name="twitter:description" content="Currículum de Vitor Schiavo: infraestructura de inferencia de IA, corrección de CVEs, arquitectura cloud, redes e ingeniería de plataformas.">
     <meta name="twitter:image" content="https://vitorschiavo.dev/og-image.png">
     <meta name="twitter:image:alt" content="Vitor Schiavo — Especialista en Site Reliability y Platform Engineering">
 
@@ -72,9 +72,10 @@
       "knowsAbout": [
         "Site Reliability Engineering", "Platform Engineering", "FinOps",
         "Cloud Cost Optimization", "Kubernetes", "Google Cloud Platform",
-        "Amazon Web Services", "Microsoft Azure", "DevOps", "Multi-Cloud Architecture"
+        "Amazon Web Services", "Microsoft Azure", "DevOps", "Multi-Cloud Architecture",
+        "GPU inference", "CVE remediation", "Cloud networking", "GitOps"
       ],
-      "description": "Site Reliability and Platform Engineer enfocado en la experiencia de desarrollador, la observabilidad y sistemas cloud confiables."
+      "description": "Site Reliability y Platform Engineer con experiencia en infraestructura de inferencia de IA, seguridad de runtimes, arquitectura cloud y entrega confiable."
     }
     </script>
 
@@ -105,24 +106,26 @@
 <h1>Vitor Schiavo</h1>
 <p class="hero-role">Especialista en Site Reliability y Platform Engineering</p>
 <div class="resume-contact"><span>Abierto a oportunidades remotas internacionales</span><a href="mailto:vitorspk@gmail.com">vitorspk@gmail.com</a><a href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a><a href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a><a href="https://vitorschiavo.dev/" rel="noopener noreferrer">vitorschiavo.dev</a></div>
-<p>En TI desde 2013, en SRE desde 2018, con experiencia en desarrollo de software. Automatización de plataformas, entregas confiables y observabilidad accionable en GCP, AWS y Azure. Infraestructura de inferencia de IA, confiabilidad e ingeniería de costos de cloud. Abierto a oportunidades en Platform Engineering y SRE.</p>
-<h2>Resultados de ingeniería destacados</h2>
+<p>Site Reliability Engineer con experiencia en software. En TI desde 2013 y SRE desde 2018; trabajo en GCP, AWS y Azure, con foco en inferencia en GPU, seguridad, redes y entrega automatizada.</p>
+<h2>Trabajos de ingeniería destacados</h2>
 <ul>
-<li>Construí flujos de trabajo de serving y despliegue en GPU conscientes del modelo con vLLM y llama.cpp; colaboré en la validación autenticada de fallback en producción en cuatro entornos.</li>
-<li>Logré reducciones de costos acotadas con equivalentes anualizados de ~US$30.1K por el retiro de sistemas heredados, £26.5K por el rightsizing de Kubernetes y £14K por una línea de ingesta de monitoreo. Líneas base y monedas separadas; no es un ahorro anual combinado ya realizado.</li>
-<li>Reparé 22 políticas de alertas y dos métricas basadas en logs tras una migración de runtime, validando filtros contra mensajes conocidos.</li>
-<li>Ensayé la reconstrucción completa de un clúster: 49 certificados adoptados sin reemisión y 35 aplicaciones de ArgoCD restauradas; reutilicé el proceso para tres reconstrucciones de entornos.</li>
+<li><strong>Infraestructura de IA:</strong> Construí flujos de inferencia en GPU con vLLM y llama.cpp, eligiendo el runtime por modelo y validando el fallback autenticado con el equipo de aplicación.</li>
+<li><strong>Seguridad de runtimes:</strong> Corregí CVEs de PHP y Node.js con inventarios de runtimes, versiones fijadas, rollout por etapas y comprobación de los contenedores en ejecución.</li>
+<li><strong>Arquitectura y redes:</strong> Diseñé bases modulares de Terraform para Kubernetes, con entornos aislados, redes compartidas y aprovisionamiento repetible.</li>
+<li><strong>Plataformas para desarrolladores:</strong> Creé un piloto de entornos efímeros de preview y probé la promoción de la misma imagen entre entornos para pruebas aisladas antes de la entrega.</li>
+<li><strong>Confiabilidad en producción:</strong> Diagnostiqué fallos de lock en Redis e implementé protecciones de TTL y limpieza de datos con alcance definido y verificación.</li>
 </ul>
 <h2>Experiencia</h2>
 <section class="resume-role">
 <h3>VerifyMy · Site Reliability Engineer</h3>
 <p>Jun 2021 – Actualidad</p>
-<p>Platform engineering para seguridad en línea regulada.</p>
+<p>Plataformas cloud, infraestructura de IA y entrega segura para seguridad en línea regulada.</p>
 <ul>
-<li>Construí y operé infraestructura cloud, pipelines de entrega y monitoreo en múltiples entornos.</li>
-<li>Desarrollé un piloto de entornos de preview efímeros y probé la promoción de imágenes sin reconstrucciones.</li>
-<li>Diagnostiqué fallas en la plataforma de CI compartida y reparé brechas de alertas introducidas por migraciones de runtime.</li>
-<li>Aporté controles de infraestructura, evidencia operativa y procedimientos de recuperación para auditorías de seguridad.</li></ul></section>
+<li>Automatizo aprovisionamiento, despliegues y comprobaciones operativas con Terraform, Python y Bash.</li>
+<li>Opero inferencia y servicios cloud con los equipos de aplicación, validando identidad, enrutamiento y comportamiento ante fallos.</li>
+<li>Construyo flujos de CI/CD y GitOps con comprobaciones de rollout, recuperación y documentación.</li>
+<li>Mejoro observabilidad, capacidad y costos; aporto controles y evidencias para auditorías de seguridad.</li>
+</ul></section>
 <section class="resume-role">
 <h3>Intelipost · Site Reliability Engineer</h3>
 <p>Feb 2020 – Jun 2021</p>
@@ -133,7 +136,7 @@
 <li>Apoyé la planificación de capacidad y la preparación de infraestructura para los picos de demanda estacional.</li></ul></section>
 <section class="resume-role">
 <h3>Dasa · Site Reliability Engineer</h3>
-<p>Jan 2018 – Feb 2020</p>
+<p>Ene 2018 – Feb 2020</p>
 <p>Operaciones de cloud en un gran entorno del sector salud.</p>
 <ul>
 <li>Aprovisioné entornos de Kubernetes y redes con Terraform y pipelines de despliegue automatizados.</li>
@@ -142,16 +145,16 @@
 <h2>Trayectoria anterior</h2>
 <section class="resume-role">
 <h3>Dasa · Software Developer</h3>
-<p>Jul – Dec 2017 · Integración de API Gateway y REST/SOAP.</p></section>
+<p>Jul – Dic 2017 · Integración de API Gateway y REST/SOAP.</p></section>
 <section class="resume-role">
 <h3>PRÓPONTO · Software Developer</h3>
-<p>Jan – Jul 2017 · Servicios web e integración continua.</p></section>
+<p>Ene – Jul 2017 · Servicios web e integración continua.</p></section>
 <section class="resume-role">
 <h3>Microdata Sistemas · Java Developer</h3>
-<p>Jan – Dec 2016 · Servicios web en Java y e-commerce.</p></section>
+<p>Ene – Dic 2016 · Servicios web en Java y e-commerce.</p></section>
 <section class="resume-role">
 <h3>Microdata Sistemas · Systems Analyst</h3>
-<p>Nov 2014 – Dec 2015 · Delphi, SQL Server y soporte empresarial.</p></section>
+<p>Nov 2014 – Dic 2015 · Delphi, SQL Server y soporte empresarial.</p></section>
 <section class="resume-role">
 <h3>GZ Sistemas · Junior IT Support Analyst</h3>
 <p>Mar 2013 – Jul 2014 · Soporte al cliente, bases de datos, redes y Linux.</p></section>
@@ -159,7 +162,11 @@
 <h3>Coca-Cola FEMSA · Administrative Assistant &amp; Supervisor</h3>
 <p>Feb 2012 – Mar 2013 · Operaciones de entrega, reportes y cierre mensual.</p></section>
 <h2>Capacidades principales</h2>
-<p>Kubernetes · Terraform · ArgoCD · Helm · Jenkins · GitHub Actions · Prometheus · Grafana · GCP · AWS · Azure · Python · Bash · vLLM · llama.cpp · Inferencia en GPU · Redes cloud · Controles de seguridad · Ingeniería de costos</p>
+<p><strong>Infraestructura de IA:</strong> vLLM · llama.cpp · inferencia en GPU · fallback autenticado</p>
+<p><strong>Seguridad:</strong> Corrección de CVEs · inventario de runtimes · IAM · TLS/mTLS · validaciones de build</p>
+<p><strong>Arquitectura y redes:</strong> GCP · AWS · Azure · Terraform · redes cloud · VPN/BGP</p>
+<p><strong>Entrega de plataformas:</strong> Kubernetes · Helm · ArgoCD · GitHub Actions · Jenkins · GitOps</p>
+<p><strong>Confiabilidad y automatización:</strong> Prometheus · Grafana · Redis · respuesta a incidentes · Python · Bash · optimización de costos</p>
 <h2>Educación</h2>
 <p>MBA — Ingeniería de Software, Wyden Educacional (2015–2016)<br>Análisis y Desarrollo de Sistemas, Anhanguera Educacional (2012–2014)</p>
 <h2>Idiomas</h2>
