@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- i18n:src-sha=d4851142f54e0eb3a652474621579072588abcff src=resume.html -->
+<!-- i18n:src-sha=1866fda1d65ffe7c6756905b8d0a0f17ff82f12a src=resume.html -->
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -16,7 +16,7 @@
 
     <!-- SEO -->
     <title>Vitor Schiavo — Currículo</title>
-    <meta name="description" content="Especialista em Site Reliability e Platform Engineering. Trabalhos selecionados em plataformas de nuvem, infraestrutura de inferência de IA, confiabilidade e engenharia de custos.">
+    <meta name="description" content="Currículo de Vitor Schiavo: infraestrutura de inferência de IA, correção de CVEs, arquitetura em nuvem, redes e engenharia de plataformas.">
     <meta name="author" content="Vitor Schiavo">
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#0a0f1e">
@@ -24,7 +24,7 @@
     <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Vitor Schiavo — Currículo">
-    <meta property="og:description" content="Decisões e resultados de engenharia: CI confiável, ambientes de pré-visualização efêmeros e observabilidade útil.">
+    <meta property="og:description" content="Currículo de Vitor Schiavo: infraestrutura de inferência de IA, correção de CVEs, arquitetura em nuvem, redes e engenharia de plataformas.">
     <meta property="og:site_name" content="Vitor Schiavo Portfolio">
     <meta property="og:image" content="https://vitorschiavo.dev/og-image.png">
     <meta property="og:image:width" content="1200">
@@ -34,7 +34,7 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Vitor Schiavo — Currículo">
-    <meta name="twitter:description" content="Decisões e resultados de engenharia: CI confiável, ambientes de pré-visualização efêmeros e observabilidade útil.">
+    <meta name="twitter:description" content="Currículo de Vitor Schiavo: infraestrutura de inferência de IA, correção de CVEs, arquitetura em nuvem, redes e engenharia de plataformas.">
     <meta name="twitter:image" content="https://vitorschiavo.dev/og-image.png">
     <meta name="twitter:image:alt" content="Vitor Schiavo — Especialista em Site Reliability e Platform Engineering">
 
@@ -72,9 +72,10 @@
       "knowsAbout": [
         "Site Reliability Engineering", "Platform Engineering", "FinOps",
         "Cloud Cost Optimization", "Kubernetes", "Google Cloud Platform",
-        "Amazon Web Services", "Microsoft Azure", "DevOps", "Multi-Cloud Architecture"
+        "Amazon Web Services", "Microsoft Azure", "DevOps", "Multi-Cloud Architecture",
+        "GPU inference", "CVE remediation", "Cloud networking", "GitOps"
       ],
-      "description": "Site Reliability Engineer e Platform Engineer atuando em experiência do desenvolvedor, observabilidade e sistemas de nuvem confiáveis."
+      "description": "Site Reliability e Platform Engineer com atuação em infraestrutura de inferência de IA, segurança de runtimes, arquitetura em nuvem e entrega confiável."
     }
     </script>
 
@@ -105,24 +106,26 @@
 <h1>Vitor Schiavo</h1>
 <p class="hero-role">Especialista em Site Reliability e Platform Engineering</p>
 <div class="resume-contact"><span>Aberto a oportunidades remotas internacionais</span><a href="mailto:vitorspk@gmail.com">vitorspk@gmail.com</a><a href="https://www.linkedin.com/in/vitorschiavo/" rel="noopener noreferrer">LinkedIn</a><a href="https://github.com/Vitorspk" rel="noopener noreferrer">GitHub</a><a href="https://vitorschiavo.dev/" rel="noopener noreferrer">vitorschiavo.dev</a></div>
-<p>Em TI desde 2013, SRE desde 2018, com formação em desenvolvimento de software. Automação de plataforma, entrega confiável e observabilidade acionável em GCP, AWS e Azure. Infraestrutura de inferência de IA, confiabilidade e engenharia de custos de nuvem. Aberto a oportunidades em Platform Engineering e SRE.</p>
-<h2>Resultados de engenharia selecionados</h2>
+<p>Site Reliability Engineer com experiência em desenvolvimento de software; em TI desde 2013 e em SRE desde 2018. Construo e opero plataformas em GCP, AWS e Azure, com trabalhos recentes em inferência em GPU, segurança de runtimes, redes em nuvem e entrega automatizada.</p>
+<h2>Trabalhos de engenharia em destaque</h2>
 <ul>
-<li>Construí fluxos de serving e implantação em GPU cientes do modelo usando vLLM e llama.cpp; colaborei na validação de fallback de produção autenticado em quatro ambientes.</li>
-<li>Entreguei reduções de custo delimitadas com equivalentes anualizados de ~US$ 30,1K pela desativação de legado, £ 26,5K pelo rightsizing de Kubernetes e £ 14K por uma linha de ingestão de monitoramento. Linhas de base e moedas distintas; não é uma economia anual realizada combinada.</li>
-<li>Reparei 22 políticas de alerta e duas métricas baseadas em logs após uma migração de runtime, validando os filtros com mensagens conhecidas.</li>
-<li>Ensaiei a reconstrução completa de um cluster: 49 certificados adotados sem reemissão e 35 aplicações ArgoCD restauradas; reutilizei o processo para três reconstruções de ambiente.</li>
+<li><strong>Infraestrutura de IA:</strong> Construí fluxos de inferência em GPU com vLLM e llama.cpp, selecionando runtimes compatíveis com cada modelo; colaborei na validação de fallback de inferência com autenticação.</li>
+<li><strong>Segurança de runtimes:</strong> Realizei a correção de CVEs em PHP e Node.js com inventário dos runtimes, builds com versões fixadas, implantação em etapas e verificação dos containers em execução.</li>
+<li><strong>Arquitetura e redes em nuvem:</strong> Projetei uma base modular em Terraform para Kubernetes, com ambientes isolados, rede compartilhada e provisionamento repetível.</li>
+<li><strong>Plataformas para desenvolvedores:</strong> Construí um piloto de ambientes efêmeros de preview e testei a promoção da mesma imagem de container entre ambientes, permitindo testes isolados antes da entrega.</li>
+<li><strong>Confiabilidade em produção:</strong> Diagnostiquei falhas de lock no Redis causadas por pressão de memória e ausência de expiração; adicionei proteções de TTL e executei uma limpeza de dados com escopo definido e verificação.</li>
 </ul>
 <h2>Experiência</h2>
 <section class="resume-role">
 <h3>VerifyMy · Site Reliability Engineer</h3>
 <p>Jun 2021 – Atual</p>
-<p>Platform engineering para segurança online regulada.</p>
+<p>Plataformas em nuvem, infraestrutura de IA e entrega segura para segurança online regulada.</p>
 <ul>
-<li>Construí e operei infraestrutura de nuvem, pipelines de entrega e monitoramento em múltiplos ambientes.</li>
-<li>Desenvolvi um piloto para ambientes de pré-visualização efêmeros e testei a promoção de imagens sem reconstruções.</li>
-<li>Diagnostiquei falhas na plataforma de CI compartilhada e reparei lacunas de alertas introduzidas por migrações de runtime.</li>
-<li>Contribuí com controles de infraestrutura, evidências operacionais e procedimentos de recuperação para auditorias de segurança.</li></ul></section>
+<li>Desenvolvo automações reutilizáveis com Terraform, Python e Bash para provisionamento de infraestrutura, implantações e verificações operacionais.</li>
+<li>Opero cargas de inferência e serviços em nuvem com os times de aplicação, validando identidade, roteamento, revisões implantadas e comportamento em falhas.</li>
+<li>Construo fluxos de CI/CD e GitOps com verificações de rollout, procedimentos de recuperação e documentação operacional.</li>
+<li>Melhoro o monitoramento, a capacidade e a eficiência de custos em nuvem; contribuo com controles de infraestrutura e evidências para auditorias de segurança.</li>
+</ul></section>
 <section class="resume-role">
 <h3>Intelipost · Site Reliability Engineer</h3>
 <p>Feb 2020 – Jun 2021</p>
@@ -159,7 +162,11 @@
 <h3>Coca-Cola FEMSA · Administrative Assistant &amp; Supervisor</h3>
 <p>Feb 2012 – Mar 2013 · Operações de entrega, relatórios e fechamento mensal.</p></section>
 <h2>Principais competências</h2>
-<p>Kubernetes · Terraform · ArgoCD · Helm · Jenkins · GitHub Actions · Prometheus · Grafana · GCP · AWS · Azure · Python · Bash · vLLM · llama.cpp · Inferência de GPU · Redes de nuvem · Controles de segurança · Engenharia de custos</p>
+<p><strong>Infraestrutura de IA:</strong> vLLM · llama.cpp · inferência em GPU · fluxos de serving de modelos · fallback autenticado</p>
+<p><strong>Segurança:</strong> Correção de CVEs · inventário de runtimes · IAM · TLS/mTLS · validações de build</p>
+<p><strong>Arquitetura e redes:</strong> GCP · AWS · Azure · Terraform · redes em nuvem · VPN/BGP</p>
+<p><strong>Entrega de plataformas:</strong> Kubernetes · Helm · ArgoCD · GitHub Actions · Jenkins · GitOps</p>
+<p><strong>Confiabilidade e automação:</strong> Prometheus · Grafana · Redis · resposta a incidentes · Python · Bash · otimização de custos</p>
 <h2>Formação</h2>
 <p>MBA — Engenharia de Software, Wyden Educacional (2015–2016)<br>Análise e Desenvolvimento de Sistemas, Anhanguera Educacional (2012–2014)</p>
 <h2>Idiomas</h2>

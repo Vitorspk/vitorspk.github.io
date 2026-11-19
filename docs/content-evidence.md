@@ -114,3 +114,9 @@ Publishing rule for these pages: technique and verification method only. This re
 | Node: colleague credit | The original exposure analysis was a colleague's. Credited as "a colleague", not named. |
 | Node: PDF service | Pre-production validated (20 of 20 scenarios, six-locale PDFs text-identical, zero pixel difference over 12 pages, image less than half the size). Production status is not stated; the page says production promotion is outside what it claims. |
 | Omitted on purpose | Every company version and base-image detail, framework and OS names, vendor and image names, service descriptions, counts of vulnerable workloads, services outside the fix, scan coverage gaps, follow-up security findings, build and commit identifiers. |
+
+## Résumé focus — 2026-11-19
+
+The résumé highlights now follow the recent work documented in the portfolio: model-aware GPU serving (`self-hosting-gemma-3-vllm`), PHP and Node.js runtime remediation (`php-runtime-rce-patch`, `node-runtime-rce-fleet-patch`), reusable cloud foundations (`gke-terraform-shared-vpc`), a preview-environment pilot (`ephemeral-preview-environments`), and scoped Redis recovery (`shared-redis-eviction-lost-lock`). The pilot and collaborative inference validation retain their original scope. Detailed alert and cluster-recovery counts and the multi-currency savings list no longer lead the CV. Employers, held titles, dates, education and language proficiency are unchanged.
+
+Résumé pages are translated in EN, PT-BR and ES; the downloadable PDF remains the English export generated from `resume.html`. Button labels were already correct in each language.
